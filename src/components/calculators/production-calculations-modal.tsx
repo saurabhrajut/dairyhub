@@ -2196,663 +2196,762 @@ export function PasteurizationCalc() {
   );
 }
 // ════════════════════════════════════════════════════════════
-// ADVANCED GHEE RECOVERY & LOSS CALCULATOR
-// Drop-in Replacement for GheeRecoveryCalc()
-//
-// INSTRUCTIONS:
-// 1. Apni file mein purana GheeRecoveryCalc() function dhundhein
-// 2. Pura block DELETE karein
-// 3. Yeh poora code wahan PASTE karein
-// Koi naya import nahi chahiye.
+// GHEE RECOVERY & EFFICIENCY CALCULATOR (UPGRADED)
+// Simplified inputs · Collapsible advanced settings
+// Optional costing · Actual vs Theoretical tracker
 // ════════════════════════════════════════════════════════════
 
-// ── INPUT MATERIAL DATABASE ───────────────────────────────
-const GHEE_INPUT_DB = {
-  white_butter: {
-    label:     "🧈 White Butter (Machine)",
-    fatMin:    80, fatMax: 84, fatDefault: "82",
-    moistMin:  14, moistMax: 18, moistDefault: "16",
-    snfDefault: "2",
-    efficiency: "98.5",
-    note: "Most common industrial input. Low SNF → cleaner ghee.",
-  },
-  desi_butter: {
-    label:     "🧈 Desi/Creamery Butter",
-    fatMin:    78, fatMax: 82, fatDefault: "80",
-    moistMin:  15, moistMax: 20, moistDefault: "17",
-    snfDefault: "3",
-    efficiency: "97.5",
-    note: "Higher SNF → more residue. Traditional process.",
-  },
-  cream_40: {
-    label:     "🫙 Cream 40% fat",
-    fatMin:    35, fatMax: 45, fatDefault: "40",
-    moistMin:  50, moistMax: 60, moistDefault: "55",
-    snfDefault: "5",
-    efficiency: "96.0",
-    note: "Direct cream clarification. Higher fuel cost, lower yield/kg.",
-  },
-  cream_60: {
-    label:     "🫙 Cream 60% fat (rich)",
-    fatMin:    55, fatMax: 65, fatDefault: "60",
-    moistMin:  33, moistMax: 40, moistDefault: "36",
-    snfDefault: "4",
-    efficiency: "97.0",
-    note: "Centrifuged cream — better yield vs 40% cream.",
-  },
-  malai: {
-    label:     "🫙 Malai (Farm)",
-    fatMin:    50, fatMax: 65, fatDefault: "55",
-    moistMin:  30, moistMax: 40, moistDefault: "35",
-    snfDefault: "10",
-    efficiency: "94.0",
-    note: "High SNF, variable quality. Expect more residue & darker colour.",
-  },
-} as const;
-
-type GheeInputKey = keyof typeof GHEE_INPUT_DB;
-
-// ── PROCESS METHOD DATABASE ───────────────────────────────
-const GHEE_PROCESS_DB = {
-  batch_open:  { label: "🪣 Batch (Open Kettle)", fuelKgPerKg: 0.08, time: "3–4 hr", colour: "Golden yellow", efficiency_adj: 0   },
-  continuous:  { label: "⚙️ Continuous Clarifier",fuelKgPerKg: 0.05, time: "Continuous", colour: "Light golden", efficiency_adj: 0.5 },
-  direct_cream:{ label: "🔥 Direct Cream Method", fuelKgPerKg: 0.12, time: "4–5 hr", colour: "Deep yellow",   efficiency_adj: -1  },
-  creamery:    { label: "🏭 Creamery Butter Method",fuelKgPerKg: 0.06,time: "2–3 hr", colour: "Pale yellow",   efficiency_adj: 0.5 },
-} as const;
-
-type GheeProcessKey = keyof typeof GHEE_PROCESS_DB;
-
-// ── QUALITY GRADES ────────────────────────────────────────
-const GHEE_GRADES = [
-  { label: "Premium / Export",  ffa: "≤0.3",  moisture: "≤0.1", colour: "Light golden", priceAdj: 1.15 },
-  { label: "Standard (FSSAI)",  ffa: "≤0.5",  moisture: "≤0.2", colour: "Golden",       priceAdj: 1.00 },
-  { label: "Table Grade",       ffa: "≤1.0",  moisture: "≤0.3", colour: "Deep yellow",  priceAdj: 0.90 },
-  { label: "Industrial Grade",  ffa: "≤2.0",  moisture: "≤0.5", colour: "Any",          priceAdj: 0.80 },
-] as const;
-
-// ── PRESETS ───────────────────────────────────────────────
-const GHEE_PRESETS = {
-  "Small Dairy (100 kg)":  { quantity: "100",  gheePrice: "550", residuePrice: "80",  fuelPrice: "55", batches: "2"  },
-  "Medium (500 kg)":       { quantity: "500",  gheePrice: "540", residuePrice: "75",  fuelPrice: "55", batches: "1"  },
-  "Large Plant (2000 kg)": { quantity: "2000", gheePrice: "530", residuePrice: "70",  fuelPrice: "50", batches: "1"  },
-} as const;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
 export function GheeRecoveryCalc() {
   const { toast } = useToast();
-
-  const [inputType, setInputType]   = useState<GheeInputKey>("white_butter");
-  const [processType, setProcessType] = useState<GheeProcessKey>("batch_open");
-
-  const [inp, setInp] = useState({
-    quantity:      "1000",
-    fatPercent:    "82",
-    moisture:      "16",
-    snf:           "2",
-    efficiency:    "98.5",
-    gheePrice:     "550",
-    residuePrice:  "80",
-    fuelPrice:     "55",    // ₹/kg LPG or equivalent
-    batches:       "1",
-    operDays:      "26",
-  });
-
-  const [result, setResult]       = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<"inputs" | "results" | "economics">("inputs");
-
-  const setF = (k: string, v: string) => setInp(p => ({ ...p, [k]: v }));
   const { validatePositive, validateNumber } = useInputValidation();
 
-  // Apply input type defaults
-  const applyInputType = (key: GheeInputKey) => {
-    const d = GHEE_INPUT_DB[key];
-    setInputType(key);
-    setInp(p => ({
-      ...p,
-      fatPercent: d.fatDefault,
-      moisture:   d.moistDefault,
-      snf:        d.snfDefault,
-      efficiency: d.efficiency,
-    }));
-    setResult(null);
-  };
+  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual">("theoretical");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [enableCosting, setEnableCosting] = useState(false);
 
-  // Apply preset
-  const applyPreset = (name: keyof typeof GHEE_PRESETS) => {
-    const pr = GHEE_PRESETS[name];
-    setInp(p => ({ ...p, ...pr }));
-    toast({ title: "Preset Applied", description: name });
-  };
+  // ── Theoretical Inputs (Predictor) ──
+  const [theo, setTheo] = useState({
+    quantity:       "1000",   // kg raw input (butter/cream)
+    fatPercent:     "82",     // % fat in input
+    moisture:       "16",     // % moisture in input
+    snf:            "2",      // % SNF (protein+lactose+ash)
+    // Advanced
+    fatRecovery:    "98.5",   // % fat recovery efficiency
+    fuelRate:       "0.08",   // kg LPG per kg input
+    gheeFatPurity:  "99.7",   // % fat in final ghee (FSSAI ≥99.5)
+    // Costing
+    gheePrice:      "550",    // ₹/kg selling price
+    residuePrice:   "80",     // ₹/kg khurchan
+    fuelPrice:      "55",     // ₹/kg LPG
+    batches:        "1",
+    operDays:       "26",
+  });
 
-  // ── CALCULATE ─────────────────────────────────────────
-  const calculate = useCallback(() => {
-    const Q        = parseFloat(inp.quantity)     || 0;
-    const Fat      = parseFloat(inp.fatPercent)   / 100;
-    const Moist    = parseFloat(inp.moisture)     / 100;
-    const SNF      = parseFloat(inp.snf)          / 100;
-    const batches  = parseFloat(inp.batches)      || 1;
-    const days     = parseFloat(inp.operDays)     || 26;
-    const proc     = GHEE_PROCESS_DB[processType];
+  // ── Actual Inputs (Tracker) ──
+  const [actual, setActual] = useState({
+    butterUsed:     "1000",
+    inputFat:       "82",
+    inputMoisture:  "16",
+    inputSnf:       "2",
+    gheeObtained:   "",
+  });
 
-    const baseEff  = parseFloat(inp.efficiency) / 100;
-    const effAdj   = baseEff + proc.efficiency_adj / 100;
-    const Eff      = Math.min(effAdj, 0.995);
+  const [theoResult, setTheoResult]     = useState<any>(null);
+  const [actualResult, setActualResult] = useState<any>(null);
 
-    const gheeRate     = parseFloat(inp.gheePrice)    || 0;
-    const residueRate  = parseFloat(inp.residuePrice) || 0;
-    const fuelRate     = parseFloat(inp.fuelPrice)    || 0;
+  const setT = (k: string, v: string) => setTheo(p => ({ ...p, [k]: v }));
+  const setA = (k: string, v: string) => setActual(p => ({ ...p, [k]: v }));
+
+  // ══════════════════════════════════════════════════════════
+  // THEORETICAL CALCULATION (Predictor)
+  // ══════════════════════════════════════════════════════════
+  const calculateTheo = useCallback(() => {
+    const Q       = parseFloat(theo.quantity)      || 0;
+    const Fat     = parseFloat(theo.fatPercent)     / 100;
+    const Moist   = parseFloat(theo.moisture)       / 100;
+    const SNF     = parseFloat(theo.snf)            / 100;
+    const Eff     = Math.min(parseFloat(theo.fatRecovery) / 100, 0.999);
+    const fuelKg  = parseFloat(theo.fuelRate)       || 0.08;
+    const purity  = parseFloat(theo.gheeFatPurity)  / 100;
+    const batches = parseFloat(theo.batches)        || 1;
+    const days    = parseFloat(theo.operDays)       || 26;
+
+    const gheePrice    = parseFloat(theo.gheePrice)    || 0;
+    const residuePrice = parseFloat(theo.residuePrice) || 0;
+    const fuelPrice    = parseFloat(theo.fuelPrice)    || 0;
 
     if (Q <= 0 || Fat <= 0) {
-      toast({ variant: "destructive", title: "Invalid values" }); return;
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया मात्रा और फैट% सही दर्ज करें।" });
+      return;
     }
 
-    // ── 1. Mass Balance ───────────────────────────────
-    // Input composition
-    const totalFatKg    = Q * Fat;          // kg fat in input
-    const totalMoistKg  = Q * Moist;        // kg moisture in input
-    const totalSNFKg    = Q * SNF;          // kg SNF (protein, lactose, ash)
-    const otherKg       = Q * (1 - Fat - Moist - SNF); // curd, impurities
+    // ── 1. Input Composition ──
+    const totalFatKg   = Q * Fat;
+    const totalMoistKg = Q * Moist;
+    const totalSnfKg   = Q * SNF;
 
-    // ── 2. Ghee Yield ────────────────────────────────
-    // Ghee = 99.7% fat (FSSAI), so:
-    // gheeKg = (totalFatKg × Eff) / 0.997
-    const recoveredFatKg  = totalFatKg * Eff;
-    const gheeYieldKg     = recoveredFatKg / 0.997;
-    const yieldPct        = (gheeYieldKg / Q) * 100;
+    // ── 2. Ghee Yield (Fat Balance Method) ──
+    // Ghee = (Total Fat × Recovery Efficiency) / Ghee Fat Purity
+    const recoveredFatKg = totalFatKg * Eff;
+    const gheeYieldKg    = recoveredFatKg / purity;
+    const yieldPct       = (gheeYieldKg / Q) * 100;
 
-    // ── 3. Fat Loss ───────────────────────────────────
-    const fatLossKg       = totalFatKg - recoveredFatKg;
-    const fatLossPct      = (fatLossKg / totalFatKg) * 100;
+    // ── 3. Fat Loss ──
+    const fatLossKg  = totalFatKg - recoveredFatKg;
+    const fatLossPct = totalFatKg > 0 ? (fatLossKg / totalFatKg) * 100 : 0;
 
-    // ── 4. Moisture Evaporation ───────────────────────
-    // All moisture + free water evaporated during clarification
-    const moistureEvapKg  = totalMoistKg; // fully removed
+    // ── 4. Moisture Evaporation ──
+    const moistureEvapKg = totalMoistKg;
 
-    // ── 5. Ghee Residue (Khurchan) ───────────────────
-    // Residue = SNF solids that precipitate + fat retained in curd
-    // Approx: residue = (SNF × 0.9) + (fat × (1-Eff))
-    const residueKg       = (totalSNFKg * 0.90) + (fatLossKg * 0.80);
+    // ── 5. Ghee Residue (Khurchan) ──
+    // Residue ≈ (SNF × 0.90) + (Fat Loss × 0.80)
+    const residueKg = (totalSnfKg * 0.90) + (fatLossKg * 0.80);
 
-    // ── 6. Mass Balance Check ─────────────────────────
-    // Q ≈ gheeYieldKg + residueKg + moistureEvapKg
-    const balanceCheck    = gheeYieldKg + residueKg + moistureEvapKg;
-    const balanceError    = Math.abs(balanceCheck - Q) / Q * 100;
+    // ── 6. Mass Balance Check ──
+    const balanceOut   = gheeYieldKg + residueKg + moistureEvapKg;
+    const balanceError = Q > 0 ? Math.abs(balanceOut - Q) / Q * 100 : 0;
 
-    // ── 7. Fuel Consumption ───────────────────────────
-    const fuelPerKgInput  = proc.fuelKgPerKg;           // kg LPG per kg input
-    const fuelKg          = Q * batches * fuelPerKgInput;
-    const fuelCost        = fuelKg * fuelRate;
+    // ── 7. Fuel ──
+    const totalFuelKg   = Q * batches * fuelKg;
+    const totalFuelCost = totalFuelKg * fuelPrice;
 
-    // ── 8. Economics (per batch × batches) ───────────
-    const gheeKgTotal     = gheeYieldKg   * batches;
-    const residueKgTotal  = residueKg     * batches;
-
-    const gheeRevenue     = gheeKgTotal   * gheeRate;
-    const residueRevenue  = residueKgTotal * residueRate;
-    const totalRevenue    = gheeRevenue + residueRevenue;
-    const totalInputCost  = 0; // input cost not tracked here (variable)
-    const netAfterFuel    = totalRevenue - fuelCost;
-
-    const costPerKgGhee   = fuelCost / gheeKgTotal;     // fuel only
-    const revenuePerKgInput= totalRevenue / (Q * batches);
+    // ── 8. Economics ──
+    const gheeKgTotal    = gheeYieldKg * batches;
+    const residueKgTotal = residueKg * batches;
+    const gheeRevenue    = gheeKgTotal * gheePrice;
+    const residueRevenue = residueKgTotal * residuePrice;
+    const totalRevenue   = gheeRevenue + residueRevenue;
+    const netAfterFuel   = totalRevenue - totalFuelCost;
+    const costPerKgGhee  = gheeKgTotal > 0 ? totalFuelCost / gheeKgTotal : 0;
 
     // Monthly
-    const monthlyGheeKg   = gheeYieldKg   * days;
-    const monthlyRevenue  = monthlyGheeKg  * gheeRate + (residueKg * days) * residueRate;
+    const monthlyGheeKg  = gheeYieldKg * batches * days;
+    const monthlyRevenue = monthlyGheeKg * gheePrice + (residueKg * batches * days) * residuePrice;
+    const monthlyFuel    = totalFuelCost * days;
+    const monthlyNet     = monthlyRevenue - monthlyFuel;
 
-    // ── 9. Milk equivalent ────────────────────────────
-    // How many litres of milk needed to make 1 kg ghee
-    // Avg: milk fat ~4%, butter fat ~82%
-    // L milk per kg ghee = 1 / (0.04 × 0.82 × Eff) × 0.997
-    const milkLPerKgGhee  = 1 / (0.04 * Fat * Eff) * 0.997;
+    // ── 9. Milk Equivalent ──
+    // L milk per kg ghee (assuming ~4% fat milk, butter at input Fat%)
+    const milkLPerKgGhee = Fat > 0 ? 1 / (0.04 * Fat * Eff) * purity : 0;
 
-    // ── 10. Warnings ─────────────────────────────────
+    // ── 10. Warnings ──
     const warnings: string[] = [];
-    if (fatLossPct > 2.5)   warnings.push(`Fat loss ${fatLossPct.toFixed(2)}% is high. Check clarifier temp (110–115°C) and decantation.`);
-    if (residueKg > Q * 0.05) warnings.push(`Residue ${residueKg.toFixed(1)} kg (${(residueKg/Q*100).toFixed(1)}% of input) — high SNF input or over-heating.`);
-    if (balanceError > 3)   warnings.push(`Mass balance error ${balanceError.toFixed(1)}% — verify fat/SNF/moisture inputs.`);
-    if (Eff < 0.96)         warnings.push(`Efficiency ${(Eff*100).toFixed(1)}% is below industry standard (98%). Review process.`);
+    if (fatLossPct > 2.5)  warnings.push(`फैट लॉस ${fatLossPct.toFixed(2)}% अधिक है। तापमान (110–115°C) और डिकैंटेशन जाँचें। (Fat loss ${fatLossPct.toFixed(2)}% is high — check clarifier temp.)`);
+    if (residueKg > Q * 0.05) warnings.push(`रेज़िड्यू ${(residueKg/Q*100).toFixed(1)}% — अधिक SNF या ज़्यादा गर्मी। (Residue is ${(residueKg/Q*100).toFixed(1)}% of input.)`);
+    if (balanceError > 3)  warnings.push(`मास बैलेंस एरर ${balanceError.toFixed(1)}% — फैट/SNF/नमी इनपुट सत्यापित करें। (Mass balance error > 3%.)`);
+    if (Eff < 0.96)        warnings.push(`एफ़िशिएंसी ${(Eff*100).toFixed(1)}% इंडस्ट्री स्टैंडर्ड (98%) से कम है। (Efficiency below industry standard.)`);
+    if (Fat * 100 < 30)    warnings.push(`इनपुट फैट ${(Fat*100).toFixed(1)}% बहुत कम है — क्रीम/बटर की क्वालिटी जाँचें। (Input fat very low.)`);
 
-    setResult({
-      totalFatKg, totalMoistKg, totalSNFKg,
+    setTheoResult({
+      totalFatKg, totalMoistKg, totalSnfKg,
       recoveredFatKg, gheeYieldKg, yieldPct,
       fatLossKg, fatLossPct, moistureEvapKg, residueKg,
-      balanceCheck, balanceError,
-      fuelKg, fuelCost, costPerKgGhee,
+      balanceOut, balanceError,
+      totalFuelKg, totalFuelCost, costPerKgGhee,
       gheeKgTotal, residueKgTotal,
       gheeRevenue, residueRevenue, totalRevenue, netAfterFuel,
-      revenuePerKgInput,
-      monthlyGheeKg, monthlyRevenue,
+      monthlyGheeKg, monthlyRevenue, monthlyFuel, monthlyNet,
       milkLPerKgGhee,
-      warnings, Q, batches, days, Eff,
+      warnings, Q, batches, days, Eff, purity,
     });
 
-    setActiveTab("results");
     toast({
-      title: "✅ Calculated",
-      description: `Ghee: ${gheeYieldKg.toFixed(1)} kg · Yield: ${yieldPct.toFixed(2)}% · Revenue: ₹${totalRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,
+      title: "🧮 गणना पूरी (Calculated)",
+      description: `घी उत्पादन: ${gheeYieldKg.toFixed(1)} kg (${yieldPct.toFixed(2)}% yield)`,
     });
-  }, [inp, inputType, processType, toast]);
+  }, [theo, toast]);
 
-  const matDef = GHEE_INPUT_DB[inputType];
+  // ══════════════════════════════════════════════════════════
+  // ACTUAL CALCULATION (Tracker)
+  // ══════════════════════════════════════════════════════════
+  const calculateActual = useCallback(() => {
+    const Q        = parseFloat(actual.butterUsed)   || 0;
+    const gheeKg   = parseFloat(actual.gheeObtained) || 0;
+    const Fat      = parseFloat(actual.inputFat)     / 100;
+    const Moist    = parseFloat(actual.inputMoisture)/ 100;
+    const SNF      = parseFloat(actual.inputSnf)     / 100;
 
-  // ── RENDER ────────────────────────────────────────────
+    if (Q <= 0 || Fat <= 0 || gheeKg <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि", description: "कृपया सभी इनपुट सही भरें।" });
+      return;
+    }
+
+    // Theoretical ideal (at 98.5% efficiency, 99.7% purity)
+    const idealEff      = 0.985;
+    const idealPurity   = 0.997;
+    const totalFatKg    = Q * Fat;
+    const idealGheeKg   = (totalFatKg * idealEff) / idealPurity;
+    const idealYieldPct = (idealGheeKg / Q) * 100;
+
+    // Actual metrics
+    const actualYieldPct    = (gheeKg / Q) * 100;
+    const recoveryEffPct    = idealGheeKg > 0 ? (gheeKg / idealGheeKg) * 100 : 0;
+
+    // Implied actual fat recovery
+    const impliedFatRecPct  = totalFatKg > 0 ? (gheeKg * idealPurity / totalFatKg) * 100 : 0;
+
+    // Fat loss
+    const actualRecoveredFat = gheeKg * idealPurity;
+    const actualFatLossKg    = totalFatKg - actualRecoveredFat;
+    const actualFatLossPct   = totalFatKg > 0 ? (actualFatLossKg / totalFatKg) * 100 : 0;
+
+    // Residue estimate
+    const totalSnfKg    = Q * SNF;
+    const residueKg     = (totalSnfKg * 0.90) + (Math.max(0, actualFatLossKg) * 0.80);
+    const moistureKg    = Q * Moist;
+
+    // Efficiency grade
+    let grade = "", gradeColor = "", gradeEmoji = "";
+    if (recoveryEffPct >= 98) {
+      grade = "Excellent (उत्कृष्ट)"; gradeColor = "text-green-700 bg-green-50 border-green-300"; gradeEmoji = "🏆";
+    } else if (recoveryEffPct >= 95) {
+      grade = "Good (अच्छा)"; gradeColor = "text-blue-700 bg-blue-50 border-blue-300"; gradeEmoji = "👍";
+    } else if (recoveryEffPct >= 92) {
+      grade = "Needs Improvement (सुधार ज़रूरी)"; gradeColor = "text-yellow-700 bg-yellow-50 border-yellow-300"; gradeEmoji = "⚠️";
+    } else {
+      grade = "Action Required (कार्रवाई ज़रूरी)"; gradeColor = "text-red-700 bg-red-50 border-red-300"; gradeEmoji = "🔴";
+    }
+
+    // Warnings
+    const warnings: string[] = [];
+    if (recoveryEffPct < 95) warnings.push(`रिकवरी ${recoveryEffPct.toFixed(1)}% — प्रोसेस तापमान, समय, और डिकैंटेशन की समीक्षा करें। (Recovery ${recoveryEffPct.toFixed(1)}% — review process.)`);
+    if (actualFatLossPct > 3) warnings.push(`फैट लॉस ${actualFatLossPct.toFixed(1)}% — क्लैरिफायर और सेटलिंग प्रक्रिया जाँचें। (Fat loss ${actualFatLossPct.toFixed(1)}% — check clarifier.)`);
+    if (gheeKg > idealGheeKg * 1.05) warnings.push(`वास्तविक घी > आदर्श — क्या इनपुट फैट% सही है? शायद नमी अधिक है। (Actual > ideal — check if moisture is high in ghee.)`);
+
+    setActualResult({
+      idealGheeKg, idealYieldPct,
+      actualYieldPct, recoveryEffPct, impliedFatRecPct,
+      actualFatLossKg, actualFatLossPct,
+      totalFatKg, residueKg, moistureKg,
+      grade, gradeColor, gradeEmoji,
+      warnings, Q, gheeKg,
+    });
+
+    toast({
+      title: "📋 ट्रैकर गणना पूरी",
+      description: `रिकवरी: ${recoveryEffPct.toFixed(1)}% — ${grade}`,
+    });
+  }, [actual, toast]);
+
+  // ══════════════════════════════════════════════════════════
+  // RENDER
+  // ══════════════════════════════════════════════════════════
   return (
-    <Card className="border-yellow-200 bg-yellow-50/20">
-      <CardHeader className="pb-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-t-lg border-b border-yellow-100">
-        <CardTitle className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-yellow-800">
-            <Target className="w-5 h-5 text-yellow-600" />
-            Industrial Ghee Recovery
-          </span>
-          {result && (
-            <Badge className="bg-yellow-600 text-white text-sm px-3 py-1">
-              {result.yieldPct.toFixed(2)}% yield
-            </Badge>
-          )}
-        </CardTitle>
-        <CardDescription className="text-yellow-700 text-xs">
-          5 input types · 4 process methods · Full mass balance · Fuel cost · Monthly revenue
-        </CardDescription>
-      </CardHeader>
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <Alert className="bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200">
+        <Target className="h-4 w-4 text-yellow-600" />
+        <AlertTitle className="text-yellow-800 font-bold">घी रिकवरी और एफ़िशिएंसी कैलकुलेटर</AlertTitle>
+        <AlertDescription className="text-xs text-yellow-700">
+          बटर/क्रीम → घी यील्ड, मास बैलेंस, फैट लॉस विश्लेषण, और प्रॉफिटेबिलिटी<br/>
+          <span className="text-yellow-500">Butter/Cream → Ghee yield, mass balance, fat loss analysis & profitability</span>
+        </AlertDescription>
+      </Alert>
 
-      <CardContent className="pt-4 space-y-4">
+      {/* ── Tab Toggle ── */}
+      <Tabs value={activeCalc} onValueChange={v => setActiveCalc(v as "theoretical" | "actual")}>
+        <TabsList className="grid grid-cols-2 bg-yellow-100">
+          <TabsTrigger value="theoretical" className="text-xs font-bold data-[state=active]:bg-yellow-600 data-[state=active]:text-white">
+            🧮 Predictor (अनुमान)
+          </TabsTrigger>
+          <TabsTrigger value="actual" className="text-xs font-bold data-[state=active]:bg-amber-600 data-[state=active]:text-white">
+            📋 Tracker (वास्तविक)
+          </TabsTrigger>
+        </TabsList>
 
-        {/* ── INPUT TYPE GRID ──────────────────────────── */}
-        <div className="space-y-1">
-          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Input Material</Label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {(Object.keys(GHEE_INPUT_DB) as GheeInputKey[]).map(key => (
-              <button key={key} onClick={() => applyInputType(key)}
-                className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                  ${inputType === key
-                    ? "bg-yellow-600 text-white border-yellow-600 shadow-md"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-yellow-300 hover:text-yellow-700"
-                  }`}>
-                {GHEE_INPUT_DB[key].label}
-                <div className={`text-[9px] mt-0.5 ${inputType === key ? "opacity-80" : "text-slate-400"}`}>
-                  Fat: {GHEE_INPUT_DB[key].fatMin}–{GHEE_INPUT_DB[key].fatMax}%
-                </div>
-              </button>
-            ))}
-          </div>
-          <p className="text-[10px] text-yellow-700 bg-yellow-50 px-2 py-1 rounded border border-yellow-100">
-            📌 {matDef.note}
-          </p>
-        </div>
+        {/* ═══════════════════════════════════════════════════ */}
+        {/* TAB 1: PREDICTOR (Theoretical Yield)               */}
+        {/* ═══════════════════════════════════════════════════ */}
+        <TabsContent value="theoretical" className="space-y-4 pt-3">
 
-        {/* ── PROCESS METHOD ───────────────────────────── */}
-        <div className="space-y-1">
-          <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Process Method</Label>
-          <div className="grid grid-cols-2 gap-2">
-            {(Object.keys(GHEE_PROCESS_DB) as GheeProcessKey[]).map(key => {
-              const p = GHEE_PROCESS_DB[key];
-              return (
-                <button key={key} onClick={() => setProcessType(key)}
-                  className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight shadow-sm
-                    ${processType === key
-                      ? "bg-amber-600 text-white border-amber-600 shadow-md"
-                      : "bg-white text-slate-600 border-slate-200 hover:border-amber-300 hover:text-amber-700"
-                    }`}>
-                  {p.label}
-                  <div className={`text-[9px] mt-0.5 ${processType === key ? "opacity-80" : "text-slate-400"}`}>
-                    {p.time} · {p.fuelKgPerKg} kg fuel/kg input
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+          {/* ── Core Inputs ── */}
+          <Card className="border-yellow-100 bg-white">
+            <CardHeader className="p-3 pb-2 bg-yellow-50 border-b border-yellow-100">
+              <CardTitle className="text-xs font-bold text-yellow-700 uppercase">🧈 इनपुट कम्पोज़ीशन (Input Composition)</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 grid grid-cols-2 gap-3">
+              <ValidatedInput
+                label="बटर/क्रीम मात्रा (Qty)"
+                value={theo.quantity}
+                onChange={v => setT("quantity", v)}
+                validation={validatePositive(theo.quantity, "Quantity")}
+                unit="kg"
+                colorScheme="yellow"
+              />
+              <ValidatedInput
+                label="फैट % (Fat)"
+                value={theo.fatPercent}
+                onChange={v => setT("fatPercent", v)}
+                validation={validateNumber(theo.fatPercent, 25, 99, "Fat")}
+                unit="%"
+                helpText="बटर: 78–84% · क्रीम: 35–65%"
+                colorScheme="orange"
+              />
+              <ValidatedInput
+                label="नमी % (Moisture)"
+                value={theo.moisture}
+                onChange={v => setT("moisture", v)}
+                validation={validateNumber(theo.moisture, 0, 65, "Moisture")}
+                unit="%"
+                helpText="बटर: 14–18% · क्रीम: 30–60%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="SNF %"
+                value={theo.snf}
+                onChange={v => setT("snf", v)}
+                validation={validateNumber(theo.snf, 0, 15, "SNF")}
+                unit="%"
+                helpText="प्रोटीन + लैक्टोज़ + राख"
+                colorScheme="purple"
+              />
+            </CardContent>
+          </Card>
 
-        {/* ── TABS ─────────────────────────────────────── */}
-        <Tabs value={activeTab} onValueChange={v => setActiveTab(v as any)}>
-          <TabsList className="grid grid-cols-3 bg-slate-100">
-            <TabsTrigger value="inputs"    className="text-xs">⚙️ Inputs</TabsTrigger>
-            <TabsTrigger value="results"   className="text-xs">📊 Mass Balance</TabsTrigger>
-            <TabsTrigger value="economics" className="text-xs">💰 Economics</TabsTrigger>
-          </TabsList>
-
-          {/* ═════ TAB 1: INPUTS ════════════════════════ */}
-          <TabsContent value="inputs" className="space-y-4 pt-3">
-
-            {/* Presets */}
-            <div className="space-y-1">
-              <Label className="text-xs font-bold text-slate-500 uppercase">Batch Presets</Label>
-              <div className="flex flex-wrap gap-2">
-                {(Object.keys(GHEE_PRESETS) as Array<keyof typeof GHEE_PRESETS>).map(name => (
-                  <button key={name} onClick={() => applyPreset(name)}
-                    className="px-3 py-1 rounded-full border border-yellow-200 bg-white text-xs font-semibold text-yellow-700 hover:bg-yellow-600 hover:text-white transition-all shadow-sm">
-                    {name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Input composition */}
-            <Card className="border-yellow-100 bg-white">
-              <CardHeader className="p-3 pb-2 bg-yellow-50 border-b border-yellow-100">
-                <CardTitle className="text-xs font-bold text-yellow-700 uppercase">🧈 Input Composition</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 grid grid-cols-2 gap-3">
+          {/* ── Advanced Process Settings (Collapsible) ── */}
+          <div className="border border-slate-200 rounded-lg overflow-hidden">
+            <button
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="w-full flex justify-between items-center p-3 bg-slate-50 hover:bg-slate-100 transition-colors"
+            >
+              <span className="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
+                <Settings2 className="w-3.5 h-3.5" /> एडवांस्ड प्रोसेस सेटिंग्स (Advanced Settings)
+              </span>
+              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
+            </button>
+            {showAdvanced && (
+              <div className="p-3 grid grid-cols-2 gap-3 bg-white border-t border-slate-100">
                 <ValidatedInput
-                  label="Quantity"
-                  value={inp.quantity}
-                  onChange={v => setF("quantity", v)}
-                  validation={validatePositive(inp.quantity, "Quantity")}
-                  unit="kg"
-                  colorScheme="yellow"
-                />
-                <ValidatedInput
-                  label="Batches"
-                  value={inp.batches}
-                  onChange={v => setF("batches", v)}
-                  validation={validatePositive(inp.batches, "Batches")}
-                  colorScheme="blue"
-                />
-                <ValidatedInput
-                  label="Fat %"
-                  value={inp.fatPercent}
-                  onChange={v => setF("fatPercent", v)}
-                  validation={validateNumber(inp.fatPercent, matDef.fatMin, matDef.fatMax, "Fat")}
+                  label="फैट रिकवरी (Fat Recovery)"
+                  value={theo.fatRecovery}
+                  onChange={v => setT("fatRecovery", v)}
+                  validation={validateNumber(theo.fatRecovery, 85, 99.9, "Recovery")}
                   unit="%"
-                  helpText={`Range: ${matDef.fatMin}–${matDef.fatMax}%`}
-                  colorScheme="orange"
-                />
-                <ValidatedInput
-                  label="Moisture %"
-                  value={inp.moisture}
-                  onChange={v => setF("moisture", v)}
-                  validation={validateNumber(inp.moisture, matDef.moistMin, matDef.moistMax, "Moisture")}
-                  unit="%"
-                  helpText={`Range: ${matDef.moistMin}–${matDef.moistMax}%`}
-                  colorScheme="blue"
-                />
-                <ValidatedInput
-                  label="SNF %"
-                  value={inp.snf}
-                  onChange={v => setF("snf", v)}
-                  validation={validateNumber(inp.snf, 0, 15, "SNF")}
-                  unit="%"
-                  helpText="Protein + lactose + ash"
-                  colorScheme="blue"
-                />
-                <ValidatedInput
-                  label="Fat Recovery Eff."
-                  value={inp.efficiency}
-                  onChange={v => setF("efficiency", v)}
-                  validation={validateNumber(inp.efficiency, 85, 99.9, "Efficiency")}
-                  unit="%"
-                  helpText="Industrial std: 98–99%"
+                  helpText="इंडस्ट्री: 97–99%"
                   colorScheme="green"
                 />
-              </CardContent>
-            </Card>
+                <ValidatedInput
+                  label="ईंधन दर (Fuel Rate)"
+                  value={theo.fuelRate}
+                  onChange={v => setT("fuelRate", v)}
+                  validation={validateNumber(theo.fuelRate, 0.01, 0.5, "Fuel rate")}
+                  unit="kg/kg input"
+                  helpText="LPG: ~0.05–0.12"
+                  colorScheme="red"
+                />
+                <ValidatedInput
+                  label="घी फैट शुद्धता (Ghee Purity)"
+                  value={theo.gheeFatPurity}
+                  onChange={v => setT("gheeFatPurity", v)}
+                  validation={validateNumber(theo.gheeFatPurity, 99, 100, "Purity")}
+                  unit="%"
+                  helpText="FSSAI: ≥99.5%"
+                  colorScheme="green"
+                />
+              </div>
+            )}
+          </div>
 
-            {/* Pricing */}
+          {/* ── Optional Costing Toggle ── */}
+          <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+            <div>
+              <p className="text-xs font-bold text-green-700">💰 कॉस्टिंग और प्रॉफिटेबिलिटी (Costing)</p>
+              <p className="text-[10px] text-green-500">ऑप्शनल — बिक्री मूल्य, ईंधन लागत, मासिक आय</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked={enableCosting} onChange={() => setEnableCosting(!enableCosting)} className="sr-only peer" />
+              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-green-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+          </div>
+
+          {enableCosting && (
             <Card className="border-green-100 bg-white">
               <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-                <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 Pricing</CardTitle>
+                <CardTitle className="text-xs font-bold text-green-700 uppercase">💰 प्राइसिंग और लागत</CardTitle>
               </CardHeader>
               <CardContent className="p-3 grid grid-cols-2 gap-3">
                 <ValidatedInput
-                  label="Ghee Price"
-                  value={inp.gheePrice}
-                  onChange={v => setF("gheePrice", v)}
-                  validation={validatePositive(inp.gheePrice, "Ghee price")}
+                  label="घी बिक्री मूल्य"
+                  value={theo.gheePrice}
+                  onChange={v => setT("gheePrice", v)}
+                  validation={validatePositive(theo.gheePrice, "Ghee price")}
                   unit="₹/kg"
                   colorScheme="green"
                 />
                 <ValidatedInput
-                  label="Residue Price"
-                  value={inp.residuePrice}
-                  onChange={v => setF("residuePrice", v)}
+                  label="खुरचन मूल्य (Residue)"
+                  value={theo.residuePrice}
+                  onChange={v => setT("residuePrice", v)}
                   validation={{ isValid: true, severity: "info" }}
                   unit="₹/kg"
-                  helpText="Khurchan / ghee residue"
                   colorScheme="orange"
                 />
                 <ValidatedInput
-                  label="Fuel Price"
-                  value={inp.fuelPrice}
-                  onChange={v => setF("fuelPrice", v)}
+                  label="ईंधन मूल्य (Fuel)"
+                  value={theo.fuelPrice}
+                  onChange={v => setT("fuelPrice", v)}
                   validation={{ isValid: true, severity: "info" }}
                   unit="₹/kg"
                   helpText="LPG ~₹50–60/kg"
                   colorScheme="red"
                 />
                 <ValidatedInput
-                  label="Working Days/Month"
-                  value={inp.operDays}
-                  onChange={v => setF("operDays", v)}
-                  validation={{ isValid: true, severity: "info" }}
-                  unit="days"
+                  label="बैच/दिन (Batches)"
+                  value={theo.batches}
+                  onChange={v => setT("batches", v)}
+                  validation={validatePositive(theo.batches, "Batches")}
                   colorScheme="blue"
                 />
+                <div className="col-span-2">
+                  <ValidatedInput
+                    label="कार्य दिवस/माह (Working Days)"
+                    value={theo.operDays}
+                    onChange={v => setT("operDays", v)}
+                    validation={{ isValid: true, severity: "info" }}
+                    unit="days"
+                    colorScheme="blue"
+                  />
+                </div>
               </CardContent>
             </Card>
-          </TabsContent>
+          )}
 
-          {/* ═════ TAB 2: MASS BALANCE ══════════════════ */}
-          <TabsContent value="results" className="space-y-4 pt-3">
-            {result ? (
-              <>
-                {/* Main KPIs */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-yellow-600 text-white p-4 rounded-xl shadow-lg text-center">
-                    <div className="text-[10px] uppercase opacity-80 font-bold">Ghee Yield</div>
-                    <div className="text-3xl font-black">{result.gheeYieldKg.toFixed(1)}</div>
-                    <div className="text-xs opacity-70">kg per batch</div>
-                  </div>
-                  <div className="bg-green-700 text-white p-4 rounded-xl shadow-lg text-center">
-                    <div className="text-[10px] uppercase opacity-80 font-bold">Recovery %</div>
-                    <div className="text-3xl font-black">{result.yieldPct.toFixed(2)}</div>
-                    <div className="text-xs opacity-70">% w/w</div>
-                  </div>
+          {/* ── Calculate Button ── */}
+          <Button onClick={calculateTheo}
+            className="w-full h-11 bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700 text-white font-bold shadow-md">
+            <Calculator className="w-4 h-4 mr-2" /> घी यील्ड गणना करें (Calculate)
+          </Button>
+
+          {/* ═══ PREDICTOR RESULTS ═══ */}
+          {theoResult && (
+            <div className="space-y-4 animate-in slide-in-from-bottom-2">
+
+              {/* Warnings */}
+              {theoResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-300">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-sm">प्रोसेस अलर्ट</AlertTitle>
+                  <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    {theoResult.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {/* Hero KPIs */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-yellow-600 text-white p-4 rounded-xl shadow-lg text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">घी उत्पादन</div>
+                  <div className="text-2xl font-black">{theoResult.gheeYieldKg.toFixed(1)}</div>
+                  <div className="text-xs opacity-70">kg / batch</div>
                 </div>
-
-                {/* Full mass balance */}
-                <Card className="bg-amber-50 border-amber-200">
-                  <CardHeader className="p-3 pb-1 border-b border-amber-100">
-                    <CardTitle className="text-sm text-amber-800">⚖️ Complete Mass Balance</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-0">
-                    {/* INPUT side */}
-                    <div className="text-[10px] uppercase font-bold text-slate-500 mb-1">INPUT ({inp.quantity} kg)</div>
-                    {[
-                      { label: "Fat",          value: result.totalFatKg.toFixed(2),   pct: parseFloat(inp.fatPercent),    color: "bg-yellow-400" },
-                      { label: "Moisture",     value: result.totalMoistKg.toFixed(2),  pct: parseFloat(inp.moisture),      color: "bg-blue-300"   },
-                      { label: "SNF",          value: result.totalSNFKg.toFixed(2),    pct: parseFloat(inp.snf),           color: "bg-slate-300"  },
-                    ].map((r, i) => (
-                      <div key={i} className="flex items-center gap-2 mb-1">
-                        <div className={`h-2 rounded-full ${r.color}`} style={{ width: `${Math.min(r.pct * 1.5, 100)}%`, minWidth: "4px" }} />
-                        <span className="text-xs text-slate-600 w-16">{r.label}</span>
-                        <span className="text-xs font-bold">{r.value} kg ({r.pct}%)</span>
-                      </div>
-                    ))}
-
-                    <div className="border-t border-amber-200 my-3" />
-
-                    {/* OUTPUT side */}
-                    <div className="text-[10px] uppercase font-bold text-slate-500 mb-1">OUTPUT</div>
-                    {[
-                      { label: "🧈 Ghee",             value: result.gheeYieldKg.toFixed(2),   unit: "kg", color: "text-yellow-700 font-black text-base" },
-                      { label: "🫙 Ghee Residue",      value: result.residueKg.toFixed(2),     unit: "kg", color: "text-orange-700 font-bold" },
-                      { label: "💧 Moisture Evap.",    value: result.moistureEvapKg.toFixed(2),unit: "kg", color: "text-blue-600"  },
-                      { label: "🔴 Fat Loss",          value: result.fatLossKg.toFixed(3),     unit: "kg", color: "text-red-600 font-bold" },
-                    ].map((r, i) => (
-                      <div key={i} className="flex justify-between py-1">
-                        <span className="text-slate-600 text-sm">{r.label}</span>
-                        <span className={`text-sm ${r.color}`}>{r.value} {r.unit}</span>
-                      </div>
-                    ))}
-
-                    {/* Balance check */}
-                    <div className={`mt-2 p-2 rounded text-xs font-bold text-center ${result.balanceError < 3 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                      {result.balanceError < 3
-                        ? `✅ Mass balance OK (error: ${result.balanceError.toFixed(2)}%)`
-                        : `⚠️ Balance error ${result.balanceError.toFixed(2)}% — check composition inputs`}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Fat loss analysis */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
-                    <div className="text-[10px] text-red-500 font-bold uppercase">Fat Loss</div>
-                    <div className="text-2xl font-black text-red-700">{result.fatLossKg.toFixed(2)} kg</div>
-                    <div className="text-xs text-red-400">{result.fatLossPct.toFixed(2)}% of input fat</div>
-                  </div>
-                  <div className="bg-white border-2 border-yellow-200 rounded-xl p-4 text-center">
-                    <div className="text-[10px] text-yellow-600 font-bold uppercase">Milk → 1 kg Ghee</div>
-                    <div className="text-2xl font-black text-yellow-800">{result.milkLPerKgGhee.toFixed(1)} L</div>
-                    <div className="text-xs text-slate-400">milk equivalent</div>
-                  </div>
+                <div className="bg-green-700 text-white p-4 rounded-xl shadow-lg text-center">
+                  <div className="text-[10px] uppercase opacity-80 font-bold">यील्ड %</div>
+                  <div className="text-2xl font-black">{theoResult.yieldPct.toFixed(2)}</div>
+                  <div className="text-xs opacity-70">% w/w</div>
                 </div>
-
-                {/* FSSAI Ghee Standards */}
-                <Card className="bg-slate-50 border-slate-200">
-                  <CardHeader className="p-3 pb-1 border-b">
-                    <CardTitle className="text-xs font-bold uppercase text-slate-600">📜 FSSAI Ghee Standards (IS 3508)</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-1">
-                    {GHEE_GRADES.map((g, i) => (
-                      <div key={i} className="flex justify-between text-xs py-0.5">
-                        <span className="font-semibold text-slate-700">{g.label}</span>
-                        <div className="flex gap-3 text-slate-500">
-                          <span>FFA {g.ffa}%</span>
-                          <span>Moist {g.moisture}%</span>
-                          <span className="text-green-600 font-bold">{g.priceAdj >= 1 ? `×${g.priceAdj}` : `×${g.priceAdj} price`}</span>
-                        </div>
-                      </div>
-                    ))}
-                    <p className="text-[10px] text-slate-400 mt-1">
-                      Process: {GHEE_PROCESS_DB[processType].colour} colour expected — {GHEE_PROCESS_DB[processType].label}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Warnings */}
-                {result.warnings.length > 0 && (
-                  <Alert className="bg-yellow-50 border-yellow-300">
-                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                    <AlertTitle className="text-yellow-800 text-sm">Process Alerts</AlertTitle>
-                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
-                      {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
-                    </AlertDescription>
-                  </Alert>
-                )}
-
-                {/* Formula */}
-                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
-                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Formulas (Fat Balance Method):</div>
-                  <div>TotalFat = Q × Fat% = {result.totalFatKg.toFixed(2)} kg</div>
-                  <div>RecoveredFat = TotalFat × Eff({(result.Eff*100).toFixed(2)}%) = {result.recoveredFatKg.toFixed(2)} kg</div>
-                  <div>GheeKg = RecoveredFat / 0.997 = {result.gheeYieldKg.toFixed(2)} kg (ghee is 99.7% fat)</div>
-                  <div>Residue ≈ (SNF × 0.90) + (FatLoss × 0.80) = {result.residueKg.toFixed(2)} kg</div>
+                <div className="bg-white border-2 border-yellow-200 p-4 rounded-xl text-center">
+                  <div className="text-[10px] text-yellow-600 font-bold uppercase">दूध → 1 kg घी</div>
+                  <div className="text-2xl font-black text-yellow-800">{theoResult.milkLPerKgGhee.toFixed(1)}</div>
+                  <div className="text-xs text-slate-400">L milk equiv.</div>
                 </div>
-              </>
-            ) : (
-              <div className="text-center py-10 text-muted-foreground text-sm">
-                <Target className="h-10 w-10 mx-auto mb-3 text-yellow-200" />
-                <p>Inputs bharein aur <strong>Calculate</strong> press karein.</p>
               </div>
-            )}
-          </TabsContent>
 
-          {/* ═════ TAB 3: ECONOMICS ═════════════════════ */}
-          <TabsContent value="economics" className="space-y-4 pt-3">
-            {result ? (
-              <>
-                {/* Revenue summary */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-yellow-600 text-white p-4 rounded-xl text-center shadow-lg">
-                    <div className="text-[10px] uppercase opacity-80 font-bold">Ghee Revenue</div>
-                    <div className="text-2xl font-black">
-                      ₹{result.gheeRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+              {/* Mass Balance */}
+              <Card className="bg-amber-50 border-amber-200">
+                <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                  <CardTitle className="text-sm text-amber-800">⚖️ मास बैलेंस (Mass Balance)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-0">
+                  <div className="text-[10px] uppercase font-bold text-slate-500 mb-1">इनपुट ({theo.quantity} kg)</div>
+                  {[
+                    { label: "फैट (Fat)", value: theoResult.totalFatKg.toFixed(2), pct: parseFloat(theo.fatPercent), color: "bg-yellow-400" },
+                    { label: "नमी (Moisture)", value: theoResult.totalMoistKg.toFixed(2), pct: parseFloat(theo.moisture), color: "bg-blue-300" },
+                    { label: "SNF", value: theoResult.totalSnfKg.toFixed(2), pct: parseFloat(theo.snf), color: "bg-slate-300" },
+                  ].map((r: any, i: number) => (
+                    <div key={i} className="flex items-center gap-2 mb-1">
+                      <div className={`h-2 rounded-full ${r.color}`} style={{ width: `${Math.min(r.pct * 1.5, 100)}%`, minWidth: "4px" }} />
+                      <span className="text-xs text-slate-600 w-20">{r.label}</span>
+                      <span className="text-xs font-bold">{r.value} kg ({r.pct}%)</span>
                     </div>
-                    <div className="text-xs opacity-70">{result.gheeKgTotal.toFixed(1)} kg × ₹{inp.gheePrice}</div>
-                  </div>
-                  <div className="bg-orange-500 text-white p-4 rounded-xl text-center shadow-lg">
-                    <div className="text-[10px] uppercase opacity-80 font-bold">Residue Revenue</div>
-                    <div className="text-2xl font-black">
-                      ₹{result.residueRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                  ))}
+
+                  <div className="border-t border-amber-200 my-3" />
+
+                  <div className="text-[10px] uppercase font-bold text-slate-500 mb-1">आउटपुट (Output)</div>
+                  {[
+                    { label: "🧈 घी (Ghee)", value: theoResult.gheeYieldKg.toFixed(2), unit: "kg", cls: "text-yellow-700 font-black text-base" },
+                    { label: "🫙 खुरचन (Residue)", value: theoResult.residueKg.toFixed(2), unit: "kg", cls: "text-orange-700 font-bold" },
+                    { label: "💧 नमी वाष्पीकरण", value: theoResult.moistureEvapKg.toFixed(2), unit: "kg", cls: "text-blue-600" },
+                    { label: "🔴 फैट लॉस", value: theoResult.fatLossKg.toFixed(3), unit: "kg", cls: "text-red-600 font-bold" },
+                  ].map((r: any, i: number) => (
+                    <div key={i} className="flex justify-between py-1">
+                      <span className="text-slate-600 text-sm">{r.label}</span>
+                      <span className={`text-sm ${r.cls}`}>{r.value} {r.unit}</span>
                     </div>
-                    <div className="text-xs opacity-70">{result.residueKgTotal.toFixed(1)} kg × ₹{inp.residuePrice}</div>
+                  ))}
+
+                  <div className={`mt-2 p-2 rounded text-xs font-bold text-center ${theoResult.balanceError < 3 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                    {theoResult.balanceError < 3
+                      ? `✅ मास बैलेंस OK (एरर: ${theoResult.balanceError.toFixed(2)}%)`
+                      : `⚠️ बैलेंस एरर ${theoResult.balanceError.toFixed(2)}% — इनपुट जाँचें`}
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Fat Loss Detail */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
+                  <div className="text-[10px] text-red-500 font-bold uppercase">फैट लॉस</div>
+                  <div className="text-2xl font-black text-red-700">{theoResult.fatLossKg.toFixed(2)} kg</div>
+                  <div className="text-xs text-red-400">{theoResult.fatLossPct.toFixed(2)}% of input fat</div>
                 </div>
+                <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 text-center">
+                  <div className="text-[10px] text-orange-600 font-bold uppercase">खुरचन (Residue)</div>
+                  <div className="text-2xl font-black text-orange-700">{theoResult.residueKg.toFixed(1)} kg</div>
+                  <div className="text-xs text-orange-400">{(theoResult.residueKg / theoResult.Q * 100).toFixed(1)}% of input</div>
+                </div>
+              </div>
 
-                {/* P&L */}
-                <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-                  <CardHeader className="p-3 pb-1">
-                    <CardTitle className="text-xs text-slate-300 font-bold uppercase">
-                      📊 Revenue Summary ({result.batches} batch{result.batches > 1 ? "es" : ""})
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-2 text-sm">
-                    {[
-                      { label: "Ghee revenue",        value: `+₹ ${result.gheeRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,    color: "text-yellow-300"  },
-                      { label: "Residue revenue",     value: `+₹ ${result.residueRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,  color: "text-orange-300"  },
-                      { label: "Fuel cost",           value: `-₹ ${result.fuelCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,        color: "text-red-400"     },
-                      { label: "Net (excl. input)",   value: `₹ ${result.netAfterFuel.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,     color: "text-green-300 font-black text-base" },
-                    ].map((r, i) => (
-                      <div key={i} className={`flex justify-between ${i === 3 ? "border-t border-slate-700 pt-2" : ""}`}>
-                        <span className="text-slate-400">{r.label}</span>
-                        <span className={`font-bold ${r.color}`}>{r.value}</span>
+              {/* FSSAI Standards Quick Ref */}
+              <Card className="bg-slate-50 border-slate-200">
+                <CardHeader className="p-3 pb-1 border-b">
+                  <CardTitle className="text-xs font-bold uppercase text-slate-600">📜 FSSAI Ghee Standards (IS 3508)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-1">
+                  {[
+                    { label: "Premium / Export", ffa: "≤0.3%", moist: "≤0.1%", colour: "Light golden" },
+                    { label: "Standard (FSSAI)", ffa: "≤0.5%", moist: "≤0.2%", colour: "Golden" },
+                    { label: "Table Grade", ffa: "≤1.0%", moist: "≤0.3%", colour: "Deep yellow" },
+                    { label: "Industrial", ffa: "≤2.0%", moist: "≤0.5%", colour: "Any" },
+                  ].map((g: any, i: number) => (
+                    <div key={i} className="flex justify-between text-xs py-0.5">
+                      <span className="font-semibold text-slate-700">{g.label}</span>
+                      <div className="flex gap-3 text-slate-500">
+                        <span>FFA {g.ffa}</span>
+                        <span>Moist {g.moist}</span>
                       </div>
-                    ))}
-                    <div className="grid grid-cols-2 gap-2 mt-2">
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Formula Reference */}
+              <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
+                <div className="font-bold text-slate-600 text-xs mb-1">📐 सूत्र (Formulas — Fat Balance Method):</div>
+                <div>TotalFat = Q × Fat% = {theoResult.totalFatKg.toFixed(2)} kg</div>
+                <div>RecoveredFat = TotalFat × Eff({(theoResult.Eff*100).toFixed(2)}%) = {theoResult.recoveredFatKg.toFixed(2)} kg</div>
+                <div>GheeKg = RecoveredFat / {(theoResult.purity*100).toFixed(1)}% = {theoResult.gheeYieldKg.toFixed(2)} kg</div>
+                <div>Residue ≈ (SNF × 0.90) + (FatLoss × 0.80) = {theoResult.residueKg.toFixed(2)} kg</div>
+              </div>
+
+              {/* ── OPTIONAL ECONOMICS ── */}
+              {enableCosting && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-yellow-600 text-white p-4 rounded-xl text-center shadow-lg">
+                      <div className="text-[10px] uppercase opacity-80 font-bold">घी रेवेन्यू</div>
+                      <div className="text-2xl font-black">₹{theoResult.gheeRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                      <div className="text-xs opacity-70">{theoResult.gheeKgTotal.toFixed(1)} kg × ₹{theo.gheePrice}</div>
+                    </div>
+                    <div className="bg-orange-500 text-white p-4 rounded-xl text-center shadow-lg">
+                      <div className="text-[10px] uppercase opacity-80 font-bold">खुरचन रेवेन्यू</div>
+                      <div className="text-2xl font-black">₹{theoResult.residueRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                      <div className="text-xs opacity-70">{theoResult.residueKgTotal.toFixed(1)} kg × ₹{theo.residuePrice}</div>
+                    </div>
+                  </div>
+
+                  <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
+                    <CardHeader className="p-3 pb-1">
+                      <CardTitle className="text-xs text-slate-300 font-bold uppercase">
+                        📊 रेवेन्यू समरी ({theoResult.batches} batch{theoResult.batches > 1 ? "es" : ""})
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 space-y-2 text-sm">
                       {[
-                        { label: "Fuel cost/kg ghee",    value: `₹${result.costPerKgGhee.toFixed(2)}` },
-                        { label: "Revenue/kg input",     value: `₹${result.revenuePerKgInput.toFixed(2)}` },
-                      ].map((c, i) => (
-                        <div key={i} className="bg-slate-700 rounded-lg p-2 text-center">
-                          <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                          <div className="font-black text-white">{c.value}</div>
+                        { label: "घी रेवेन्यू", value: `+₹${theoResult.gheeRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-yellow-300" },
+                        { label: "खुरचन रेवेन्यू", value: `+₹${theoResult.residueRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-orange-300" },
+                        { label: "ईंधन लागत", value: `-₹${theoResult.totalFuelCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-red-400" },
+                        { label: "नेट (ईंधन बाद)", value: `₹${theoResult.netAfterFuel.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-green-300 font-black text-base" },
+                      ].map((r: any, i: number) => (
+                        <div key={i} className={`flex justify-between ${i === 3 ? "border-t border-slate-700 pt-2" : ""}`}>
+                          <span className="text-slate-400">{r.label}</span>
+                          <span className={`font-bold ${r.color}`}>{r.value}</span>
                         </div>
                       ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Monthly summary */}
-                <Card className="bg-green-50 border-green-200">
-                  <CardHeader className="p-3 pb-1 border-b border-green-100">
-                    <CardTitle className="text-sm text-green-800">
-                      📅 Monthly Estimate ({inp.operDays} days)
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-2 text-sm">
-                    {[
-                      { label: "Monthly ghee production",  value: `${result.monthlyGheeKg.toFixed(0)} kg` },
-                      { label: "Monthly total revenue",    value: `₹ ${result.monthlyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
-                    ].map((r, i) => (
-                      <div key={i} className="flex justify-between">
-                        <span className="text-slate-500">{r.label}</span>
-                        <span className="font-bold text-green-800">{r.value}</span>
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        <div className="bg-slate-700 rounded-lg p-2 text-center">
+                          <div className="text-[9px] text-slate-400 font-bold">ईंधन लागत/kg घी</div>
+                          <div className="font-black text-white">₹{theoResult.costPerKgGhee.toFixed(2)}</div>
+                        </div>
+                        <div className="bg-slate-700 rounded-lg p-2 text-center">
+                          <div className="text-[9px] text-slate-400 font-bold">Monthly Net</div>
+                          <div className="font-black text-green-300">₹{theoResult.monthlyNet.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
+                        </div>
                       </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </>
-            ) : (
-              <div className="text-center py-10 text-muted-foreground text-sm">
-                <Target className="h-10 w-10 mx-auto mb-3 text-yellow-200" />
-                <p>Pehle calculate karein — tab economics aayega.</p>
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
+                    </CardContent>
+                  </Card>
 
-        {/* ── CALCULATE BUTTON ─────────────────────────── */}
-        <Button onClick={calculate}
-          className="w-full h-11 bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700 text-white font-bold shadow-md">
-          <Target className="w-4 h-4 mr-2" />
-          Calculate Ghee Recovery
-        </Button>
-      </CardContent>
-    </Card>
+                  <Card className="bg-green-50 border-green-200">
+                    <CardHeader className="p-3 pb-1 border-b border-green-100">
+                      <CardTitle className="text-sm text-green-800">📅 मासिक अनुमान ({theo.operDays} दिन)</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 space-y-2 text-sm">
+                      {[
+                        { label: "मासिक घी उत्पादन", value: `${theoResult.monthlyGheeKg.toFixed(0)} kg` },
+                        { label: "मासिक रेवेन्यू", value: `₹${theoResult.monthlyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
+                        { label: "मासिक ईंधन लागत", value: `₹${theoResult.monthlyFuel.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
+                        { label: "मासिक नेट प्रॉफ़िट", value: `₹${theoResult.monthlyNet.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
+                      ].map((r: any, i: number) => (
+                        <div key={i} className="flex justify-between">
+                          <span className="text-slate-500">{r.label}</span>
+                          <span className="font-bold text-green-800">{r.value}</span>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* ═══════════════════════════════════════════════════ */}
+        {/* TAB 2: TRACKER (Actual vs Theoretical)              */}
+        {/* ═══════════════════════════════════════════════════ */}
+        <TabsContent value="actual" className="space-y-4 pt-3">
+
+          {/* Tracker Inputs */}
+          <Card className="border-amber-100 bg-white">
+            <CardHeader className="p-3 pb-2 bg-amber-50 border-b border-amber-100">
+              <CardTitle className="text-xs font-bold text-amber-700 uppercase">📋 वास्तविक बैच डेटा (Actual Batch Data)</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 grid grid-cols-2 gap-3">
+              <ValidatedInput
+                label="बटर/क्रीम इस्तेमाल"
+                value={actual.butterUsed}
+                onChange={v => setA("butterUsed", v)}
+                validation={validatePositive(actual.butterUsed, "Butter used")}
+                unit="kg"
+                colorScheme="yellow"
+              />
+              <ValidatedInput
+                label="इनपुट फैट %"
+                value={actual.inputFat}
+                onChange={v => setA("inputFat", v)}
+                validation={validateNumber(actual.inputFat, 25, 99, "Fat")}
+                unit="%"
+                colorScheme="orange"
+              />
+              <ValidatedInput
+                label="इनपुट नमी %"
+                value={actual.inputMoisture}
+                onChange={v => setA("inputMoisture", v)}
+                validation={validateNumber(actual.inputMoisture, 0, 65, "Moisture")}
+                unit="%"
+                colorScheme="blue"
+              />
+              <ValidatedInput
+                label="इनपुट SNF %"
+                value={actual.inputSnf}
+                onChange={v => setA("inputSnf", v)}
+                validation={validateNumber(actual.inputSnf, 0, 15, "SNF")}
+                unit="%"
+                colorScheme="purple"
+              />
+              <div className="col-span-2">
+                <ValidatedInput
+                  label="🧈 वास्तविक घी प्राप्त (Actual Ghee Obtained)"
+                  value={actual.gheeObtained}
+                  onChange={v => setA("gheeObtained", v)}
+                  validation={validatePositive(actual.gheeObtained, "Ghee obtained")}
+                  unit="kg"
+                  colorScheme="green"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Tracker Calculate Button */}
+          <Button onClick={calculateActual}
+            className="w-full h-11 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold shadow-md">
+            <Calculator className="w-4 h-4 mr-2" /> ट्रैकर गणना करें (Analyze)
+          </Button>
+
+          {/* ═══ TRACKER RESULTS ═══ */}
+          {actualResult && (
+            <div className="space-y-4 animate-in slide-in-from-bottom-2">
+
+              {/* Warnings */}
+              {actualResult.warnings.length > 0 && (
+                <Alert className="bg-yellow-50 border-yellow-300">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800 text-sm">प्रोसेस अलर्ट</AlertTitle>
+                  <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    {actualResult.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {/* Efficiency Grade Badge */}
+              <div className={`p-4 rounded-xl border-2 text-center ${actualResult.gradeColor}`}>
+                <div className="text-3xl mb-1">{actualResult.gradeEmoji}</div>
+                <div className="text-lg font-black">{actualResult.grade}</div>
+                <div className="text-sm font-bold mt-1">रिकवरी: {actualResult.recoveryEffPct.toFixed(1)}%</div>
+              </div>
+
+              {/* Comparison Table */}
+              <Card className="bg-white border-amber-200">
+                <CardHeader className="p-3 pb-1 border-b border-amber-100">
+                  <CardTitle className="text-sm text-amber-800">📊 आदर्श vs वास्तविक (Ideal vs Actual)</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 space-y-0">
+                  <div className="grid grid-cols-3 gap-2 text-xs font-bold text-slate-500 uppercase mb-2">
+                    <div>मीट्रिक</div>
+                    <div className="text-center">आदर्श (Ideal)</div>
+                    <div className="text-center">वास्तविक (Actual)</div>
+                  </div>
+                  {[
+                    { metric: "घी (kg)", ideal: actualResult.idealGheeKg.toFixed(1), actual: actualResult.gheeKg.toFixed(1), ok: actualResult.recoveryEffPct >= 95 },
+                    { metric: "यील्ड %", ideal: actualResult.idealYieldPct.toFixed(2) + "%", actual: actualResult.actualYieldPct.toFixed(2) + "%", ok: actualResult.recoveryEffPct >= 95 },
+                    { metric: "फैट लॉस %", ideal: "1.5%", actual: actualResult.actualFatLossPct.toFixed(2) + "%", ok: actualResult.actualFatLossPct <= 2.5 },
+                  ].map((r: any, i: number) => (
+                    <div key={i} className="grid grid-cols-3 gap-2 py-2 border-b border-slate-100 text-sm">
+                      <div className="font-semibold text-slate-700">{r.metric}</div>
+                      <div className="text-center text-blue-600 font-bold">{r.ideal}</div>
+                      <div className={`text-center font-bold ${r.ok ? "text-green-600" : "text-red-600"}`}>{r.actual}</div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* KPI Cards */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
+                  <div className="text-[10px] text-red-500 font-bold uppercase">फैट लॉस</div>
+                  <div className="text-2xl font-black text-red-700">{actualResult.actualFatLossKg.toFixed(2)} kg</div>
+                  <div className="text-xs text-red-400">{actualResult.actualFatLossPct.toFixed(2)}%</div>
+                </div>
+                <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 text-center">
+                  <div className="text-[10px] text-green-500 font-bold uppercase">फैट रिकवरी</div>
+                  <div className="text-2xl font-black text-green-700">{actualResult.impliedFatRecPct.toFixed(1)}%</div>
+                  <div className="text-xs text-green-400">implied recovery</div>
+                </div>
+              </div>
+
+              {/* Efficiency Bar */}
+              <div className="space-y-1">
+                <div className="flex justify-between text-xs">
+                  <span className="text-slate-500 font-semibold">एफ़िशिएंसी बार</span>
+                  <span className={`font-bold ${actualResult.recoveryEffPct >= 95 ? "text-green-600" : "text-red-600"}`}>
+                    {actualResult.recoveryEffPct.toFixed(1)}%
+                  </span>
+                </div>
+                <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-700 ${
+                      actualResult.recoveryEffPct >= 98 ? "bg-green-500" :
+                      actualResult.recoveryEffPct >= 95 ? "bg-blue-500" :
+                      actualResult.recoveryEffPct >= 92 ? "bg-yellow-500" : "bg-red-500"
+                    }`}
+                    style={{ width: `${Math.min(actualResult.recoveryEffPct, 100)}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-[9px] text-slate-400">
+                  <span>0%</span>
+                  <span className="text-red-400">92%</span>
+                  <span className="text-yellow-500">95%</span>
+                  <span className="text-green-500">98%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }
+
 
 // ════════════════════════════════════════════════════════════
 // ADVANCED CHEESE YIELD CALCULATOR (VAN SLYKE FORMULA)
