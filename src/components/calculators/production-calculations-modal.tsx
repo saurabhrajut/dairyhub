@@ -19,6 +19,9 @@ import {
   FileText,
   ArrowLeft,
   Percent,
+  Calendar,
+  ChevronDown,
+  ChevronUp,
   ChevronsUp,
   Droplets,
   Info,
@@ -101,7 +104,7 @@ import html2canvas from "html2canvas";
 interface ValidationResult {
     isValid: boolean;
     message?: string;
-    severity: "error" | "warning" | "info";
+    severity?: "error" | "warning" | "info";
   }
   
   interface CalculationResult {
@@ -235,7 +238,7 @@ interface ValidatedInputProps {
   unit?: string;
   icon?: React.ReactNode;
   helpText?: string;
-  colorScheme?: "blue" | "green" | "purple" | "orange" | "pink";
+  colorScheme?: "blue" | "green" | "purple" | "orange" | "pink" | "yellow" | "red" | "violet" | "cyan" | "indigo" | "slate" | "teal" | "rose";
 }
 
 const ValidatedInput = memo(
@@ -260,6 +263,14 @@ const ValidatedInput = memo(
       purple: "focus-visible:ring-purple-500 border-purple-200",
       orange: "focus-visible:ring-orange-500 border-orange-200",
       pink: "focus-visible:ring-pink-500 border-pink-200",
+      yellow: "focus-visible:ring-yellow-500 border-yellow-200",
+      red: "focus-visible:ring-red-500 border-red-200",
+      violet: "focus-visible:ring-violet-500 border-violet-200",
+      cyan: "focus-visible:ring-cyan-500 border-cyan-200",
+      indigo: "focus-visible:ring-indigo-500 border-indigo-200",
+      slate: "focus-visible:ring-slate-500 border-slate-200",
+      teal: "focus-visible:ring-teal-500 border-teal-200",
+      rose: "focus-visible:ring-rose-500 border-rose-200",
     };
 
     return (
@@ -546,60 +557,38 @@ export function ProductionCalculationsModal({
 // Koi naya import nahi chahiye.
 // ════════════════════════════════════════════════════════════
 
-// ── MILK TYPE DATABASE ────────────────────────────────────
-const PANEER_MILK_DB = {
-  cow_hf:     { label: "🐄 HF/Holstein Cow",      fat: "3.5", snf: "8.5",  density: "1.030", caseinInSnf: "0.77", fatRec: "90", caseinRec: "93" },
-  cow_jersey: { label: "🐄 Jersey Cow",            fat: "5.0", snf: "9.2",  density: "1.031", caseinInSnf: "0.77", fatRec: "90", caseinRec: "93" },
-  buffalo:    { label: "🐃 Buffalo",               fat: "7.5", snf: "9.5",  density: "1.033", caseinInSnf: "0.80", fatRec: "92", caseinRec: "95" },
-  mixed:      { label: "🐄🐃 Mixed Herd",          fat: "4.5", snf: "8.8",  density: "1.032", caseinInSnf: "0.77", fatRec: "90", caseinRec: "93" },
-  std_cow:    { label: "🥛 Std Cow (FSSAI 3.0%F)", fat: "3.0", snf: "8.5",  density: "1.030", caseinInSnf: "0.77", fatRec: "88", caseinRec: "92" },
-  toned:      { label: "🥛 Toned Milk (1.5%F)",    fat: "1.5", snf: "9.0",  density: "1.029", caseinInSnf: "0.77", fatRec: "85", caseinRec: "92" },
-} as const;
-
-type PaneerMilkKey = keyof typeof PANEER_MILK_DB;
-
-// ── PANEER VARIETY PRESETS ────────────────────────────────
-const PANEER_VARIETY_DB = {
-  standard:  { label: "Standard Paneer",     moisture: "55", fatRec: "90", caseinRec: "93", pressKgCm2: 0.5,  pressMin: 20 },
-  soft:      { label: "Soft Paneer",         moisture: "58", fatRec: "88", caseinRec: "92", pressKgCm2: 0.3,  pressMin: 15 },
-  malai:     { label: "Malai Paneer",        moisture: "60", fatRec: "92", caseinRec: "94", pressKgCm2: 0.4,  pressMin: 20 },
-  firm:      { label: "Firm / Frying Grade", moisture: "52", fatRec: "91", caseinRec: "94", pressKgCm2: 0.8,  pressMin: 30 },
-  low_fat:   { label: "Low-fat Paneer",      moisture: "56", fatRec: "80", caseinRec: "93", pressKgCm2: 0.6,  pressMin: 25 },
-} as const;
-
-type PaneerVarietyKey = keyof typeof PANEER_VARIETY_DB;
-
-// ── MAIN COMPONENT ────────────────────────────────────────
 function PaneerYieldCalc() {
   const { toast } = useToast();
   const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
 
-  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual" | "comparison">("theoretical");
-  const [milkType,   setMilkType]   = useState<PaneerMilkKey>("mixed");
-  const [variety,    setVariety]    = useState<PaneerVarietyKey>("standard");
+  const [activeCalc, setActiveCalc] = useState<"theoretical" | "actual">("theoretical");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [enableCosting, setEnableCosting] = useState(false);
 
-  // Theoretical inputs
+  // Theoretical inputs (Predictor)
   const [theo, setTheo] = useState({
     milkQty:      "1000",
     fat:          "4.5",
-    snf:          "8.8",
+    snf:          "8.5",
     density:      "1.032",
     caseinInSnf:  "77",   // %
     fatRec:       "90",
     caseinRec:    "93",
     moisture:     "55",
-    milkPrice:    "40",   // ₹/L
-    paneerPrice:  "280",  // ₹/kg
+    milkPrice:    "45",   // ₹/L
+    paneerPrice:  "350",  // ₹/kg
     wheyPrice:    "2",    // ₹/kg
     batches:      "1",
   });
 
-  // Actual inputs
+  // Actual inputs (Tracker)
   const [actual, setActual] = useState({
-    milkUsed:    "",
-    paneerObtained: "",
-    milkFat:     "4.5",
-    targetYield: "16",   // % — theoretical benchmark to compare
+    milkUsed:      "1000",
+    paneerObtained: "145",
+    milkFat:       "4.5",
+    milkSnf:       "8.5",
+    moisture:      "55",
+    density:       "1.032",
   });
 
   const [theoResult,   setTheoResult]   = useState<any>(null);
@@ -607,21 +596,6 @@ function PaneerYieldCalc() {
 
   const setT = (k: string, v: string) => setTheo(p => ({ ...p, [k]: v }));
   const setA = (k: string, v: string) => setActual(p => ({ ...p, [k]: v }));
-
-  // Apply milk type
-  const applyMilkType = (key: PaneerMilkKey) => {
-    const m = PANEER_MILK_DB[key];
-    setMilkType(key);
-    setTheo(p => ({ ...p, fat: m.fat, snf: m.snf, density: m.density, caseinInSnf: String(parseFloat(m.caseinInSnf) * 100), fatRec: m.fatRec, caseinRec: m.caseinRec }));
-    setActual(p => ({ ...p, milkFat: m.fat }));
-  };
-
-  // Apply variety
-  const applyVariety = (key: PaneerVarietyKey) => {
-    const v = PANEER_VARIETY_DB[key];
-    setVariety(key);
-    setTheo(p => ({ ...p, moisture: v.moisture, fatRec: v.fatRec, caseinRec: v.caseinRec }));
-  };
 
   // ── THEORETICAL CALCULATE ─────────────────────────────
   const calculateTheo = useCallback(() => {
@@ -640,7 +614,8 @@ function PaneerYieldCalc() {
     const wheyPr    = parseFloat(theo.wheyPrice)   || 0;
 
     if (qty <= 0 || fat <= 0 || snf <= 0) {
-      toast({ variant: "destructive", title: "Invalid values" }); return;
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "कृपया दूध की मात्रा, फैट (Fat) और एसएनएफ (SNF) सही दर्ज करें।" }); 
+      return;
     }
 
     const milkKg         = qty * density;
@@ -649,7 +624,6 @@ function PaneerYieldCalc() {
     const totalFatKg     = milkKg * fat;
     const totalSnfKg     = milkKg * snf;
     const totalCaseinKg  = totalSnfKg * caseinRat;
-    const totalWaterKg   = milkKg * (1 - fat - snf);
 
     // Recovery
     const recovFatKg     = totalFatKg    * fRec;
@@ -688,16 +662,13 @@ function PaneerYieldCalc() {
     const gpm            = milkCost > 0 ? (grossProfit / milkCost) * 100 : 0;
     const costPerKgPaneer= milkCost / paneerTotal;
 
-    // Confidence
-    let confidence: "high" | "medium" | "low" = "high";
+    // Quality Alerts
     const warnings: string[] = [];
-
-    if (fat * 100 < 3 || fat * 100 > 9)   { confidence = "medium"; warnings.push(`Fat ${(fat*100).toFixed(1)}% is outside typical range (3–9%).`); }
-    if (fRec < 0.85)   warnings.push(`Fat recovery ${(fRec*100).toFixed(0)}% is low — check coagulation temp & pressing.`);
-    if (cRec < 0.90)   warnings.push(`Casein recovery ${(cRec*100).toFixed(0)}% is low — check coagulant dose & pH.`);
-    if (moisture > 0.60) warnings.push(`Moisture ${(moisture*100).toFixed(0)}% exceeds FSSAI limit (60% for cow milk).`);
-    if (paneerFDM < 50)  warnings.push(`FDM ${paneerFDM.toFixed(1)}% below FSSAI minimum 50% — check milk fat.`);
-    if (yieldPct < 12)   { confidence = "low"; warnings.push(`Yield ${yieldPct.toFixed(1)}% below 12% — verify inputs.`); }
+    if (fat * 100 < 3 || fat * 100 > 9)   { warnings.push(`दूध में फैट प्रतिशत (${(fat*100).toFixed(1)}%) सामान्य रेंज (3–9%) से अलग है।`); }
+    if (fRec < 0.85)   warnings.push(`वसा की रिकवरी ${(fRec*100).toFixed(0)}% काफी कम है। कोगुलेशन तापमान और दबाने का दबाव बढ़ाएं।`);
+    if (cRec < 0.90)   warnings.push(`केसीन रिकवरी ${(cRec*100).toFixed(0)}% कम है। कोगुलेंट की मात्रा और पीच (pH) की जाँच करें।`);
+    if (moisture > 0.60) warnings.push(`पनीर में नमी ${(moisture*100).toFixed(0)}% FSSAI की अधिकतम सीमा (60%) से अधिक है।`);
+    if (paneerFDM < 50)  warnings.push(`Fat in Dry Matter (FDM) ${paneerFDM.toFixed(1)}% है, जो FSSAI के न्यूनतम 50% से कम है। दूध में फैट बढ़ाएं।`);
 
     setTheoResult({
       milkKg, totalFatKg, totalSnfKg, totalCaseinKg,
@@ -707,431 +678,415 @@ function PaneerYieldCalc() {
       milkPerKgPaneer, litrePerKgPaneer,
       paneerTotal, wheyTotal,
       milkCost, paneerRevenue, wheyRevenue, totalRevenue, grossProfit, gpm, costPerKgPaneer,
-      confidence, warnings,
+      warnings,
       qty, batches,
     });
 
     toast({
-      title: "✅ Calculated",
-      description: `Yield: ${paneerKg.toFixed(2)} kg (${yieldPct.toFixed(2)}%) | GPM: ${gpm.toFixed(1)}%`,
+      title: "🧮 गणना पूरी हुई (Calculated)",
+      description: `अनुमानित पनीर उत्पादन: ${paneerKg.toFixed(2)} kg (${yieldPct.toFixed(2)}% yield)`,
     });
   }, [theo, toast]);
 
   // ── ACTUAL CALCULATE ──────────────────────────────────
   const calculateActual = useCallback(() => {
-    const milkKg    = parseFloat(actual.milkUsed)        || 0;
-    const paneerKg  = parseFloat(actual.paneerObtained)  || 0;
-    const fat       = parseFloat(actual.milkFat)         || 4.5;
-    const target    = parseFloat(actual.targetYield)     || 16;
+    const qty            = parseFloat(actual.milkUsed)        || 0;
+    const paneerKg       = parseFloat(actual.paneerObtained)  || 0;
+    const fat            = parseFloat(actual.milkFat)         / 100;
+    const snf            = parseFloat(actual.milkSnf)         / 100;
+    const density        = parseFloat(actual.density)         || 1.032;
+    const moisture       = parseFloat(actual.moisture)        / 100;
+    
+    // Default Process recovery settings to evaluate baseline ideal
+    const caseinRat = 0.77;
+    const fRec      = 0.90;
+    const cRec      = 0.93;
 
-    if (milkKg <= 0 || paneerKg <= 0) {
-      toast({ variant: "destructive", title: "Enter both milk and paneer values" }); return;
+    if (qty <= 0 || paneerKg <= 0) {
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "दूध की मात्रा और पनीर का वजन सही दर्ज करें।" }); 
+      return;
     }
+    
+    const milkKg         = qty * density;
     if (paneerKg > milkKg) {
-      toast({ variant: "destructive", title: "Paneer weight cannot exceed milk weight" }); return;
+      toast({ variant: "destructive", title: "त्रुटि (Error)", description: "पनीर का वजन इस्तेमाल किए गए दूध के कुल वजन से अधिक नहीं हो सकता।" }); 
+      return;
     }
 
-    const yieldPct       = (paneerKg / milkKg) * 100;
-    const litrePerKgPaneer = milkKg / paneerKg;
+    const actualYieldPct = (paneerKg / milkKg) * 100;
+    const litrePerKgPaneer = qty / paneerKg;
 
-    // Expected theoretical yield (rough: fat×0.9 + casein×0.93) / (1 - 0.55)
-    // Simplified using fat alone: approx 2.2× fat% + 5 (empirical for Indian milk)
-    const theoreticalEst = fat * 2.0 + 6.5;
-    const gapVsTheo      = yieldPct - theoreticalEst;
-    const gapVsTarget    = yieldPct - target;
+    // Calculate theoretical ideal base for comparison
+    const idealFatKg     = milkKg * fat;
+    const idealSnfKg     = milkKg * snf;
+    const idealCaseinKg  = idealSnfKg * caseinRat;
+    const idealSolids    = (idealFatKg * fRec) + (idealCaseinKg * cRec);
+    const idealYieldKg   = idealSolids / (1 - moisture);
+    const idealYieldPct  = (idealYieldKg / milkKg) * 100;
 
-    let confidence: "high" | "medium" | "low" = "high";
+    const yieldEfficiency = (actualYieldPct / idealYieldPct) * 100;
+    const lostPaneerKg    = Math.max(0, idealYieldKg - paneerKg);
+
     const warnings: string[] = [];
-
-    if (yieldPct < 12)       { confidence = "low";    warnings.push(`Yield ${yieldPct.toFixed(1)}% below industry minimum (12%). Check coagulation, pressing, or milk quality.`); }
-    else if (yieldPct > 20)  { confidence = "medium"; warnings.push(`Yield ${yieldPct.toFixed(1)}% unusually high — verify moisture content and weighing accuracy.`); }
-    if (gapVsTheo < -2)      warnings.push(`${Math.abs(gapVsTheo).toFixed(1)}% below theoretical estimate — possible fat/casein loss in whey.`);
-    if (gapVsTarget < -1.5)  warnings.push(`${Math.abs(gapVsTarget).toFixed(1)}% below target (${target}%) — investigate coagulant dosing and process.`);
+    if (actualYieldPct < 12) { 
+      warnings.push(`वास्तविक उत्पादन ${actualYieldPct.toFixed(1)}% काफी कम है। कोगुलेशन, छानने, या दूध की गुणवत्ता की जांच करें।`); 
+    }
+    if (yieldEfficiency < 95) {
+      warnings.push(`आप आदर्श क्षमता से ${(100 - yieldEfficiency).toFixed(1)}% पीछे हैं। लगभग ${lostPaneerKg.toFixed(1)} kg पनीर प्रोसेसिंग के नुकसान (Loss) में बह गया है।`);
+    }
 
     setActualResult({
-      milkKg, paneerKg, yieldPct,
-      litrePerKgPaneer, theoreticalEst,
-      gapVsTheo, gapVsTarget,
-      confidence, warnings,
+      milkKg, paneerKg, actualYieldPct,
+      litrePerKgPaneer, idealYieldKg, idealYieldPct,
+      yieldEfficiency, lostPaneerKg,
+      warnings,
+      qty,
     });
 
     toast({
-      title: `Actual Yield: ${yieldPct.toFixed(2)}%`,
-      description: `${litrePerKgPaneer.toFixed(2)} L milk per kg paneer`,
+      title: `बैच विश्लेषण पूरा हुआ`,
+      description: `वास्तविक उत्पादन: ${actualYieldPct.toFixed(2)}% | दक्षता: ${yieldEfficiency.toFixed(1)}%`,
     });
   }, [actual, toast]);
 
-  // ── RENDER ────────────────────────────────────────────
+  const fmt = (n: number) => n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+
   return (
-    <Card className="border-2 border-green-200 shadow-lg bg-green-50/10">
-      <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-lg border-b border-green-100">
+    <Card className="border-2 border-emerald-200 shadow-lg bg-emerald-50/10">
+      <CardHeader className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-t-lg border-b border-emerald-100">
         <CardTitle className="flex items-center justify-between">
-          <span className="flex items-center gap-2 text-green-800">
-            <PaneerIcon className="h-6 w-6 text-green-600" />
-            Advanced Paneer Yield Calculator
+          <span className="flex items-center gap-2 text-emerald-800">
+            <PaneerIcon className="h-6 w-6 text-emerald-600 animate-pulse" />
+            Paneer Yield Calculator (पनीर उत्पादन कैलकुलेटर)
           </span>
           {theoResult && activeCalc === "theoretical" && (
-            <Badge className="bg-green-600 text-white text-sm px-3 py-1">
-              {theoResult.yieldPct.toFixed(2)}% yield
+            <Badge className="bg-emerald-600 text-white text-sm px-3 py-1 font-bold shadow-sm">
+              {theoResult.yieldPct.toFixed(2)}% Yield (अनुमानित)
+            </Badge>
+          )}
+          {actualResult && activeCalc === "actual" && (
+            <Badge className={cn("text-white text-sm px-3 py-1 font-bold shadow-sm", actualResult.yieldEfficiency >= 95 ? "bg-green-600" : "bg-red-500")}>
+              {actualResult.actualYieldPct.toFixed(2)}% Yield (वास्तविक)
             </Badge>
           )}
         </CardTitle>
-        <CardDescription className="text-green-600 text-xs">
-          6 milk types · 5 paneer varieties · Mass balance · Economics · Actual vs Theoretical
+        <CardDescription className="text-emerald-700 font-medium text-xs">
+          Predict Paneer Yield, manage production metrics, and identify process losses with high-precision formulas.
         </CardDescription>
       </CardHeader>
 
       <CardContent className="pt-4 space-y-4">
 
         {/* ── MODE SELECTOR ─────────────────────────── */}
-        <div className="grid grid-cols-3 gap-2">
-          {([
-            { key: "theoretical",  label: "🧮 Theoretical", desc: "Predict from composition" },
-            { key: "actual",       label: "✅ Actual",       desc: "Analyse production data"  },
-            { key: "comparison",   label: "📊 Compare",      desc: "Actual vs theoretical"    },
-          ] as const).map(m => (
-            <button key={m.key} onClick={() => setActiveCalc(m.key)}
-              className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left leading-tight
-                ${activeCalc === m.key
-                  ? "bg-green-600 text-white border-green-600 shadow-md"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-green-300"
-                }`}>
-              {m.label}
-              <div className={`text-[9px] mt-0.5 ${activeCalc === m.key ? "opacity-80" : "text-slate-400"}`}>
-                {m.desc}
-              </div>
-            </button>
-          ))}
+        <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+          <button onClick={() => setActiveCalc("theoretical")}
+            className={cn("p-2.5 rounded-lg text-xs font-bold transition-all text-center leading-tight shadow-sm flex flex-col justify-center items-center gap-0.5",
+              activeCalc === "theoretical" ? "bg-emerald-600 text-white shadow" : "bg-transparent text-slate-600 hover:text-emerald-700"
+            )}>
+            <span className="text-sm">🧮 Yield Predictor</span>
+            <span className="text-[9px] opacity-80">अनुमानित उत्पादन व मुनाफा</span>
+          </button>
+          <button onClick={() => setActiveCalc("actual")}
+            className={cn("p-2.5 rounded-lg text-xs font-bold transition-all text-center leading-tight shadow-sm flex flex-col justify-center items-center gap-0.5",
+              activeCalc === "actual" ? "bg-emerald-600 text-white shadow" : "bg-transparent text-slate-600 hover:text-emerald-700"
+            )}>
+            <span className="text-sm">✅ Batch Performance Tracker</span>
+            <span className="text-[9px] opacity-80">वास्तविक उत्पादन व प्रोसेसिंग नुकसान</span>
+          </button>
         </div>
 
-        {/* ═══════════ THEORETICAL MODE ═══════════════ */}
+        {/* ═══════════ PREDICTOR MODE ═══════════════ */}
         {activeCalc === "theoretical" && (
           <div className="space-y-4">
 
-            {/* Milk type */}
-            <div className="space-y-1">
-              <Label className="text-xs font-bold text-slate-500 uppercase">Milk Type</Label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {(Object.keys(PANEER_MILK_DB) as PaneerMilkKey[]).map(key => (
-                  <button key={key} onClick={() => applyMilkType(key)}
-                    className={`p-2 rounded-lg border text-xs font-semibold transition-all text-left shadow-sm
-                      ${milkType === key
-                        ? "bg-green-600 text-white border-green-600"
-                        : "bg-white text-slate-600 border-slate-200 hover:border-green-300"
-                      }`}>
-                    {PANEER_MILK_DB[key].label}
-                    <div className={`text-[9px] mt-0.5 ${milkType === key ? "opacity-80" : "text-slate-400"}`}>
-                      F:{PANEER_MILK_DB[key].fat}% SNF:{PANEER_MILK_DB[key].snf}%
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Paneer variety */}
-            <div className="space-y-1">
-              <Label className="text-xs font-bold text-slate-500 uppercase">Paneer Variety</Label>
-              <div className="flex flex-wrap gap-2">
-                {(Object.keys(PANEER_VARIETY_DB) as PaneerVarietyKey[]).map(key => (
-                  <button key={key} onClick={() => applyVariety(key)}
-                    className={`px-3 py-1 rounded-full border text-xs font-semibold transition-all shadow-sm
-                      ${variety === key
-                        ? "bg-emerald-600 text-white border-emerald-600"
-                        : "bg-white text-slate-600 border-slate-200 hover:border-emerald-300"
-                      }`}>
-                    {PANEER_VARIETY_DB[key].label}
-                    <span className={`ml-1 text-[9px] ${variety === key ? "opacity-80" : "text-slate-400"}`}>
-                      {PANEER_VARIETY_DB[key].moisture}% moist
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* Inputs */}
-            <Card className="border-green-100 bg-white">
-              <CardHeader className="p-3 pb-2 bg-green-50 border-b border-green-100">
-                <CardTitle className="text-xs font-bold text-green-700 uppercase">🥛 Milk Parameters</CardTitle>
+            <Card className="border-emerald-100 bg-white shadow-sm">
+              <CardHeader className="p-3 pb-2 bg-emerald-50/50 border-b border-emerald-100">
+                <CardTitle className="text-xs font-bold text-emerald-700 uppercase flex items-center gap-1">
+                  <Milk className="h-3.5 w-3.5" /> Core Processing Parameters
+                </CardTitle>
               </CardHeader>
               <CardContent className="p-3 grid grid-cols-2 gap-3">
-                <ValidatedInput label="Milk Quantity" value={theo.milkQty} onChange={v => setT("milkQty", v)} validation={validatePositive(theo.milkQty, "Quantity")} unit="L" colorScheme="blue" />
-                <ValidatedInput label="Batches" value={theo.batches} onChange={v => setT("batches", v)} validation={validatePositive(theo.batches, "Batches")} colorScheme="blue" />
-                <ValidatedInput label="Fat %" value={theo.fat} onChange={v => setT("fat", v)} validation={validatePercentage(theo.fat, "Fat")} unit="%" helpText="Typical: 3–8%" colorScheme="green" />
-                <ValidatedInput label="SNF %" value={theo.snf} onChange={v => setT("snf", v)} validation={validatePercentage(theo.snf, "SNF")} unit="%" helpText="Typical: 8.5–10%" colorScheme="purple" />
-                <ValidatedInput label="Casein/SNF %" value={theo.caseinInSnf} onChange={v => setT("caseinInSnf", v)} validation={validateNumber(theo.caseinInSnf, 70, 85, "Casein ratio")} unit="%" helpText="Typically 77%" colorScheme="purple" />
-                <ValidatedInput label="Milk Density" value={theo.density} onChange={v => setT("density", v)} validation={{ isValid: true, severity: "info" }} unit="kg/L" colorScheme="blue" />
-                <ValidatedInput label="Fat Recovery" value={theo.fatRec} onChange={v => setT("fatRec", v)} validation={validatePercentage(theo.fatRec, "Fat rec")} unit="%" helpText="85–95%" colorScheme="orange" />
-                <ValidatedInput label="Casein Recovery" value={theo.caseinRec} onChange={v => setT("caseinRec", v)} validation={validatePercentage(theo.caseinRec, "Casein rec")} unit="%" helpText="90–95%" colorScheme="orange" />
-                <ValidatedInput label="Final Moisture" value={theo.moisture} onChange={v => setT("moisture", v)} validation={validateNumber(theo.moisture, 40, 70, "Moisture")} unit="%" helpText="FSSAI: 50–60%" colorScheme="red" />
+                <ValidatedInput label="Milk Quantity (दूध की मात्रा)" value={theo.milkQty} onChange={v => setT("milkQty", v)} validation={validatePositive(theo.milkQty, "Quantity")} unit="L" colorScheme="blue" />
+                <ValidatedInput label="Batches / Cycles" value={theo.batches} onChange={v => setT("batches", v)} validation={validatePositive(theo.batches, "Batches")} colorScheme="blue" />
+                <ValidatedInput label="Milk Fat % (फैट)" value={theo.fat} onChange={v => setT("fat", v)} validation={validatePercentage(theo.fat, "Fat")} unit="%" helpText="Typical: 3.5–8.0%" colorScheme="green" />
+                <ValidatedInput label="Milk SNF % (एसएनएफ)" value={theo.snf} onChange={v => setT("snf", v)} validation={validatePercentage(theo.snf, "SNF")} unit="%" helpText="Typical: 8.5–9.5%" colorScheme="purple" />
+                <ValidatedInput label="Paneer Moisture % (पनीर में नमी)" value={theo.moisture} onChange={v => setT("moisture", v)} validation={validateNumber(theo.moisture, 40, 70, "Moisture")} unit="%" helpText="Standard: 55%" colorScheme="pink" />
               </CardContent>
             </Card>
 
-            {/* Pricing */}
-            <Card className="border-slate-100 bg-white">
-              <CardHeader className="p-3 pb-2 bg-slate-50 border-b border-slate-100">
-                <CardTitle className="text-xs font-bold text-slate-600 uppercase">💰 Pricing (optional)</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 grid grid-cols-3 gap-3">
-                <ValidatedInput label="Milk" value={theo.milkPrice} onChange={v => setT("milkPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/L" colorScheme="blue" />
-                <ValidatedInput label="Paneer" value={theo.paneerPrice} onChange={v => setT("paneerPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="green" />
-                <ValidatedInput label="Whey" value={theo.wheyPrice} onChange={v => setT("wheyPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="slate" />
-              </CardContent>
-            </Card>
+            {/* Collapsible Advanced Parameters */}
+            <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
+              <button 
+                onClick={() => setShowAdvanced(!showAdvanced)} 
+                type="button" 
+                className="w-full p-3 bg-slate-50 flex justify-between items-center text-xs font-bold text-slate-700 border-b border-slate-200 hover:bg-slate-100 transition"
+              >
+                <span className="flex items-center gap-1.5"><Settings2 className="h-4 w-4 text-slate-500" /> Advanced Process Settings (एडवांस सेटिंग्स - वैकल्पिक)</span>
+                {showAdvanced ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </button>
+              {showAdvanced && (
+                <div className="p-3 grid grid-cols-2 gap-3 bg-white animate-in slide-in-from-top-2">
+                  <ValidatedInput label="Milk Density" value={theo.density} onChange={v => setT("density", v)} validation={{ isValid: true, severity: "info" }} unit="kg/L" helpText="Cow: 1.030 | Buffalo: 1.032" colorScheme="blue" />
+                  <ValidatedInput label="Casein % in SNF" value={theo.caseinInSnf} onChange={v => setT("caseinInSnf", v)} validation={validateNumber(theo.caseinInSnf, 70, 85, "Casein ratio")} unit="%" helpText="Typically 77%" colorScheme="purple" />
+                  <ValidatedInput label="Fat Recovery in Paneer" value={theo.fatRec} onChange={v => setT("fatRec", v)} validation={validatePercentage(theo.fatRec, "Fat rec")} unit="%" helpText="Normal: 90%" colorScheme="orange" />
+                  <ValidatedInput label="Casein Recovery in Paneer" value={theo.caseinRec} onChange={v => setT("caseinRec", v)} validation={validatePercentage(theo.caseinRec, "Casein rec")} unit="%" helpText="Normal: 93%" colorScheme="orange" />
+                </div>
+              )}
+            </div>
+
+            {/* Optional Costing Toggle */}
+            <div className="border border-slate-200 rounded-lg bg-white p-3 shadow-sm flex items-center justify-between">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs font-bold text-slate-800 flex items-center gap-1">
+                  <BadgeIndianRupee className="h-4 w-4 text-indigo-600" /> Costing & Profitability Analysis (लागत गणना जोड़ें)
+                </span>
+                <span className="text-[10px] text-slate-400">Toggle to calculate batch expenses, revenue, and gross profit.</span>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={enableCosting} 
+                onChange={(e) => setEnableCosting(e.target.checked)} 
+                className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 rounded cursor-pointer"
+              />
+            </div>
+
+            {/* Pricing Section (only visible if costing is enabled) */}
+            {enableCosting && (
+              <Card className="border-indigo-100 bg-white shadow-sm animate-in slide-in-from-top-2">
+                <CardHeader className="p-3 pb-2 bg-indigo-50/50 border-b border-indigo-100">
+                  <CardTitle className="text-xs font-bold text-indigo-700 uppercase flex items-center gap-1">
+                    <BadgeIndianRupee className="h-3.5 w-3.5" /> Pricing Data
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 grid grid-cols-3 gap-3">
+                  <ValidatedInput label="Milk Price" value={theo.milkPrice} onChange={v => setT("milkPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/L" colorScheme="blue" />
+                  <ValidatedInput label="Paneer Price" value={theo.paneerPrice} onChange={v => setT("paneerPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="green" />
+                  <ValidatedInput label="Whey Price" value={theo.wheyPrice} onChange={v => setT("wheyPrice", v)} validation={{ isValid: true, severity: "info" }} unit="₹/kg" colorScheme="purple" />
+                </CardContent>
+              </Card>
+            )}
 
             <Button onClick={calculateTheo}
-              className="w-full h-11 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold shadow-md">
-              <Calculator className="mr-2 h-4 w-4" />
-              Calculate Theoretical Yield
+              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold shadow-md text-sm rounded-xl">
+              <Calculator className="mr-2 h-4.5 w-4.5" />
+              Predict Paneer Yield (गणना करें)
             </Button>
 
             {/* Theoretical Results */}
             {theoResult && (
-              <div className="space-y-3 animate-in fade-in">
+              <div className="space-y-4 animate-in fade-in">
 
-                {/* KPIs */}
+                {/* Main Yield KPIs */}
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    { label: "Paneer Yield", value: theoResult.paneerKg.toFixed(1), unit: "kg/batch", color: "bg-green-600" },
-                    { label: "Yield %",      value: theoResult.yieldPct.toFixed(2), unit: "% w/w",    color: "bg-emerald-700" },
-                    { label: "Whey",         value: theoResult.wheyKg.toFixed(0),   unit: "kg",       color: "bg-blue-600"   },
+                    { label: "Expected Paneer", value: theoResult.paneerKg.toFixed(2), unit: "kg/batch", color: "bg-emerald-600" },
+                    { label: "Yield %",      value: theoResult.yieldPct.toFixed(2), unit: "% w/w",    color: "bg-teal-700" },
+                    { label: "Whey Output",         value: theoResult.wheyKg.toFixed(0),   unit: "kg",       color: "bg-blue-600"   },
                   ].map((k, i) => (
-                    <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow`}>
-                      <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                      <div className="text-2xl font-black">{k.value}</div>
-                      <div className="text-[9px] opacity-70">{k.unit}</div>
+                    <div key={i} className={`${k.color} text-white p-3 rounded-xl text-center shadow-sm`}>
+                      <div className="text-[9px] uppercase opacity-90 font-extrabold tracking-wider">{k.label}</div>
+                      <div className="text-xl sm:text-2xl font-black mt-0.5">{k.value}</div>
+                      <div className="text-[9px] opacity-80 font-medium">{k.unit}</div>
                     </div>
                   ))}
                 </div>
 
-                {/* Mass balance */}
-                <Card className="bg-green-50 border-green-200">
-                  <CardHeader className="p-3 pb-1 border-b border-green-100">
-                    <CardTitle className="text-sm text-green-800">⚖️ Mass Balance</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-2 text-sm">
-                    {[
-                      { label: "Milk weight",           value: `${theoResult.milkKg.toFixed(1)} kg`,        color: "" },
-                      { label: "Total fat in milk",     value: `${theoResult.totalFatKg.toFixed(2)} kg`,    color: "text-yellow-700" },
-                      { label: "Total casein in milk",  value: `${theoResult.totalCaseinKg.toFixed(2)} kg`, color: "text-purple-700" },
-                      { label: "Fat recovered → curd",  value: `${theoResult.recovFatKg.toFixed(2)} kg`,    color: "text-green-700"  },
-                      { label: "Casein recovered → curd",value:`${theoResult.recovCaseinKg.toFixed(2)} kg`, color: "text-green-700"  },
-                      { label: "Paneer solids total",   value: `${theoResult.totalSolids.toFixed(2)} kg`,   color: "text-slate-800 font-black" },
-                      { label: "Fat in whey (loss)",    value: `${theoResult.wheyFatKg.toFixed(2)} kg`,     color: "text-red-600 font-bold"    },
-                    ].map((r, i) => (
-                      <div key={i} className="flex justify-between">
-                        <span className="text-slate-500">{r.label}</span>
-                        <span className={`font-bold ${r.color}`}>{r.value}</span>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Paneer composition + pressing guide */}
-                <div className="grid grid-cols-2 gap-3">
-                  <Card className="bg-white border-green-100">
-                    <CardContent className="p-3 space-y-1 text-xs">
-                      <div className="font-bold text-green-700 mb-1 text-sm">🧀 Paneer Composition</div>
-                      {[
-                        { label: "Fat %",  value: `${theoResult.paneerFatPct.toFixed(1)}%` },
-                        { label: "FDM %",  value: `${theoResult.paneerFDM.toFixed(1)}%`    },
-                        { label: "Moisture",value:`${theo.moisture}%`                       },
-                        { label: "FSSAI",  value: theoResult.paneerFDM >= 50 ? "✅ OK" : "❌ Low FDM" },
-                      ].map((r, i) => (
-                        <div key={i} className="flex justify-between">
-                          <span className="text-slate-500">{r.label}</span>
-                          <span className="font-bold">{r.value}</span>
-                        </div>
-                      ))}
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white border-emerald-100">
-                    <CardContent className="p-3 space-y-1 text-xs">
-                      <div className="font-bold text-emerald-700 mb-1 text-sm">🏭 Conversion</div>
-                      {[
-                        { label: "L milk / kg paneer", value: `${theoResult.litrePerKgPaneer.toFixed(2)} L` },
-                        { label: "kg milk / kg paneer", value: `${theoResult.milkPerKgPaneer.toFixed(2)} kg` },
-                        { label: "Press",    value: `${PANEER_VARIETY_DB[variety].pressKgCm2} kg/cm²` },
-                        { label: "Press time",value:`${PANEER_VARIETY_DB[variety].pressMin} min` },
-                      ].map((r, i) => (
-                        <div key={i} className="flex justify-between">
-                          <span className="text-slate-500">{r.label}</span>
-                          <span className="font-bold">{r.value}</span>
-                        </div>
-                      ))}
-                    </CardContent>
-                  </Card>
+                {/* Conversion Ratio Summary */}
+                <div className="bg-white border border-emerald-100 rounded-xl p-3 shadow-sm flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] uppercase font-bold text-slate-400">Milk Required per kg Paneer</span>
+                    <span className="text-base font-black text-emerald-800 mt-0.5">{theoResult.litrePerKgPaneer.toFixed(2)} Litres</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] uppercase font-bold text-slate-400">Solid Recovery</span>
+                    <span className="text-base font-black text-emerald-800 mt-0.5">{theoResult.totalSolids.toFixed(2)} kg Solids</span>
+                  </div>
                 </div>
 
-                {/* Multi-batch summary */}
-                {theoResult.batches > 1 && (
-                  <Card className="bg-indigo-50 border-indigo-200">
-                    <CardContent className="p-3 text-sm space-y-1">
-                      <div className="font-bold text-indigo-700 mb-1">{theoResult.batches} Batches</div>
+                {/* Economics statement (only visible if costing is enabled) */}
+                {enableCosting && (
+                  <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none shadow-md">
+                    <CardContent className="p-4 space-y-3 text-sm">
+                      <div className="text-xs text-slate-300 font-extrabold uppercase mb-1 tracking-wider flex items-center gap-1">
+                        <BadgeIndianRupee className="h-4 w-4 text-emerald-400" /> Batch Economic Overview
+                      </div>
                       {[
-                        { label: "Total paneer", value: `${theoResult.paneerTotal.toFixed(1)} kg` },
-                        { label: "Total whey",   value: `${theoResult.wheyTotal.toFixed(0)} kg`   },
+                        { label: "Raw Milk Expenses", value: `- ₹ ${fmt(theoResult.milkCost)}`, color: "text-red-400" },
+                        { label: "Estimated Paneer Revenue", value: `+ ₹ ${fmt(theoResult.paneerRevenue)}`, color: "text-emerald-400" },
+                        { label: "Estimated Whey Revenue", value: `+ ₹ ${fmt(theoResult.wheyRevenue)}`, color: "text-cyan-400" },
+                        { label: "Gross Operating Profit", value: `₹ ${fmt(theoResult.grossProfit)}`, color: `${theoResult.grossProfit >= 0 ? "text-yellow-400 font-black text-base" : "text-red-400 font-black"}` },
                       ].map((r, i) => (
-                        <div key={i} className="flex justify-between">
-                          <span className="text-slate-500">{r.label}</span>
-                          <span className="font-bold text-indigo-700">{r.value}</span>
+                        <div key={i} className={cn("flex justify-between py-0.5", i === 3 ? "border-t border-slate-700 pt-2 mt-1" : "")}>
+                          <span className="text-slate-400 font-medium">{r.label}</span>
+                          <span className={cn("font-bold", r.color)}>{r.value}</span>
                         </div>
                       ))}
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        {[
+                          { label: "Gross Operating Margin", value: `${theoResult.gpm.toFixed(1)}%` },
+                          { label: "Milk Cost / kg Paneer", value: `₹ ${theoResult.costPerKgPaneer.toFixed(2)}` },
+                        ].map((c, i) => (
+                          <div key={i} className="bg-slate-700/60 border border-slate-700 rounded p-2 text-center">
+                            <div className="text-[9px] text-slate-400 font-bold uppercase">{c.label}</div>
+                            <div className="font-extrabold text-white text-sm mt-0.5">{c.value}</div>
+                          </div>
+                        ))}
+                      </div>
                     </CardContent>
                   </Card>
                 )}
 
-                {/* Economics */}
-                <Card className="bg-gradient-to-br from-slate-800 to-slate-900 text-white border-none">
-                  <CardContent className="p-3 space-y-2 text-sm">
-                    <div className="text-xs text-slate-300 font-bold uppercase mb-1">💰 Economics</div>
+                {/* Composition estimate */}
+                <Card className="bg-white border border-slate-200 shadow-sm">
+                  <CardContent className="p-3 space-y-2 text-xs">
+                    <div className="font-bold text-slate-800 text-sm border-b pb-1.5">🧀 Estimated Paneer Composition</div>
                     {[
-                      { label: "Milk cost",       value: `-₹ ${theoResult.milkCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-red-400"    },
-                      { label: "Paneer revenue",  value: `+₹ ${theoResult.paneerRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, color: "text-yellow-300" },
-                      { label: "Whey revenue",    value: `+₹ ${theoResult.wheyRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,   color: "text-cyan-300"   },
-                      { label: "Gross Profit",    value: `₹ ${theoResult.grossProfit.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,    color: `${theoResult.grossProfit >= 0 ? "text-green-300 font-black" : "text-red-400 font-black"}` },
+                      { label: "Fat Content in Paneer", value: `${theoResult.paneerFatPct.toFixed(1)}%` },
+                      { label: "Fat in Dry Matter (FDM)", value: `${theoResult.paneerFDM.toFixed(1)}%` },
+                      { label: "FSSAI Compliance Status", value: theoResult.paneerFDM >= 50 ? "✅ Compliant (Standard Paneer)" : "⚠️ Low FDM (< 50% - verify fat)" },
                     ].map((r, i) => (
-                      <div key={i} className={`flex justify-between ${i === 3 ? "border-t border-slate-700 pt-2" : ""}`}>
-                        <span className="text-slate-400">{r.label}</span>
-                        <span className={`font-bold ${r.color}`}>{r.value}</span>
+                      <div key={i} className="flex justify-between py-0.5">
+                        <span className="text-slate-500 font-medium">{r.label}</span>
+                        <span className={cn("font-bold", i === 2 && (theoResult.paneerFDM >= 50 ? "text-green-600" : "text-red-500"))}>{r.value}</span>
                       </div>
                     ))}
-                    <div className="grid grid-cols-2 gap-2 mt-2">
-                      {[
-                        { label: "Gross Margin",        value: `${theoResult.gpm.toFixed(1)}%`                    },
-                        { label: "Milk cost/kg paneer", value: `₹${theoResult.costPerKgPaneer.toFixed(2)}`        },
-                      ].map((c, i) => (
-                        <div key={i} className="bg-slate-700 rounded p-2 text-center">
-                          <div className="text-[9px] text-slate-400 font-bold">{c.label}</div>
-                          <div className="font-black text-white">{c.value}</div>
-                        </div>
-                      ))}
-                    </div>
                   </CardContent>
                 </Card>
 
                 {/* Warnings */}
                 {theoResult.warnings.length > 0 && (
                   <Alert className="bg-yellow-50 border-yellow-300">
-                    <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                    <AlertTitle className="text-yellow-800 text-sm">Quality Alerts</AlertTitle>
-                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    <AlertTriangle className="h-4 w-4 text-yellow-600 animate-bounce" />
+                    <AlertTitle className="text-yellow-800 text-xs font-bold">Process & Quality Warnings</AlertTitle>
+                    <AlertDescription className="text-[11px] text-yellow-700 space-y-1 mt-1 font-medium">
                       {theoResult.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
                     </AlertDescription>
                   </Alert>
                 )}
 
-                {/* Formula */}
-                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1">
-                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Formula:</div>
-                  <div>MilkKg = Qty × Density = {theoResult.qty} × {theo.density} = {theoResult.milkKg.toFixed(2)} kg</div>
-                  <div>Casein = SNF × CaseinRatio = {theo.snf}% × {theo.caseinInSnf}% = {(parseFloat(theo.snf) * parseFloat(theo.caseinInSnf) / 100).toFixed(3)}%</div>
-                  <div>TotalSolids = (Fat×fRec) + (Casein×cRec) = {theoResult.totalSolids.toFixed(3)} kg</div>
-                  <div>PaneerKg = TotalSolids / (1−Moisture) = {theoResult.paneerKg.toFixed(3)} kg</div>
+                {/* Multi-batch total */}
+                {theoResult.batches > 1 && (
+                  <Card className="bg-emerald-50/50 border border-emerald-100">
+                    <CardContent className="p-3 text-xs space-y-1.5">
+                      <div className="font-bold text-emerald-800 uppercase tracking-wider text-[10px]">Total Production Summary ({theoResult.batches} batches)</div>
+                      <div className="flex justify-between text-slate-600">
+                        <span>Cumulative Paneer Yield:</span>
+                        <span className="font-black text-slate-800">{fmt(theoResult.paneerTotal)} kg</span>
+                      </div>
+                      <div className="flex justify-between text-slate-600">
+                        <span>Cumulative Whey Output:</span>
+                        <span className="font-black text-slate-800">{fmt(theoResult.wheyTotal)} kg</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Formulas Explained */}
+                <div className="bg-slate-50 border rounded-lg p-3 text-[10px] font-mono text-slate-400 space-y-1 leading-relaxed">
+                  <div className="font-bold text-slate-600 text-xs mb-1">📐 Underlying Calculation:</div>
+                  <div>• Milk Weight (kg) = Qty ({theoResult.qty} L) × Density ({theo.density}) = {theoResult.milkKg.toFixed(2)} kg</div>
+                  <div>• Casein (kg) = Milk Weight × SNF ({theo.snf}%) × Casein/SNF ({theo.caseinInSnf}%) = {theoResult.totalCaseinKg.toFixed(3)} kg</div>
+                  <div>• Total Solids recovered in curd (kg) = (Fat × {theo.fatRec}%) + (Casein × {theo.caseinRec}%) = {theoResult.totalSolids.toFixed(3)} kg</div>
+                  <div>• Predicted Yield (kg) = Solids / (1 − Moisture ({theo.moisture}%)) = {theoResult.paneerKg.toFixed(3)} kg</div>
                 </div>
               </div>
             )}
           </div>
         )}
 
-        {/* ═══════════ ACTUAL MODE ═════════════════════ */}
+        {/* ═══════════ TRACKER MODE ═════════════════════ */}
         {activeCalc === "actual" && (
           <div className="space-y-4">
             <Alert className="bg-blue-50 border-blue-200">
-              <CheckCircle2 className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-xs text-blue-700">
-                Production ke baad actual data enter karein — yield% aur gap analysis milega
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertDescription className="text-xs text-blue-700 font-medium">
+                Enter your actual production data to check process efficiency and calculate product loss gaps.
               </AlertDescription>
             </Alert>
 
             <div className="grid grid-cols-2 gap-3">
-              <ValidatedInput label="Milk Used" value={actual.milkUsed} onChange={v => setA("milkUsed", v)} validation={validatePositive(actual.milkUsed, "Milk used")} unit="kg" helpText="Actual processed" colorScheme="blue" />
-              <ValidatedInput label="Paneer Obtained" value={actual.paneerObtained} onChange={v => setA("paneerObtained", v)} validation={validatePositive(actual.paneerObtained, "Paneer")} unit="kg" colorScheme="green" />
-              <ValidatedInput label="Milk Fat %" value={actual.milkFat} onChange={v => setA("milkFat", v)} validation={validatePercentage(actual.milkFat, "Fat")} unit="%" helpText="For benchmarking" colorScheme="orange" />
-              <ValidatedInput label="Target Yield %" value={actual.targetYield} onChange={v => setA("targetYield", v)} validation={validatePercentage(actual.targetYield, "Target")} unit="%" helpText="Your standard" colorScheme="purple" />
+              <ValidatedInput label="Milk Used (इस्तेमाल किया दूध)" value={actual.milkUsed} onChange={v => setA("milkUsed", v)} validation={validatePositive(actual.milkUsed, "Milk used")} unit="L" colorScheme="blue" />
+              <ValidatedInput label="Paneer Obtained (प्राप्त पनीर)" value={actual.paneerObtained} onChange={v => setA("paneerObtained", v)} validation={validatePositive(actual.paneerObtained, "Paneer")} unit="kg" colorScheme="green" />
+              <ValidatedInput label="Milk Fat % (फैट)" value={actual.milkFat} onChange={v => setA("milkFat", v)} validation={validatePercentage(actual.milkFat, "Fat")} unit="%" colorScheme="orange" />
+              <ValidatedInput label="Milk SNF % (एसएनएफ)" value={actual.milkSnf} onChange={v => setA("milkSnf", v)} validation={validatePercentage(actual.milkSnf, "SNF")} unit="%" colorScheme="purple" />
+            </div>
+
+            {/* Collapsible Advanced Parameters for Actual */}
+            <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
+              <button 
+                onClick={() => setShowAdvanced(!showAdvanced)} 
+                type="button" 
+                className="w-full p-2.5 bg-slate-50 flex justify-between items-center text-xs font-bold text-slate-700 border-b border-slate-200 hover:bg-slate-100 transition"
+              >
+                <span className="flex items-center gap-1.5"><Settings2 className="h-4 w-4 text-slate-500" /> Advanced Parameters</span>
+                {showAdvanced ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </button>
+              {showAdvanced && (
+                <div className="p-3 grid grid-cols-2 gap-3 bg-white animate-in slide-in-from-top-2">
+                  <ValidatedInput label="Milk Density" value={actual.density} onChange={v => setA("density", v)} validation={{ isValid: true, severity: "info" }} unit="kg/L" colorScheme="blue" />
+                  <ValidatedInput label="Paneer Moisture %" value={actual.moisture} onChange={v => setA("moisture", v)} validation={validateNumber(actual.moisture, 40, 70, "Moisture")} unit="%" colorScheme="pink" />
+                </div>
+              )}
             </div>
 
             <Button onClick={calculateActual}
-              className="w-full h-11 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold shadow-md">
-              <Calculator className="mr-2 h-4 w-4" />
-              Analyse Actual Yield
+              className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold shadow-md text-sm rounded-xl">
+              <Calculator className="mr-2 h-4.5 w-4.5" />
+              Analyse Production Efficiency (विश्लेषण करें)
             </Button>
 
             {actualResult && (
-              <div className="space-y-3 animate-in fade-in">
+              <div className="space-y-4 animate-in fade-in">
 
-                {/* Yield KPI */}
-                <div className={`p-5 rounded-xl border-2 text-center ${
-                  actualResult.yieldPct >= parseFloat(actual.targetYield)
-                    ? "bg-green-50 border-green-300"
-                    : actualResult.yieldPct >= 12
-                    ? "bg-yellow-50 border-yellow-300"
-                    : "bg-red-50 border-red-300"
-                }`}>
-                  <div className="text-xs font-bold text-slate-500 uppercase mb-1">Actual Yield</div>
-                  <div className={`text-5xl font-black ${
-                    actualResult.yieldPct >= parseFloat(actual.targetYield) ? "text-green-700" :
-                    actualResult.yieldPct >= 12 ? "text-yellow-700" : "text-red-700"
-                  }`}>
-                    {actualResult.yieldPct.toFixed(2)}%
+                {/* Recovery Efficiency Rating */}
+                <div className={cn("p-5 rounded-xl border-2 text-center",
+                  actualResult.yieldEfficiency >= 98 ? "bg-green-50 border-green-300" :
+                  actualResult.yieldEfficiency >= 94 ? "bg-yellow-50 border-yellow-300" : "bg-red-50 border-red-300"
+                )}>
+                  <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Process Recovery Efficiency</div>
+                  <div className={cn("text-4xl sm:text-5xl font-black",
+                    actualResult.yieldEfficiency >= 98 ? "text-green-700" :
+                    actualResult.yieldEfficiency >= 94 ? "text-yellow-700" : "text-red-700"
+                  )}>
+                    {actualResult.yieldEfficiency.toFixed(1)}%
                   </div>
-                  <div className="text-xs text-slate-500 mt-1">
-                    {actualResult.milkKg} kg milk → {actualResult.paneerKg} kg paneer
+                  <p className="text-[11px] text-slate-500 mt-2 font-medium">
+                    Actual Yield: <strong>{actualResult.actualYieldPct.toFixed(2)}%</strong> vs. Theoretical Ideal: <strong>{actualResult.idealYieldPct.toFixed(2)}%</strong>
+                  </p>
+                  <div className="text-[10px] px-2 py-0.5 rounded-full inline-block mt-2 font-bold uppercase tracking-wide bg-slate-200/50 text-slate-700">
+                    {actualResult.yieldEfficiency >= 98 ? "🏆 Excellent (विश्वसनीय रिकवरी)" : 
+                     actualResult.yieldEfficiency >= 94 ? "⚠️ Normal (नियमित रिकवरी - कुछ सुधार संभव)" : "🚨 High Solids Loss (अत्यधिक नुकसान - प्रक्रिया जांचें)"}
                   </div>
                 </div>
 
-                {/* Benchmarks */}
-                <Card className="bg-white border-slate-200">
-                  <CardHeader className="p-3 pb-1 border-b">
-                    <CardTitle className="text-xs font-bold uppercase text-slate-600">📊 Benchmark Comparison</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 space-y-2 text-sm">
-                    {[
-                      { label: "Industry minimum",       ref: 12,                              actual: actualResult.yieldPct },
-                      { label: "Industry standard",      ref: 16,                              actual: actualResult.yieldPct },
-                      { label: "Your target",            ref: parseFloat(actual.targetYield),  actual: actualResult.yieldPct },
-                      { label: "Theoretical estimate",   ref: actualResult.theoreticalEst,     actual: actualResult.yieldPct },
-                    ].map((b, i) => {
-                      const gap   = b.actual - b.ref;
-                      const ok    = gap >= 0;
-                      return (
-                        <div key={i}>
-                          <div className="flex justify-between mb-1">
-                            <span className="text-slate-500">{b.label}</span>
-                            <div className="flex gap-2 items-center">
-                              <span className="text-slate-400">{b.ref.toFixed(1)}%</span>
-                              <span className={`font-bold text-xs px-1.5 py-0.5 rounded ${ok ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                                {ok ? "+" : ""}{gap.toFixed(2)}%
-                              </span>
-                            </div>
-                          </div>
-                          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full rounded-full ${ok ? "bg-green-500" : "bg-red-400"}`}
-                              style={{ width: `${Math.min((b.actual / (b.ref * 1.3)) * 100, 100)}%` }}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </CardContent>
-                </Card>
+                {/* Loss Deficit Summary */}
+                {actualResult.lostPaneerKg > 0 && (
+                  <Card className="bg-red-50/50 border border-red-200 shadow-sm">
+                    <CardContent className="p-3 text-xs space-y-1">
+                      <div className="font-bold text-red-800 uppercase tracking-wider text-[10px]">solids loss deficit (उत्पादन नुकसान)</div>
+                      <div className="flex justify-between text-slate-600">
+                        <span>Solids Lost in Whey:</span>
+                        <span className="font-black text-red-600">{actualResult.lostPaneerKg.toFixed(2)} kg Paneer</span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 mt-1 italic leading-normal">
+                        This represent paneer lost in processing due to poor curd strength, high washing losses, or overpressing.
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
 
-                {/* Milk per kg + confidence */}
+                {/* Conversion KPIs */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
-                    <div className="text-[10px] text-blue-600 font-bold uppercase">kg Milk / kg Paneer</div>
-                    <div className="text-2xl font-black text-blue-800">{actualResult.litrePerKgPaneer.toFixed(2)}</div>
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 shadow-sm text-center">
+                    <div className="text-[10px] text-blue-600 font-extrabold uppercase">Milk Consumption Rate</div>
+                    <div className="text-xl sm:text-2xl font-black text-blue-800 mt-1">{actualResult.litrePerKgPaneer.toFixed(2)} L</div>
+                    <div className="text-[9px] text-blue-500 mt-0.5">per 1 kg Paneer obtained</div>
                   </div>
-                  <div className={`rounded-xl p-4 text-center border-2 ${
-                    actualResult.confidence === "high" ? "bg-green-50 border-green-300" :
-                    actualResult.confidence === "medium" ? "bg-yellow-50 border-yellow-300" : "bg-red-50 border-red-300"
-                  }`}>
-                    <div className="text-[10px] font-bold uppercase text-slate-500">Data Confidence</div>
-                    <div className={`text-xl font-black uppercase ${
-                      actualResult.confidence === "high" ? "text-green-700" :
-                      actualResult.confidence === "medium" ? "text-yellow-700" : "text-red-700"
-                    }`}>{actualResult.confidence}</div>
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 shadow-sm text-center">
+                    <div className="text-[10px] text-emerald-600 font-extrabold uppercase">Ideal Expected Yield</div>
+                    <div className="text-xl sm:text-2xl font-black text-emerald-800 mt-1">{actualResult.idealYieldKg.toFixed(1)} kg</div>
+                    <div className="text-[9px] text-emerald-500 mt-0.5">at 100% ideal recovery</div>
                   </div>
                 </div>
 
@@ -1139,63 +1094,13 @@ function PaneerYieldCalc() {
                 {actualResult.warnings.length > 0 && (
                   <Alert className="bg-yellow-50 border-yellow-300">
                     <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                    <AlertTitle className="text-yellow-800 text-sm">Process Alerts</AlertTitle>
-                    <AlertDescription className="text-xs text-yellow-700 space-y-1">
+                    <AlertTitle className="text-yellow-800 text-xs font-bold">Process Quality Warnings</AlertTitle>
+                    <AlertDescription className="text-[11px] text-yellow-700 space-y-1 mt-1 font-medium">
                       {actualResult.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
                     </AlertDescription>
                   </Alert>
                 )}
               </div>
-            )}
-          </div>
-        )}
-
-        {/* ═══════════ COMPARISON MODE ════════════════ */}
-        {activeCalc === "comparison" && (
-          <div className="space-y-3">
-            {theoResult && actualResult ? (
-              <>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  {[
-                    { label: "Theoretical", value: `${theoResult.yieldPct.toFixed(2)}%`,   color: "bg-green-600"  },
-                    { label: "Actual",       value: `${actualResult.yieldPct.toFixed(2)}%`, color: "bg-blue-600"   },
-                    { label: "Gap",
-                      value: `${(actualResult.yieldPct - theoResult.yieldPct).toFixed(2)}%`,
-                      color: actualResult.yieldPct >= theoResult.yieldPct ? "bg-emerald-600" : "bg-red-600" },
-                  ].map((k, i) => (
-                    <div key={i} className={`${k.color} text-white p-3 rounded-xl shadow`}>
-                      <div className="text-[9px] uppercase opacity-80 font-bold">{k.label}</div>
-                      <div className="text-2xl font-black">{k.value}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <Card className="bg-white border-slate-200">
-                  <CardContent className="p-3 space-y-2 text-sm">
-                    {[
-                      { label: "Theoretical kg",   value: `${theoResult.paneerKg.toFixed(2)} kg`      },
-                      { label: "Actual kg",         value: `${actualResult.paneerKg} kg`               },
-                      { label: "Difference",
-                        value: `${(actualResult.paneerKg - theoResult.paneerKg).toFixed(2)} kg`,
-                        color: actualResult.paneerKg >= theoResult.paneerKg ? "text-green-700" : "text-red-600" },
-                      { label: "Efficiency vs theory",
-                        value: `${((actualResult.yieldPct / theoResult.yieldPct) * 100).toFixed(1)}%` },
-                    ].map((r, i) => (
-                      <div key={i} className="flex justify-between">
-                        <span className="text-slate-500">{r.label}</span>
-                        <span className={`font-bold ${r.color || ""}`}>{r.value}</span>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </>
-            ) : (
-              <Alert className="bg-blue-50 border-blue-200">
-                <Info className="h-4 w-4 text-blue-600" />
-                <AlertDescription className="text-xs text-blue-700">
-                  Pehle <strong>Theoretical</strong> aur <strong>Actual</strong> dono tabs mein calculate karein — phir comparison yahan aayega.
-                </AlertDescription>
-              </Alert>
             )}
           </div>
         )}
@@ -1235,10 +1140,10 @@ function CIPChemicalCalc() {
     workingDays:      "26",
   });
 
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState<any>(null);
   const [showSteps, setShowSteps] = useState(false);
 
-  const set = (k, v) => setInputs(p => ({ ...p, [k]: v }));
+  const set = (k: string, v: string) => setInputs(p => ({ ...p, [k]: v }));
 
   const calculate = useCallback(() => {
     const V      = parseFloat(inputs.systemVolume)     || 0;
@@ -1306,7 +1211,7 @@ function CIPChemicalCalc() {
     toast({ title: "CIP Calculated", description: `Cycle cost: ₹${totalCycleChemCost.toFixed(2)} | Monthly: ₹${monthlyCost.toFixed(0)}` });
   }, [inputs, toast]);
 
-  const InputRow = ({ label, k, suffix, help }) => (
+  const InputRow = ({ label, k, suffix, help }: { label: string; k: keyof typeof inputs; suffix?: string; help?: string }) => (
     <div className="space-y-1">
       <Label className="text-xs font-semibold text-slate-600 flex justify-between">
         {label} {suffix && <span className="text-muted-foreground font-normal">{suffix}</span>}
@@ -1393,7 +1298,7 @@ function CIPChemicalCalc() {
               <AlertTriangle className="h-4 w-4 text-yellow-600" />
               <AlertTitle className="text-yellow-800 text-sm">Process Warnings</AlertTitle>
               <AlertDescription className="text-xs space-y-1">
-                {result.warnings.map((w, i) => <div key={i}>⚠️ {w}</div>)}
+                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
               </AlertDescription>
             </Alert>
           )}
@@ -1488,11 +1393,11 @@ function EvaporatorCalc() {
     productType:    "condensed", // condensed | khoa | wpc
   });
 
-  const [result, setResult] = useState(null);
-  const set = (k, v) => setInputs(p => ({ ...p, [k]: v }));
+  const [result, setResult] = useState<any>(null);
+  const set = (k: string, v: string) => setInputs(p => ({ ...p, [k]: v }));
 
   // Latent heat of vaporization table by temp (°C → kJ/kg)
-  const latentHeat = (T) => {
+  const latentHeat = (T: number) => {
     // Approximation: Lv ≈ 2501 - 2.37 × T (kJ/kg) — accurate within 0.5% for 40–100°C
     return 2501 - 2.37 * T;
   };
@@ -1572,7 +1477,7 @@ function EvaporatorCalc() {
     toast({ title: "Evaporator Calculated", description: `Evaporate ${W.toFixed(0)} kg/h water | Concentrate: ${C.toFixed(0)} kg/h` });
   }, [inputs, toast]);
 
-  const InputRow = ({ label, k, suffix, help }) => (
+  const InputRow = ({ label, k, suffix, help }: { label: string; k: keyof typeof inputs; suffix?: string; help?: string }) => (
     <div className="space-y-1">
       <Label className="text-xs font-semibold text-slate-600 flex justify-between">
         {label} {suffix && <span className="text-muted-foreground font-normal">{suffix}</span>}
@@ -1641,7 +1546,7 @@ function EvaporatorCalc() {
               <AlertTriangle className="h-4 w-4 text-yellow-600" />
               <AlertTitle className="text-sm text-yellow-800">Process Notes</AlertTitle>
               <AlertDescription className="text-xs space-y-1">
-                {result.warnings.map((w, i) => <div key={i}>⚠️ {w}</div>)}
+                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
               </AlertDescription>
             </Alert>
           )}
@@ -1745,8 +1650,8 @@ function SprayDryerCalc() {
     fanLoad:         "45",    // kW main air fan
   });
 
-  const [result, setResult] = useState(null);
-  const set = (k, v) => setInputs(p => ({ ...p, [k]: v }));
+  const [result, setResult] = useState<any>(null);
+  const set = (k: string, v: string) => setInputs(p => ({ ...p, [k]: v }));
 
   const calculate = useCallback(() => {
     const F   = parseFloat(inputs.feedRate)       || 0;
@@ -1821,7 +1726,7 @@ function SprayDryerCalc() {
     toast({ title: "Spray Dryer Calculated", description: `Powder: ${powderYield.toFixed(0)} kg/h | Efficiency: ${thermalEfficiency.toFixed(1)}%` });
   }, [inputs, toast]);
 
-  const InputRow = ({ label, k, suffix, help }) => (
+  const InputRow = ({ label, k, suffix, help }: { label: string; k: keyof typeof inputs; suffix?: string; help?: string }) => (
     <div className="space-y-1">
       <Label className="text-xs font-semibold text-slate-600 flex justify-between">
         {label} {suffix && <span className="text-muted-foreground font-normal">{suffix}</span>}
@@ -1892,7 +1797,7 @@ function SprayDryerCalc() {
               <AlertTriangle className="h-4 w-4 text-yellow-600" />
               <AlertTitle className="text-sm text-yellow-800">Process Warnings</AlertTitle>
               <AlertDescription className="text-xs space-y-1">
-                {result.warnings.map((w, i) => <div key={i}>⚠️ {w}</div>)}
+                {result.warnings.map((w: string, i: number) => <div key={i}>⚠️ {w}</div>)}
               </AlertDescription>
             </Alert>
           )}
@@ -8893,7 +8798,7 @@ function WmrCalc() {
       .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
       .map(([key]) => {
-        const sub = Object.values(DEPT_CATEGORIES).flatMap(d => d.subs).find(s => s.key === key)!;
+        const sub = (Object.values(DEPT_CATEGORIES) as any[]).flatMap((d: any) => d.subs).find((s: any) => s.key === key)!;
         return { label: sub.label, excess: subExcess[key], val: subVals[key], bench: sub.benchmark };
       });
 
@@ -9178,7 +9083,7 @@ function WmrCalc() {
                     <CardTitle className="text-xs font-bold text-teal-700 uppercase">Sub-Category vs Benchmark</CardTitle>
                   </CardHeader>
                   <CardContent className="p-3 space-y-1">
-                    {Object.values(DEPT_CATEGORIES).flatMap(d => d.subs).map(sub => {
+                    {(Object.values(DEPT_CATEGORIES) as any[]).flatMap((d: any) => d.subs).map((sub: any) => {
                       const actual = result.subWMR[sub.key];
                       const excess = result.subExcess[sub.key];
                       const over   = excess > 0;
@@ -13063,23 +12968,23 @@ function BatchScalingCalc() {
   });
 
   // Optional target ingredients added by user: [{ key, label, value }]
-  const [optionalTargets, setOptionalTargets] = useState([]);
+  const [optionalTargets, setOptionalTargets] = useState<any[]>([]);
 
   // Raw materials — 3 solver variables
-  const [rawMaterials, setRawMaterials] = useState({
+  const [rawMaterials, setRawMaterials] = useState<any>({
     base:      { name: "Milk (Full Fat 6%)",     fat: "6.0",  snf: "9.0" },
     fatSource: { name: "Cream (40% fat)",        fat: "40",   snf: "5.4" },
     smp:       { name: "SMP (Skim Milk Powder)", fat: "0.5",  snf: "97"  },
   });
 
   // Extra source ingredients added by user: [{ id, name, fat, snf, amount }]
-  const [extraSources, setExtraSources] = useState([]);
+  const [extraSources, setExtraSources] = useState<any[]>([]);
 
-  const [solverResult, setSolverResult]           = useState(null);
-  const [verificationSteps, setVerificationSteps] = useState([]);
+  const [solverResult, setSolverResult]           = useState<any>(null);
+  const [verificationSteps, setVerificationSteps] = useState<any[]>([]);
 
   // Manual tab rows
-  const [manualRows, setManualRows] = useState([
+  const [manualRows, setManualRows] = useState<any[]>([
     { id: 1, name: "Milk (Full Fat 6%)", amount: "55" },
   ]);
 
@@ -13089,18 +12994,18 @@ function BatchScalingCalc() {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  const setRM = (key, field, value) =>
-    setRawMaterials(prev => ({ ...prev, [key]: { ...prev[key], [field]: value } }));
+  const setRM = (key: string, field: string, value: string) =>
+    setRawMaterials((prev: any) => ({ ...prev, [key]: { ...prev[key], [field]: value } }));
 
-  const handleRMSelect = (key, selectedName) => {
-    const db = IC_INGREDIENT_DB[selectedName] || {};
-    setRawMaterials(prev => ({
+  const handleRMSelect = (key: string, selectedName: string) => {
+    const db: any = IC_INGREDIENT_DB[selectedName as keyof typeof IC_INGREDIENT_DB] || {};
+    setRawMaterials((prev: any) => ({
       ...prev,
       [key]: { name: selectedName, fat: String(db.fat ?? prev[key].fat), snf: String(db.snf ?? prev[key].snf) },
     }));
   };
 
-  const handleProductTypeChange = (type) => {
+  const handleProductTypeChange = (type: string) => {
     setProductType(type);
     setSolverResult(null);
     setExtraSources([]);
@@ -13120,21 +13025,21 @@ function BatchScalingCalc() {
   };
 
   // Add optional target ingredient
-  const addOptionalTarget = (option) => {
+  const addOptionalTarget = (option: any) => {
     if (optionalTargets.find(o => o.key === option.key)) return; // already added
     setOptionalTargets(prev => [...prev, { ...option, value: "0" }]);
     setShowOptionalDropdown(false);
   };
 
-  const removeOptionalTarget = (key) =>
+  const removeOptionalTarget = (key: string) =>
     setOptionalTargets(prev => prev.filter(o => o.key !== key));
 
-  const updateOptionalTarget = (key, value) =>
+  const updateOptionalTarget = (key: string, value: string) =>
     setOptionalTargets(prev => prev.map(o => o.key === key ? { ...o, value } : o));
 
   // Add extra source ingredient
-  const addExtraSource = (name) => {
-    const db = IC_INGREDIENT_DB[name] || {};
+  const addExtraSource = (name: string) => {
+    const db: any = IC_INGREDIENT_DB[name as keyof typeof IC_INGREDIENT_DB] || {};
     setExtraSources(prev => [
       ...prev,
       { id: Date.now(), name, fat: String(db.fat ?? 0), snf: String(db.snf ?? 0) },
@@ -13142,21 +13047,21 @@ function BatchScalingCalc() {
     setShowExtraSourceDropdown(false);
   };
 
-  const removeExtraSource = (id) =>
+  const removeExtraSource = (id: number) =>
     setExtraSources(prev => prev.filter(s => s.id !== id));
 
-  const updateExtraSource = (id, field, value) =>
+  const updateExtraSource = (id: number, field: string, value: string) =>
     setExtraSources(prev => prev.map(s => s.id === id ? { ...s, [field]: value } : s));
 
-  const handleExtraSourceSelect = (id, name) => {
-    const db = IC_INGREDIENT_DB[name] || {};
+  const handleExtraSourceSelect = (id: number, name: string) => {
+    const db: any = IC_INGREDIENT_DB[name as keyof typeof IC_INGREDIENT_DB] || {};
     setExtraSources(prev => prev.map(s =>
       s.id === id ? { ...s, name, fat: String(db.fat ?? 0), snf: String(db.snf ?? 0) } : s
     ));
   };
 
   // ── Categorized ingredient select ─────────────────────────────────────────
-  const IngredientSelect = ({ value, onChange, className = "" }) => (
+  const IngredientSelect = ({ value, onChange, className = "" }: { value: string; onChange: (v: string) => void; className?: string }) => (
     <select
       value={value}
       onChange={e => onChange(e.target.value)}
@@ -14761,6 +14666,8 @@ export default function PlantCostCalc() {
     energyCost: "1.5",         // Per Unit
     logisticsCost: "1.0",      // Per Unit
     taxRate: "0",
+    workingDays: "25",         // Operating Days per Month
+    batchesPerDay: "1"         // Batches per Day (for Product mode)
   });
 
   const [fixedExpenses, setFixedExpenses] = useState<FixedExpense[]>([
@@ -14783,11 +14690,13 @@ export default function PlantCostCalc() {
           // Reset to Plant Defaults
           setInputs(prev => ({
               ...prev,
-              inputQty: "30000", // Larger volume for plant
+              inputQty: "30000",      // Larger volume for plant
               avgSellingPrice: "60", // Avg realization
-              yieldFactor: "1.0", // Avg Yield
+              yieldFactor: "1.0",    // Avg Yield
               packagingCost: "2.0",
-              ingredientsCost: "0.5"
+              ingredientsCost: "0.5",
+              workingDays: "25",
+              batchesPerDay: "1"
           }));
       } else {
           // Reset to Product Defaults (Trigger currently selected product)
@@ -14806,8 +14715,9 @@ export default function PlantCostCalc() {
               yieldFactor: prod.yield,
               packagingCost: prod.packCost,
               ingredientsCost: prod.type === 'Drink' ? '2.0' : (prod.type === 'Fermented' ? '0.5' : '0.0'),
+              workingDays: "25",
+              batchesPerDay: "1"
           }));
-          // toast({ title: "Loaded", description: `${prod.label} settings applied.` });
       }
   };
 
@@ -14823,28 +14733,38 @@ export default function PlantCostCalc() {
   const results = useMemo(() => {
     const vals = Object.fromEntries(Object.entries(inputs).map(([k, v]) => [k, parseFloat(v) || 0]));
     
-    const inputVolume = vals.inputQty;
-    const grossOutput = inputVolume * vals.yieldFactor;
-    const lossQty = grossOutput * (vals.processLoss / 100);
-    const saleableQty = grossOutput - lossQty;
+    const inputQty = vals.inputQty;
+    const workingDays = vals.workingDays || 25;
+    const batchesPerDay = scope === 'product' ? (vals.batchesPerDay || 1) : 1;
     
-    const totalRevenue = saleableQty * vals.avgSellingPrice;
+    // Total Milk Processed per day
+    const dailyInputVolume = scope === 'product' ? (inputQty * batchesPerDay) : inputQty;
+    // Total Milk Processed per month
+    const monthlyInputVolume = dailyInputVolume * workingDays;
+    
+    // Selected period input volume
+    const periodInputVolume = period === "monthly" ? monthlyInputVolume : dailyInputVolume;
+    
+    // Yield & Loss Calculations
+    const periodGrossOutput = periodInputVolume * vals.yieldFactor;
+    const periodLossQty = periodGrossOutput * (vals.processLoss / 100);
+    const periodSaleableQty = periodGrossOutput - periodLossQty;
+    
+    // Revenue
+    const totalRevenue = periodSaleableQty * vals.avgSellingPrice;
 
-    const totalRawCost = vals.rawMaterialCost * inputVolume;
-    const totalPackCost = vals.packagingCost * saleableQty; 
-    const totalIngCost = vals.ingredientsCost * saleableQty;
-    const totalEnergyCost = vals.energyCost * saleableQty;
-    const totalLogisticsCost = vals.logisticsCost * saleableQty;
+    // Period Costs
+    const totalRawCost = vals.rawMaterialCost * periodInputVolume;
+    const totalPackCost = vals.packagingCost * periodSaleableQty; 
+    const totalIngCost = vals.ingredientsCost * periodSaleableQty;
+    const totalEnergyCost = vals.energyCost * periodSaleableQty;
+    const totalLogisticsCost = vals.logisticsCost * periodSaleableQty;
 
     const totalVariableCost = totalRawCost + totalPackCost + totalIngCost + totalEnergyCost + totalLogisticsCost;
-    const unitVariableCost = saleableQty > 0 ? totalVariableCost / saleableQty : 0;
-
-    const monthlyFixed = fixedExpenses.reduce((sum, i) => sum + (parseFloat(i.cost) || 0), 0);
-    const periodFixedCost = period === "monthly" ? monthlyFixed : monthlyFixed / 30;
     
-    // In product mode, we allocate fixed cost based on share? 
-    // No, for simplicity in "Product" mode, user typically sees Batch P&L against Total Fixed Cost
-    // To make it realistic per product, we might check Break Even
+    // Fixed Costs
+    const monthlyFixed = fixedExpenses.reduce((sum, i) => sum + (parseFloat(i.cost) || 0), 0);
+    const periodFixedCost = period === "monthly" ? monthlyFixed : monthlyFixed / workingDays;
     
     const totalCost = totalVariableCost + periodFixedCost;
     const grossProfit = totalRevenue - totalVariableCost;
@@ -14854,24 +14774,63 @@ export default function PlantCostCalc() {
     const netProfitPostTax = netProfitPreTax - taxAmount;
 
     const netMargin = totalRevenue > 0 ? (netProfitPostTax / totalRevenue) * 100 : 0;
-    const breakEvenUnits = (vals.avgSellingPrice - unitVariableCost) > 0 
-        ? periodFixedCost / (vals.avgSellingPrice - unitVariableCost) 
-        : 0;
+    
+    // Unit level metrics (Per Unit of Saleable Output)
+    const unitRawCost = periodSaleableQty > 0 ? totalRawCost / periodSaleableQty : 0;
+    const unitVariableCost = periodSaleableQty > 0 ? totalVariableCost / periodSaleableQty : 0;
+    const unitFixedCost = periodSaleableQty > 0 ? periodFixedCost / periodSaleableQty : 0;
+    const unitTotalCost = periodSaleableQty > 0 ? totalCost / periodSaleableQty : 0;
+    const unitNetProfit = vals.avgSellingPrice - unitTotalCost;
+    
+    // Cost of Processing (CoP)
+    const unitCoPVal = periodSaleableQty > 0 ? (totalCost - totalRawCost) / periodSaleableQty : 0;
+    const unitVariableCoPVal = periodSaleableQty > 0 ? (totalVariableCost - totalRawCost) / periodSaleableQty : 0;
+
+    // Break Even Point
+    const unitContribution = vals.avgSellingPrice - unitVariableCost;
+    const breakEvenUnits = unitContribution > 0 ? periodFixedCost / unitContribution : 0;
+    const breakEvenRevenue = breakEvenUnits * vals.avgSellingPrice;
+    const breakEvenCapacityPct = periodSaleableQty > 0 ? (breakEvenUnits / periodSaleableQty) * 100 : 0;
+    const safetyMarginPct = 100 - breakEvenCapacityPct;
     
     const costStructure = {
-        material: (totalRawCost / totalCost) * 100,
-        overhead: ((totalCost - totalRawCost) / totalCost) * 100
+        material: totalCost > 0 ? (totalRawCost / totalCost) * 100 : 0,
+        overhead: totalCost > 0 ? ((totalCost - totalRawCost) / totalCost) * 100 : 0
     };
 
     return {
-        saleableQty, totalRevenue, totalRawCost, totalVariableCost, periodFixedCost, totalCost,
-        grossProfit, netProfitPreTax, taxAmount, netProfitPostTax, netMargin, breakEvenUnits,
-        unitVariableCost, costStructure
+        dailyInputVolume,
+        monthlyInputVolume,
+        periodInputVolume,
+        saleableQty: periodSaleableQty,
+        totalRevenue,
+        totalRawCost,
+        totalVariableCost,
+        periodFixedCost,
+        totalCost,
+        grossProfit,
+        netProfitPreTax,
+        taxAmount,
+        netProfitPostTax,
+        netMargin,
+        breakEvenUnits,
+        breakEvenRevenue,
+        breakEvenCapacityPct,
+        safetyMarginPct,
+        unitRawCost,
+        unitVariableCost,
+        unitFixedCost,
+        unitTotalCost,
+        unitNetProfit,
+        unitCoPVal,
+        unitVariableCoPVal,
+        costStructure
     };
-  }, [inputs, fixedExpenses, period]);
+  }, [inputs, fixedExpenses, period, scope]);
 
   // Helper
   const fmt = (n: number) => n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+  
   const downloadPdf = async () => {
       if(!reportRef.current) return;
       setIsDownloading(true);
@@ -14899,7 +14858,7 @@ export default function PlantCostCalc() {
                         <Factory className="h-6 w-6 text-indigo-600" />
                         Dairy Plant Costing
                     </CardTitle>
-                    <CardDescription>P&L Analysis, Break-even & Tax Calculations</CardDescription>
+                    <CardDescription>Industrial-Grade P&L Analysis, Break-even & Process Costing (CoP)</CardDescription>
                 </div>
                 
                 {/* SCOPE DROPDOWN (PLANT vs PRODUCT) */}
@@ -14942,7 +14901,6 @@ export default function PlantCostCalc() {
                             <SelectItem value="sm">Skimmed Milk</SelectItem>
                             
                             <SelectItem value="header2" disabled className="font-bold bg-slate-100 opacity-100">-- Curd Products --</SelectItem>
-                            <SelectItem value="curd_fcm">Premium Curd</SelectItem>
                             <SelectItem value="curd_ton">Toned Curd</SelectItem>
                             <SelectItem value="curd_skim">Skimmed Curd</SelectItem>
                             <SelectItem value="curd_part">Partial Curd</SelectItem>
@@ -14970,49 +14928,105 @@ export default function PlantCostCalc() {
         {/* === SECTION 1: PRODUCTION LOGIC === */}
         <section className="space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-2">
-                <Calculator className="h-4 w-4"/> {scope === 'plant' ? 'Plant Throughput' : 'Product Batching'}
+                <Calculator className="h-4 w-4"/> {scope === 'plant' ? 'Plant Capacity & Throughput' : 'Product Batch Configuration'}
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <SmartInput label="Input (Milk)" name="inputQty" value={inputs.inputQty} setter={handleInputChange} validation={validatePositive(inputs.inputQty)} icon={<Droplets className="h-3 w-3"/>} suffix="L/Kg" />
-                <SmartInput label="Yield Factor" name="yieldFactor" value={inputs.yieldFactor} setter={handleInputChange} validation={validatePositive(inputs.yieldFactor)} icon={<Target className="h-3 w-3"/>} suffix="Out/In" colorScheme="orange" readOnly={scope==='product'} />
-                <SmartInput label="Selling Price" name="avgSellingPrice" value={inputs.avgSellingPrice} setter={handleInputChange} validation={validatePositive(inputs.avgSellingPrice)} icon={<DollarSign className="h-3 w-3"/>} suffix="₹/Unit" colorScheme="green" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
+                <SmartInput 
+                    label={scope === 'plant' ? "Daily Milk Processed" : "Batch Size (Milk)"} 
+                    name="inputQty" 
+                    value={inputs.inputQty} 
+                    setter={handleInputChange} 
+                    validation={validatePositive(inputs.inputQty)} 
+                    icon={<Droplets className="h-3 w-3"/>} 
+                    suffix="L/Kg" 
+                />
+                {scope === 'product' && (
+                    <SmartInput 
+                        label="Batches / Day" 
+                        name="batchesPerDay" 
+                        value={inputs.batchesPerDay} 
+                        setter={handleInputChange} 
+                        validation={validatePositive(inputs.batchesPerDay)} 
+                        icon={<Calculator className="h-3 w-3"/>} 
+                        suffix="Batches" 
+                        colorScheme="purple" 
+                    />
+                )}
+                <SmartInput 
+                    label="Operating Days / Month" 
+                    name="workingDays" 
+                    value={inputs.workingDays} 
+                    setter={handleInputChange} 
+                    validation={validatePositive(inputs.workingDays)} 
+                    icon={<Calendar className="h-3 w-3"/>} 
+                    suffix="Days" 
+                    colorScheme="pink" 
+                />
+                <SmartInput 
+                    label="Yield Factor" 
+                    name="yieldFactor" 
+                    value={inputs.yieldFactor} 
+                    setter={handleInputChange} 
+                    validation={validatePositive(inputs.yieldFactor)} 
+                    icon={<Target className="h-3 w-3"/>} 
+                    suffix="Out/In" 
+                    colorScheme="orange" 
+                    readOnly={scope==='product'} 
+                />
+                <SmartInput 
+                    label="Avg Selling Price" 
+                    name="avgSellingPrice" 
+                    value={inputs.avgSellingPrice} 
+                    setter={handleInputChange} 
+                    validation={validatePositive(inputs.avgSellingPrice)} 
+                    icon={<DollarSign className="h-3 w-3"/>} 
+                    suffix="₹/Unit" 
+                    colorScheme="green" 
+                />
             </div>
 
+            {/* Mass Balance Verification Panel */}
             <div className="grid grid-cols-3 gap-0 bg-slate-100 rounded-lg border border-slate-200 overflow-hidden text-center divide-x divide-slate-300">
                 <div className="p-2">
-                    <div className="text-[9px] font-bold text-slate-500 uppercase">Input</div>
-                    <div className="text-sm font-bold text-slate-800">{inputs.inputQty}</div>
+                    <div className="text-[9px] font-bold text-slate-500 uppercase">Input Volume ({period})</div>
+                    <div className="text-sm font-bold text-slate-800">{fmt(results.periodInputVolume)} L/Kg</div>
+                    <div className="text-[9px] text-slate-400">
+                      {scope === 'product' ? `${inputs.inputQty} L × ${inputs.batchesPerDay} batches` : `${inputs.inputQty} L/day`}
+                      {period === 'monthly' && ` × ${inputs.workingDays} days`}
+                    </div>
                 </div>
                 <div className="p-2 bg-indigo-50/50">
-                    <div className="text-[9px] font-bold text-indigo-500 uppercase">Gross Output</div>
-                    <div className="text-sm font-bold text-indigo-700">{fmt(inputs.inputQty * parseFloat(inputs.yieldFactor))}</div>
+                    <div className="text-[9px] font-bold text-indigo-500 uppercase">Gross Output ({period})</div>
+                    <div className="text-sm font-bold text-indigo-700">{fmt(results.periodInputVolume * parseFloat(inputs.yieldFactor))} L/Kg</div>
+                    <div className="text-[9px] text-indigo-400">Yield Factor: {inputs.yieldFactor}x</div>
                 </div>
                 <div className="p-2 bg-green-50/50">
-                    <div className="text-[9px] font-bold text-green-600 uppercase">Saleable</div>
-                    <div className="text-base font-extrabold text-green-700">{fmt(results.saleableQty)}</div>
+                    <div className="text-[9px] font-bold text-green-600 uppercase">Saleable Volume ({period})</div>
+                    <div className="text-base font-extrabold text-green-700">{fmt(results.saleableQty)} Units</div>
+                    <div className="text-[9px] text-green-500">Loss: {inputs.processLoss}%</div>
                 </div>
             </div>
         </section>
 
         {/* === SECTION 2: VARIABLE COSTS === */}
         <section className="space-y-4 pt-4 border-t">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-red-600 flex items-center gap-2"><Weight className="h-4 w-4"/> Variable Costs</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-red-600 flex items-center gap-2"><Weight className="h-4 w-4"/> Variable Cost Components</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                <SmartInput label="Raw Milk" name="rawMaterialCost" value={inputs.rawMaterialCost} setter={handleInputChange} colorScheme="orange" suffix="₹/In" />
-                <SmartInput label="Packaging" name="packagingCost" value={inputs.packagingCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.packaging} colorScheme="purple" suffix="₹/Out" />
-                <SmartInput label="Additives/Spice" name="ingredientsCost" value={inputs.ingredientsCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.ingredients} colorScheme="blue" suffix="₹/Out" />
-                <SmartInput label="Energy/Fuel" name="energyCost" value={inputs.energyCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.energy} colorScheme="orange" suffix="₹/Out" />
-                <SmartInput label="Logistics" name="logisticsCost" value={inputs.logisticsCost} setter={handleInputChange} colorScheme="pink" suffix="₹/Out" />
-                <SmartInput label="Process Loss" name="processLoss" value={inputs.processLoss} setter={handleInputChange} colorScheme="red" suffix="%" />
+                <SmartInput label="Raw Milk Cost" name="rawMaterialCost" value={inputs.rawMaterialCost} setter={handleInputChange} colorScheme="orange" suffix="₹/L or kg" />
+                <SmartInput label="Packaging" name="packagingCost" value={inputs.packagingCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.packaging} colorScheme="purple" suffix="₹/Unit" />
+                <SmartInput label="Ingredients/Additives" name="ingredientsCost" value={inputs.ingredientsCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.ingredients} colorScheme="blue" suffix="₹/Unit" />
+                <SmartInput label="Utility Power/Fuel" name="energyCost" value={inputs.energyCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.energy} colorScheme="orange" suffix="₹/Unit" />
+                <SmartInput label="Logistics/Transport" name="logisticsCost" value={inputs.logisticsCost} setter={handleInputChange} colorScheme="pink" suffix="₹/Unit" />
+                <SmartInput label="Process Loss Rate" name="processLoss" value={inputs.processLoss} setter={handleInputChange} colorScheme="orange" suffix="%" />
             </div>
         </section>
 
         {/* === SECTION 3: FIXED EXPENSES === */}
         <section className="space-y-4 pt-4 border-t">
             <div className="flex justify-between items-center">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-purple-600 flex items-center gap-2"><Factory className="h-4 w-4"/> Fixed Overheads ({period})</h3>
-                <Button variant="outline" size="sm" onClick={handleFixedExpense.add} className="h-7 text-xs"><PlusCircle className="w-3 h-3 mr-1"/> Add</Button>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-purple-600 flex items-center gap-2"><Factory className="h-4 w-4"/> Monthly Fixed Overheads</h3>
+                <Button variant="outline" size="sm" onClick={handleFixedExpense.add} className="h-7 text-xs"><PlusCircle className="w-3 h-3 mr-1"/> Add Overhead</Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {fixedExpenses.map(item => <FixedExpenseRow key={item.id} item={item} onChange={handleFixedExpense.change} onRemove={handleFixedExpense.remove} />)}
@@ -15020,68 +15034,239 @@ export default function PlantCostCalc() {
         </section>
 
         {/* === RESULTS SECTION === */}
-        <div ref={reportRef} className="bg-white border-2 border-indigo-100 rounded-xl overflow-hidden mt-6 shadow-sm">
+        <div ref={reportRef} className="bg-white border-2 border-indigo-100 rounded-xl overflow-hidden mt-6 shadow-md">
             <div className="bg-indigo-600 p-4 text-white flex justify-between items-center">
-                <h2 className="font-bold flex items-center gap-2"><PieChart className="w-5 h-5"/> {scope === 'plant' ? 'Total Plant Report' : `${PRODUCT_CATALOG[selectedProduct]?.label || 'Product'} Report`}</h2>
-                <Badge variant="secondary" className="bg-white/20 text-white">{period.toUpperCase()}</Badge>
+                <h2 className="font-bold flex items-center gap-2">
+                    <PieChart className="w-5 h-5"/> 
+                    {scope === 'plant' ? 'Total Plant Costing & P&L Statement' : `${PRODUCT_CATALOG[selectedProduct]?.label || 'Product'} Costing Sheet`}
+                </h2>
+                <Badge variant="secondary" className="bg-white/20 text-white font-bold">{period.toUpperCase()} ANALYSIS</Badge>
             </div>
             
             <div className="p-4 bg-slate-50 border-b">
                 <div className="flex justify-between text-xs mb-1 font-medium text-slate-600">
-                    <span>Raw Material ({results.costStructure.material.toFixed(0)}%)</span>
-                    <span>Overheads & Ops ({results.costStructure.overhead.toFixed(0)}%)</span>
+                    <span>Raw Material Cost Contribution ({results.costStructure.material.toFixed(0)}%)</span>
+                    <span>Processing & Overheads Contribution ({results.costStructure.overhead.toFixed(0)}%)</span>
                 </div>
                 <div className="h-3 w-full flex rounded-full overflow-hidden">
-                    <div className="bg-blue-500" style={{ width: `${results.costStructure.material}%` }} />
+                    <div className="bg-blue-500 animate-pulse" style={{ width: `${results.costStructure.material}%` }} />
                     <div className="bg-orange-400" style={{ width: `${results.costStructure.overhead}%` }} />
                 </div>
             </div>
 
             <div className="overflow-x-auto w-full">
-                <Table className="w-full min-w-[300px]">
+                <Table className="w-full min-w-[500px]">
+                    <TableHeader className="bg-slate-100">
+                        <TableRow>
+                            <TableHead className="font-bold text-slate-700 pl-4">Cost/Revenue Component</TableHead>
+                            <TableHead className="text-right font-bold text-slate-700 pr-4">Per Finished Unit (₹/Unit)</TableHead>
+                            <TableHead className="text-right font-bold text-slate-700 pr-4">Total Period Total ({period === 'monthly' ? 'Monthly' : 'Daily'})</TableHead>
+                        </TableRow>
+                    </TableHeader>
                     <TableBody>
-                        <TableRow className="hover:bg-slate-50">
-                            <TableCell className="font-medium text-slate-600 pl-4">Revenue ({fmt(results.saleableQty)} units)</TableCell>
-                            <TableCell className="text-right font-bold text-green-600 pr-4 text-lg">₹ {fmt(results.totalRevenue)}</TableCell>
+                        <TableRow className="hover:bg-slate-50 border-b">
+                            <TableCell className="font-semibold text-slate-700 pl-4">Saleable Output Revenue</TableCell>
+                            <TableCell className="text-right font-bold text-slate-800 pr-4">₹ {parseFloat(inputs.avgSellingPrice).toFixed(2)}</TableCell>
+                            <TableCell className="text-right font-black text-green-600 pr-4 text-base">₹ {fmt(results.totalRevenue)}</TableCell>
                         </TableRow>
-                        <TableRow className="hover:bg-slate-50">
-                            <TableCell className="font-medium text-slate-600 pl-4">Total Expenses</TableCell>
-                            <TableCell className="text-right font-bold text-red-500 pr-4">- ₹ {fmt(results.totalCost)}</TableCell>
+                        <TableRow className="hover:bg-slate-50 border-b">
+                            <TableCell className="font-medium text-slate-600 pl-4">Raw Milk Cost (Raw Input)</TableCell>
+                            <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitRawCost.toFixed(2)}</TableCell>
+                            <TableCell className="text-right text-red-500 pr-4">- ₹ {fmt(results.totalRawCost)}</TableCell>
                         </TableRow>
-                        <TableRow className="bg-slate-100 border-t-2 border-slate-200">
-                            <TableCell className="font-bold pl-4">Gross Profit (Pre-Tax)</TableCell>
-                            <TableCell className={cn("text-right font-bold text-lg pr-4", results.netProfitPreTax > 0 ? "text-indigo-700" : "text-red-600")}>
+                        <TableRow className="hover:bg-slate-50 border-b">
+                            <TableCell className="font-medium text-slate-600 pl-4">Variable Processing (Packaging, Ingredients, Utilities)</TableCell>
+                            <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitVariableCoPVal.toFixed(2)}</TableCell>
+                            <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.totalVariableCost - results.totalRawCost)}</TableCell>
+                        </TableRow>
+                        <TableRow className="hover:bg-slate-50 border-b">
+                            <TableCell className="font-medium text-slate-600 pl-4">Fixed Overheads Allocation</TableCell>
+                            <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitFixedCost.toFixed(2)}</TableCell>
+                            <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.periodFixedCost)}</TableCell>
+                        </TableRow>
+                        <TableRow className="hover:bg-slate-50 border-b-2 font-bold bg-slate-50">
+                            <TableCell className="font-bold text-slate-800 pl-4">Total Cost of Production (CoP_total)</TableCell>
+                            <TableCell className="text-right font-bold text-slate-800 pr-4">₹ {results.unitTotalCost.toFixed(2)}</TableCell>
+                            <TableCell className="text-right font-bold text-red-600 pr-4">- ₹ {fmt(results.totalCost)}</TableCell>
+                        </TableRow>
+                        <TableRow className="hover:bg-slate-50 border-b font-bold bg-indigo-50/30">
+                            <TableCell className="font-bold text-indigo-900 pl-4">Gross Operating Profit (Pre-Tax)</TableCell>
+                            <TableCell className={cn("text-right font-bold pr-4", results.unitNetProfit > 0 ? "text-indigo-700" : "text-red-600")}>
+                                ₹ {results.unitNetProfit.toFixed(2)}
+                            </TableCell>
+                            <TableCell className={cn("text-right font-extrabold pr-4 text-base", results.netProfitPreTax > 0 ? "text-indigo-700" : "text-red-600")}>
                                 ₹ {fmt(results.netProfitPreTax)}
                             </TableCell>
                         </TableRow>
                         {parseFloat(inputs.taxRate) > 0 && (
-                            <TableRow className="text-sm">
+                            <TableRow className="text-sm border-b">
                                 <TableCell className="pl-4 text-muted-foreground">Tax @ {inputs.taxRate}%</TableCell>
+                                <TableCell className="text-right text-red-400 pr-4">₹ {(results.taxAmount / results.saleableQty || 0).toFixed(2)}</TableCell>
                                 <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.taxAmount)}</TableCell>
                             </TableRow>
                         )}
-                        <TableRow className="bg-indigo-50 border-t border-indigo-100">
-                            <TableCell className="font-extrabold pl-4 text-indigo-900">NET PROFIT (Post-Tax)</TableCell>
-                            <TableCell className={cn("text-right font-extrabold text-xl pr-4", results.netProfitPostTax > 0 ? "text-green-600" : "text-red-600")}>
-                                ₹ {fmt(results.netProfitPostTax)}
-                            </TableCell>
+                        <TableRow className="bg-indigo-600 text-white font-extrabold hover:bg-indigo-700">
+                            <TableCell className="pl-4 text-sm uppercase tracking-wider font-bold">Net Profit (Post-Tax)</TableCell>
+                            <TableCell className="text-right pr-4 text-sm font-black">₹ {results.unitNetProfit.toFixed(2)}</TableCell>
+                            <TableCell className="text-right pr-4 text-lg font-black">₹ {fmt(results.netProfitPostTax)}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
             </div>
 
+            {/* Break-Even Progress Bar & Health Meter */}
+            <div className="p-4 bg-slate-50/50 border-t border-b">
+                <div className="flex justify-between items-center mb-1 text-xs">
+                    <span className="font-bold text-slate-700 flex items-center gap-1">
+                        <Target className="h-3.5 w-3.5 text-indigo-600" />
+                        Break-Even Analysis & Safety Margin
+                    </span>
+                    <span className={cn("font-extrabold px-2 py-0.5 rounded-full text-[10px]", results.safetyMarginPct > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700")}>
+                        {results.safetyMarginPct > 0 ? `Safety Buffer: +${results.safetyMarginPct.toFixed(1)}%` : `Loss Gap: ${results.safetyMarginPct.toFixed(1)}%`}
+                    </span>
+                </div>
+                {results.safetyMarginPct > 0 ? (
+                    <div className="space-y-1">
+                        <div className="h-2.5 w-full bg-slate-200 rounded-full overflow-hidden flex">
+                            <div className="bg-indigo-600 h-full" style={{ width: `${Math.max(0, Math.min(100, results.breakEvenCapacityPct))}%` }} />
+                            <div className="bg-green-500 h-full" style={{ width: `${Math.max(0, Math.min(100, results.safetyMarginPct))}%` }} />
+                        </div>
+                        <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+                            <span>0 L</span>
+                            <span>Break-Even Target: {fmt(results.breakEvenUnits)} Units ({results.breakEvenCapacityPct.toFixed(0)}% capacity)</span>
+                            <span className="font-bold text-green-600">Current: {fmt(results.saleableQty)} Units</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="space-y-1">
+                        <div className="h-2.5 w-full bg-red-100 rounded-full overflow-hidden flex">
+                            <div className="bg-red-500 h-full animate-pulse" style={{ width: "100%" }} />
+                        </div>
+                        <p className="text-[10px] text-red-600 font-medium">
+                            ⚠️ Warning: Operating below break-even! You need to process at least <strong>{fmt(results.breakEvenUnits - results.saleableQty)} more units</strong> or increase Selling Price to survive.
+                        </p>
+                    </div>
+                )}
+            </div>
+
+            {/* Industrial Metrics Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-slate-50">
-                <PlantResultCard title="Net Margin" value={results.netMargin.toFixed(1)} unit="%" icon={Target} color={results.netMargin > 15 ? "border-green-300 bg-green-50 text-green-900" : "border-orange-300 bg-orange-50 text-orange-900"} />
-                <PlantResultCard title="Break Even" value={fmt(results.breakEvenUnits)} unit="Units" icon={ArrowRight} color="border-blue-300 bg-blue-50 text-blue-900" subtitle="To survive" />
-                <div className="col-span-2 md:col-span-2 p-3 rounded-xl border bg-white flex items-center justify-between shadow-sm">
-                    <div className="flex flex-col"><span className="text-[10px] uppercase font-bold text-slate-400">Taxation</span><div className="flex items-center gap-2"><span className="text-sm font-semibold">Rate:</span><Input className="h-6 w-16 text-right text-xs" value={inputs.taxRate} onChange={(e) => handleInputChange('taxRate', e.target.value)} /><span className="text-sm">%</span></div></div>
-                    <div className="text-right"><span className="text-[10px] uppercase font-bold text-slate-400">Profit / Unit</span><div className="text-lg font-bold text-indigo-600">₹ {(results.netProfitPostTax / results.saleableQty || 0).toFixed(1)}</div></div>
+                <PlantResultCard 
+                    title="Net Profit Margin" 
+                    value={`${results.netMargin.toFixed(1)}%`} 
+                    unit="" 
+                    icon={Percent} 
+                    color={results.netMargin > 15 ? "border-green-300 bg-green-50 text-green-900" : (results.netMargin > 0 ? "border-yellow-300 bg-yellow-50 text-yellow-900" : "border-red-300 bg-red-50 text-red-900")} 
+                    subtitle={results.netMargin > 0 ? "Profitable Operation" : "Operating at Loss"}
+                />
+                <PlantResultCard 
+                    title="Cost of Processing (CoP)" 
+                    value={`₹${results.unitCoPVal.toFixed(2)}`} 
+                    unit="/Unit" 
+                    icon={Factory} 
+                    color="border-blue-300 bg-blue-50 text-blue-900" 
+                    subtitle="Conversion overhead" 
+                />
+                <PlantResultCard 
+                    title="Break Even Volume" 
+                    value={fmt(results.breakEvenUnits)} 
+                    unit="Units" 
+                    icon={ArrowRight} 
+                    color="border-indigo-300 bg-indigo-50 text-indigo-900" 
+                    subtitle={`Min. Revenue: ₹${fmt(results.breakEvenRevenue)}`} 
+                />
+                <div className="p-3 rounded-xl border bg-white flex flex-col justify-between shadow-sm border-slate-200">
+                    <div className="flex justify-between items-start">
+                        <span className="text-[10px] uppercase font-bold text-slate-400">TAX & PROFITABILITY</span>
+                        <CheckCircle2 className="h-4 w-4 text-indigo-600" />
+                    </div>
+                    <div className="flex flex-col gap-1 mt-1">
+                        <div className="flex items-center justify-between text-xs">
+                            <span className="text-slate-500">Tax Rate:</span>
+                            <div className="flex items-center gap-1">
+                                <Input className="h-5 w-12 text-right text-[10px] p-1 font-bold" value={inputs.taxRate} onChange={(e) => handleInputChange('taxRate', e.target.value)} />
+                                <span>%</span>
+                            </div>
+                        </div>
+                        <div className="flex justify-between text-xs">
+                            <span className="text-slate-500">Margin / Unit:</span>
+                            <span className="font-extrabold text-indigo-600">₹{results.unitNetProfit.toFixed(2)}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <Button onClick={downloadPdf} disabled={isDownloading} className="w-full bg-indigo-600 hover:bg-indigo-700 h-12 text-lg shadow-md mt-4">
-            {isDownloading ? <Loader2 className="mr-2 animate-spin"/> : <FileDown className="mr-2"/>} Download Report PDF
+        {/* Bilingual Working Principles & Factors Description */}
+        <Card className="border border-slate-200 mt-6 bg-slate-50">
+          <CardHeader className="p-4 pb-2 border-b">
+            <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-2">
+              <Info className="h-4 w-4 text-indigo-600" />
+              Costing Working Principles & Factors (लागत के कार्य सिद्धांत)
+            </CardTitle>
+            <CardDescription className="text-xs">
+              Key operational parameters explained to remove confusion and build operational confidence.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-4 space-y-4 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white p-3 rounded-lg border border-slate-100 shadow-sm space-y-1">
+                <span className="font-bold text-indigo-700 block text-xs">1. Yield Factor (उत्पादन अनुपात)</span>
+                <p className="text-slate-600 leading-relaxed">
+                  <strong>English:</strong> Output produced per unit of raw input. For example, 1 Litre raw milk yields 1 Litre of Toned Milk (1.0), but 1 Kg raw milk yields 0.15 Kg Paneer (0.15).
+                </p>
+                <p className="text-slate-500 italic">
+                  <strong>Hindi:</strong> 1 यूनिट कच्चे दूध से कितना तैयार उत्पाद बनता है। पनीर के लिए यह 0.15 (15%) है, यानी 100 लीटर दूध से 15 किलो पनीर बनेगा।
+                </p>
+              </div>
+
+              <div className="bg-white p-3 rounded-lg border border-slate-100 shadow-sm space-y-1">
+                <span className="font-bold text-indigo-700 block text-xs">2. Process Loss (प्रक्रिया नुकसान)</span>
+                <p className="text-slate-600 leading-relaxed">
+                  <strong>English:</strong> Percentage of volume lost during filtration, pasteurization, packaging, or pipe hold-ups. Reduces final saleable output.
+                </p>
+                <p className="text-slate-500 italic">
+                  <strong>Hindi:</strong> प्रोसेसिंग के दौरान पाइपों में रुकने, फैलने या भाप बनने से होने वाला नुकसान। यह बिक्री योग्य मात्रा (Saleable Qty) को सीधे कम करता है।
+                </p>
+              </div>
+
+              <div className="bg-white p-3 rounded-lg border border-slate-100 shadow-sm space-y-1">
+                <span className="font-bold text-indigo-700 block text-xs">3. Cost of Processing (CoP - प्रोसेसिंग लागत)</span>
+                <p className="text-slate-600 leading-relaxed">
+                  <strong>English:</strong> Total cost of processing milk (excluding raw material cost) per unit of finished product. Includes packaging, additives, energy, logistics, and labor overheads.
+                </p>
+                <p className="text-slate-500 italic">
+                  <strong>Hindi:</strong> कच्चे दूध को छोड़कर 1 किलो/लीटर तैयार उत्पाद बनाने में लगने वाला कुल खर्च (पैकेजिंग, बिजली, ईंधन, मजदूरी और किराया)। इसे कम रखना ही मुनाफे की कुंजी है।
+                </p>
+              </div>
+
+              <div className="bg-white p-3 rounded-lg border border-slate-100 shadow-sm space-y-1">
+                <span className="font-bold text-indigo-700 block text-xs">4. Break-Even Point (BEP - सम-विच्छेद बिंदु)</span>
+                <p className="text-slate-600 leading-relaxed">
+                  <strong>English:</strong> The volume of production where Total Revenue equals Total Cost. Below this point, the plant operates at a loss.
+                </p>
+                <p className="text-slate-500 italic">
+                  <strong>Hindi:</strong> वह बिक्री स्तर जहाँ न कोई मुनाफा हो न नुकसान। इस मात्रा से अधिक बेचने पर ही प्लांट फायदे में आता है।
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-indigo-50 border border-indigo-100 p-3 rounded-lg space-y-1.5">
+              <span className="font-bold text-indigo-800 block text-xs flex items-center gap-1">
+                <Calculator className="h-3.5 w-3.5" /> Formula Dictionary (गणना सूत्र)
+              </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] text-slate-700 font-mono">
+                <div>• Saleable Qty = Input × Yield × (1 - Loss%)</div>
+                <div>• Contribution Margin = Price - Variable Cost / Unit</div>
+                <div>• Break-Even Qty = Fixed Cost ÷ Contribution Margin</div>
+                <div>• Safety Margin % = (Saleable Qty - Break-Even Qty) ÷ Saleable Qty</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Button onClick={downloadPdf} disabled={isDownloading} className="w-full bg-indigo-600 hover:bg-indigo-700 h-12 text-lg shadow-md mt-4 font-bold text-white">
+            {isDownloading ? <Loader2 className="mr-2 animate-spin"/> : <FileDown className="mr-2"/>} Download Costing Report PDF
         </Button>
 
       </CardContent>
