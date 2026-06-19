@@ -936,7 +936,7 @@ function MilkBlendingCalc() {
                 {milks.map((milk, index) => (
                      <MemoizedMilkInputGroup 
                         key={milk.id}
-                        milkNum={index + 1} 
+                        milkNum={index === 0 ? 1 : 2} 
                         onInputChange={(id, field, value) => handleInputChange(milk.id, field, value)} 
                         initialValues={milk}
                     />
@@ -2186,13 +2186,16 @@ function TwoComponentStandardizationCalc() {
     const [milkUnit, setMilkUnit] = useState<'liters' | 'kg'>('kg');
     const [snfFormula, setSnfFormula] = useState('isi');
     const [inputs, setInputs] = useState({
-        V0: '700', Fi: '3.5', CLRi: '28',
-        Ft: '4.5', CLRt: '28.5',
-        Fc: '40', CLRc: '10',    // Cream
-        Fr: '6', CLRr: '30',     // Rich Milk
-        Fs: '0.1', CLRs: '27',   // Skim Milk
+        V0: '700', Fi: '3.5', CLRi: '28', Si: '8.315',
+        Ft: '4.5', CLRt: '28.5', St: '8.69',
+        Fc: '40', CLRc: '10', Sc: '5.44',    // Cream
+        Fr: '6', CLRr: '30', Sr: '9.06',     // Rich Milk
+        Fs: '0.1', CLRs: '27', Ss: '7.215',   // Skim Milk
         smpSnf: '96', smpFat: '0.5'
     });
+    const [initialBasis, setInitialBasis] = useState<'clr' | 'snf'>('clr');
+    const [targetBasis, setTargetBasis] = useState<'clr' | 'snf'>('clr');
+    const [adjBasis, setAdjBasis] = useState<'clr' | 'snf'>('clr');
     
     // ✅ NEW: Tab State
     const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
@@ -2228,6 +2231,81 @@ function TwoComponentStandardizationCalc() {
         return formula.calc(clr, fatPercent);
     }, [snfFormula]);
 
+    const initialSnf = useMemo(() => {
+        if (initialBasis === 'snf') return parseFloat(inputs.Si) || 0;
+        const fat = parseFloat(inputs.Fi);
+        const clr = parseFloat(inputs.CLRi);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [initialBasis, inputs.Fi, inputs.CLRi, inputs.Si, calculateSnf]);
+
+    const initialClrCalculated = useMemo(() => {
+        if (initialBasis === 'clr') return parseFloat(inputs.CLRi) || 0;
+        const fat = parseFloat(inputs.Fi);
+        const snf = parseFloat(inputs.Si);
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
+    }, [initialBasis, inputs.Fi, inputs.Si, snfFormula]);
+
+    const targetSnf = useMemo(() => {
+        if (targetBasis === 'snf') return parseFloat(inputs.St) || 0;
+        const fat = parseFloat(inputs.Ft);
+        const clr = parseFloat(inputs.CLRt);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [targetBasis, inputs.Ft, inputs.CLRt, inputs.St, calculateSnf]);
+
+    const targetClrCalculated = useMemo(() => {
+        if (targetBasis === 'clr') return parseFloat(inputs.CLRt) || 0;
+        const fat = parseFloat(inputs.Ft);
+        const snf = parseFloat(inputs.St);
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
+    }, [targetBasis, inputs.Ft, inputs.St, snfFormula]);
+
+    const creamSnf = useMemo(() => {
+        if (adjBasis === 'snf') return parseFloat(inputs.Sc) || 0;
+        const fat = parseFloat(inputs.Fc);
+        const clr = parseFloat(inputs.CLRc);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [adjBasis, inputs.Fc, inputs.CLRc, inputs.Sc, calculateSnf]);
+
+    const creamClrCalculated = useMemo(() => {
+        if (adjBasis === 'clr') return parseFloat(inputs.CLRc) || 0;
+        const fat = parseFloat(inputs.Fc);
+        const snf = parseFloat(inputs.Sc);
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
+    }, [adjBasis, inputs.Fc, inputs.Sc, snfFormula]);
+
+    const richMilkSnf = useMemo(() => {
+        if (adjBasis === 'snf') return parseFloat(inputs.Sr) || 0;
+        const fat = parseFloat(inputs.Fr);
+        const clr = parseFloat(inputs.CLRr);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [adjBasis, inputs.Fr, inputs.CLRr, inputs.Sr, calculateSnf]);
+
+    const richMilkClrCalculated = useMemo(() => {
+        if (adjBasis === 'clr') return parseFloat(inputs.CLRr) || 0;
+        const fat = parseFloat(inputs.Fr);
+        const snf = parseFloat(inputs.Sr);
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
+    }, [adjBasis, inputs.Fr, inputs.Sr, snfFormula]);
+
+    const skimMilkSnf = useMemo(() => {
+        if (adjBasis === 'snf') return parseFloat(inputs.Ss) || 0;
+        const fat = parseFloat(inputs.Fs);
+        const clr = parseFloat(inputs.CLRs);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [adjBasis, inputs.Fs, inputs.CLRs, inputs.Ss, calculateSnf]);
+
+    const skimMilkClrCalculated = useMemo(() => {
+        if (adjBasis === 'clr') return parseFloat(inputs.CLRs) || 0;
+        const fat = parseFloat(inputs.Fs);
+        const snf = parseFloat(inputs.Ss);
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
+    }, [adjBasis, inputs.Fs, inputs.Ss, snfFormula]);
+
     const calculate = useCallback(() => {
         setResults(null);
         setError(null);
@@ -2243,43 +2321,44 @@ function TwoComponentStandardizationCalc() {
         }
 
         const Fi = parseFloat(inputs.Fi) / 100;
-        const CLRi = parseFloat(inputs.CLRi) || 0;
+        const CLRi = initialClrCalculated;
         const Ft = parseFloat(inputs.Ft) / 100;
-        const CLRt = parseFloat(inputs.CLRt) || 0;
+        const CLRt = targetClrCalculated;
         const smpSnf = parseFloat(inputs.smpSnf) / 100;
         const smpFat = parseFloat(inputs.smpFat) / 100;
 
-        if ([V0, Fi, CLRi, Ft, CLRt, smpSnf, smpFat].some(isNaN) || V0 <= 0) {
+        if (isNaN(V0) || V0 <= 0 || isNaN(Fi) || isNaN(CLRi) || isNaN(Ft) || isNaN(CLRt) || isNaN(smpSnf) || isNaN(smpFat)) {
             setError("⚠️ Please fill all fields with valid positive numbers.");
             return;
         }
 
         const steps: string[] = [];
         
-        // ... (Original Calculation Logic) ...
-        
         steps.push(`📊 **═══════════ STEP 1: INPUT VALUES ═══════════**`);
-        steps.push(`\n   Initial Milk: Vol=${V0Input} ${unitInput} (${V0.toFixed(4)} kg), Fat=${inputs.Fi}%, CLR=${CLRi}`);
+        steps.push(`\n   Initial Milk: Vol=${V0Input} ${unitInput} (${V0.toFixed(4)} kg), Fat=${inputs.Fi}%, CLR=${CLRi.toFixed(2)} (SNF=${initialSnf.toFixed(4)}%)`);
         
-        const SNFi = calculateSnf(CLRi, parseFloat(inputs.Fi)) / 100;
-        const SNFt = calculateSnf(CLRt, parseFloat(inputs.Ft)) / 100;
+        const SNFi = initialSnf / 100;
+        const SNFt = targetSnf / 100;
         
         steps.push(`   Initial SNF: ${(SNFi * 100).toFixed(4)}%`);
-        steps.push(`   Target: Fat=${inputs.Ft}%, CLR=${CLRt}, SNF=${(SNFt * 100).toFixed(4)}%`);
+        steps.push(`   Target: Fat=${inputs.Ft}%, CLR=${CLRt.toFixed(2)}, SNF=${(SNFt * 100).toFixed(4)}%`);
 
         let mainIng: { F: number, SNF: number, name: string, CLR: number, fatInput: string };
         switch(correctionType) {
             case 'rich_milk':
                 const Fr = parseFloat(inputs.Fr);
-                mainIng = { F: Fr/100, SNF: calculateSnf(parseFloat(inputs.CLRr), Fr)/100, CLR: parseFloat(inputs.CLRr), name: "Rich Milk", fatInput: inputs.Fr };
+                mainIng = { F: Fr/100, SNF: richMilkSnf/100, CLR: richMilkClrCalculated, name: "Rich Milk", fatInput: inputs.Fr };
                 break;
             case 'skim_milk':
                 const Fs = parseFloat(inputs.Fs);
-                mainIng = { F: Fs/100, SNF: calculateSnf(parseFloat(inputs.CLRs), Fs)/100, CLR: parseFloat(inputs.CLRs), name: "Skim Milk", fatInput: inputs.Fs };
+                mainIng = { F: Fs/100, SNF: skimMilkSnf/100, CLR: skimMilkClrCalculated, name: "Skim Milk", fatInput: inputs.Fs };
+                break;
+            case 'water':
+                mainIng = { F: 0, SNF: 0, CLR: 0, name: "Water", fatInput: "0" };
                 break;
             default: // cream
                 const Fc = parseFloat(inputs.Fc);
-                mainIng = { F: Fc/100, SNF: calculateSnf(parseFloat(inputs.CLRc), Fc)/100, CLR: parseFloat(inputs.CLRc), name: "Cream", fatInput: inputs.Fc };
+                mainIng = { F: Fc/100, SNF: creamSnf/100, CLR: creamClrCalculated, name: "Cream", fatInput: inputs.Fc };
                 break;
         }
         
@@ -2349,7 +2428,7 @@ function TwoComponentStandardizationCalc() {
             snfError: Math.abs(finalSnfPercent - (SNFt * 100))
         });
 
-    }, [inputs, correctionType, milkUnit, calculateSnf, snfFormula]);
+    }, [inputs, correctionType, milkUnit, calculateSnf, snfFormula, initialBasis, initialSnf, initialClrCalculated, targetBasis, targetSnf, targetClrCalculated, creamSnf, creamClrCalculated, richMilkSnf, richMilkClrCalculated, skimMilkSnf, skimMilkClrCalculated, adjBasis]);
 
     return (
         <CalculatorCard 
@@ -2409,7 +2488,35 @@ function TwoComponentStandardizationCalc() {
                             </div>
                         </div>
                         <MemoizedInputField label="Fat (Fᵢ) %" value={inputs.Fi} name="Fi" setter={handleInputChange} />
-                        <MemoizedInputField label="CLR (CLRᵢ)" value={inputs.CLRi} name="CLRi" setter={handleInputChange} />
+                        
+                        <div>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Select value={initialBasis} onValueChange={(val) => setInitialBasis(val as 'clr' | 'snf')}>
+                                <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {initialBasis === 'clr' ? (
+                            <MemoizedInputField label="CLR (CLR\u1d62)" value={inputs.CLRi} name="CLRi" setter={handleInputChange} />
+                        ) : (
+                            <MemoizedInputField label="SNF % (S\u1d62)" value={inputs.Si} name="Si" setter={handleInputChange} />
+                        )}
+
+                        <Alert className="bg-blue-200/50 border-2 border-blue-300 p-2">
+                            <Info className="h-4 w-4 text-blue-700" />
+                            <AlertDescription className="font-bold text-blue-900 text-xs">
+                                {initialBasis === 'clr'
+                                    ? `Calculated SNF: ${initialSnf > 0 ? initialSnf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated CLR: ${initialClrCalculated > 0 ? initialClrCalculated.toFixed(2) : '...'}`
+                                }
+                            </AlertDescription>
+                        </Alert>
                     </div>
                 </div>
 
@@ -2420,8 +2527,36 @@ function TwoComponentStandardizationCalc() {
                         Target Milk
                     </h4>
                     <div className="space-y-4">
-                        <MemoizedInputField label="Target Fat (Fₜ) %" value={inputs.Ft} name="Ft" setter={handleInputChange} />
-                        <MemoizedInputField label="Target CLR (CLRₜ)" value={inputs.CLRt} name="CLRt" setter={handleInputChange} />
+                        <MemoizedInputField label="Target Fat (F\u209c) %" value={inputs.Ft} name="Ft" setter={handleInputChange} />
+                        
+                        <div>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Select value={targetBasis} onValueChange={(val) => setTargetBasis(val as 'clr' | 'snf')}>
+                                <SelectTrigger className="h-10 border-2 border-green-300 font-semibold text-sm bg-white">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {targetBasis === 'clr' ? (
+                            <MemoizedInputField label="Target CLR (CLR\u209c)" value={inputs.CLRt} name="CLRt" setter={handleInputChange} />
+                        ) : (
+                            <MemoizedInputField label="Target SNF % (S\u209c)" value={inputs.St} name="St" setter={handleInputChange} />
+                        )}
+
+                        <Alert className="bg-green-200/50 border-2 border-green-300 p-2">
+                            <Info className="h-4 w-4 text-green-700" />
+                            <AlertDescription className="font-bold text-green-900 text-xs">
+                                {targetBasis === 'clr'
+                                    ? `Calculated SNF: ${targetSnf > 0 ? targetSnf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated CLR: ${targetClrCalculated > 0 ? targetClrCalculated.toFixed(2) : '...'}`
+                                }
+                            </AlertDescription>
+                        </Alert>
                     </div>
                 </div>
             </div>
@@ -2432,39 +2567,103 @@ function TwoComponentStandardizationCalc() {
                     <Beaker className="w-6 h-6" />
                     Main Correction Ingredient
                 </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                     <div>
                         <Label className="text-sm font-semibold mb-2 block">Select Ingredient</Label>
                         <Select value={correctionType} onValueChange={(v) => setCorrectionType(v)}>
-                            <SelectTrigger className="h-11 border-2 border-yellow-300 font-semibold text-base">
+                            <SelectTrigger className="h-11 border-2 border-yellow-300 font-semibold text-base bg-white">
                                 <SelectValue/>
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="cream" className="text-base font-medium">Cream</SelectItem>
                                 <SelectItem value="rich_milk" className="text-base font-medium">Rich Milk</SelectItem>
                                 <SelectItem value="skim_milk" className="text-base font-medium">Skimmed Milk</SelectItem>
+                                <SelectItem value="water" className="text-base font-medium">Water (पानी)</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
-                    {correctionType === 'cream' && (<>
-                        <MemoizedInputField label="Cream Fat (F꜀) %" value={inputs.Fc} name="Fc" setter={handleInputChange} />
-                        <MemoizedInputField label="Cream CLR (CLR꜀)" value={inputs.CLRc} name="CLRc" setter={handleInputChange} />
-                    </>)}
-                    {correctionType === 'rich_milk' && (<>
-                        <MemoizedInputField label="Rich Milk Fat (Fᵣ) %" value={inputs.Fr} name="Fr" setter={handleInputChange} />
-                        <MemoizedInputField label="Rich Milk CLR (CLRᵣ)" value={inputs.CLRr} name="CLRr" setter={handleInputChange} />
-                    </>)}
-                    {correctionType === 'skim_milk' && (<>
-                        <MemoizedInputField label="Skim Milk Fat (Fₛ) %" value={inputs.Fs} name="Fs" setter={handleInputChange} />
-                        <MemoizedInputField label="Skim Milk CLR (CLRₛ)" value={inputs.CLRs} name="CLRs" setter={handleInputChange} />
-                    </>)}
+
+                    {correctionType !== 'water' ? (
+                        <>
+                            <div>
+                                <Label className="text-sm font-semibold mb-2 block">Input Mode</Label>
+                                <Select value={adjBasis} onValueChange={(val) => setAdjBasis(val as 'clr' | 'snf')}>
+                                    <SelectTrigger className="h-11 border-2 border-yellow-300 font-semibold text-base bg-white">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="clr" className="text-base py-2">CLR Reading</SelectItem>
+                                        <SelectItem value="snf" className="text-base py-2">SNF %</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            {correctionType === 'cream' && (<>
+                                <MemoizedInputField label="Cream Fat (F꜀) %" value={inputs.Fc} name="Fc" setter={handleInputChange} />
+                                {adjBasis === 'clr' ? (
+                                    <MemoizedInputField label="Cream CLR (CLR꜀)" value={inputs.CLRc} name="CLRc" setter={handleInputChange} />
+                                ) : (
+                                    <MemoizedInputField label="Cream SNF % (S꜀)" value={inputs.Sc} name="Sc" setter={handleInputChange} />
+                                )}
+                            </>)}
+                            {correctionType === 'rich_milk' && (<>
+                                <MemoizedInputField label="Rich Milk Fat (Fᵣ) %" value={inputs.Fr} name="Fr" setter={handleInputChange} />
+                                {adjBasis === 'clr' ? (
+                                    <MemoizedInputField label="Rich Milk CLR (CLRᵣ)" value={inputs.CLRr} name="CLRr" setter={handleInputChange} />
+                                ) : (
+                                    <MemoizedInputField label="Rich Milk SNF % (Sᵣ)" value={inputs.Sr} name="Sr" setter={handleInputChange} />
+                                )}
+                            </>)}
+                            {correctionType === 'skim_milk' && (<>
+                                <MemoizedInputField label="Skim Milk Fat (Fₛ) %" value={inputs.Fs} name="Fs" setter={handleInputChange} />
+                                {adjBasis === 'clr' ? (
+                                    <MemoizedInputField label="Skim Milk CLR (CLRₛ)" value={inputs.CLRs} name="CLRs" setter={handleInputChange} />
+                                ) : (
+                                    <MemoizedInputField label="Skim Milk SNF % (Sₛ)" value={inputs.Ss} name="Ss" setter={handleInputChange} />
+                                )}
+                            </>)}
+                        </>
+                    ) : (
+                        <div className="md:col-span-3 flex items-center justify-center p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <span className="text-sm font-semibold text-blue-800">
+                                Water: 0% Fat, 0% SNF. No additional input parameters needed. (पानी: 0% फैट, 0% SNF)
+                            </span>
+                        </div>
+                    )}
                 </div>
-                <Alert className="mt-4 bg-blue-100 border-2 border-blue-300">
-                    <Info className="h-5 w-5 text-blue-700" />
-                    <AlertDescription className="text-sm font-semibold text-blue-800">
-                        <strong>Auto Fine-Tuning:</strong> Water (0% Fat, 0 CLR) and SMP (0.5% Fat, 96% SNF) will be used automatically for precise standardization.
-                    </AlertDescription>
-                </Alert>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <Alert className="bg-amber-100 border-2 border-amber-300">
+                        <Info className="h-5 w-5 text-amber-700" />
+                        <AlertDescription className="text-sm font-semibold text-amber-800">
+                            {correctionType === 'cream' && (
+                                adjBasis === 'clr'
+                                    ? `Calculated Cream SNF: ${creamSnf > 0 ? creamSnf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated Cream CLR: ${creamClrCalculated > 0 ? creamClrCalculated.toFixed(2) : '...'}`
+                            )}
+                            {correctionType === 'rich_milk' && (
+                                adjBasis === 'clr'
+                                    ? `Calculated Rich Milk SNF: ${richMilkSnf > 0 ? richMilkSnf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated Rich Milk CLR: ${richMilkClrCalculated > 0 ? richMilkClrCalculated.toFixed(2) : '...'}`
+                            )}
+                            {correctionType === 'skim_milk' && (
+                                adjBasis === 'clr'
+                                    ? `Calculated Skim Milk SNF: ${skimMilkSnf > 0 ? skimMilkSnf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated Skim Milk CLR: ${skimMilkClrCalculated > 0 ? skimMilkClrCalculated.toFixed(2) : '...'}`
+                            )}
+                            {correctionType === 'water' && (
+                                "Water is pure dilution component (0% Fat, 0% SNF)."
+                            )}
+                        </AlertDescription>
+                    </Alert>
+
+                    <Alert className="bg-blue-100 border-2 border-blue-300">
+                        <Info className="h-5 w-5 text-blue-700" />
+                        <AlertDescription className="text-sm font-semibold text-blue-800">
+                            <strong>Auto Fine-Tuning:</strong> Water (0% Fat, 0 CLR) and SMP (0.5% Fat, 96% SNF) will be used automatically for precise standardization.
+                        </AlertDescription>
+                    </Alert>
+                </div>
             </div>
 
             <Button 
@@ -2536,7 +2735,7 @@ function TwoComponentStandardizationCalc() {
                                                         <span className="font-semibold text-sm md:text-lg text-amber-900">{results.ingName}</span>
                                                         <div className="text-right">
                                                             <p className="font-bold text-lg md:text-2xl text-amber-700 break-all">{results.x.toFixed(4)} kg</p>
-                                                            <p className="text-xs md:text-sm text-amber-600">{(results.x / componentProps.milkDensity).toFixed(4)} liters</p>
+                                                            <p className="text-xs md:text-sm text-amber-600">= {(results.x / (results.ingName === 'Water' ? 1.0 : componentProps.milkDensity)).toFixed(4)} liters</p>
                                                         </div>
                                                     </div>
                                                 )}
