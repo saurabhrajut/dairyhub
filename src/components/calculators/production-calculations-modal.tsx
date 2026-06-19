@@ -279,11 +279,10 @@ const ValidatedInput = memo(
 
     return (
       <div className="space-y-2">
-        <Label className="text-sm font-semibold flex items-center gap-2">
-          {icon}
-          {label}
+        <Label className="text-xs sm:text-sm font-semibold flex flex-wrap items-center justify-between gap-1.5 w-full">
+          <span className="flex items-center gap-1">{icon}{label}</span>
           {unit && (
-            <Badge variant="outline" className="ml-auto text-xs">
+            <Badge variant="outline" className="text-[10px] sm:text-xs shrink-0">
               {unit}
             </Badge>
           )}
@@ -416,11 +415,11 @@ function YieldsCalc() {
   };
 
   return (
-    <Card className="border shadow-md">
-      <CardHeader className="bg-slate-50/50 pb-3">
-        <CardTitle className="text-sm font-bold text-slate-700 uppercase">Product Yield Calculators (उत्पाद यील्ड कैलकुलेटर)</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-4">
+    <div className="bg-white rounded-xl border border-slate-200/80 shadow-sm overflow-hidden p-3 sm:p-5">
+      <div className="border-b border-slate-100 pb-3 mb-4 bg-slate-50/50 -mx-3 -mt-3 p-3 sm:-mx-5 sm:-mt-5 sm:p-5">
+        <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">Product Yield Calculators (उत्पाद यील्ड कैलकुलेटर)</h2>
+      </div>
+      <div>
         <div className="mb-4">
           <Label className="text-xs font-semibold mb-2 block">कैलकुलेटर चुनें (Select Yield Calculator)</Label>
           <Select value={activeCalc} onValueChange={setActiveCalc}>
@@ -437,8 +436,8 @@ function YieldsCalc() {
         <div className="mt-4 border-t pt-4">
           {renderCalculator()}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -464,11 +463,11 @@ function ProductionProcessCalc() {
   };
 
   return (
-    <Card className="border shadow-md">
-      <CardHeader className="bg-slate-50/50 pb-3">
-        <CardTitle className="text-sm font-bold text-slate-700 uppercase">Production Process Calculators (उत्पादन प्रक्रिया कैलकुलेटर)</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-4">
+    <div className="bg-white rounded-xl border border-slate-200/80 shadow-sm overflow-hidden p-3 sm:p-5">
+      <div className="border-b border-slate-100 pb-3 mb-4 bg-slate-50/50 -mx-3 -mt-3 p-3 sm:-mx-5 sm:-mt-5 sm:p-5">
+        <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">Production Process Calculators (उत्पादन प्रक्रिया कैलकुलेटर)</h2>
+      </div>
+      <div>
         <div className="mb-4">
           <Label className="text-xs font-semibold mb-2 block">कैलकुलेटर चुनें (Select Process Calculator)</Label>
           <Select value={activeCalc} onValueChange={setActiveCalc}>
@@ -485,8 +484,8 @@ function ProductionProcessCalc() {
         <div className="mt-4 border-t pt-4">
           {renderCalculator()}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -506,11 +505,11 @@ function UtilityInfraCalc() {
   };
 
   return (
-    <Card className="border shadow-md">
-      <CardHeader className="bg-slate-50/50 pb-3">
-        <CardTitle className="text-sm font-bold text-slate-700 uppercase">Utility & Infrastructure Calculators (उपयोगिता और बुनियादी ढांचा कैलकुलेटर)</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-4">
+    <div className="bg-white rounded-xl border border-slate-200/80 shadow-sm overflow-hidden p-3 sm:p-5">
+      <div className="border-b border-slate-100 pb-3 mb-4 bg-slate-50/50 -mx-3 -mt-3 p-3 sm:-mx-5 sm:-mt-5 sm:p-5">
+        <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">Utility & Infrastructure Calculators (उपयोगिता और बुनियादी ढांचा कैलकुलेटर)</h2>
+      </div>
+      <div>
         <div className="mb-4">
           <Label className="text-xs font-semibold mb-2 block">कैलकुलेटर चुनें (Select Utility Calculator)</Label>
           <Select value={activeCalc} onValueChange={setActiveCalc}>
@@ -527,8 +526,8 @@ function UtilityInfraCalc() {
         <div className="mt-4 border-t pt-4">
           {renderCalculator()}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -643,9 +642,9 @@ export function ProductionCalculationsModal({
                 </div>
               </div>
             </DialogHeader>
-            <ScrollArea className="h-full mt-6 pr-2">
+            <div className="flex-1 w-full max-w-full min-w-0 overflow-y-auto overflow-x-hidden mt-6 pr-2">
               <ActiveCalculatorComponent />
-            </ScrollArea>
+            </div>
           </>
         ) : (
           <>
@@ -662,7 +661,7 @@ export function ProductionCalculationsModal({
                 Advanced calculators for precision dairy production
               </DialogDescription>
             </DialogHeader>
-            <ScrollArea className="flex-1 mt-6 pr-2">
+            <div className="flex-1 w-full max-w-full min-w-0 overflow-y-auto overflow-x-hidden mt-6 pr-2">
               {/* ALWAYS SHOW GRID - Mobile aur Desktop dono pe */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 p-2">
                 {Object.entries(calculatorsInfo).map(
@@ -688,7 +687,7 @@ export function ProductionCalculationsModal({
                   )
                 )}
               </div>
-            </ScrollArea>
+            </div>
           </>
         )}
       </DialogContent>
@@ -3422,10 +3421,10 @@ export function CheeseYieldCalc() {
           )}
 
           {/* Costing Checkbox */}
-          <div className="flex items-center gap-2">
-            <Checkbox id="cheese-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
-            <Label htmlFor="cheese-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
-              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+          <div className="flex items-start gap-2.5">
+            <Checkbox id="cheese-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} className="mt-0.5" />
+            <Label htmlFor="cheese-costing" className="text-xs font-semibold cursor-pointer text-slate-700 leading-normal flex-1">
+              <Coins className="w-3.5 h-3.5 text-green-600 inline mr-1 -mt-0.5" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
             </Label>
           </div>
 
@@ -10160,10 +10159,10 @@ function CreamSeparationCalc() {
           )}
 
           {/* Costing Checkbox */}
-          <div className="flex items-center gap-2">
-            <Checkbox id="cream-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
-            <Label htmlFor="cream-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
-              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+          <div className="flex items-start gap-2.5">
+            <Checkbox id="cream-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} className="mt-0.5" />
+            <Label htmlFor="cream-costing" className="text-xs font-semibold cursor-pointer text-slate-700 leading-normal flex-1">
+              <Coins className="w-3.5 h-3.5 text-green-600 inline mr-1 -mt-0.5" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
             </Label>
           </div>
 
@@ -10775,10 +10774,10 @@ function ButterYieldCalc() {
           )}
 
           {/* Costing Toggle */}
-          <div className="flex items-center gap-2">
-            <Checkbox id="butter-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
-            <Label htmlFor="butter-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
-              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+          <div className="flex items-start gap-2.5">
+            <Checkbox id="butter-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} className="mt-0.5" />
+            <Label htmlFor="butter-costing" className="text-xs font-semibold cursor-pointer text-slate-700 leading-normal flex-1">
+              <Coins className="w-3.5 h-3.5 text-green-600 inline mr-1 -mt-0.5" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
             </Label>
           </div>
 
@@ -11369,10 +11368,10 @@ function KhoaYieldCalc() {
           )}
 
           {/* Costing Toggle */}
-          <div className="flex items-center gap-2">
-            <Checkbox id="khoa-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
-            <Label htmlFor="khoa-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
-              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+          <div className="flex items-start gap-2.5">
+            <Checkbox id="khoa-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} className="mt-0.5" />
+            <Label htmlFor="khoa-costing" className="text-xs font-semibold cursor-pointer text-slate-700 leading-normal flex-1">
+              <Coins className="w-3.5 h-3.5 text-green-600 inline mr-1 -mt-0.5" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
             </Label>
           </div>
 
@@ -11921,10 +11920,10 @@ function ShrikhandYieldCalc() {
           )}
 
           {/* Costing Toggle */}
-          <div className="flex items-center gap-2">
-            <Checkbox id="shrikhand-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
-            <Label htmlFor="shrikhand-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
-              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+          <div className="flex items-start gap-2.5">
+            <Checkbox id="shrikhand-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} className="mt-0.5" />
+            <Label htmlFor="shrikhand-costing" className="text-xs font-semibold cursor-pointer text-slate-700 leading-normal flex-1">
+              <Coins className="w-3.5 h-3.5 text-green-600 inline mr-1 -mt-0.5" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
             </Label>
           </div>
 
@@ -12511,10 +12510,10 @@ function PedhaBurfiYieldCalc() {
           )}
 
           {/* Costing Toggle */}
-          <div className="flex items-center gap-2">
-            <Checkbox id="pedha-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} />
-            <Label htmlFor="pedha-costing" className="text-xs font-semibold cursor-pointer text-slate-700 flex items-center gap-1">
-              <Coins className="w-3.5 h-3.5 text-green-600" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
+          <div className="flex items-start gap-2.5">
+            <Checkbox id="pedha-costing" checked={enableCosting} onCheckedChange={(c) => setEnableCosting(!!c)} className="mt-0.5" />
+            <Label htmlFor="pedha-costing" className="text-xs font-semibold cursor-pointer text-slate-700 leading-normal flex-1">
+              <Coins className="w-3.5 h-3.5 text-green-600 inline mr-1 -mt-0.5" /> कॉस्टिंग और प्रॉफिटेबिलिटी शामिल करें (Enable Costing & Profitability)
             </Label>
           </div>
 
