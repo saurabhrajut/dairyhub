@@ -1583,7 +1583,7 @@ function EvaporatorCalc() {
 
     // Heat load on 1st effect (sensible + evaporation)
     const Cp_milk = 3.93;  // kJ/(kg·°C) typical for milk
-    const Q_sensible = F * Cp_milk * Math.max(0, Ts_sat - Tf);  // kJ/h (preheat)
+    const Q_sensible = F * Cp_milk * Math.max(0, Tb - Tf);  // kJ/h (preheat)
     const Q_evap     = W * Lv_evap;                              // kJ/h total evaporation
     const Q_total    = Q_sensible + Q_evap;                      // kJ/h
 
@@ -2059,7 +2059,7 @@ export function PasteurizationCalc() {
     const pathogen = pathogenData[htst.pathogen] || pathogenData["listeria"];
 
     // D value at process temp using z-value
-    const D_process = pathogen.D72 * Math.pow(10, (pathogen.refTemp || 72 - T) / pathogen.z);
+    const D_process = pathogen.D72 * Math.pow(10, ((pathogen.refTemp || 72) - T) / pathogen.z);
     
     // Log reduction = t(min) / D_process(min)
     const t_min    = t / 60;
@@ -3482,7 +3482,7 @@ export function CheeseYieldCalc() {
           {theoResult && (
             <div className="space-y-4">
               {/* KPIs */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div className="bg-orange-600 text-white p-3.5 rounded-xl shadow-sm text-center">
                   <div className="text-[10px] uppercase opacity-80 font-bold">चीज उत्पादन (Cheese Yield)</div>
                   <div className="text-xl font-extrabold">{theoResult.cheeseKg.toFixed(1)} kg</div>
@@ -3551,7 +3551,7 @@ export function CheeseYieldCalc() {
                     <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
                   </CardHeader>
                   <CardContent className="p-3 space-y-3">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-center">
                       <div className="p-2 bg-slate-800/60 rounded-lg">
                         <div className="text-[10px] text-slate-400 font-medium">कुल दूध की लागत (Milk Cost)</div>
                         <div className="text-sm font-bold text-red-300">₹ {theoResult.milkCost.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</div>
@@ -3582,7 +3582,7 @@ export function CheeseYieldCalc() {
                     </div>
 
                     {theoResult.days > 1 && (
-                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-xs">
                         <div>
                           <span className="text-slate-400 block text-[10px]">मासिक उत्पादन (Monthly Cheese)</span>
                           <span className="font-semibold text-slate-200">{theoResult.monthlyCheeseKg.toFixed(0)} kg</span>
@@ -3701,8 +3701,8 @@ export function CheeseYieldCalc() {
                 <CardHeader className="p-3 pb-1 border-b">
                   <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yield)</CardTitle>
                 </CardHeader>
-                <CardContent className="p-0 text-xs">
-                  <table className="w-full text-left border-collapse">
+                <CardContent className="p-0 text-xs overflow-x-auto w-full">
+                  <table className="w-full text-left border-collapse min-w-[400px]">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
                         <th className="p-2.5">पैरामीटर (Parameter)</th>
@@ -11994,7 +11994,7 @@ function ShrikhandYieldCalc() {
           {/* Results */}
           {theoResult && (
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div className="bg-blue-600 text-white p-3 rounded-xl shadow-sm text-center">
                   <div className="text-[10px] uppercase opacity-80 font-bold">श्रीखंड उत्पादन (Shrikhand Output)</div>
                   <div className="text-xl font-extrabold">{theoResult.shrikhandKg.toFixed(1)} kg</div>
@@ -12040,7 +12040,7 @@ function ShrikhandYieldCalc() {
                     <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
                   </CardHeader>
                   <CardContent className="p-3 space-y-3">
-                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-xs">
                       <div className="p-2 bg-slate-800/60 rounded-lg">
                         <span className="text-slate-400 block text-[9px]">चक्का कुल लागत (Chakka Cost)</span>
                         <span className="font-semibold text-red-300">₹ {theoResult.chakkaCost.toLocaleString("en-IN")}</span>
@@ -12067,7 +12067,7 @@ function ShrikhandYieldCalc() {
                     </div>
 
                     {theoResult.days > 1 && (
-                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
                         <div>
                           <span className="text-slate-400 block text-[9px]">मासिक श्रीखंड (Monthly Yield)</span>
                           <span className="font-semibold text-slate-200">{theoResult.monthlyShrikhand.toFixed(0)} kg</span>
@@ -12166,8 +12166,8 @@ function ShrikhandYieldCalc() {
                 <CardHeader className="p-3 pb-1 border-b">
                   <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yield)</CardTitle>
                 </CardHeader>
-                <CardContent className="p-0 text-xs">
-                  <table className="w-full text-left border-collapse">
+                <CardContent className="p-0 text-xs overflow-x-auto w-full">
+                  <table className="w-full text-left border-collapse min-w-[400px]">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
                         <th className="p-2.5">पैरामीटर (Parameter)</th>
@@ -15706,7 +15706,7 @@ export default function PlantCostCalc() {
             </div>
 
             {/* Mass Balance Verification Panel */}
-            <div className="grid grid-cols-3 gap-0 bg-slate-100 rounded-lg border border-slate-200 overflow-hidden text-center divide-x divide-slate-300">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-0 bg-slate-100 rounded-lg border border-slate-200 overflow-hidden text-center divide-y sm:divide-y-0 sm:divide-x divide-slate-300">
                 <div className="p-2">
                     <div className="text-[9px] font-bold text-slate-500 uppercase">Input Volume ({period})</div>
                     <div className="text-sm font-bold text-slate-800">{fmt(results.periodInputVolume)} L/Kg</div>
@@ -15850,10 +15850,10 @@ export default function PlantCostCalc() {
                             <div className="bg-indigo-600 h-full" style={{ width: `${Math.max(0, Math.min(100, results.breakEvenCapacityPct))}%` }} />
                             <div className="bg-green-500 h-full" style={{ width: `${Math.max(0, Math.min(100, results.safetyMarginPct))}%` }} />
                         </div>
-                        <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+                        <div className="flex flex-col sm:flex-row justify-between gap-1 text-[9px] text-slate-400 font-mono">
                             <span>0 L</span>
-                            <span>Break-Even Target: {fmt(results.breakEvenUnits)} Units ({results.breakEvenCapacityPct.toFixed(0)}% capacity)</span>
-                            <span className="font-bold text-green-600">Current: {fmt(results.saleableQty)} Units</span>
+                            <span className="text-center">Break-Even Target: {fmt(results.breakEvenUnits)} Units ({results.breakEvenCapacityPct.toFixed(0)}% capacity)</span>
+                            <span className="font-bold text-green-600 sm:text-right">Current: {fmt(results.saleableQty)} Units</span>
                         </div>
                     </div>
                 ) : (
@@ -15869,7 +15869,7 @@ export default function PlantCostCalc() {
             </div>
 
             {/* Industrial Metrics Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-slate-50">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-slate-50">
                 <PlantResultCard 
                     title="Net Profit Margin" 
                     value={`${results.netMargin.toFixed(1)}%`} 
