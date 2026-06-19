@@ -612,7 +612,7 @@ export function ProductionCalculationsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-5xl h-[95vh] flex flex-col p-4 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
+      <DialogContent className="w-[calc(100vw-1rem)] sm:w-full sm:max-w-5xl h-[95vh] flex flex-col p-4 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
             <DialogHeader className="flex-row items-center space-x-4 shrink-0">
@@ -3329,7 +3329,7 @@ export function CheeseYieldCalc() {
             ══════════════════════════════════════════════════════════ */}
         <TabsContent value="theoretical" className="space-y-4 pt-3">
           {/* Core Inputs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <ValidatedInput
               label="दूध की मात्रा (Milk Qty)"
               value={theo.milkQty}
@@ -3377,7 +3377,7 @@ export function CheeseYieldCalc() {
           </Button>
 
           {showAdvanced && (
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
               <ValidatedInput
                 label="केसीन/प्रोटीन % (Casein Ratio)"
                 value={theo.caseinRatio}
@@ -3430,7 +3430,7 @@ export function CheeseYieldCalc() {
           </div>
 
           {enableCosting && (
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
               <ValidatedInput
                 label="दूध का मूल्य (Milk Price)"
                 value={theo.milkPrice}
@@ -3625,7 +3625,7 @@ export function CheeseYieldCalc() {
             TAB 2: ACTUAL TRACKER
             ══════════════════════════════════════════════════════════ */}
         <TabsContent value="actual" className="space-y-4 pt-3">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <ValidatedInput
               label="दूध की मात्रा (Milk Qty)"
               value={actual.milkQty}
@@ -11842,7 +11842,7 @@ function ShrikhandYieldCalc() {
 
         {/* TAB 1: PREDICTOR */}
         <TabsContent value="theoretical" className="space-y-4 pt-3">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <ValidatedInput
               label="चक्का की मात्रा (Chakka Qty)"
               value={theo.chakkaQty}
@@ -11890,7 +11890,7 @@ function ShrikhandYieldCalc() {
           </Button>
 
           {showAdvanced && (
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               <ValidatedInput
                 label="चक्का प्रोटीन प्रतिशत (Chakka Protein %)"
                 value={theo.chakkaProtein}
@@ -11927,7 +11927,7 @@ function ShrikhandYieldCalc() {
           </div>
 
           {enableCosting && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-green-50/30 rounded-xl border border-green-100">
               <ValidatedInput
                 label="चक्का का मूल्य (Chakka Price)"
                 value={theo.chakkaPrice}
@@ -12102,7 +12102,7 @@ function ShrikhandYieldCalc() {
 
         {/* TAB 2: TRACKER */}
         <TabsContent value="actual" className="space-y-4 pt-3">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <ValidatedInput
               label="चक्का की मात्रा (Chakka Qty)"
               value={actual.chakkaQty}
@@ -15731,7 +15731,7 @@ export default function PlantCostCalc() {
         {/* === SECTION 2: VARIABLE COSTS === */}
         <section className="space-y-4 pt-4 border-t">
             <h3 className="text-sm font-bold uppercase tracking-wider text-red-600 flex items-center gap-2"><Weight className="h-4 w-4"/> Variable Cost Components</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 <SmartInput label="Raw Milk Cost" name="rawMaterialCost" value={inputs.rawMaterialCost} setter={handleInputChange} colorScheme="orange" suffix="₹/L or kg" />
                 <SmartInput label="Packaging" name="packagingCost" value={inputs.packagingCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.packaging} colorScheme="purple" suffix="₹/Unit" />
                 <SmartInput label="Ingredients/Additives" name="ingredientsCost" value={inputs.ingredientsCost} setter={handleInputChange} options={VARIABLE_COST_PRESETS.ingredients} colorScheme="blue" suffix="₹/Unit" />
