@@ -1615,11 +1615,14 @@ function FatSnfAdjustmentCalc() {
 }
 function TwoMilkBlendingToTargetCalc() {
     const [inputs, setInputs] = useState({
-        f1: '6.5', c1: '29',
-        f2: '2.5', c2: '27',
-        fTarget: '4.5', cTarget: '28.5',
+        f1: '6.5', c1: '29', s1: '9.19',
+        f2: '2.5', c2: '27', s2: '8.14',
+        fTarget: '4.5', cTarget: '28.5', sTarget: '8.84',
         qTotal: '1000'
     });
+    const [m1Basis, setM1Basis] = useState<'clr' | 'snf'>('clr');
+    const [m2Basis, setM2Basis] = useState<'clr' | 'snf'>('clr');
+    const [targetBasis, setTargetBasis] = useState<'clr' | 'snf'>('clr');
     const [totalQtyUnit, setTotalQtyUnit] = useState<'kg' | 'liters'>('kg');
     const [snfFormula, setSnfFormula] = useState('isi');
     
@@ -1657,6 +1660,51 @@ function TwoMilkBlendingToTargetCalc() {
         return formula.calc(clr, fat);
     }, [snfFormula]);
 
+    const m1Snf = useMemo(() => {
+        if (m1Basis === 'snf') return parseFloat(inputs.s1) || 0;
+        const fat = parseFloat(inputs.f1);
+        const clr = parseFloat(inputs.c1);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [m1Basis, inputs.f1, inputs.c1, inputs.s1, calculateSnf]);
+
+    const m1ClrCalculated = useMemo(() => {
+        if (m1Basis === 'clr') return parseFloat(inputs.c1) || 0;
+        const fat = parseFloat(inputs.f1);
+        const snf = parseFloat(inputs.s1);
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
+    }, [m1Basis, inputs.f1, inputs.s1, snfFormula]);
+
+    const m2Snf = useMemo(() => {
+        if (m2Basis === 'snf') return parseFloat(inputs.s2) || 0;
+        const fat = parseFloat(inputs.f2);
+        const clr = parseFloat(inputs.c2);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [m2Basis, inputs.f2, inputs.c2, inputs.s2, calculateSnf]);
+
+    const m2ClrCalculated = useMemo(() => {
+        if (m2Basis === 'clr') return parseFloat(inputs.c2) || 0;
+        const fat = parseFloat(inputs.f2);
+        const snf = parseFloat(inputs.s2);
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
+    }, [m2Basis, inputs.f2, inputs.s2, snfFormula]);
+
+    const targetSnf = useMemo(() => {
+        if (targetBasis === 'snf') return parseFloat(inputs.sTarget) || 0;
+        const fat = parseFloat(inputs.fTarget);
+        const clr = parseFloat(inputs.cTarget);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [targetBasis, inputs.fTarget, inputs.cTarget, inputs.sTarget, calculateSnf]);
+
+    const targetClrCalculated = useMemo(() => {
+        if (targetBasis === 'clr') return parseFloat(inputs.cTarget) || 0;
+        const fat = parseFloat(inputs.fTarget);
+        const snf = parseFloat(inputs.sTarget);
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
+    }, [targetBasis, inputs.fTarget, inputs.sTarget, snfFormula]);
+
     const calculate = useCallback(() => {
         setResult(null);
         setError(null);
@@ -1664,11 +1712,11 @@ function TwoMilkBlendingToTargetCalc() {
         setActiveTab('summary'); // ✅ Reset to Summary view
         
         const F1 = parseFloat(inputs.f1);
-        const C1 = parseFloat(inputs.c1);
+        const C1 = m1ClrCalculated;
         const F2 = parseFloat(inputs.f2);
-        const C2 = parseFloat(inputs.c2);
+        const C2 = m2ClrCalculated;
         const FT = parseFloat(inputs.fTarget);
-        const CT = parseFloat(inputs.cTarget);
+        const CT = targetClrCalculated;
         const qTotalVal = parseFloat(inputs.qTotal);
 
         const QT = totalQtyUnit === 'liters' ? qTotalVal * componentProps.milkDensity : qTotalVal;
@@ -1689,14 +1737,23 @@ function TwoMilkBlendingToTargetCalc() {
         }
 
         const steps: string[] = [];
-        
-        // ... (Original Logic) ...
-        // Placeholder for brevity, logic remains identical to your provided code
 
         steps.push(`📊 **═══════════ STEP 1: INPUT VALUES ═══════════**`);
-        steps.push(`\n   Milk 1: Fat=${F1}%, CLR=${C1}`);
-        steps.push(`   Milk 2: Fat=${F2}%, CLR=${C2}`);
-        steps.push(`   Target: Qty=${QT.toFixed(4)} kg, Fat=${FT}%, CLR=${CT}`);
+        if (m1Basis === 'clr') {
+            steps.push(`   Milk 1: Fat=${F1}%, CLR=${C1} (Calculated SNF=${m1Snf.toFixed(4)}%)`);
+        } else {
+            steps.push(`   Milk 1: Fat=${F1}%, SNF=${inputs.s1}% (Calculated CLR=${m1ClrCalculated.toFixed(2)})`);
+        }
+        if (m2Basis === 'clr') {
+            steps.push(`   Milk 2: Fat=${F2}%, CLR=${C2} (Calculated SNF=${m2Snf.toFixed(4)}%)`);
+        } else {
+            steps.push(`   Milk 2: Fat=${F2}%, SNF=${inputs.s2}% (Calculated CLR=${m2ClrCalculated.toFixed(2)})`);
+        }
+        if (targetBasis === 'clr') {
+            steps.push(`   Target: Qty=${QT.toFixed(4)} kg, Fat=${FT}%, CLR=${CT} (Calculated SNF=${targetSnf.toFixed(4)}%)`);
+        } else {
+            steps.push(`   Target: Qty=${QT.toFixed(4)} kg, Fat=${FT}%, SNF=${inputs.sTarget}% (Calculated CLR=${targetClrCalculated.toFixed(2)})`);
+        }
 
         let q1, q2;
         // Pearson Square Logic
@@ -1733,7 +1790,6 @@ function TwoMilkBlendingToTargetCalc() {
 
         // SNF Calcs
         const finalSnf = calculateSnf(finalClr, finalFat);
-        const targetSnf = calculateSnf(CT, FT);
 
         // Adjustment Logic
         let adjustment: { type: 'none' | 'smp' | 'water'; amount: number; amountLiters: number } = { type: 'none', amount: 0, amountLiters: 0 };
@@ -1765,7 +1821,7 @@ function TwoMilkBlendingToTargetCalc() {
             adjustment
         });
 
-    }, [inputs, totalQtyUnit, calculateSnf, snfFormula]);
+    }, [inputs, totalQtyUnit, calculateSnf, snfFormula, m1Basis, m2Basis, targetBasis, m1ClrCalculated, m2ClrCalculated, targetClrCalculated, targetSnf]);
 
     return (
         <CalculatorCard 
@@ -1804,7 +1860,35 @@ function TwoMilkBlendingToTargetCalc() {
                     </h3>
                     <div className="space-y-4">
                         <MemoizedInputField label="Fat % (F₁)" value={inputs.f1} name="f1" setter={handleInputChange} />
-                        <MemoizedInputField label="CLR (C₁)" value={inputs.c1} name="c1" setter={handleInputChange} />
+                        
+                        <div>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Select value={m1Basis} onValueChange={(val) => setM1Basis(val as 'clr' | 'snf')}>
+                                <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {m1Basis === 'clr' ? (
+                            <MemoizedInputField label="CLR (C₁)" value={inputs.c1} name="c1" setter={handleInputChange} />
+                        ) : (
+                            <MemoizedInputField label="SNF % (S₁)" value={inputs.s1} name="s1" setter={handleInputChange} />
+                        )}
+
+                        <Alert className="bg-blue-200 border-2 border-blue-400 p-2">
+                            <Info className="h-4 w-4" />
+                            <AlertDescription className="font-bold text-blue-900 text-xs">
+                                {m1Basis === 'clr'
+                                    ? `Calculated SNF: ${m1Snf > 0 ? m1Snf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated CLR: ${m1ClrCalculated > 0 ? m1ClrCalculated.toFixed(2) : '...'}`
+                                }
+                            </AlertDescription>
+                        </Alert>
                     </div>
                 </div>
 
@@ -1816,7 +1900,35 @@ function TwoMilkBlendingToTargetCalc() {
                     </h3>
                     <div className="space-y-4">
                         <MemoizedInputField label="Fat % (F₂)" value={inputs.f2} name="f2" setter={handleInputChange} />
-                        <MemoizedInputField label="CLR (C₂)" value={inputs.c2} name="c2" setter={handleInputChange} />
+                        
+                        <div>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Select value={m2Basis} onValueChange={(val) => setM2Basis(val as 'clr' | 'snf')}>
+                                <SelectTrigger className="h-10 border-2 border-green-300 font-semibold text-sm bg-white">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {m2Basis === 'clr' ? (
+                            <MemoizedInputField label="CLR (C₂)" value={inputs.c2} name="c2" setter={handleInputChange} />
+                        ) : (
+                            <MemoizedInputField label="SNF % (S₂)" value={inputs.s2} name="s2" setter={handleInputChange} />
+                        )}
+
+                        <Alert className="bg-green-200 border-2 border-green-400 p-2">
+                            <Info className="h-4 w-4" />
+                            <AlertDescription className="font-bold text-green-900 text-xs">
+                                {m2Basis === 'clr'
+                                    ? `Calculated SNF: ${m2Snf > 0 ? m2Snf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated CLR: ${m2ClrCalculated > 0 ? m2ClrCalculated.toFixed(2) : '...'}`
+                                }
+                            </AlertDescription>
+                        </Alert>
                     </div>
                 </div>
 
@@ -1849,7 +1961,37 @@ function TwoMilkBlendingToTargetCalc() {
                             </div>
                         </div>
                         <MemoizedInputField label="Target Fat % (Fᴛ)" value={inputs.fTarget} name="fTarget" setter={handleInputChange} />
-                        <MemoizedInputField label="Target CLR (Cᴛ)" value={inputs.cTarget} name="cTarget" setter={handleInputChange} />
+                        
+                        <div className="space-y-2">
+                            <div>
+                                <Label className="text-xs font-semibold mb-1 block">Target Input Mode</Label>
+                                <Select value={targetBasis} onValueChange={(val) => setTargetBasis(val as 'clr' | 'snf')}>
+                                    <SelectTrigger className="h-10 border-2 border-yellow-300 font-semibold text-sm bg-white">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
+                                        <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            {targetBasis === 'clr' ? (
+                                <MemoizedInputField label="Target CLR (Cᴛ)" value={inputs.cTarget} name="cTarget" setter={handleInputChange} />
+                            ) : (
+                                <MemoizedInputField label="Target SNF %" value={inputs.sTarget} name="sTarget" setter={handleInputChange} />
+                            )}
+
+                            <Alert className="bg-amber-100 border border-amber-300 p-2 mt-2">
+                                <Info className="h-4 w-4 text-amber-700" />
+                                <AlertDescription className="font-bold text-amber-900 text-xs">
+                                    {targetBasis === 'clr'
+                                        ? `Target SNF: ${targetSnf > 0 ? targetSnf.toFixed(4) + '%' : '...'}`
+                                        : `Target CLR: ${targetClrCalculated > 0 ? targetClrCalculated.toFixed(2) : '...'}`
+                                    }
+                                </AlertDescription>
+                            </Alert>
+                        </div>
                     </div>
                 </div>
             </div>
