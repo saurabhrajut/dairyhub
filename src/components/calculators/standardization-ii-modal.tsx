@@ -1016,7 +1016,8 @@ function MilkBlendingCalc() {
 }
 
 function FatSnfAdjustmentCalc() {
-    const [adjustmentComponent, setAdjustmentComponent] = useState<'cream' | 'rich_milk' | 'skim_milk'>('cream');
+    const [adjustmentComponent, setAdjustmentComponent] = useState<'cream' | 'rich_milk' | 'skim_milk' | 'water'>('cream');
+    const [baseBasis, setBaseBasis] = useState<'clr' | 'snf'>('clr');
     const [baseUnit, setBaseUnit] = useState<'kg' | 'liters'>('kg');
     const [snfFormula, setSnfFormula] = useState('isi');
     const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
@@ -1028,6 +1029,7 @@ function FatSnfAdjustmentCalc() {
         baseQty: '1000',
         baseFat: '3.5',
         baseClr: '28',
+        baseSnf: '8.5',
         targetFat: '4.5',
         targetSnf: '8.7',
         creamFat: '40',
@@ -1078,12 +1080,32 @@ function FatSnfAdjustmentCalc() {
     }, [snfFormula, customConstants]);
 
     const baseSnf = useMemo(() => {
+        if (baseBasis === 'snf') {
+            return parseFloat(inputs.baseSnf) || 0;
+        }
         const fat = parseFloat(inputs.baseFat);
         const clr = parseFloat(inputs.baseClr);
         return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
-    }, [inputs.baseFat, inputs.baseClr, calculateSnf]);
+    }, [baseBasis, inputs.baseFat, inputs.baseClr, inputs.baseSnf, calculateSnf]);
+
+    const baseClrCalculated = useMemo(() => {
+        if (baseBasis === 'clr') {
+            return parseFloat(inputs.baseClr) || 0;
+        }
+        const fat = parseFloat(inputs.baseFat);
+        const snf = parseFloat(inputs.baseSnf);
+        if (isNaN(fat) || isNaN(snf)) return 0;
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (snf - fat * multi - constFactor) * 4;
+        }
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return formula.inverse(snf, fat);
+    }, [baseBasis, inputs.baseFat, inputs.baseSnf, snfFormula, customConstants]);
     
     const adjustmentCompSnf = useMemo(() => {
+        if (adjustmentComponent === 'water') return 0;
         let fat=0, clr=0;
         switch(adjustmentComponent) {
             case 'cream': fat = parseFloat(inputs.creamFat); clr = parseFloat(inputs.creamClr); break;
@@ -1125,6 +1147,7 @@ function FatSnfAdjustmentCalc() {
         switch(adjustmentComponent) {
             case 'rich_milk': mainComp = { name: "Rich Milk", F_percent: parseFloat(inputs.richMilkFat), S_percent: adjustmentCompSnf, CLR: parseFloat(inputs.richMilkClr) }; break;
             case 'skim_milk': mainComp = { name: "Skim Milk", F_percent: parseFloat(inputs.skimMilkFat), S_percent: adjustmentCompSnf, CLR: parseFloat(inputs.skimMilkClr) }; break;
+            case 'water': mainComp = { name: "Water", F_percent: 0, S_percent: 0, CLR: 0 }; break;
             default: mainComp = { name: "Cream", F_percent: parseFloat(inputs.creamFat), S_percent: adjustmentCompSnf, CLR: parseFloat(inputs.creamClr) }; break;
         }
 
@@ -1141,6 +1164,18 @@ function FatSnfAdjustmentCalc() {
 
         const fatDifference = F_t - F_m;
         const snfDifference = S_t - S_m;
+
+        steps.push(`📊 **═══════════ STEP 1: INPUT VALUES ═══════════**`);
+        steps.push(`\n   Base Milk Quantity: ${Qm.toFixed(4)} kg`);
+        steps.push(`   Base Fat: ${Fm_percent}%`);
+        if (baseBasis === 'clr') {
+            steps.push(`   Base CLR: ${inputs.baseClr} (Calculated SNF: ${Sm_percent.toFixed(4)}%)`);
+        } else {
+            steps.push(`   Base SNF: ${inputs.baseSnf}% (Calculated CLR: ${baseClrCalculated.toFixed(2)})`);
+        }
+        steps.push(`   Target Fat: ${Ft_percent}%`);
+        steps.push(`   Target SNF: ${St_percent}%`);
+        steps.push(`   Adjustment Component: ${mainComp.name} (Fat: ${mainComp.F_percent}%, SNF: ${mainComp.S_percent.toFixed(4)}%)`);
 
         // Solve Linear Equations (Simulated logic for display)
         let comp2: { name: string; F: number; S: number; };
@@ -1205,7 +1240,7 @@ function FatSnfAdjustmentCalc() {
             snfError: Math.abs(finalSnf - St_percent)
         });
 
-    }, [inputs, adjustmentComponent, baseUnit, baseSnf, adjustmentCompSnf, calculateSnf]);
+    }, [inputs, adjustmentComponent, baseUnit, baseSnf, baseClrCalculated, baseBasis, adjustmentCompSnf, calculateSnf]);
 
     return (
         <CalculatorCard 
@@ -1283,11 +1318,33 @@ function FatSnfAdjustmentCalc() {
                             </div>
                         </div>
                         <MemoizedInputField label="Fat %" value={inputs.baseFat} name="baseFat" setter={handleInputChange} />
-                        <MemoizedInputField label="CLR" value={inputs.baseClr} name="baseClr" setter={handleInputChange} />
+                        
+                        <div>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Select value={baseBasis} onValueChange={(val) => setBaseBasis(val as 'clr' | 'snf')}>
+                                <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {baseBasis === 'clr' ? (
+                            <MemoizedInputField label="CLR" value={inputs.baseClr} name="baseClr" setter={handleInputChange} />
+                        ) : (
+                            <MemoizedInputField label="SNF %" value={inputs.baseSnf} name="baseSnf" setter={handleInputChange} />
+                        )}
+
                         <Alert className="bg-blue-200 border-2 border-blue-400 p-2">
                             <Info className="h-4 w-4" />
                             <AlertDescription className="font-bold text-blue-900 text-xs">
-                                Calculated SNF: {baseSnf > 0 ? baseSnf.toFixed(4) + '%' : '...'}
+                                {baseBasis === 'clr'
+                                    ? `Calculated SNF: ${baseSnf > 0 ? baseSnf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated CLR: ${baseClrCalculated > 0 ? baseClrCalculated.toFixed(2) : '...'}`
+                                }
                             </AlertDescription>
                         </Alert>
                     </div>
@@ -1321,6 +1378,7 @@ function FatSnfAdjustmentCalc() {
                             <SelectItem value="cream" className="text-base font-medium">Cream</SelectItem>
                             <SelectItem value="rich_milk" className="text-base font-medium">Rich Milk</SelectItem>
                             <SelectItem value="skim_milk" className="text-base font-medium">Skim Milk</SelectItem>
+                            <SelectItem value="water" className="text-base font-medium">Water (पानी)</SelectItem>
                         </SelectContent>
                     </Select>
                     
@@ -1337,19 +1395,27 @@ function FatSnfAdjustmentCalc() {
                             <MemoizedInputField label="Skim Milk Fat %" value={inputs.skimMilkFat} name="skimMilkFat" setter={handleInputChange} />
                             <MemoizedInputField label="Skim Milk CLR" value={inputs.skimMilkClr} name="skimMilkClr" setter={handleInputChange} />
                         </>)}
+                        {adjustmentComponent === 'water' && (
+                            <div className="col-span-2 text-xs font-semibold text-orange-700 bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
+                                ℹ️ Water (पानी) has 0% Fat and 0% SNF by default. No composition inputs needed.
+                            </div>
+                        )}
                     </div>
                     
                     <Alert className="bg-amber-200 border-2 border-amber-400 p-2">
                         <Info className="h-4 w-4" />
                         <AlertDescription className="font-bold text-amber-900 text-xs">
-                            Component SNF: {adjustmentCompSnf > 0 ? adjustmentCompSnf.toFixed(4) + '%' : '...'}
+                            Component SNF: {adjustmentComponent === 'water' ? '0.0000%' : (adjustmentCompSnf > 0 ? adjustmentCompSnf.toFixed(4) + '%' : '...')}
                         </AlertDescription>
                     </Alert>
                     
                     <Alert className="bg-blue-100 border-2 border-blue-300 p-2">
                         <Info className="h-5 w-5 text-blue-700" />
                         <AlertDescription className="text-xs md:text-sm font-semibold text-blue-800">
-                            <strong>Auto Fine-Tuning:</strong> Calculator will automatically use SMP (0.5% Fat, 96% TS) or Water for precise results.
+                            <strong>Auto Fine-Tuning:</strong> {adjustmentComponent === 'water' 
+                                ? 'Calculator will automatically calculate required Water & SMP (0.5% Fat, 96% TS) for precise adjustment.'
+                                : 'Calculator will automatically use SMP (0.5% Fat, 96% TS) or Water for precise results.'
+                            }
                         </AlertDescription>
                     </Alert>
                 </div>
