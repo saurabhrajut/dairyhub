@@ -612,10 +612,10 @@ export function ProductionCalculationsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[calc(100vw-1rem)] sm:w-full sm:max-w-5xl h-[95vh] flex flex-col p-4 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
+      <DialogContent className="w-[calc(100vw-1rem)] sm:w-full sm:max-w-5xl h-[95vh] flex flex-col p-4 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-x-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
-            <DialogHeader className="flex-row items-center space-x-4 shrink-0">
+            <DialogHeader className="flex flex-row flex-wrap items-center gap-3 sm:space-x-4 shrink-0">
               <Button
                 variant="ghost"
                 size="icon"
@@ -3701,35 +3701,37 @@ export function CheeseYieldCalc() {
                 <CardHeader className="p-3 pb-1 border-b">
                   <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yield)</CardTitle>
                 </CardHeader>
-                <CardContent className="p-0 text-xs overflow-x-auto w-full">
-                  <table className="w-full text-left border-collapse min-w-[400px]">
-                    <thead>
-                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
-                        <th className="p-2.5">पैरामीटर (Parameter)</th>
-                        <th className="p-2.5 text-right">आदर्श (Ideal)</th>
-                        <th className="p-2.5 text-right">वास्तविक (Actual)</th>
-                        <th className="p-2.5 text-right">अंतर (Variance)</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      <tr>
-                        <td className="p-2.5 font-medium text-slate-700">चीज मात्रा (Cheese Yield)</td>
-                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealCheeseKg.toFixed(1)} kg</td>
-                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.cheeseObtained.toFixed(1)} kg</td>
-                        <td className={`p-2.5 text-right font-bold ${actualResult.deviationKg >= 0 ? "text-green-600" : "text-red-600"}`}>
-                          {actualResult.deviationKg >= 0 ? "+" : ""}{actualResult.deviationKg.toFixed(1)} kg ({actualResult.deviationPct.toFixed(1)}%)
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="p-2.5 font-medium text-slate-700">यील्ड प्रतिशत (Yield %)</td>
-                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealYieldPct.toFixed(2)}%</td>
-                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.actualYieldPct.toFixed(2)}%</td>
-                        <td className={`p-2.5 text-right font-bold ${actualResult.deviationKg >= 0 ? "text-green-600" : "text-red-600"}`}>
-                          {actualResult.deviationKg >= 0 ? "+" : ""}{(actualResult.actualYieldPct - actualResult.idealYieldPct).toFixed(2)}%
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <CardContent className="p-0 text-xs w-full max-w-full overflow-hidden">
+                  <div className="overflow-x-auto w-full">
+                    <table className="w-full text-left border-collapse min-w-[400px]">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+                          <th className="p-2.5">पैरामीटर (Parameter)</th>
+                          <th className="p-2.5 text-right">आदर्श (Ideal)</th>
+                          <th className="p-2.5 text-right">वास्तविक (Actual)</th>
+                          <th className="p-2.5 text-right">अंतर (Variance)</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        <tr>
+                          <td className="p-2.5 font-medium text-slate-700">चीज मात्रा (Cheese Yield)</td>
+                          <td className="p-2.5 text-right text-slate-600">{actualResult.idealCheeseKg.toFixed(1)} kg</td>
+                          <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.cheeseObtained.toFixed(1)} kg</td>
+                          <td className={`p-2.5 text-right font-bold ${actualResult.deviationKg >= 0 ? "text-green-600" : "text-red-600"}`}>
+                            {actualResult.deviationKg >= 0 ? "+" : ""}{actualResult.deviationKg.toFixed(1)} kg ({actualResult.deviationPct.toFixed(1)}%)
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="p-2.5 font-medium text-slate-700">यील्ड प्रतिशत (Yield %)</td>
+                          <td className="p-2.5 text-right text-slate-600">{actualResult.idealYieldPct.toFixed(2)}%</td>
+                          <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.actualYieldPct.toFixed(2)}%</td>
+                          <td className={`p-2.5 text-right font-bold ${actualResult.deviationKg >= 0 ? "text-green-600" : "text-red-600"}`}>
+                            {actualResult.deviationKg >= 0 ? "+" : ""}{(actualResult.actualYieldPct - actualResult.idealYieldPct).toFixed(2)}%
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -10218,7 +10220,7 @@ function CreamSeparationCalc() {
           {theoResult && (
             <div className="space-y-4">
               {/* KPIs */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div className="bg-orange-600 text-white p-3.5 rounded-xl shadow-sm text-center">
                   <div className="text-[10px] uppercase opacity-80 font-bold">क्रीम उत्पादन (Cream Output)</div>
                   <div className="text-xl font-extrabold">{theoResult.cream.toFixed(1)} kg</div>
@@ -10263,7 +10265,7 @@ function CreamSeparationCalc() {
                     <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
                   </CardHeader>
                   <CardContent className="p-3 space-y-3">
-                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-xs">
                       <div className="p-2 bg-slate-800/60 rounded-lg">
                         <span className="text-slate-400 block text-[9px]">कुल इनपुट दूध लागत</span>
                         <span className="font-semibold text-red-300">₹ {theoResult.milkCost.toLocaleString("en-IN")}</span>
@@ -10290,7 +10292,7 @@ function CreamSeparationCalc() {
                     </div>
 
                     {theoResult.days > 1 && (
-                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
                         <div>
                           <span className="text-slate-400 block text-[9px]">मासिक क्रीम (Monthly Cream)</span>
                           <span className="font-semibold text-slate-200">{theoResult.monthlyCream.toFixed(0)} kg</span>
@@ -10832,7 +10834,7 @@ function ButterYieldCalc() {
           {/* Results */}
           {theoResult && (
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div className="bg-amber-600 text-white p-3 rounded-xl shadow-sm text-center">
                   <div className="text-[10px] uppercase opacity-80 font-bold">मक्खन उत्पादन (Butter Output)</div>
                   <div className="text-xl font-extrabold">{theoResult.butterKg.toFixed(1)} kg</div>
@@ -10878,7 +10880,7 @@ function ButterYieldCalc() {
                     <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
                   </CardHeader>
                   <CardContent className="p-3 space-y-3">
-                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-xs">
                       <div className="p-2 bg-slate-800/60 rounded-lg">
                         <span className="text-slate-400 block text-[9px]">क्रीम कुल लागत (Cream Cost)</span>
                         <span className="font-semibold text-red-300">₹ {theoResult.creamCost.toLocaleString("en-IN")}</span>
@@ -10905,7 +10907,7 @@ function ButterYieldCalc() {
                     </div>
 
                     {theoResult.days > 1 && (
-                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
                         <div>
                           <span className="text-slate-400 block text-[9px]">मासिक मक्खन (Monthly Butter)</span>
                           <span className="font-semibold text-slate-200">{theoResult.monthlyButter.toFixed(0)} kg</span>
@@ -11418,7 +11420,7 @@ function KhoaYieldCalc() {
           {/* Results */}
           {theoResult && (
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div className="bg-amber-600 text-white p-3 rounded-xl shadow-sm text-center">
                   <div className="text-[10px] uppercase opacity-80 font-bold">खोया उत्पादन (Khoa Output)</div>
                   <div className="text-xl font-extrabold">{theoResult.khoaKg.toFixed(1)} kg</div>
@@ -11464,7 +11466,7 @@ function KhoaYieldCalc() {
                     <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
                   </CardHeader>
                   <CardContent className="p-3 space-y-3">
-                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-xs">
                       <div className="p-2 bg-slate-800/60 rounded-lg">
                         <span className="text-slate-400 block text-[9px]">दूध कुल लागत (Milk Cost)</span>
                         <span className="font-semibold text-red-300">₹ {theoResult.milkCost.toLocaleString("en-IN")}</span>
@@ -11491,7 +11493,7 @@ function KhoaYieldCalc() {
                     </div>
 
                     {theoResult.days > 1 && (
-                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
                         <div>
                           <span className="text-slate-400 block text-[9px]">मासिक खोया (Monthly Khoa)</span>
                           <span className="font-semibold text-slate-200">{theoResult.monthlyKhoa.toFixed(0)} kg</span>
@@ -12166,33 +12168,35 @@ function ShrikhandYieldCalc() {
                 <CardHeader className="p-3 pb-1 border-b">
                   <CardTitle className="text-xs font-bold text-slate-700 uppercase">📊 आदर्श बनाम वास्तविक (Ideal vs Actual Yield)</CardTitle>
                 </CardHeader>
-                <CardContent className="p-0 text-xs overflow-x-auto w-full">
-                  <table className="w-full text-left border-collapse min-w-[400px]">
-                    <thead>
-                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
-                        <th className="p-2.5">पैरामीटर (Parameter)</th>
-                        <th className="p-2.5 text-right">आदर्श (Ideal)</th>
-                        <th className="p-2.5 text-right">वास्तविक (Actual)</th>
-                        <th className="p-2.5 text-right">हानि/नुकसान (Difference)</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      <tr>
-                        <td className="p-2.5 font-medium text-slate-700">श्रीखंड मात्रा (Shrikhand Yield)</td>
-                        <td className="p-2.5 text-right text-slate-600">{actualResult.idealShrikhand.toFixed(1)} kg</td>
-                        <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.shrikhandObt.toFixed(1)} kg</td>
-                        <td className={`p-2.5 text-right font-bold ${actualResult.shrikhandObt >= actualResult.idealShrikhand ? "text-green-600" : "text-red-600"}`}>
-                          {(actualResult.shrikhandObt - actualResult.idealShrikhand).toFixed(1)} kg
-                        </td>
-                      </tr>
-                      <tr className="bg-slate-50/50">
-                        <td className="p-2.5 font-semibold text-slate-700">प्रोसेसिंग द्रव्यमान हानि (Mass Loss)</td>
-                        <td className="p-2.5 text-right text-slate-600">0.0 kg</td>
-                        <td className="p-2.5 text-right text-slate-600">{actualResult.massLossKg.toFixed(1)} kg</td>
-                        <td className="p-2.5 text-right text-red-600 font-bold">{actualResult.massLossKg.toFixed(1)} kg ({actualResult.massLossPct.toFixed(2)}%)</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <CardContent className="p-0 text-xs w-full max-w-full overflow-hidden">
+                  <div className="overflow-x-auto w-full">
+                    <table className="w-full text-left border-collapse min-w-[400px]">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+                          <th className="p-2.5">पैरामीटर (Parameter)</th>
+                          <th className="p-2.5 text-right">आदर्श (Ideal)</th>
+                          <th className="p-2.5 text-right">वास्तविक (Actual)</th>
+                          <th className="p-2.5 text-right">हानि/नुकसान (Difference)</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        <tr>
+                          <td className="p-2.5 font-medium text-slate-700">श्रीखंड मात्रा (Shrikhand Yield)</td>
+                          <td className="p-2.5 text-right text-slate-600">{actualResult.idealShrikhand.toFixed(1)} kg</td>
+                          <td className="p-2.5 text-right text-slate-900 font-bold">{actualResult.shrikhandObt.toFixed(1)} kg</td>
+                          <td className={`p-2.5 text-right font-bold ${actualResult.shrikhandObt >= actualResult.idealShrikhand ? "text-green-600" : "text-red-600"}`}>
+                            {(actualResult.shrikhandObt - actualResult.idealShrikhand).toFixed(1)} kg
+                          </td>
+                        </tr>
+                        <tr className="bg-slate-50/50">
+                          <td className="p-2.5 font-semibold text-slate-700">प्रोसेसिंग द्रव्यमान हानि (Mass Loss)</td>
+                          <td className="p-2.5 text-right text-slate-600">0.0 kg</td>
+                          <td className="p-2.5 text-right text-slate-600">{actualResult.massLossKg.toFixed(1)} kg</td>
+                          <td className="p-2.5 text-right text-red-600 font-bold">{actualResult.massLossKg.toFixed(1)} kg ({actualResult.massLossPct.toFixed(2)}%)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -12582,7 +12586,7 @@ function PedhaBurfiYieldCalc() {
           {/* Results */}
           {theoResult && (
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div className="bg-rose-600 text-white p-3 rounded-xl shadow-sm text-center">
                   <div className="text-[10px] uppercase opacity-80 font-bold">मिठाई उत्पादन (Sweet Output)</div>
                   <div className="text-xl font-extrabold">{theoResult.yieldKg.toFixed(1)} kg</div>
@@ -12628,7 +12632,7 @@ function PedhaBurfiYieldCalc() {
                     <CardTitle className="text-xs font-bold text-slate-400 uppercase">💰 आर्थिक विश्लेषण (Economics Projections)</CardTitle>
                   </CardHeader>
                   <CardContent className="p-3 space-y-3">
-                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-xs">
                       <div className="p-2 bg-slate-800/60 rounded-lg">
                         <span className="text-slate-400 block text-[9px]">खोया कुल लागत (Khoa Cost)</span>
                         <span className="font-semibold text-red-300">₹ {theoResult.khoaCost.toLocaleString("en-IN")}</span>
@@ -12655,7 +12659,7 @@ function PedhaBurfiYieldCalc() {
                     </div>
 
                     {theoResult.days > 1 && (
-                      <div className="grid grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 border-t border-slate-800 pt-2.5 text-center text-[11px]">
                         <div>
                           <span className="text-slate-400 block text-[9px]">मासिक उत्पादन (Monthly Yield)</span>
                           <span className="font-semibold text-slate-200">{theoResult.monthlyYield.toFixed(0)} kg</span>
@@ -15323,7 +15327,7 @@ const FixedExpenseRow = memo(function FixedExpenseRow({
 }) {
   return (
     <div className="flex gap-2 items-center bg-slate-50 p-2 rounded-md border border-slate-200">
-        <div className="flex-grow grid grid-cols-[1.5fr_1fr] gap-2">
+        <div className="flex-grow grid grid-cols-1 sm:grid-cols-[1.5fr_1fr] gap-2">
             <div className="relative">
                 <Input placeholder="Name" value={item.name} onChange={(e) => onChange(item.id, "name", e.target.value)} className="h-8 text-xs bg-white" />
                 <div className="absolute right-0 top-0 h-full">
@@ -15773,64 +15777,66 @@ export default function PlantCostCalc() {
                 </div>
             </div>
 
-            <div className="overflow-x-auto w-full">
-                <Table className="w-full min-w-[500px]">
-                    <TableHeader className="bg-slate-100">
-                        <TableRow>
-                            <TableHead className="font-bold text-slate-700 pl-4">Cost/Revenue Component</TableHead>
-                            <TableHead className="text-right font-bold text-slate-700 pr-4">Per Finished Unit (₹/Unit)</TableHead>
-                            <TableHead className="text-right font-bold text-slate-700 pr-4">Total Period Total ({period === 'monthly' ? 'Monthly' : 'Daily'})</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow className="hover:bg-slate-50 border-b">
-                            <TableCell className="font-semibold text-slate-700 pl-4">Saleable Output Revenue</TableCell>
-                            <TableCell className="text-right font-bold text-slate-800 pr-4">₹ {parseFloat(inputs.avgSellingPrice).toFixed(2)}</TableCell>
-                            <TableCell className="text-right font-black text-green-600 pr-4 text-base">₹ {fmt(results.totalRevenue)}</TableCell>
-                        </TableRow>
-                        <TableRow className="hover:bg-slate-50 border-b">
-                            <TableCell className="font-medium text-slate-600 pl-4">Raw Milk Cost (Raw Input)</TableCell>
-                            <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitRawCost.toFixed(2)}</TableCell>
-                            <TableCell className="text-right text-red-500 pr-4">- ₹ {fmt(results.totalRawCost)}</TableCell>
-                        </TableRow>
-                        <TableRow className="hover:bg-slate-50 border-b">
-                            <TableCell className="font-medium text-slate-600 pl-4">Variable Processing (Packaging, Ingredients, Utilities)</TableCell>
-                            <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitVariableCoPVal.toFixed(2)}</TableCell>
-                            <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.totalVariableCost - results.totalRawCost)}</TableCell>
-                        </TableRow>
-                        <TableRow className="hover:bg-slate-50 border-b">
-                            <TableCell className="font-medium text-slate-600 pl-4">Fixed Overheads Allocation</TableCell>
-                            <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitFixedCost.toFixed(2)}</TableCell>
-                            <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.periodFixedCost)}</TableCell>
-                        </TableRow>
-                        <TableRow className="hover:bg-slate-50 border-b-2 font-bold bg-slate-50">
-                            <TableCell className="font-bold text-slate-800 pl-4">Total Cost of Production (CoP_total)</TableCell>
-                            <TableCell className="text-right font-bold text-slate-800 pr-4">₹ {results.unitTotalCost.toFixed(2)}</TableCell>
-                            <TableCell className="text-right font-bold text-red-600 pr-4">- ₹ {fmt(results.totalCost)}</TableCell>
-                        </TableRow>
-                        <TableRow className="hover:bg-slate-50 border-b font-bold bg-indigo-50/30">
-                            <TableCell className="font-bold text-indigo-900 pl-4">Gross Operating Profit (Pre-Tax)</TableCell>
-                            <TableCell className={cn("text-right font-bold pr-4", results.unitNetProfit > 0 ? "text-indigo-700" : "text-red-600")}>
-                                ₹ {results.unitNetProfit.toFixed(2)}
-                            </TableCell>
-                            <TableCell className={cn("text-right font-extrabold pr-4 text-base", results.netProfitPreTax > 0 ? "text-indigo-700" : "text-red-600")}>
-                                ₹ {fmt(results.netProfitPreTax)}
-                            </TableCell>
-                        </TableRow>
-                        {parseFloat(inputs.taxRate) > 0 && (
-                            <TableRow className="text-sm border-b">
-                                <TableCell className="pl-4 text-muted-foreground">Tax @ {inputs.taxRate}%</TableCell>
-                                <TableCell className="text-right text-red-400 pr-4">₹ {(results.taxAmount / results.saleableQty || 0).toFixed(2)}</TableCell>
-                                <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.taxAmount)}</TableCell>
+            <div className="w-full max-w-full overflow-hidden">
+                <div className="overflow-x-auto w-full">
+                    <Table className="w-full min-w-[500px]">
+                        <TableHeader className="bg-slate-100">
+                            <TableRow>
+                                <TableHead className="font-bold text-slate-700 pl-4">Cost/Revenue Component</TableHead>
+                                <TableHead className="text-right font-bold text-slate-700 pr-4">Per Finished Unit (₹/Unit)</TableHead>
+                                <TableHead className="text-right font-bold text-slate-700 pr-4">Total Period Total ({period === 'monthly' ? 'Monthly' : 'Daily'})</TableHead>
                             </TableRow>
-                        )}
-                        <TableRow className="bg-indigo-600 text-white font-extrabold hover:bg-indigo-700">
-                            <TableCell className="pl-4 text-sm uppercase tracking-wider font-bold">Net Profit (Post-Tax)</TableCell>
-                            <TableCell className="text-right pr-4 text-sm font-black">₹ {results.unitNetProfit.toFixed(2)}</TableCell>
-                            <TableCell className="text-right pr-4 text-lg font-black">₹ {fmt(results.netProfitPostTax)}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow className="hover:bg-slate-50 border-b">
+                                <TableCell className="font-semibold text-slate-700 pl-4">Saleable Output Revenue</TableCell>
+                                <TableCell className="text-right font-bold text-slate-800 pr-4">₹ {parseFloat(inputs.avgSellingPrice).toFixed(2)}</TableCell>
+                                <TableCell className="text-right font-black text-green-600 pr-4 text-base">₹ {fmt(results.totalRevenue)}</TableCell>
+                            </TableRow>
+                            <TableRow className="hover:bg-slate-50 border-b">
+                                <TableCell className="font-medium text-slate-600 pl-4">Raw Milk Cost (Raw Input)</TableCell>
+                                <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitRawCost.toFixed(2)}</TableCell>
+                                <TableCell className="text-right text-red-500 pr-4">- ₹ {fmt(results.totalRawCost)}</TableCell>
+                            </TableRow>
+                            <TableRow className="hover:bg-slate-50 border-b">
+                                <TableCell className="font-medium text-slate-600 pl-4">Variable Processing (Packaging, Ingredients, Utilities)</TableCell>
+                                <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitVariableCoPVal.toFixed(2)}</TableCell>
+                                <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.totalVariableCost - results.totalRawCost)}</TableCell>
+                            </TableRow>
+                            <TableRow className="hover:bg-slate-50 border-b">
+                                <TableCell className="font-medium text-slate-600 pl-4">Fixed Overheads Allocation</TableCell>
+                                <TableCell className="text-right text-slate-600 pr-4">₹ {results.unitFixedCost.toFixed(2)}</TableCell>
+                                <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.periodFixedCost)}</TableCell>
+                            </TableRow>
+                            <TableRow className="hover:bg-slate-50 border-b-2 font-bold bg-slate-50">
+                                <TableCell className="font-bold text-slate-800 pl-4">Total Cost of Production (CoP_total)</TableCell>
+                                <TableCell className="text-right font-bold text-slate-800 pr-4">₹ {results.unitTotalCost.toFixed(2)}</TableCell>
+                                <TableCell className="text-right font-bold text-red-600 pr-4">- ₹ {fmt(results.totalCost)}</TableCell>
+                            </TableRow>
+                            <TableRow className="hover:bg-slate-50 border-b font-bold bg-indigo-50/30">
+                                <TableCell className="font-bold text-indigo-900 pl-4">Gross Operating Profit (Pre-Tax)</TableCell>
+                                <TableCell className={cn("text-right font-bold pr-4", results.unitNetProfit > 0 ? "text-indigo-700" : "text-red-600")}>
+                                    ₹ {results.unitNetProfit.toFixed(2)}
+                                </TableCell>
+                                <TableCell className={cn("text-right font-extrabold pr-4 text-base", results.netProfitPreTax > 0 ? "text-indigo-700" : "text-red-600")}>
+                                    ₹ {fmt(results.netProfitPreTax)}
+                                </TableCell>
+                            </TableRow>
+                            {parseFloat(inputs.taxRate) > 0 && (
+                                <TableRow className="text-sm border-b">
+                                    <TableCell className="pl-4 text-muted-foreground">Tax @ {inputs.taxRate}%</TableCell>
+                                    <TableCell className="text-right text-red-400 pr-4">₹ {(results.taxAmount / results.saleableQty || 0).toFixed(2)}</TableCell>
+                                    <TableCell className="text-right text-red-400 pr-4">- ₹ {fmt(results.taxAmount)}</TableCell>
+                                </TableRow>
+                            )}
+                            <TableRow className="bg-indigo-600 text-white font-extrabold hover:bg-indigo-700">
+                                <TableCell className="pl-4 text-sm uppercase tracking-wider font-bold">Net Profit (Post-Tax)</TableCell>
+                                <TableCell className="text-right pr-4 text-sm font-black">₹ {results.unitNetProfit.toFixed(2)}</TableCell>
+                                <TableCell className="text-right pr-4 text-lg font-black">₹ {fmt(results.netProfitPostTax)}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
             </div>
 
             {/* Break-Even Progress Bar & Health Meter */}
