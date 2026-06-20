@@ -80,7 +80,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     const now = new Date();
     let newExpiryDate: Date | null = null;
     
-    let duration: Duration | undefined;
+    let duration: { days?: number; months?: number; years?: number } | undefined;
 
     switch (newPlan) {
       case '1-day':
