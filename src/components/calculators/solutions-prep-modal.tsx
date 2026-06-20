@@ -717,7 +717,7 @@ function IndicatorCalc() {
         setShowSpecs(false);
     }, [indicatorKey]);
 
-    const indicator = indicatorKey ? chemicals.indicators[indicatorKey as keyof typeof chemicals.indicators] : null;
+    const indicator = (indicatorKey ? chemicals.indicators[indicatorKey as keyof typeof chemicals.indicators] : null) as any;
 
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -737,7 +737,7 @@ function IndicatorCalc() {
             return; 
         }
         
-        const indicator = chemicals.indicators[indicatorKey as keyof typeof chemicals.indicators];
+        const indicator = chemicals.indicators[indicatorKey as keyof typeof chemicals.indicators] as any;
         const steps: any[] = [];
         let resultText = '';
         const warnings: string[] = [];
@@ -2258,7 +2258,7 @@ function StrengthCalc() {
         setShowSpecs(false);
     }, [chemicalKey]);
 
-    const chemical = chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null;
+    const chemical = (chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null) as any;
 
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -2274,7 +2274,7 @@ function StrengthCalc() {
             return;
         }
         
-        const chemical = allChemicals[chemicalKey as keyof typeof allChemicals];
+        const chemical = allChemicals[chemicalKey as keyof typeof allChemicals] as any;
         const equivalentWeight = chemical.molarMass / chemical.nFactor;
         const strength = norm * equivalentWeight;
         
@@ -2745,7 +2745,7 @@ function PercentageSolutionCalc() {
         setShowSpecs(false);
     }, [chemicalKey]);
 
-    const chemical = chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null;
+    const chemical = (chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null) as any;
 
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -2762,7 +2762,7 @@ function PercentageSolutionCalc() {
             return;
         }
         
-        const chemical = allChemicals[chemicalKey as keyof typeof allChemicals];
+        const chemical = allChemicals[chemicalKey as keyof typeof allChemicals] as any;
         const steps: any[] = [];
         const warnings: string[] = [];
         let resultText = '';
@@ -3021,12 +3021,12 @@ function DilutionCalc() {
     const [showSpecs, setShowSpecs] = useState(false);
     const allChemicals = {...chemicals.acids, ...chemicals.bases};
 
-    const chemical = chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null;
+    const chemical = (chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null) as any;
 
     const handleChemChange = useCallback((key: string) => {
         setChemicalKey(key);
         setShowSpecs(false);
-        const chemical = allChemicals[key as keyof typeof allChemicals];
+        const chemical = allChemicals[key as keyof typeof allChemicals] as any;
         if (chemical && chemical.type === 'liquid') {
             const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
             const stockNormality = stockMolarity * chemical.nFactor;
