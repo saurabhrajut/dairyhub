@@ -275,7 +275,7 @@ export function StandardizationIModal({
               {/* INPUT SECTION */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
                 {/* Raw Milk */}
-                <div className="group bg-white/70 backdrop-blur-xl p-4 md:p-8 rounded-3xl border border-slate-200 shadow-xl md:shadow-2xl">
+                <div className="group bg-white p-4 md:p-8 rounded-3xl border border-slate-200 shadow-xl md:shadow-2xl">
                   <div className="flex items-center gap-3 mb-4 md:mb-6 pb-4 border-b border-blue-100">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
                       <Milk className="w-6 h-6 md:w-7 md:h-7 text-white" />
@@ -334,7 +334,7 @@ export function StandardizationIModal({
                 </div>
 
                 {/* Target */}
-                <div className="group bg-white/70 backdrop-blur-xl p-4 md:p-8 rounded-3xl border border-slate-200 shadow-xl md:shadow-2xl">
+                <div className="group bg-white p-4 md:p-8 rounded-3xl border border-slate-200 shadow-xl md:shadow-2xl">
                   <div className="flex items-center gap-3 mb-4 md:mb-6 pb-4 border-b border-emerald-100">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
                       <Target className="w-6 h-6 md:w-7 md:h-7 text-white" />
@@ -380,7 +380,7 @@ export function StandardizationIModal({
               {/* Formula & Ingredients */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
                 {/* SNF Formula */}
-                <div className="group bg-white/70 backdrop-blur-xl p-4 md:p-8 rounded-3xl border border-slate-200 shadow-xl md:shadow-2xl">
+                <div className="group bg-white p-4 md:p-8 rounded-3xl border border-slate-200 shadow-xl md:shadow-2xl">
                   <div className="flex items-center gap-3 mb-4 md:mb-6 pb-4 border-b border-violet-100">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
                       <Settings2 className="w-6 h-6 md:w-7 md:h-7 text-white" />
@@ -394,10 +394,15 @@ export function StandardizationIModal({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.entries(snfFormulas).map(([key, {name}]) => (
-                          <SelectItem key={key} value={key}>{name}</SelectItem>
+                        {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
+                          <SelectItem key={key} value={key} className="text-base py-3">
+                            <div className="flex flex-col">
+                              <span className="font-bold text-gray-800">{name}</span>
+                              <span className="text-xs text-muted-foreground mt-1">{formulaText}</span>
+                            </div>
+                          </SelectItem>
                         ))}
-                        <SelectItem value="custom" className="bg-violet-50 font-semibold">Custom Formula</SelectItem>
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                       </SelectContent>
                     </Select>
 
@@ -423,7 +428,7 @@ export function StandardizationIModal({
                 </div>
 
                 {/* Ingredients */}
-                <div className="group bg-white/70 backdrop-blur-xl p-4 md:p-8 rounded-3xl border border-slate-200 shadow-xl md:shadow-2xl">
+                <div className="group bg-white p-4 md:p-8 rounded-3xl border border-slate-200 shadow-xl md:shadow-2xl">
                   <div className="flex items-center gap-3 mb-4 md:mb-6 pb-4 border-b border-amber-100">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
                       <Beaker className="w-6 h-6 md:w-7 md:h-7 text-white" />
@@ -520,21 +525,21 @@ export function StandardizationIModal({
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-10">
                     {results.mainComponentAmount > 0.0001 && (
-                      <div className="group bg-gradient-to-br from-yellow-400/20 to-orange-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-yellow-200 hover:border-yellow-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
+                      <div className="group bg-gradient-to-br from-yellow-50 to-orange-50 p-4 md:p-8 rounded-3xl border-4 border-yellow-200 hover:border-yellow-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
                         <p className="text-base md:text-lg font-bold text-yellow-900 mb-2 md:mb-3">{results.mainComponentName}</p>
                         <p className="text-3xl md:text-5xl font-black text-yellow-700">{results.mainComponentAmount.toFixed(2)}</p>
                         <p className="text-sm md:text-lg font-semibold text-yellow-600 mt-2">kg</p>
                       </div>
                     )}
                     {results.smpAmount > 0.0001 && (
-                      <div className="group bg-gradient-to-br from-orange-400/20 to-red-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-orange-200 hover:border-orange-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
+                      <div className="group bg-gradient-to-br from-orange-50 to-red-50 p-4 md:p-8 rounded-3xl border-4 border-orange-200 hover:border-orange-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
                         <p className="text-base md:text-lg font-bold text-orange-900 mb-2 md:mb-3">SMP</p>
                         <p className="text-3xl md:text-5xl font-black text-orange-700">{results.smpAmount.toFixed(2)}</p>
                         <p className="text-sm md:text-lg font-semibold text-orange-600 mt-2">kg</p>
                       </div>
                     )}
                     {results.waterAmount > 0.0001 && (
-                      <div className="group bg-gradient-to-br from-cyan-400/20 to-blue-400/20 backdrop-blur-xl p-4 md:p-8 rounded-3xl border-4 border-cyan-200 hover:border-cyan-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
+                      <div className="group bg-gradient-to-br from-cyan-50 to-blue-50 p-4 md:p-8 rounded-3xl border-4 border-cyan-200 hover:border-cyan-300 transition-all duration-200 hover:scale-[1.02] text-center md:text-left">
                         <p className="text-base md:text-lg font-bold text-cyan-900 mb-2 md:mb-3">Water</p>
                         <p className="text-3xl md:text-5xl font-black text-cyan-700">{results.waterAmount.toFixed(2)}</p>
                         <p className="text-sm md:text-lg font-semibold text-cyan-600 mt-2">kg</p>
@@ -543,12 +548,12 @@ export function StandardizationIModal({
                   </div>
 
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-                    <div className="bg-white/50 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-slate-200 text-center shadow-xl">
+                    <div className="bg-white p-4 md:p-8 rounded-2xl border-2 border-slate-200 text-center shadow-xl">
                       <p className="text-[10px] md:text-sm font-bold text-slate-600 uppercase tracking-wider mb-2 md:mb-3">Total Weight</p>
                       <p className="text-2xl md:text-4xl font-black text-slate-900">{results.finalWeight.toFixed(2)}</p>
                       <p className="text-xs md:text-lg text-slate-600">{results.finalWeightLiters.toFixed(1)} L</p>
                     </div>
-                    <div className="bg-gradient-to-br from-purple-400/20 to-pink-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-purple-200 text-center shadow-xl">
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 md:p-8 rounded-2xl border-2 border-purple-200 text-center shadow-xl">
                       <p className="text-[10px] md:text-sm font-bold text-purple-700 uppercase tracking-wider mb-2 md:mb-3">Final Fat</p>
                       <p className="text-2xl md:text-4xl font-black text-purple-700">{results.finalFat.toFixed(2)}%</p>
                       <Badge className={cn("text-xs md:text-sm px-2 mt-2", 
@@ -556,7 +561,7 @@ export function StandardizationIModal({
                         Error: {results.fatError.toFixed(5)}%
                       </Badge>
                     </div>
-                    <div className="bg-gradient-to-br from-pink-400/20 to-rose-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-pink-200 text-center shadow-xl">
+                    <div className="bg-gradient-to-br from-pink-50 to-rose-50 p-4 md:p-8 rounded-2xl border-2 border-pink-200 text-center shadow-xl">
                       <p className="text-[10px] md:text-sm font-bold text-pink-700 uppercase tracking-wider mb-2 md:mb-3">Final SNF</p>
                       <p className="text-2xl md:text-4xl font-black text-pink-700">{results.finalSnf.toFixed(2)}%</p>
                       <Badge className={cn("text-xs md:text-sm px-2 mt-2", 
@@ -564,7 +569,7 @@ export function StandardizationIModal({
                         Error: {results.snfError.toFixed(5)}%
                       </Badge>
                     </div>
-                    <div className="bg-gradient-to-br from-indigo-400/20 to-slate-400/20 backdrop-blur-xl p-4 md:p-8 rounded-2xl border-2 border-indigo-200 text-center shadow-xl">
+                    <div className="bg-gradient-to-br from-indigo-50 to-slate-100 p-4 md:p-8 rounded-2xl border-2 border-indigo-200 text-center shadow-xl">
                       <p className="text-[10px] md:text-sm font-bold text-indigo-700 uppercase tracking-wider mb-2 md:mb-3">Total Solids</p>
                       <p className="text-2xl md:text-4xl font-black text-indigo-700">{results.finalTS.toFixed(2)}%</p>
                     </div>
@@ -574,7 +579,7 @@ export function StandardizationIModal({
 
               {/* Calculation Steps */}
               {results && (
-                <div className="bg-white/80 backdrop-blur-xl rounded-3xl border-2 border-slate-200 shadow-2xl overflow-hidden">
+                <div className="bg-white rounded-3xl border-2 border-slate-200 shadow-2xl overflow-hidden">
                   <Button 
                       variant="ghost" 
                       onClick={() => setShowCalculationSteps(!showCalculationSteps)}
