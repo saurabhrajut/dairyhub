@@ -275,7 +275,7 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
 
 type TopicConfig = {
   value: string;
-  titleKey: string;
+  titleKey: keyof typeof cipProcessContent.en;
   icon: React.ComponentType<{ className?: string }>;
   colorClass: string;
   bgClass: string;
@@ -451,10 +451,13 @@ export function CipProcessModal({
   if (!content) return null;
 
   // Build topics with resolved titles
-  const topics = TOPIC_CONFIGS.map((cfg) => ({
-    ...cfg,
-    title: content[cfg.titleKey]?.title ?? cfg.value,
-  }));
+  const topics = TOPIC_CONFIGS.map((cfg) => {
+    const section = content[cfg.titleKey] as any;
+    return {
+      ...cfg,
+      title: section?.title ?? cfg.value,
+    };
+  });
 
   const selectedTopic = topics.find((t) => t.value === activeTopic);
   const ActiveComponent = activeTopic
