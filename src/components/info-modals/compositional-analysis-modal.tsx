@@ -63,7 +63,7 @@ function useTableWrapper(ref: React.RefObject<HTMLDivElement | null>) {
       wrapper.style.overflowX = "auto";
       wrapper.style.overflowY = "hidden";
       wrapper.style.maxWidth = "100%";
-      wrapper.style.WebkitOverflowScrolling = "touch";
+      (wrapper.style as any).WebkitOverflowScrolling = "touch";
       wrapper.style.marginBottom = "1rem";
       wrapper.style.borderRadius = "8px";
       wrapper.style.border = "1px solid #e2e8f0";
