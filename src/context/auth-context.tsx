@@ -3,10 +3,8 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCredential, User as FirebaseUser, updateProfile } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseUser, updateProfile } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
-import { Capacitor } from '@capacitor/core';
-import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
@@ -132,23 +130,10 @@ const login = async (email: string, password: string) => {
 
 const signInWithGoogle = async () => {
     const { auth } = initializeFirebase();
+    const provider = new GoogleAuthProvider();
     try {
-        let firebaseUser;
-        if (Capacitor.isNativePlatform()) {
-            // Android/iOS Native Google Authentication
-            const result = await FirebaseAuthentication.signInWithGoogle({ useCredentialManager: false });
-            if (!result.credential?.idToken) {
-                throw new Error("No idToken received from native Google Sign-in.");
-            }
-            const credential = GoogleAuthProvider.credential(result.credential.idToken);
-            const userCredential = await signInWithCredential(auth, credential);
-            firebaseUser = userCredential.user;
-        } else {
-            // Web Google Authentication fallback
-            const provider = new GoogleAuthProvider();
-            const result = await signInWithPopup(auth, provider);
-            firebaseUser = result.user;
-        }
+        const result = await signInWithPopup(auth, provider);
+        const firebaseUser = result.user;
 
         const allUsers = getUsers();
         let appUser = allUsers.find(u => u.uid === firebaseUser.uid && !u.isAnonymous);
@@ -173,15 +158,6 @@ const signInWithGoogle = async () => {
         loadSubscription(appUser.uid);
     } catch (error: any) {
         console.error("Google Sign-In Error:", error);
-        const errorMessage = error.message || "";
-        
-        if (errorMessage.includes("auth_api_credentials_begin_sign_in") || errorMessage.includes("Missing Feature")) {
-            throw new Error("Google Play Services is missing or outdated on this emulator/device. Please use a physical device or an emulator image with Google Play Store installed and ensure you are logged in.");
-        }
-        if (errorMessage.includes("10") || errorMessage.includes("DEVELOPER_ERROR")) {
-            throw new Error("Google Sign-In Failed (DEVELOPER_ERROR): Please make sure your SHA-1 and SHA-256 fingerprints are added to your Firebase Console settings.");
-        }
-
         if (error.code === 'auth/popup-closed-by-user') {
             throw new Error("Sign-in process was cancelled.");
         }
@@ -218,7 +194,7 @@ const updateUserProfile = async (profileData: Partial<AppUser>) => {
   const updateUserPhoto = async (file: File) => {
     if (!user || user.isAnonymous) return;
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
