@@ -188,14 +188,14 @@ VerificationStep.displayName = "VerificationStep";
 
 // Calculation Breakdown Component
 const CalculationBreakdown = memo(({ steps }: { steps: { label: string; value: string; formula?: string; unit?: string }[] }) => {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     
     return (
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
                 <CardHeader className="pb-3">
                     <CollapsibleTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-between hover:bg-transparent p-0">
+                        <Button type="button" variant="ghost" className="w-full justify-between hover:bg-transparent p-0">
                             <div className="flex items-center gap-2">
                                 <FlaskConical className="h-5 w-5 text-purple-600" />
                                 <CardTitle className="text-lg">Calculation Breakdown</CardTitle>
@@ -241,69 +241,95 @@ const MobileVerification = memo(({
     calculations: { label: string; value: string; formula?: string; unit?: string }[];
     warnings?: string[];
 }) => {
+    const [isVerificationOpen, setIsVerificationOpen] = useState(true);
+    const [isWarningsOpen, setIsWarningsOpen] = useState(true);
+
     return (
-        <Card className="border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-yellow-50">
-            <CardHeader>
-                <div className="flex items-center gap-2">
-                    <Eye className="h-5 w-5 text-amber-600" />
-                    <CardTitle className="text-lg">Verification Summary</CardTitle>
-                </div>
-                <CardDescription>Review your inputs and calculations</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div>
-                    <h4 className="font-semibold text-sm text-amber-800 mb-2 flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4" /> Input Values
-                    </h4>
-                    <div className="space-y-2">
-                        {inputValues.map((input, idx) => (
-                            <div key={idx} className="flex justify-between items-center bg-white p-2 rounded border border-amber-200">
-                                <span className="text-sm text-gray-700">{input.label}</span>
-                                <span className="font-semibold text-amber-800">{input.value}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                
-                <Separator />
-                
-                <div>
-                    <h4 className="font-semibold text-sm text-green-800 mb-2 flex items-center gap-2">
-                        <Calculator className="h-4 w-4" /> Calculated Results
-                    </h4>
-                    <div className="space-y-2">
-                        {calculations.map((calc, idx) => (
-                            <div key={idx} className="bg-white p-2 rounded border border-green-200">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-sm text-gray-700">{calc.label}</span>
-                                    <Badge className="bg-green-100 text-green-800 border-green-300">
-                                        {calc.value} {calc.unit || ''}
-                                    </Badge>
+        <div className="space-y-4">
+            {/* 1. Verification Summary Dropdown */}
+            <Collapsible open={isVerificationOpen} onOpenChange={setIsVerificationOpen}>
+                <Card className="border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-yellow-50">
+                    <CardHeader className="pb-3">
+                        <CollapsibleTrigger asChild>
+                            <Button type="button" variant="ghost" className="w-full justify-between hover:bg-transparent p-0">
+                                <div className="flex items-center gap-2 text-amber-800">
+                                    <Eye className="h-5 w-5 text-amber-600" />
+                                    <CardTitle className="text-lg">Verification Summary</CardTitle>
+                                </div>
+                                {isVerificationOpen ? <ChevronUp className="h-5 w-5 text-amber-600" /> : <ChevronDown className="h-5 w-5 text-amber-600" />}
+                            </Button>
+                        </CollapsibleTrigger>
+                        <CardDescription className="text-amber-700/80">Review your inputs and calculations</CardDescription>
+                    </CardHeader>
+                    <CollapsibleContent>
+                        <CardContent className="space-y-4 pt-0">
+                            <div>
+                                <h4 className="font-semibold text-sm text-amber-800 mb-2 flex items-center gap-2">
+                                    <CheckCircle2 className="h-4 w-4" /> Input Values
+                                </h4>
+                                <div className="space-y-2">
+                                    {inputValues.map((input, idx) => (
+                                        <div key={idx} className="flex justify-between items-center bg-white p-2 rounded border border-amber-200">
+                                            <span className="text-sm text-gray-700">{input.label}</span>
+                                            <span className="font-semibold text-amber-800">{input.value}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
-                
-                {warnings && warnings.length > 0 && (
-                    <>
-                        <Separator />
-                        <div>
-                            <h4 className="font-semibold text-sm text-red-800 mb-2 flex items-center gap-2">
-                                <AlertTriangle className="h-4 w-4" /> Safety Warnings
-                            </h4>
-                            <div className="space-y-2">
+                            
+                            <Separator className="bg-amber-200" />
+                            
+                            <div>
+                                <h4 className="font-semibold text-sm text-green-800 mb-2 flex items-center gap-2">
+                                    <Calculator className="h-4 w-4" /> Calculated Results
+                                </h4>
+                                <div className="space-y-2">
+                                    {calculations.map((calc, idx) => (
+                                        <div key={idx} className="bg-white p-2 rounded border border-green-200">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-sm text-gray-700">{calc.label}</span>
+                                                <Badge className="bg-green-100 text-green-800 border-green-300">
+                                                    {calc.value} {calc.unit || ''}
+                                                </Badge>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </CardContent>
+                    </CollapsibleContent>
+                </Card>
+            </Collapsible>
+
+            {/* 2. Safety Warnings Dropdown */}
+            {warnings && warnings.length > 0 && (
+                <Collapsible open={isWarningsOpen} onOpenChange={setIsWarningsOpen}>
+                    <Card className="border-2 border-red-300 bg-gradient-to-br from-red-50 to-orange-50">
+                        <CardHeader className="pb-3">
+                            <CollapsibleTrigger asChild>
+                                <Button type="button" variant="ghost" className="w-full justify-between hover:bg-transparent p-0">
+                                    <div className="flex items-center gap-2 text-red-800">
+                                        <AlertTriangle className="h-5 w-5 text-red-600" />
+                                        <CardTitle className="text-lg">Safety Warnings</CardTitle>
+                                    </div>
+                                    {isWarningsOpen ? <ChevronUp className="h-5 w-5 text-red-600" /> : <ChevronDown className="h-5 w-5 text-red-600" />}
+                                </Button>
+                            </CollapsibleTrigger>
+                            <CardDescription className="text-red-700/80">Important safety measures for chemical preparation</CardDescription>
+                        </CardHeader>
+                        <CollapsibleContent>
+                            <CardContent className="space-y-2 pt-0">
                                 {warnings.map((warning, idx) => (
-                                    <Alert key={idx} variant="destructive" className="py-2">
-                                        <AlertDescription className="text-sm">{warning}</AlertDescription>
+                                    <Alert key={idx} variant="destructive" className="py-2 border-red-200 bg-red-100 text-red-900">
+                                        <AlertDescription className="text-sm font-medium">{warning}</AlertDescription>
                                     </Alert>
                                 ))}
-                            </div>
-                        </div>
-                    </>
-                )}
-            </CardContent>
-        </Card>
+                            </CardContent>
+                        </CollapsibleContent>
+                    </Card>
+                </Collapsible>
+            )}
+        </div>
     );
 });
 
@@ -333,6 +359,11 @@ function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' |
     const [prepBy, setPrepBy] = useState<'normality' | 'molarity'>('normality');
     const [verificationData, setVerificationData] = useState<any>(null);
     const [calculationSteps, setCalculationSteps] = useState<any[]>([]);
+    const [showSpecs, setShowSpecs] = useState(false);
+
+    useEffect(() => {
+        setShowSpecs(false);
+    }, [chemicalKey]);
 
     const chemical = useCallback(() => {
         if (!chemicalKey) return null;
@@ -522,46 +553,59 @@ function SolutionCalculator({ chemType, title, idPrefix }: { chemType: 'acids' |
                         </Select>
                         
                         {chemical && (
-                            <Card className="border-2 border-blue-200 bg-blue-50">
-                                <CardContent className="pt-4 space-y-2">
-                                    <div className="grid grid-cols-2 gap-3 text-sm">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Type:</span>
-                                            <Badge variant="outline">{chemical.type === 'solid' ? 'Solid 🧂' : 'Liquid 💧'}</Badge>
+                            <Collapsible open={showSpecs} onOpenChange={setShowSpecs} className="w-full mt-3">
+                                <CollapsibleTrigger asChild>
+                                    <Button type="button" variant="outline" className="w-full justify-between border-2 border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-100">
+                                        <div className="flex items-center gap-2">
+                                            <Info className="h-4 w-4 text-blue-600" />
+                                            <span className="font-semibold text-sm">Chemical Specifications</span>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">MW:</span>
-                                            <Badge className="bg-blue-100 text-blue-800">{chemical.molarMass} g/mol</Badge>
-                                        </div>
-                                        {chemical.nFactor > 0 && (
-                                            <>
+                                        {showSpecs ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                    </Button>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="mt-2">
+                                    <Card className="border-2 border-blue-200 bg-blue-50">
+                                        <CardContent className="pt-4 space-y-2">
+                                            <div className="grid grid-cols-2 gap-3 text-sm">
                                                 <div className="flex justify-between">
-                                                    <span className="text-gray-600">n-factor:</span>
-                                                    <Badge className="bg-green-100 text-green-800">{chemical.nFactor}</Badge>
+                                                    <span className="text-gray-600">Type:</span>
+                                                    <Badge variant="outline">{chemical.type === 'solid' ? 'Solid 🧂' : 'Liquid 💧'}</Badge>
                                                 </div>
                                                 <div className="flex justify-between">
-                                                    <span className="text-gray-600">Eq. Wt:</span>
-                                                    <Badge className="bg-purple-100 text-purple-800">
-                                                        {(chemical.molarMass / chemical.nFactor).toFixed(2)} g/eq
-                                                    </Badge>
+                                                    <span className="text-gray-600">MW:</span>
+                                                    <Badge className="bg-blue-100 text-blue-800">{chemical.molarMass} g/mol</Badge>
                                                 </div>
-                                            </>
-                                        )}
-                                        {chemical.type === 'liquid' && (
-                                            <>
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-600">Purity:</span>
-                                                    <Badge className="bg-yellow-100 text-yellow-800">{chemical.purity}%</Badge>
-                                                </div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-600">Density:</span>
-                                                    <Badge className="bg-cyan-100 text-cyan-800">{chemical.density} g/mL</Badge>
-                                                </div>
-                                            </>
-                                        )}
-                                    </div>
-                                </CardContent>
-                            </Card>
+                                                {chemical.nFactor > 0 && (
+                                                    <>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">n-factor:</span>
+                                                            <Badge className="bg-green-100 text-green-800">{chemical.nFactor}</Badge>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">Eq. Wt:</span>
+                                                            <Badge className="bg-purple-100 text-purple-800">
+                                                                {(chemical.molarMass / chemical.nFactor).toFixed(2)} g/eq
+                                                            </Badge>
+                                                        </div>
+                                                    </>
+                                                )}
+                                                {chemical.type === 'liquid' && (
+                                                    <>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">Purity:</span>
+                                                            <Badge className="bg-yellow-100 text-yellow-800">{chemical.purity}%</Badge>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">Density:</span>
+                                                            <Badge className="bg-cyan-100 text-cyan-800">{chemical.density} g/mL</Badge>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </CollapsibleContent>
+                            </Collapsible>
                         )}
                     </div>
                 </VerificationStep>
@@ -667,6 +711,11 @@ function IndicatorCalc() {
     const [volume, setVolume] = useState("100");
     const [verificationData, setVerificationData] = useState<any>(null);
     const [calculationSteps, setCalculationSteps] = useState<any[]>([]);
+    const [showSpecs, setShowSpecs] = useState(false);
+
+    useEffect(() => {
+        setShowSpecs(false);
+    }, [indicatorKey]);
 
     const indicator = indicatorKey ? chemicals.indicators[indicatorKey as keyof typeof chemicals.indicators] : null;
 
@@ -878,74 +927,87 @@ function IndicatorCalc() {
                         </Select>
                         
                         {indicator && (
-                            <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
-                                <CardContent className="pt-4 space-y-3">
-                                    <div className="grid grid-cols-2 gap-3 text-sm">
-                                        <div className="col-span-2">
-                                            <Badge className="bg-purple-600 text-white">Indicator Details</Badge>
+                            <Collapsible open={showSpecs} onOpenChange={setShowSpecs} className="w-full mt-3">
+                                <CollapsibleTrigger asChild>
+                                    <Button type="button" variant="outline" className="w-full justify-between border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 text-purple-800 hover:from-purple-100 hover:to-pink-100">
+                                        <div className="flex items-center gap-2">
+                                            <Info className="h-4 w-4 text-purple-600" />
+                                            <span className="font-semibold text-sm">Indicator Details</span>
                                         </div>
-                                        
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Type:</span>
-                                            <Badge variant="outline" className="bg-blue-50">
-                                                {indicator.type.toUpperCase().replace('_', ' ')}
-                                            </Badge>
-                                        </div>
-                                        
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Base Volume:</span>
-                                            <Badge className="bg-green-100 text-green-800">
-                                                {indicator.baseVolume} mL
-                                            </Badge>
-                                        </div>
-                                        
-                                        {indicator.weight && (
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-600">Base Weight:</span>
-                                                <Badge className="bg-amber-100 text-amber-800">
-                                                    {indicator.weight} g
-                                                </Badge>
+                                        {showSpecs ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                    </Button>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="mt-2">
+                                    <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+                                        <CardContent className="pt-4 space-y-3">
+                                            <div className="grid grid-cols-2 gap-3 text-sm">
+                                                <div className="col-span-2">
+                                                    <Badge className="bg-purple-600 text-white">Indicator Details</Badge>
+                                                </div>
+                                                
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-600">Type:</span>
+                                                    <Badge variant="outline" className="bg-blue-50">
+                                                        {indicator.type.toUpperCase().replace('_', ' ')}
+                                                    </Badge>
+                                                </div>
+                                                
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-600">Base Volume:</span>
+                                                    <Badge className="bg-green-100 text-green-800">
+                                                        {indicator.baseVolume} mL
+                                                    </Badge>
+                                                </div>
+                                                
+                                                {indicator.weight && (
+                                                    <div className="flex justify-between">
+                                                        <span className="text-gray-600">Base Weight:</span>
+                                                        <Badge className="bg-amber-100 text-amber-800">
+                                                            {indicator.weight} g
+                                                        </Badge>
+                                                    </div>
+                                                )}
+                                                
+                                                {indicator.volume && (
+                                                    <div className="flex justify-between">
+                                                        <span className="text-gray-600">Stock Vol:</span>
+                                                        <Badge className="bg-cyan-100 text-cyan-800">
+                                                            {indicator.volume} mL
+                                                        </Badge>
+                                                    </div>
+                                                )}
+                                                
+                                                {indicator.solvent && (
+                                                    <div className="flex justify-between col-span-2">
+                                                        <span className="text-gray-600">Solvent:</span>
+                                                        <Badge className="bg-indigo-100 text-indigo-800">
+                                                            {indicator.solvent}
+                                                        </Badge>
+                                                    </div>
+                                                )}
+                                                
+                                                {indicator.naohVolume && (
+                                                    <div className="flex justify-between col-span-2">
+                                                        <span className="text-gray-600">NaOH (N/50):</span>
+                                                        <Badge className="bg-rose-100 text-rose-800">
+                                                            {indicator.naohVolume} mL
+                                                        </Badge>
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
-                                        
-                                        {indicator.volume && (
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-600">Stock Vol:</span>
-                                                <Badge className="bg-cyan-100 text-cyan-800">
-                                                    {indicator.volume} mL
-                                                </Badge>
-                                            </div>
-                                        )}
-                                        
-                                        {indicator.solvent && (
-                                            <div className="flex justify-between col-span-2">
-                                                <span className="text-gray-600">Solvent:</span>
-                                                <Badge className="bg-indigo-100 text-indigo-800">
-                                                    {indicator.solvent}
-                                                </Badge>
-                                            </div>
-                                        )}
-                                        
-                                        {indicator.naohVolume && (
-                                            <div className="flex justify-between col-span-2">
-                                                <span className="text-gray-600">NaOH (N/50):</span>
-                                                <Badge className="bg-rose-100 text-rose-800">
-                                                    {indicator.naohVolume} mL
-                                                </Badge>
-                                            </div>
-                                        )}
-                                    </div>
-                                    
-                                    {indicator.note && (
-                                        <Alert className="mt-3 bg-white border-purple-300">
-                                            <Info className="h-4 w-4" />
-                                            <AlertDescription className="text-xs">
-                                                {indicator.note}
-                                            </AlertDescription>
-                                        </Alert>
-                                    )}
-                                </CardContent>
-                            </Card>
+                                            
+                                            {indicator.note && (
+                                                <Alert className="mt-3 bg-white border-purple-300">
+                                                    <Info className="h-4 w-4" />
+                                                    <AlertDescription className="text-xs">
+                                                        {indicator.note}
+                                                    </AlertDescription>
+                                                </Alert>
+                                            )}
+                                        </CardContent>
+                                    </Card>
+                                </CollapsibleContent>
+                            </Collapsible>
                         )}
                     </div>
                 </VerificationStep>
@@ -1100,6 +1162,11 @@ function ReagentCalculator() {
     const [error, setError] = useState<string | null>(null);
     const [verificationData, setVerificationData] = useState<any>(null);
     const [calculationSteps, setCalculationSteps] = useState<any[]>([]);
+    const [showSpecs, setShowSpecs] = useState(false);
+
+    useEffect(() => {
+        setShowSpecs(false);
+    }, [selectedReagent]);
 
     const recipe = selectedReagent ? reagentRecipes[selectedReagent as keyof typeof reagentRecipes] : null;
 
@@ -1401,36 +1468,49 @@ function ReagentCalculator() {
                         </Select>
                         
                         {recipe && (
-                            <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
-                                <CardContent className="pt-4 space-y-3">
-                                    <div className="grid grid-cols-2 gap-3 text-sm">
-                                        <div className="col-span-2">
-                                            <Badge className="bg-green-600 text-white">Reagent Details</Badge>
+                            <Collapsible open={showSpecs} onOpenChange={setShowSpecs} className="w-full mt-3">
+                                <CollapsibleTrigger asChild>
+                                    <Button type="button" variant="outline" className="w-full justify-between border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 text-green-800 hover:from-green-100 hover:to-emerald-100">
+                                        <div className="flex items-center gap-2">
+                                            <Info className="h-4 w-4 text-green-600" />
+                                            <span className="font-semibold text-sm">Reagent Details</span>
                                         </div>
-                                        
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Test Name:</span>
-                                            <Badge variant="outline" className="bg-blue-50">
-                                                {recipe.testName}
-                                            </Badge>
-                                        </div>
-                                        
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Type:</span>
-                                            <Badge className="bg-purple-100 text-purple-800">
-                                                {recipe.type.toUpperCase().replace('_', ' ')}
-                                            </Badge>
-                                        </div>
-                                        
-                                        <div className="col-span-2 flex justify-between">
-                                            <span className="text-gray-600">Components:</span>
-                                            <Badge className="bg-amber-100 text-amber-800">
-                                                {recipe.components.length} items
-                                            </Badge>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                                        {showSpecs ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                    </Button>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="mt-2">
+                                    <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
+                                        <CardContent className="pt-4 space-y-3">
+                                            <div className="grid grid-cols-2 gap-3 text-sm">
+                                                <div className="col-span-2">
+                                                    <Badge className="bg-green-600 text-white">Reagent Details</Badge>
+                                                </div>
+                                                
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-600">Test Name:</span>
+                                                    <Badge variant="outline" className="bg-blue-50">
+                                                        {recipe.testName}
+                                                    </Badge>
+                                                </div>
+                                                
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-600">Type:</span>
+                                                    <Badge className="bg-purple-100 text-purple-800">
+                                                        {recipe.type.toUpperCase().replace('_', ' ')}
+                                                    </Badge>
+                                                </div>
+                                                
+                                                <div className="col-span-2 flex justify-between">
+                                                    <span className="text-gray-600">Components:</span>
+                                                    <Badge className="bg-amber-100 text-amber-800">
+                                                        {recipe.components.length} items
+                                                    </Badge>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </CollapsibleContent>
+                            </Collapsible>
                         )}
                     </div>
                 </VerificationStep>
@@ -2172,6 +2252,11 @@ function StrengthCalc() {
     const allChemicals = {...chemicals.acids, ...chemicals.bases, ...chemicals.other_reagents};
     const [chemicalKey, setChemicalKey] = useState("");
     const [normality, setNormality] = useState("");
+    const [showSpecs, setShowSpecs] = useState(false);
+
+    useEffect(() => {
+        setShowSpecs(false);
+    }, [chemicalKey]);
 
     const chemical = chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null;
 
@@ -2288,26 +2373,39 @@ function StrengthCalc() {
                         </Select>
                         
                         {chemical && (
-                            <Card className="border-2 border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50">
-                                <CardContent className="pt-4">
-                                    <div className="grid grid-cols-2 gap-3 text-sm">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">MW:</span>
-                                            <Badge className="bg-blue-100 text-blue-800">{chemical.molarMass} g/mol</Badge>
+                            <Collapsible open={showSpecs} onOpenChange={setShowSpecs} className="w-full mt-3">
+                                <CollapsibleTrigger asChild>
+                                    <Button type="button" variant="outline" className="w-full justify-between border-2 border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50 text-rose-800 hover:from-rose-100 hover:to-pink-100">
+                                        <div className="flex items-center gap-2">
+                                            <Info className="h-4 w-4 text-rose-600" />
+                                            <span className="font-semibold text-sm">Chemical Specifications</span>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">n-factor:</span>
-                                            <Badge className="bg-green-100 text-green-800">{chemical.nFactor}</Badge>
-                                        </div>
-                                        <div className="flex justify-between col-span-2">
-                                            <span className="text-gray-600">Eq. Weight:</span>
-                                            <Badge className="bg-purple-100 text-purple-800">
-                                                {(chemical.molarMass / chemical.nFactor).toFixed(4)} g/eq
-                                            </Badge>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                                        {showSpecs ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                    </Button>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="mt-2">
+                                    <Card className="border-2 border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50">
+                                        <CardContent className="pt-4">
+                                            <div className="grid grid-cols-2 gap-3 text-sm">
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-600">MW:</span>
+                                                    <Badge className="bg-blue-100 text-blue-800">{chemical.molarMass} g/mol</Badge>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-600">n-factor:</span>
+                                                    <Badge className="bg-green-100 text-green-800">{chemical.nFactor}</Badge>
+                                                </div>
+                                                <div className="flex justify-between col-span-2">
+                                                    <span className="text-gray-600">Eq. Weight:</span>
+                                                    <Badge className="bg-purple-100 text-purple-800">
+                                                        {(chemical.molarMass / chemical.nFactor).toFixed(4)} g/eq
+                                                    </Badge>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </CollapsibleContent>
+                            </Collapsible>
                         )}
                     </div>
                 </VerificationStep>
@@ -2641,6 +2739,11 @@ function PercentageSolutionCalc() {
     const [chemicalKey, setChemicalKey] = useState("");
     const [percentage, setPercentage] = useState("");
     const [volume, setVolume] = useState("");
+    const [showSpecs, setShowSpecs] = useState(false);
+
+    useEffect(() => {
+        setShowSpecs(false);
+    }, [chemicalKey]);
 
     const chemical = chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null;
 
@@ -2787,28 +2890,41 @@ function PercentageSolutionCalc() {
                     </Select>
                     
                     {chemical && (
-                        <Card className="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50 mt-3">
-                            <CardContent className="pt-4">
-                                <div className="grid grid-cols-2 gap-3 text-sm">
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600">Type:</span>
-                                        <Badge variant="outline">{chemical.type === 'solid' ? 'Solid 🧂' : 'Liquid 💧'}</Badge>
+                        <Collapsible open={showSpecs} onOpenChange={setShowSpecs} className="w-full mt-3">
+                            <CollapsibleTrigger asChild>
+                                <Button type="button" variant="outline" className="w-full justify-between border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50 text-amber-800 hover:from-yellow-100 hover:to-amber-100">
+                                    <div className="flex items-center gap-2">
+                                        <Info className="h-4 w-4 text-amber-600" />
+                                        <span className="font-semibold text-sm">Chemical Specifications</span>
                                     </div>
-                                    {chemical.type === 'liquid' && (
-                                        <>
+                                    {showSpecs ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                </Button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="mt-2">
+                                <Card className="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50">
+                                    <CardContent className="pt-4">
+                                        <div className="grid grid-cols-2 gap-3 text-sm">
                                             <div className="flex justify-between">
-                                                <span className="text-gray-600">Purity:</span>
-                                                <Badge className="bg-yellow-100 text-yellow-800">{chemical.purity}%</Badge>
+                                                <span className="text-gray-600">Type:</span>
+                                                <Badge variant="outline">{chemical.type === 'solid' ? 'Solid 🧂' : 'Liquid 💧'}</Badge>
                                             </div>
-                                            <div className="flex justify-between col-span-2">
-                                                <span className="text-gray-600">Density:</span>
-                                                <Badge className="bg-cyan-100 text-cyan-800">{chemical.density} g/mL</Badge>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            </CardContent>
-                        </Card>
+                                            {chemical.type === 'liquid' && (
+                                                <>
+                                                    <div className="flex justify-between">
+                                                        <span className="text-gray-600">Purity:</span>
+                                                        <Badge className="bg-yellow-100 text-yellow-800">{chemical.purity}%</Badge>
+                                                    </div>
+                                                    <div className="flex justify-between col-span-2">
+                                                        <span className="text-gray-600">Density:</span>
+                                                        <Badge className="bg-cyan-100 text-cyan-800">{chemical.density} g/mL</Badge>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </CollapsibleContent>
+                        </Collapsible>
                     )}
                 </VerificationStep>
                 
@@ -2902,12 +3018,14 @@ function DilutionCalc() {
     const [n2, setN2] = useState("");
     const [v2, setV2] = useState("");
     const [chemicalKey, setChemicalKey] = useState("");
+    const [showSpecs, setShowSpecs] = useState(false);
     const allChemicals = {...chemicals.acids, ...chemicals.bases};
 
     const chemical = chemicalKey ? allChemicals[chemicalKey as keyof typeof allChemicals] : null;
 
     const handleChemChange = useCallback((key: string) => {
         setChemicalKey(key);
+        setShowSpecs(false);
         const chemical = allChemicals[key as keyof typeof allChemicals];
         if (chemical && chemical.type === 'liquid') {
             const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
@@ -3040,20 +3158,33 @@ function DilutionCalc() {
                     </Select>
                     
                     {chemical && chemical.type === 'liquid' && (
-                        <Card className="border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-violet-50 mt-3">
-                            <CardContent className="pt-4">
-                                <div className="grid grid-cols-2 gap-3 text-sm">
-                                    <div className="flex justify-between col-span-2">
-                                        <span className="text-gray-600">Stock Purity:</span>
-                                        <Badge className="bg-yellow-100 text-yellow-800">{chemical.purity}%</Badge>
+                        <Collapsible open={showSpecs} onOpenChange={setShowSpecs} className="w-full mt-3">
+                            <CollapsibleTrigger asChild>
+                                <Button type="button" variant="outline" className="w-full justify-between border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-violet-50 text-indigo-800 hover:from-indigo-100 hover:to-violet-100">
+                                    <div className="flex items-center gap-2">
+                                        <Info className="h-4 w-4 text-indigo-600" />
+                                        <span className="font-semibold text-sm">Chemical Specifications</span>
                                     </div>
-                                    <div className="flex justify-between col-span-2">
-                                        <span className="text-gray-600">Calculated Stock Normality:</span>
-                                        <Badge className="bg-indigo-100 text-indigo-800">{n1} N</Badge>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
+                                    {showSpecs ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                </Button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="mt-2">
+                                <Card className="border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-violet-50">
+                                    <CardContent className="pt-4">
+                                        <div className="grid grid-cols-2 gap-3 text-sm">
+                                            <div className="flex justify-between col-span-2">
+                                                <span className="text-gray-600">Stock Purity:</span>
+                                                <Badge className="bg-yellow-100 text-yellow-800">{chemical.purity}%</Badge>
+                                            </div>
+                                            <div className="flex justify-between col-span-2">
+                                                <span className="text-gray-600">Calculated Stock Normality:</span>
+                                                <Badge className="bg-indigo-100 text-indigo-800">{n1} N</Badge>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </CollapsibleContent>
+                        </Collapsible>
                     )}
                 </VerificationStep>
                 
