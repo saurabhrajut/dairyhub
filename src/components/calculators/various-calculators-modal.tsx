@@ -78,7 +78,7 @@ const productSampleWeights: Record<string, string> = {
     other: "10.0"
 };
 
-type CalculatorType = 'acidity' | 'fat-dry' | 'gravimetric' | 'formulas' | 'cip-strength' | 'protein-casein' | 'minerals' | 'cream' | 'pricing' | 'rm-pv' | 'peroxide-value' | 'salt-percent' | 'ffa-percent' | 'oil-percent';
+type CalculatorType = keyof typeof calculatorsInfo;
 
 // ✅ Updated Object with Gradient Colors
 const calculatorsInfo = {
@@ -262,7 +262,7 @@ const CalculatorCard = ({ title, children, description }: { title: string; child
 
 // ✅ Renamed to avoid duplicate identifier error
 function AcidityCheckCalc() { 
-    const toast = useToast();
+    const { toast } = useToast();
     const [productType, setProductType] = useState<ProductType>("milk");
     const [inputs, setInputs] = useState({
         sampleWeight: productSampleWeights.milk,
@@ -2209,7 +2209,7 @@ function OilPercentCalc() {
 }
 
 function MilkPricingCalculators() {
-    const [activeTab, setActiveTab] = useState("two-axis");
+    const [activeTab, setActiveTab] = useState<'two-axis' | 'point-based'>("two-axis");
     
     // Pricing options with icons and descriptions
     const pricingOptions = {
@@ -2244,7 +2244,7 @@ function MilkPricingCalculators() {
                 <Label className="text-base font-semibold mb-3 block">Select Pricing Method</Label>
                 
                 {/* DROPDOWN */}
-                <Select value={activeTab} onValueChange={setActiveTab}>
+                <Select value={activeTab} onValueChange={(val) => setActiveTab(val as any)}>
                     <SelectTrigger className="w-full h-16 text-base">
                         <div className="flex items-center gap-3">
                             {pricingOptions[activeTab].icon}
@@ -2286,7 +2286,7 @@ function MilkPricingCalculators() {
 
 // ===== 🧪 RM & POLENSKE VALUE CALCULATORS =====
 function RMPVCalc() {
-    const [activeCalc, setActiveCalc] = useState('rm-volume');
+    const [activeCalc, setActiveCalc] = useState<'rm-volume' | 'rm-weight' | 'pv'>('rm-volume');
 
     // Calculator options with icons
     const calculatorOptions = {
@@ -2328,7 +2328,7 @@ function RMPVCalc() {
                 <Label className="text-base font-semibold mb-3 block">Select Calculator Type</Label>
                 
                 {/* DROPDOWN WITH ICON IN TRIGGER */}
-                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                <Select value={activeCalc} onValueChange={(val) => setActiveCalc(val as any)}>
                     <SelectTrigger className="w-full h-16 text-base">
                         <div className="flex items-center gap-3">
                             {calculatorOptions[activeCalc].icon}
@@ -3794,7 +3794,7 @@ function PointBasedPricingCalc() {
 
 // ===== 🍦 CREAM CALCULATORS =====
 function CreamCalculators() {
-    const [activeCalc, setActiveCalc] = useState('cream-dilution');
+    const [activeCalc, setActiveCalc] = useState<'cream-dilution' | 'fat-percent' | 'actual-snf'>('cream-dilution');
 
     // Cream calculator options with icons
     const creamOptions = {
@@ -3836,7 +3836,7 @@ function CreamCalculators() {
                 <Label className="text-base font-semibold mb-3 block">Select Calculator Type</Label>
                 
                 {/* DROPDOWN */}
-                <Select value={activeCalc} onValueChange={setActiveCalc}>
+                <Select value={activeCalc} onValueChange={(val) => setActiveCalc(val as any)}>
                     <SelectTrigger className="w-full h-16 text-base">
                         <div className="flex items-center gap-3">
                             {creamOptions[activeCalc].icon}
@@ -6715,7 +6715,7 @@ function ProteinFromCaseinCalc() {
 
 // ===== ⚖️ GRAVIMETRIC ANALYSIS CALCULATORS =====
 function GravimetricAnalysisCalc() {
-    const [activeCalc, setActiveCalc] = useState('moisture-ts');
+    const [activeCalc, setActiveCalc] = useState<'moisture-ts' | 'ash' | 'fat-on-dry-basis'>('moisture-ts');
 
     const renderCalculator = () => {
         switch (activeCalc) {
@@ -6773,7 +6773,7 @@ function GravimetricAnalysisCalc() {
                     {/* The Dropdown */}
                     <select
                         value={activeCalc}
-                        onChange={(e) => setActiveCalc(e.target.value)}
+                        onChange={(e) => setActiveCalc(e.target.value as any)}
                         className={`w-full pl-14 pr-10 py-4 text-base bg-white border-2 border-gray-200 rounded-xl appearance-none cursor-pointer outline-none transition-all duration-300 ${meta.borderColor} focus:ring-4 focus:ring-opacity-20 hover:border-gray-300`}
                     >
                         <option value="moisture-ts">Moisture & Total Solids (Oven Method)</option>
@@ -8086,7 +8086,7 @@ function FormulasTab() {
 
 function SolutionStrengthCalc() {
     const { toast } = useToast();
-    const [activeCalc, setActiveCalc] = useState('naoh');
+    const [activeCalc, setActiveCalc] = useState<'naoh' | 'hno3' | 'h3po4' | 'chlorine'>('naoh');
     const [inputs, setInputs] = useState({
         sampleQuantity: "10",
         sampleUnit: 'ml' as 'ml' | 'gm',
@@ -8363,7 +8363,7 @@ function SolutionStrengthCalc() {
                     <Select 
                         value={activeCalc} 
                         onValueChange={(value) => {
-                            setActiveCalc(value);
+                            setActiveCalc(value as any);
                             setCurrentStrength(null);
                             setInputs(prev => ({...prev, titreValue: '', targetStrength: '', currentVolume: ''}));
                         }}
