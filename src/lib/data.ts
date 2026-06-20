@@ -1274,8 +1274,8 @@ export const reagentCategoryInfo: Record<string, { label: string; emoji: string;
           safetyLevel: 'low',
           storageInfo: 'Dark bottle, add 0.1g Na₂CO₃ as preservative',
           shelfLife: '1 month',
-          components: [{ name: 'Na₂S₂O₃·5H₂O', amount: 24.8, unit: 'g' }],
-          instructions: '24.8g Na₂S₂O₃·5H₂O ko freshly boiled & cooled distilled water mein gholkar 1 litre banayein.'
+          components: [{ name: 'Na₂S₂O₃·5H₂O', amount: 24.82, unit: 'g' }],
+          instructions: '24.82g Na₂S₂O₃·5H₂O ko freshly boiled & cooled distilled water mein gholkar 1 litre banayein.'
       },
       'na_stock_1000ppm': {
           name: 'Sodium Standard (1000 ppm)',
@@ -1303,8 +1303,8 @@ export const reagentCategoryInfo: Record<string, { label: string; emoji: string;
           safetyLevel: 'low',
           storageInfo: 'Sealed, room temperature',
           shelfLife: '3 months',
-          components: [{ name: 'Anhydrous Na₂CO₃ (dried at 250°C)', amount: 2.5, unit: 'g' }],
-          instructions: '2.5g dried Na₂CO₃ ko distilled water me gholkar 1 litre banayein.'
+          components: [{ name: 'Anhydrous Na₂CO₃ (dried at 250°C)', amount: 2.65, unit: 'g' }],
+          instructions: '2.65g dried Na₂CO₃ ko distilled water me gholkar 1 litre banayein.'
       },
       'std_h2so4_01n': {
           name: 'Standard H₂SO₄ (approx. 0.1 N)',
@@ -1483,5 +1483,107 @@ export const reagentCategoryInfo: Record<string, { label: string; emoji: string;
               { name: 'Distilled Water', ratio: 4 }
           ],
           instructions: 'Pehle 4 parts water lein. Phir 1 part conc. H₂SO₄ bahut DHEERE se milayein. ACID KO PAANI MEIN DAALEIN.'
+      },
+      'storch_guaiacol': {
+          name: 'Guaiacol Solution (1% v/v)',
+          testName: 'Storch Test (Peroxidase)',
+          type: 'v/v',
+          category: 'dairy',
+          safetyLevel: 'medium',
+          storageInfo: 'Amber bottle, cool dry place',
+          shelfLife: '3 months',
+          components: [{ name: 'Guaiacol', amount: 1, unit: 'ml' }],
+          instructions: '1ml Guaiacol ko 95% Ethyl Alcohol mein milakar final volume 100ml banayein. Pasteurization verify karne ke liye storch test mein iska use hota hai.'
+      },
+      'storch_h2o2': {
+          name: 'Hydrogen Peroxide Solution (3% v/v)',
+          testName: 'Storch Test / Sanitization',
+          type: 'v/v',
+          category: 'dairy',
+          safetyLevel: 'medium',
+          storageInfo: 'Amber bottle, refrigerate, dark place',
+          shelfLife: '1 month',
+          components: [{ name: 'Concentrated H₂O₂ (30%)', amount: 10, unit: 'ml' }],
+          instructions: '10ml concentrated H₂O₂ (30% strength) ko distilled water mein dhyan se milakar final volume 100ml poora karein. Storch test mein use kiya jata hai.'
+      },
+      'california_mastitis_reagent': {
+          name: 'California Mastitis Test (CMT) Reagent',
+          testName: 'Mastitis Detection',
+          type: 'complex',
+          category: 'dairy',
+          safetyLevel: 'low',
+          storageInfo: 'Plastic bottle, room temperature',
+          shelfLife: '6 months',
+          components: [
+              { name: 'Sodium Lauryl Sulfate (SLS)', amount: 3, unit: 'g' },
+              { name: 'Bromocresol Purple', amount: 0.01, unit: 'g' }
+          ],
+          instructions: '3g SLS aur 0.01g Bromocresol Purple ko distilled water mein gholkar 100ml solution banayein. Mastitis check karne ke liye iska upyog kiya jata hai.'
+      },
+      'halphen_reagent': {
+          name: 'Halphen Reagent',
+          testName: 'Cottonseed Oil Detection',
+          type: 'complex',
+          category: 'food',
+          safetyLevel: 'high',
+          storageInfo: 'Amber bottle, tightly sealed, flammable',
+          shelfLife: '3 months',
+          components: [
+              { name: 'Sulfur Powder', amount: 1, unit: 'g' },
+              { name: 'Carbon Disulfide (CS₂)', amount: 50, unit: 'ml' },
+              { name: 'Amyl Alcohol', amount: 50, unit: 'ml' }
+          ],
+          instructions: '1g Sulfur powder ko 50ml Carbon Disulfide (CS₂) mein gholein. Phir usme 50ml Amyl Alcohol milakar mix karein. ⚠️ CS₂ IS HIGHLY FLAMMABLE & TOXIC: Fume hood ke andar prepare aur use karein.'
+      },
+      'wijs_solution': {
+          name: 'Wijs Solution (Iodine Monochloride)',
+          testName: 'Iodine Value (Oils & Fats)',
+          type: 'complex',
+          category: 'food',
+          safetyLevel: 'critical',
+          storageInfo: 'Amber glass bottle, airtight, acid cabinet',
+          shelfLife: '6 months',
+          components: [
+              { name: 'Iodine Crystals', amount: 0.9, unit: 'g' },
+              { name: 'Iodine Trichloride (ICl₃)', amount: 0.8, unit: 'g' },
+              { name: 'Glacial Acetic Acid', amount: 100, unit: 'ml' }
+          ],
+          instructions: '0.9g Iodine crystals aur 0.8g ICl₃ ko alag-alag thode Glacial Acetic Acid mein gholkar mix karein, aur final volume 100ml Glacial Acetic Acid se poora karein. ⚠️ CORROSIVE & IRRITANT.'
+      },
+      'glycerol_caustic_rm': {
+          name: 'Glycerol-Caustic Soda Solution',
+          testName: 'RM & Polenske Value',
+          type: 'complex',
+          category: 'food',
+          safetyLevel: 'high',
+          storageInfo: 'Airtight container, prevent moisture absorption',
+          shelfLife: '6 months',
+          components: [
+              { name: 'Glycerol (highly pure)', amount: 90, unit: 'ml' },
+              { name: '50% Sodium Hydroxide (NaOH) Solution', amount: 10, unit: 'ml' }
+          ],
+          instructions: '90ml pure Glycerol mein 10ml concentrated 50% NaOH solution milayein. Ghee ke RM/Polenske digestion test ke liye direct use kiya jata hai.'
+      },
+      'acidified_turmeric': {
+          name: 'Acidified Turmeric Reagent',
+          testName: 'Boric Acid Adulteration',
+          type: 'w/v',
+          category: 'dairy',
+          safetyLevel: 'medium',
+          storageInfo: 'Amber bottle, room temperature',
+          shelfLife: '3 months',
+          components: [{ name: 'Turmeric Powder', amount: 1, unit: 'g' }],
+          instructions: '1g Turmeric powder ko 100ml 95% Ethyl Alcohol mein gholkar filter karein. Milk sample ko hydrochloric acid se acidify karne ke baad is reagent/turmeric paper se test kiya jata hai.'
+      },
+      'hehner_acid_reagent': {
+          name: "Hehner's Acid Reagent",
+          testName: 'Formalin Adulteration',
+          type: 'w/v_in_acid',
+          category: 'dairy',
+          safetyLevel: 'critical',
+          storageInfo: 'Acid cabinet, keep in glass bottle',
+          shelfLife: '6 months',
+          components: [{ name: 'Ferric Chloride (FeCl₃)', amount: 0.05, unit: 'g' }],
+          instructions: '0.05g (50mg) anhydrous FeCl₃ ko 100ml concentrated H₂SO₄ mein mix karein. Milk sample ke side se is reagent ko test tube mein slide karne par formaldehyde ki upasthiti mein violet ring banti hai.'
       },
   };
