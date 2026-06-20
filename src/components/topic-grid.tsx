@@ -113,7 +113,7 @@ const topics: Topic[] = [
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'quality', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true, color: 'from-purple-500 via-violet-500 to-fuchsia-600', iconColor: 'text-white' },
   { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'quality', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true, color: 'from-rose-500 via-pink-500 to-red-600', iconColor: 'text-white' },
   { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'quality', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true, color: 'from-violet-500 via-purple-500 to-fuchsia-600', iconColor: 'text-white' },
-  { id: 'expert-support', title: 'Expert Support', description: 'Real Expert Advice', category: 'production', icon: GraduationCap, modal: ExpertSupportModal, isPro: true, color: 'from-orange-500 via-amber-500 to-yellow-600', iconColor: 'text-white' },
+  { id: 'expert-support', title: 'Expert Support', description: 'AI & Real Expert Advice', category: 'production', icon: GraduationCap, badge: 'AI', modal: ExpertSupportModal, isPro: true, color: 'from-orange-500 via-amber-500 to-yellow-600', iconColor: 'text-white' },
   { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'quality', icon: ClipboardCheck, modal: CalibrationStandardizationModal, isPro: true, color: 'from-red-500 via-orange-500 to-amber-600', iconColor: 'text-white' },
   { id: 'lab-equipments', title: 'Lab Equipments', description: 'Principles & Working', category: 'quality', icon: Microscope, badge: 'Pro', modal: LabEquipmentsModal, isPro: true, color: 'from-slate-500 via-gray-500 to-zinc-600', iconColor: 'text-white' },
   { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'quality', icon: Atom, modal: MilkChemistryModal, isPro: true, color: 'from-pink-500 via-rose-500 to-red-600', iconColor: 'text-white' },
@@ -124,7 +124,7 @@ const topics: Topic[] = [
   { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'quality', icon: TestTube, modal: CompositionalAnalysisModal, isPro: true, color: 'from-indigo-500 via-blue-500 to-purple-600', iconColor: 'text-white' },
   { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'quality', icon: Droplet, modal: WaterTestingModal, isPro: true, color: 'from-blue-500 via-cyan-500 to-sky-600', iconColor: 'text-white' },
   { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'quality', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true, color: 'from-yellow-500 via-amber-500 to-orange-600', iconColor: 'text-white' },
-  { id: 'chromatography', title: 'Chromatography', description: 'HPLC, GC, TLC & More', category: 'quality', icon: HplcIcon, badge: 'New', modal: ChromatographyModal, isPro: false, color: 'from-pink-100 to-rose-200', iconColor: 'text-white' },
+  { id: 'chromatography', title: 'Chromatography', description: 'HPLC, GC, TLC & More', category: 'quality', icon: HplcIcon, badge: 'New', modal: ChromatographyModal, isPro: false, color: 'from-pink-100 to-rose-200' },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'process', icon: Scale, modal: StandardizationIModal, isPro: true, color: 'from-sky-500 via-blue-500 to-cyan-600', iconColor: 'text-white' },
   { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'process', icon: Calculator, modal: StandardizationIIModal, isPro: true, color: 'from-fuchsia-500 via-pink-500 to-purple-600', iconColor: 'text-white' },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'process', icon: Settings, modal: DairyProcessingModal, isPro: true, color: 'from-gray-500 via-slate-500 to-zinc-600', iconColor: 'text-white' },
@@ -267,7 +267,7 @@ export function TopicGrid() {
             <Input
               type="text"
               placeholder="Search topics..."
-              className="w-full pl-10 pr-4 py-2 rounded-full shadow-lg bg-white border-2 border-slate-200"
+              className="w-full pl-10 pr-4 py-2 rounded-full shadow-lg bg-white/80 backdrop-blur-sm border-2 border-white/50"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -283,7 +283,7 @@ export function TopicGrid() {
                 key={topic.id}
                 onClick={() => openModal(topic.id, topic.isPro)}
                 className={cn(
-                  "bg-white p-4 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden group border-2 border-slate-200",
+                  "bg-white/70 backdrop-blur-md p-4 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden group border-2 border-white/50",
                   "cursor-pointer"
                 )}
               >
