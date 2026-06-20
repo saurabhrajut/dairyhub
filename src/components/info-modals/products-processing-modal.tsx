@@ -880,7 +880,7 @@ export function ProductsProcessingModal({
     };
 
     // ── FIX: guard against empty subTopics objects ──
-    const rawSubTopics = product.subTopics;
+    const rawSubTopics = (product as any).subTopics;
     const hasValidSubTopics =
       rawSubTopics && Object.keys(rawSubTopics).length > 0;
 
@@ -970,7 +970,7 @@ export function ProductsProcessingModal({
         {activeProduct && selectedTopic ? (
           <div className="flex-1 flex flex-col min-h-0 w-full max-w-full overflow-hidden">
             {/* ── Header ── */}
-            <DialogHeader className="shrink-0 px-3 py-2.5 sm:px-5 sm:py-3 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
+            <DialogHeader className="shrink-0 px-3 py-2.5 sm:px-5 sm:py-3 border-b border-gray-100 bg-white">
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
@@ -1050,7 +1050,7 @@ export function ProductsProcessingModal({
                   <ProductContent
                     content={
                       activeSubProduct
-                        ? productMap[activeProduct as keyof typeof productMap]
+                        ? (productMap[activeProduct as keyof typeof productMap] as any)
                             .subTopics![activeSubProduct]
                         : productMap[activeProduct as keyof typeof productMap]
                     }
