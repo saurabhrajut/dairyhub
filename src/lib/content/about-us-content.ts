@@ -39,122 +39,122 @@ export const aboutUsContent = {
       "title": "Dairy Hub mein kya hai?",
       "features": [
         {
-          "icon": "Factory",
+          "icon": Factory,
           "title": "Dairy Industry Insights",
           "description": "Indian dairy sector se latest trends, stats, aur updates prapt karein."
         },
         {
-          "icon": "ShieldCheck",
+          "icon": ShieldCheck,
           "title": "FSSAI Standards",
           "description": "Doodh aur doodh products ke liye official FSSAI standards ko samjhein."
         },
         {
-          "icon": "Atom",
+          "icon": Atom,
           "title": "Milk Chemistry",
           "description": "Doodh ki composition, protein, aur properties mein gehraai se utrein."
         },
         {
-          "icon": "Bug",
+          "icon": Bug,
           "title": "Microbiology",
           "description": "Dairy mein microorganisms, unke testing, aur safety protocols ke baare mein jaanein."
         },
         {
-          "icon": "Droplet",
+          "icon": Droplet,
           "title": "Milk Handling",
           "description": "Doodh ki receiving, storage, aur preservation ki best practices ko jaanein."
         },
         {
-          "icon": "Settings",
+          "icon": Settings,
           "title": "Dairy Processing",
           "description": "Pasteurization se lekar homogenization tak, core dairy processing techniques ko explore karein."
         },
         {
-          "icon": "ReagentIcon",
+          "icon": ReagentIcon,
           "title": "Fermented Products",
           "description": "Dahi, chhaachh, aur anya fermented products ke science aur processing ko samjhein."
         },
         {
-          "icon": "Wind",
+          "icon": Wind,
           "title": "Evaporation & Drying",
           "description": "Condensed milk aur milk powder banane ke processes ke baare mein jaanein."
         },
         {
-          "icon": "PaneerIcon",
+          "icon": PaneerIcon,
           "title": "Paneer Processing",
           "description": "Industrial process mein maharat haasil karein aur paneer ki yield calculate karein."
         },
         {
-          "icon": "IceCreamIcon",
+          "icon": IceCreamIcon,
           "title": "Ice-Cream Production",
           "description": "Ice cream banane ke peeche ke science aur engineering ko samjhein."
         },
         {
-          "icon": "TestTube",
+          "icon": TestTube,
           "title": "Compositional Analysis",
           "description": "Alag-alag dairy products ke liye chemical testing methods jaanein."
         },
         {
-          "icon": "CheckSquare",
+          "icon": CheckSquare,
           "title": "Quality Concepts",
           "description": "HACCP, TQM, aur ISO jaise quality management systems ko explore karein."
         },
         {
-          "icon": "ClipboardCheck",
+          "icon": ClipboardCheck,
           "title": "Audits & Verification",
           "description": "Dairy plants mein food safety audits aur verification processes ko samjhein."
         },
         {
-          "icon": "Beaker",
+          "icon": Beaker,
           "title": "Solutions Preparation",
           "description": "Alag-alag lab reagents aur solutions ko aasaani se calculate aur prepare karein."
         },
         {
-          "icon": "Scale",
+          "icon": Scale,
           "title": "Standardization Calculators",
           "description": "Pearson Square, blending, aur milk standardization ke liye advanced calculations."
         },
         {
-          "icon": "FileSpreadsheet",
+          "icon": FileSpreadsheet,
           "title": "Various Calculations",
           "description": "Yield, acidity, cost-benefit, aur anya miscellaneous calculations karein."
         },
         {
-          "icon": "Recycle",
+          "icon": Recycle,
           "title": "CIP & ETP",
           "description": "Cleaning-In-Place (CIP) processes aur Effluent Treatment Plants (ETP) ke baare mein jaanein."
         },
         {
-          "icon": "Microscope",
+          "icon": Microscope,
           "title": "Lab Equipments",
           "description": "Dairy laboratory mein use hone wale equipments ke principles aur working ko jaanein."
         },
         {
-          "icon": "Search",
+          "icon": Search,
           "title": "Adulteration Testing",
           "description": "Doodh mein aam milavaton ka pata lagane aur unhein rokne ke tareeke seekhein."
         },
         {
-          "icon": "ClipboardCheck",
+          "icon": ClipboardCheck,
           "title": "Calibration",
           "description": "Accurate results ke liye lab ke glassware aur reagents ko calibrate karein."
         },
         {
-          "icon": "PackageCheck",
+          "icon": PackageCheck,
           "title": "Packaging Testing",
           "description": "Dairy products ke liye packaging material ke quality tests ko samjhein."
         },
         {
-          "icon": "Droplet",
+          "icon": Droplet,
           "title": "Water Testing",
           "description": "WTP/ETP analysis ke liye water testing ke importance aur methods ko jaanein."
         },
         {
-          "icon": "GraduationCap",
+          "icon": GraduationCap,
           "title": "Expert Support",
-          "description": "AI aur real experts se salah aur answers prapt karein."
+          "description": "Real industry experts se salah aur answers prapt karein."
         },
         {
-          "icon": "Bot",
+          "icon": Bot,
           "title": "Sarathi AI Chatbot",
           "description": "Apne personal AI assistant se turant jawab aur sahayata prapt karein. Dairy ya career se related koi bhi sawal poochein!"
         }
@@ -222,7 +222,7 @@ export const aboutUsContent = {
                 { icon: ClipboardCheck, title: "Calibration", description: "Calibrate lab glassware and reagents for accurate results." },
                 { icon: PackageCheck, title: "Packaging Testing", description: "Understand the quality tests for packaging materials for dairy products." },
                 { icon: Droplet, title: "Water Testing", description: "Learn the importance and methods of water testing for WTP/ETP analysis." },
-                { icon: GraduationCap, title: "Expert Support", description: "Get advice and answers from AI and real experts." },
+                { icon: GraduationCap, title: "Expert Support", description: "Get advice and answers from real industry experts." },
                 { icon: Bot, title: "Sarathi AI Chatbot", description: "Get instant answers and assistance from your personal AI assistant. Ask any dairy or career-related question!" }
             ]
         },
