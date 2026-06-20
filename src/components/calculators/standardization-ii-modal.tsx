@@ -1003,6 +1003,7 @@ function MilkBlendingCalc() {
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                         {Object.entries(snfFormulas).map(([key, val]) => {
                             const { name, formulaText } = val as { name: string; formulaText: string };
                             return (
@@ -1014,7 +1015,6 @@ function MilkBlendingCalc() {
                                 </SelectItem>
                             );
                         })}
-                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -1388,6 +1388,7 @@ function FatSnfAdjustmentCalc() {
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="custom" className="text-base py-3">Custom Formula</SelectItem>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
                             <SelectItem key={key} value={key} className="text-base py-3">
                                 <div className="flex flex-col">
@@ -1396,7 +1397,6 @@ function FatSnfAdjustmentCalc() {
                                 </div>
                             </SelectItem>
                         ))}
-                        <SelectItem value="custom" className="text-base py-3">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -1990,6 +1990,7 @@ function TwoMilkBlendingToTargetCalc() {
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
                             <SelectItem key={key} value={key} className="text-base py-3">
                                 <div className="flex flex-col">
@@ -1998,7 +1999,6 @@ function TwoMilkBlendingToTargetCalc() {
                                 </div>
                             </SelectItem>
                         ))}
-                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -2660,6 +2660,7 @@ function TwoComponentStandardizationCalc() {
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
                             <SelectItem key={key} value={key} className="text-base py-3">
                                 <div className="flex flex-col">
@@ -2668,7 +2669,6 @@ function TwoComponentStandardizationCalc() {
                                 </div>
                             </SelectItem>
                         ))}
-                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -4049,6 +4049,12 @@ function RecombinedMilkCalc() {
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="custom" className="text-base py-3">
+                            <div className="flex flex-col">
+                                <span className="font-bold text-gray-800">Custom Formula (कस्टम फ़ॉर्मूला)</span>
+                                <span className="text-xs text-muted-foreground mt-1">SNF % = (CLR/4) + (Fat * Multiplier) + Constant</span>
+                            </div>
+                        </SelectItem>
                         {Object.entries(snfFormulas).map(([key, val]) => {
                             const { name, formulaText } = val as { name: string; formulaText: string };
                             return (
@@ -4060,12 +4066,6 @@ function RecombinedMilkCalc() {
                                 </SelectItem>
                             );
                         })}
-                        <SelectItem value="custom" className="text-base py-3">
-                            <div className="flex flex-col">
-                                <span className="font-bold text-gray-800">Custom Formula (कस्टम फ़ॉर्मूला)</span>
-                                <span className="text-xs text-muted-foreground mt-1">SNF % = (CLR/4) + (Fat * Multiplier) + Constant</span>
-                            </div>
-                        </SelectItem>
                     </SelectContent>
                 </Select>
                 
@@ -5141,6 +5141,7 @@ function ClrIncreaseCalc() {
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                         {Object.entries(snfFormulas).map(([key, val]) => {
                             const { name, formulaText } = val as { name: string; formulaText: string };
                             return (
@@ -5152,7 +5153,6 @@ function ClrIncreaseCalc() {
                                 </SelectItem>
                             );
                         })}
-                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -5670,6 +5670,7 @@ function ClrBlendingCalc() {
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                         {Object.entries(snfFormulas).map(([key, val]) => {
                             const { name, formulaText } = val as { name: string; formulaText: string };
                             return (
@@ -5681,7 +5682,6 @@ function ClrBlendingCalc() {
                                 </SelectItem>
                             );
                         })}
-                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
