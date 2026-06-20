@@ -744,21 +744,33 @@ const MemoizedMilkInputGroup = memo(function MilkInputGroup({
     onInputChange,
     initialValues,
     snfFormula,
+    customConstants,
 }: {
     milkNum: number;
     onInputChange: (milkNum: number, field: string, value: string) => void;
     initialValues: { qty: string; fat: string; clr: string; snf: string; basis: 'clr' | 'snf'; unit: 'kg' | 'liters' };
     snfFormula: string;
+    customConstants?: { fatMultiplier: string; constant: string };
 }) {
     const calculateSnf = useCallback((clrVal: number, fatPercent: number) => {
+        if (snfFormula === 'custom' && customConstants) {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (clrVal / 4) + (multi * fatPercent) + constFactor;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.calc(clrVal, fatPercent);
-    }, [snfFormula]);
+    }, [snfFormula, customConstants]);
 
     const calculateClrInverse = useCallback((snfVal: number, fatVal: number) => {
+        if (snfFormula === 'custom' && customConstants) {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (snfVal - (multi * fatVal) - constFactor) * 4;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.inverse ? formula.inverse(snfVal, fatVal) : 0;
-    }, [snfFormula]);
+    }, [snfFormula, customConstants]);
 
     const fat = parseFloat(initialValues.fat) || 0;
     const clr = parseFloat(initialValues.clr) || 0;
@@ -837,6 +849,7 @@ function MilkBlendingCalc() {
         { id: 2, qty: '500', fat: '2.5', clr: '27', snf: '8.14', basis: 'clr' as 'clr' | 'snf', unit: 'kg' as 'kg' | 'liters' }
     ]);
     const [snfFormula, setSnfFormula] = useState('isi');
+    const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
     const [result, setResult] = useState<any | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [calculationSteps, setCalculationSteps] = useState<string[]>([]);
@@ -860,9 +873,14 @@ function MilkBlendingCalc() {
     }, []);
 
     const calculateSnf = useCallback((clr: number, fat: number) => {
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (clr / 4) + (multi * fat) + constFactor;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.calc(clr, fat);
-    }, [snfFormula]);
+    }, [snfFormula, customConstants]);
 
     const calculate = useCallback(() => {
         setResult(null);
@@ -870,7 +888,13 @@ function MilkBlendingCalc() {
         setCalculationSteps([]);
         setShowSteps(false);
         
-        const formulaObj = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        const formulaObj = snfFormula === 'custom' ? {
+            inverse: (snfVal: number, fatVal: number) => {
+                const multi = parseFloat(customConstants.fatMultiplier) || 0;
+                const constFactor = parseFloat(customConstants.constant) || 0;
+                return (snfVal - (multi * fatVal) - constFactor) * 4;
+            }
+        } as any : (snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi);
 
         const milkData = milks.map(milk => {
             const qtyVal = parseFloat(milk.qty);
@@ -961,7 +985,7 @@ function MilkBlendingCalc() {
             blendedMilks: processedMilks
         });
 
-    }, [milks, calculateSnf, snfFormula]);
+    }, [milks, calculateSnf, snfFormula, customConstants]);
 
     return (
         <CalculatorCard 
@@ -990,9 +1014,35 @@ function MilkBlendingCalc() {
                                 </SelectItem>
                             );
                         })}
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
+
+            {snfFormula === 'custom' && (
+                <div className="grid grid-cols-2 gap-4 p-4 mb-6 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl border-2 border-violet-200 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">Fat × (Multiplier)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.fatMultiplier} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, fatMultiplier: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">+ Constant (C)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.constant} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, constant: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                </div>
+            )}
 
             <div className="mb-6">
                 <Label className="text-base font-bold mb-3 block">Number of Milk Sources</Label>
@@ -1018,6 +1068,7 @@ function MilkBlendingCalc() {
                         onInputChange={(id, field, value) => handleInputChange(milk.id, field, value)} 
                         initialValues={milk}
                         snfFormula={snfFormula}
+                        customConstants={customConstants}
                     />
                 ))}
             </div>
@@ -1704,6 +1755,7 @@ function TwoMilkBlendingToTargetCalc() {
     const [targetBasis, setTargetBasis] = useState<'clr' | 'snf'>('clr');
     const [totalQtyUnit, setTotalQtyUnit] = useState<'kg' | 'liters'>('kg');
     const [snfFormula, setSnfFormula] = useState('isi');
+    const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
     
     // ✅ NEW: Tab State
     const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
@@ -1735,9 +1787,14 @@ function TwoMilkBlendingToTargetCalc() {
     }, []);
 
     const calculateSnf = useCallback((clr: number, fat: number) => {
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (clr / 4) + (multi * fat) + constFactor;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.calc(clr, fat);
-    }, [snfFormula]);
+    }, [snfFormula, customConstants]);
 
     const m1Snf = useMemo(() => {
         if (m1Basis === 'snf') return parseFloat(inputs.s1) || 0;
@@ -1750,9 +1807,14 @@ function TwoMilkBlendingToTargetCalc() {
         if (m1Basis === 'clr') return parseFloat(inputs.c1) || 0;
         const fat = parseFloat(inputs.f1);
         const snf = parseFloat(inputs.s1);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [m1Basis, inputs.f1, inputs.s1, snfFormula]);
+    }, [m1Basis, inputs.f1, inputs.s1, snfFormula, customConstants]);
 
     const m2Snf = useMemo(() => {
         if (m2Basis === 'snf') return parseFloat(inputs.s2) || 0;
@@ -1765,9 +1827,14 @@ function TwoMilkBlendingToTargetCalc() {
         if (m2Basis === 'clr') return parseFloat(inputs.c2) || 0;
         const fat = parseFloat(inputs.f2);
         const snf = parseFloat(inputs.s2);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [m2Basis, inputs.f2, inputs.s2, snfFormula]);
+    }, [m2Basis, inputs.f2, inputs.s2, snfFormula, customConstants]);
 
     const targetSnf = useMemo(() => {
         if (targetBasis === 'snf') return parseFloat(inputs.sTarget) || 0;
@@ -1780,9 +1847,14 @@ function TwoMilkBlendingToTargetCalc() {
         if (targetBasis === 'clr') return parseFloat(inputs.cTarget) || 0;
         const fat = parseFloat(inputs.fTarget);
         const snf = parseFloat(inputs.sTarget);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [targetBasis, inputs.fTarget, inputs.sTarget, snfFormula]);
+    }, [targetBasis, inputs.fTarget, inputs.sTarget, snfFormula, customConstants]);
 
     const calculate = useCallback(() => {
         setResult(null);
@@ -1926,9 +1998,35 @@ function TwoMilkBlendingToTargetCalc() {
                                 </div>
                             </SelectItem>
                         ))}
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
+
+            {snfFormula === 'custom' && (
+                <div className="grid grid-cols-2 gap-4 p-4 mb-6 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl border-2 border-violet-200 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">Fat × (Multiplier)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.fatMultiplier} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, fatMultiplier: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">+ Constant (C)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.constant} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, constant: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
                 {/* Milk Source 1 */}
@@ -2264,6 +2362,7 @@ function TwoComponentStandardizationCalc() {
     const [correctionType, setCorrectionType] = useState('cream');
     const [milkUnit, setMilkUnit] = useState<'liters' | 'kg'>('kg');
     const [snfFormula, setSnfFormula] = useState('isi');
+    const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
     const [inputs, setInputs] = useState({
         V0: '700', Fi: '3.5', CLRi: '28', Si: '8.315',
         Ft: '4.5', CLRt: '28.5', St: '8.69',
@@ -2306,9 +2405,14 @@ function TwoComponentStandardizationCalc() {
     }, []);
 
     const calculateSnf = useCallback((clr: number, fatPercent: number) => {
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (clr / 4) + (multi * fatPercent) + constFactor;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.calc(clr, fatPercent);
-    }, [snfFormula]);
+    }, [snfFormula, customConstants]);
 
     const initialSnf = useMemo(() => {
         if (initialBasis === 'snf') return parseFloat(inputs.Si) || 0;
@@ -2321,9 +2425,14 @@ function TwoComponentStandardizationCalc() {
         if (initialBasis === 'clr') return parseFloat(inputs.CLRi) || 0;
         const fat = parseFloat(inputs.Fi);
         const snf = parseFloat(inputs.Si);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [initialBasis, inputs.Fi, inputs.Si, snfFormula]);
+    }, [initialBasis, inputs.Fi, inputs.Si, snfFormula, customConstants]);
 
     const targetSnf = useMemo(() => {
         if (targetBasis === 'snf') return parseFloat(inputs.St) || 0;
@@ -2336,9 +2445,14 @@ function TwoComponentStandardizationCalc() {
         if (targetBasis === 'clr') return parseFloat(inputs.CLRt) || 0;
         const fat = parseFloat(inputs.Ft);
         const snf = parseFloat(inputs.St);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [targetBasis, inputs.Ft, inputs.St, snfFormula]);
+    }, [targetBasis, inputs.Ft, inputs.St, snfFormula, customConstants]);
 
     const creamSnf = useMemo(() => {
         if (adjBasis === 'snf') return parseFloat(inputs.Sc) || 0;
@@ -2351,9 +2465,14 @@ function TwoComponentStandardizationCalc() {
         if (adjBasis === 'clr') return parseFloat(inputs.CLRc) || 0;
         const fat = parseFloat(inputs.Fc);
         const snf = parseFloat(inputs.Sc);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [adjBasis, inputs.Fc, inputs.Sc, snfFormula]);
+    }, [adjBasis, inputs.Fc, inputs.Sc, snfFormula, customConstants]);
 
     const richMilkSnf = useMemo(() => {
         if (adjBasis === 'snf') return parseFloat(inputs.Sr) || 0;
@@ -2366,9 +2485,14 @@ function TwoComponentStandardizationCalc() {
         if (adjBasis === 'clr') return parseFloat(inputs.CLRr) || 0;
         const fat = parseFloat(inputs.Fr);
         const snf = parseFloat(inputs.Sr);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [adjBasis, inputs.Fr, inputs.Sr, snfFormula]);
+    }, [adjBasis, inputs.Fr, inputs.Sr, snfFormula, customConstants]);
 
     const skimMilkSnf = useMemo(() => {
         if (adjBasis === 'snf') return parseFloat(inputs.Ss) || 0;
@@ -2381,9 +2505,14 @@ function TwoComponentStandardizationCalc() {
         if (adjBasis === 'clr') return parseFloat(inputs.CLRs) || 0;
         const fat = parseFloat(inputs.Fs);
         const snf = parseFloat(inputs.Ss);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [adjBasis, inputs.Fs, inputs.Ss, snfFormula]);
+    }, [adjBasis, inputs.Fs, inputs.Ss, snfFormula, customConstants]);
 
     const calculate = useCallback(() => {
         setResults(null);
@@ -2485,7 +2614,13 @@ function TwoComponentStandardizationCalc() {
         const finalSnfPercent = (finalSnfMass / Vf) * 100;
 
         // Inverse CLR
-        const formulaObj = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        const formulaObj = snfFormula === 'custom' ? {
+            inverse: (snfVal: number, fatVal: number) => {
+                const multi = parseFloat(customConstants.fatMultiplier) || 0;
+                const constFactor = parseFloat(customConstants.constant) || 0;
+                return (snfVal - (multi * fatVal) - constFactor) * 4;
+            }
+        } as any : (snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi);
         const finalClr = formulaObj.inverse ? formulaObj.inverse(finalSnfPercent, finalFatPercent) : 
                         4 * (finalSnfPercent/100 - 0.25 * finalFatPercent/100 - 0.0044);
 
@@ -2507,7 +2642,7 @@ function TwoComponentStandardizationCalc() {
             snfError: Math.abs(finalSnfPercent - (SNFt * 100))
         });
 
-    }, [inputs, correctionType, milkUnit, calculateSnf, snfFormula, initialBasis, initialSnf, initialClrCalculated, targetBasis, targetSnf, targetClrCalculated, creamSnf, creamClrCalculated, richMilkSnf, richMilkClrCalculated, skimMilkSnf, skimMilkClrCalculated, adjBasis]);
+    }, [inputs, correctionType, milkUnit, calculateSnf, snfFormula, initialBasis, initialSnf, initialClrCalculated, targetBasis, targetSnf, targetClrCalculated, creamSnf, creamClrCalculated, richMilkSnf, richMilkClrCalculated, skimMilkSnf, skimMilkClrCalculated, adjBasis, customConstants]);
 
     return (
         <CalculatorCard 
@@ -2533,9 +2668,35 @@ function TwoComponentStandardizationCalc() {
                                 </div>
                             </SelectItem>
                         ))}
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
+
+            {snfFormula === 'custom' && (
+                <div className="grid grid-cols-2 gap-4 p-4 mb-6 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl border-2 border-violet-200 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">Fat × (Multiplier)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.fatMultiplier} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, fatMultiplier: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">+ Constant (C)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.constant} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, constant: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
                 {/* Initial Milk */}
@@ -4810,6 +4971,7 @@ function ClrIncreaseCalc() {
     const [initialBasis, setInitialBasis] = useState<'clr' | 'snf'>('clr');
     const [targetBasis, setTargetBasis] = useState<'clr' | 'snf'>('clr');
     const [snfFormula, setSnfFormula] = useState('isi');
+    const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
     
     // ✅ NEW: Tab State
     const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
@@ -4833,9 +4995,14 @@ function ClrIncreaseCalc() {
     }, []);
 
     const calculateSnf = useCallback((clr: number, fatPercent: number) => {
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (clr / 4) + (multi * fatPercent) + constFactor;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.calc(clr, fatPercent);
-    }, [snfFormula]);
+    }, [snfFormula, customConstants]);
 
     const initialSnf = useMemo(() => {
         if (initialBasis === 'snf') return parseFloat(inputs.initialSnf) || 0;
@@ -4848,9 +5015,14 @@ function ClrIncreaseCalc() {
         if (initialBasis === 'clr') return parseFloat(inputs.initialClr) || 0;
         const fat = parseFloat(inputs.fat);
         const snf = parseFloat(inputs.initialSnf);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [initialBasis, inputs.fat, inputs.initialSnf, snfFormula]);
+    }, [initialBasis, inputs.fat, inputs.initialSnf, snfFormula, customConstants]);
 
     const targetSnf = useMemo(() => {
         if (targetBasis === 'snf') return parseFloat(inputs.targetSnf) || 0;
@@ -4863,9 +5035,14 @@ function ClrIncreaseCalc() {
         if (targetBasis === 'clr') return parseFloat(inputs.targetClr) || 0;
         const fat = parseFloat(inputs.fat);
         const snf = parseFloat(inputs.targetSnf);
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return !isNaN(fat) && !isNaN(snf) ? (snf - (multi * fat) - constFactor) * 4 : 0;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
-    }, [targetBasis, inputs.fat, inputs.targetSnf, snfFormula]);
+    }, [targetBasis, inputs.fat, inputs.targetSnf, snfFormula, customConstants]);
 
     const calculate = useCallback(() => {
         setResult(null);
@@ -4975,9 +5152,35 @@ function ClrIncreaseCalc() {
                                 </SelectItem>
                             );
                         })}
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
+
+            {snfFormula === 'custom' && (
+                <div className="grid grid-cols-2 gap-4 p-4 mb-6 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl border-2 border-violet-200 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">Fat × (Multiplier)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.fatMultiplier} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, fatMultiplier: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">+ Constant (C)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.constant} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, constant: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                </div>
+            )}
 
             {/* Input Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
@@ -5289,6 +5492,7 @@ function ClrBlendingCalc() {
     const [lowBasis, setLowBasis] = useState<'clr' | 'snf'>('clr');
     const [targetBasis, setTargetBasis] = useState<'clr' | 'snf'>('clr');
     const [snfFormula, setSnfFormula] = useState('isi');
+    const [customConstants, setCustomConstants] = useState({ fatMultiplier: "0.25", constant: "0.72" });
     
     // TAB State
     const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
@@ -5307,14 +5511,24 @@ function ClrBlendingCalc() {
     const [calculationSteps, setCalculationSteps] = useState<string[]>([]);
 
     const calculateSnf = useCallback((clr: number, fatPercent: number) => {
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (clr / 4) + (multi * fatPercent) + constFactor;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.calc(clr, fatPercent);
-    }, [snfFormula]);
+    }, [snfFormula, customConstants]);
 
     const calculateClr = useCallback((snfPercent: number, fatPercent: number) => {
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (snfPercent - (multi * fatPercent) - constFactor) * 4;
+        }
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.inverse(snfPercent, fatPercent);
-    }, [snfFormula]);
+    }, [snfFormula, customConstants]);
 
     const resolvedHighClr = useMemo(() => {
         if (highBasis === 'clr') return parseFloat(inputs.highClr) || 0;
@@ -5467,9 +5681,35 @@ function ClrBlendingCalc() {
                                 </SelectItem>
                             );
                         })}
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
+
+            {snfFormula === 'custom' && (
+                <div className="grid grid-cols-2 gap-4 p-4 mb-6 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl border-2 border-violet-200 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">Fat × (Multiplier)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.fatMultiplier} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, fatMultiplier: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                    <div>
+                        <Label className="text-xs font-bold text-violet-700 uppercase tracking-wider mb-1 block">+ Constant (C)</Label>
+                        <Input 
+                            type="number" 
+                            step="0.01" 
+                            value={customConstants.constant} 
+                            onChange={(e) => setCustomConstants(prev => ({...prev, constant: e.target.value}))} 
+                            className="h-12 border-violet-300 focus:border-violet-500 bg-white font-medium" 
+                        />
+                    </div>
+                </div>
+            )}
 
             {/* Inputs Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
