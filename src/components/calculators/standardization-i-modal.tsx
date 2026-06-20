@@ -394,6 +394,7 @@ export function StandardizationIModal({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                         {Object.entries(snfFormulas).map(([key, {name, formulaText}]) => (
                           <SelectItem key={key} value={key} className="text-base py-3">
                             <div className="flex flex-col">
@@ -402,7 +403,6 @@ export function StandardizationIModal({
                             </div>
                           </SelectItem>
                         ))}
-                        <SelectItem value="custom" className="text-base py-3 font-semibold bg-violet-50">Custom Formula</SelectItem>
                       </SelectContent>
                     </Select>
 
