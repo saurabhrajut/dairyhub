@@ -33,7 +33,8 @@ import {
   Beaker,
   Milk,
   Building2,
-  Factory
+  Factory,
+  Microscope // <-- Yeh import add kiya gaya hai
 } from "lucide-react";
 
 // ─────────────────────────────────────────────
