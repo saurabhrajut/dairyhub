@@ -19,16 +19,30 @@ import {
 } from "lucide-react";
 
 // ─────────────────────────────────────────────
+// The "Nuclear" Fix for Injected HTML Overflow
+// ─────────────────────────────────────────────
+// Yeh classes injected HTML ke har ek child element par force lagayengi ki 
+// wo 100% width cross na kare, lambe words ko tod de, aur tables ko scrollable banaye.
+const PROSE_CLASSES = `
+  prose prose-sm max-w-none leading-relaxed w-full min-w-0 
+  break-words whitespace-pre-wrap
+  [&_*]:max-w-full [&_*]:break-words [&_*]:overflow-wrap-anywhere
+  [&_table]:block [&_table]:w-full [&_table]:overflow-x-auto 
+  [&_img]:max-w-full [&_img]:h-auto 
+  [&_pre]:whitespace-pre-wrap [&_pre]:overflow-x-auto
+  [&_a]:break-all
+`;
+
+// ─────────────────────────────────────────────
 // Helper Components
 // ─────────────────────────────────────────────
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="bg-card border border-border rounded-xl shadow-sm mb-6 overflow-hidden w-full min-w-0">
+  <div className="bg-card border border-border rounded-xl shadow-sm mb-6 overflow-hidden w-full max-w-full">
     <div className="bg-muted/40 px-5 py-3 border-b border-border w-full">
       <h2 className="text-xl font-bold text-primary font-headline break-words">{title}</h2>
     </div>
-    {/* Added w-full min-w-0 break-words and overflow-x-auto to contain anything inside */}
-    <div className="p-4 sm:p-6 text-card-foreground prose max-w-none text-gray-700 leading-relaxed break-words w-full min-w-0 overflow-x-auto">
+    <div className="p-4 sm:p-6 text-card-foreground text-gray-700 w-full min-w-0 max-w-full overflow-hidden">
       <div className="space-y-4 w-full min-w-0">{children}</div>
     </div>
   </div>
@@ -38,7 +52,7 @@ const SubHeading = ({ children }: { children: React.ReactNode }) => (
   <div className="mt-6 mb-3 w-full min-w-0 break-words">
     <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 font-headline">
       <span className="w-2 h-2 rounded-full bg-primary inline-block shrink-0" />
-      {children}
+      <span className="flex-1 break-words">{children}</span>
     </h3>
   </div>
 );
@@ -48,7 +62,7 @@ const CollapsibleStep = ({ step, index, total }: { step: any; index: number; tot
   const [open, setOpen] = useState(false);
   return (
     <div className="relative w-full min-w-0">
-      <div className={`border rounded-xl shadow-sm transition-all w-full min-w-0 ${step.colorClass || "bg-white border-gray-200"}`}>
+      <div className={`border rounded-xl shadow-sm transition-all w-full min-w-0 max-w-full ${step.colorClass || "bg-white border-gray-200"}`}>
         <button
           onClick={() => setOpen(!open)}
           className="w-full p-4 text-left flex items-center gap-3 group"
@@ -67,8 +81,7 @@ const CollapsibleStep = ({ step, index, total }: { step: any; index: number; tot
         </button>
         {open && (
           <div
-            // Added strict constraints for injected HTML
-            className="px-5 pb-4 text-sm text-gray-700 prose prose-sm max-w-none leading-relaxed border-t border-black/5 pt-3 w-full min-w-0 break-words overflow-x-auto"
+            className={`px-5 pb-4 text-sm text-gray-700 border-t border-black/5 pt-3 ${PROSE_CLASSES}`}
             dangerouslySetInnerHTML={{ __html: step.details }}
           />
         )}
@@ -90,7 +103,7 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
   intro({ content }) {
     return (
       <Section title={content.intro.title}>
-        <div className="w-full min-w-0 break-words overflow-x-auto" dangerouslySetInnerHTML={{ __html: content.intro.htmlContent }} />
+        <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: content.intro.htmlContent }} />
       </Section>
     );
   },
@@ -109,9 +122,6 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
             />
           ))}
         </div>
-        <p className="mt-4 text-xs text-gray-400 text-center w-full break-words">
-          Click each step to expand/collapse details
-        </p>
       </Section>
     );
   },
@@ -122,13 +132,13 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
         <p className="mb-4 text-gray-600 break-words w-full min-w-0">{content.chemicals.intro}</p>
         <div className="grid gap-4 w-full min-w-0">
           {content.chemicals.types.map((type: any, i: number) => (
-            <div key={i} className="bg-purple-50 p-5 rounded-xl border border-purple-100 w-full min-w-0 overflow-hidden">
+            <div key={i} className="bg-purple-50 p-5 rounded-xl border border-purple-100 w-full min-w-0 max-w-full overflow-hidden">
               <h3 className="text-base font-bold mb-2 text-purple-900 flex items-center gap-2 break-words w-full min-w-0">
                 <FlaskConical className="w-4 h-4 shrink-0" />
                 <span className="flex-1 break-words">{type.title}</span>
               </h3>
               <div
-                className="text-purple-800 text-sm leading-relaxed prose prose-sm max-w-none w-full min-w-0 break-words overflow-x-auto"
+                className={`text-purple-800 ${PROSE_CLASSES}`}
                 dangerouslySetInnerHTML={{ __html: type.details }}
               />
             </div>
@@ -141,7 +151,7 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
   advantages({ content }) {
     return (
       <Section title={content.advantages.title}>
-        <div className="bg-emerald-50 p-5 rounded-xl border border-emerald-100 w-full min-w-0">
+        <div className="bg-emerald-50 p-5 rounded-xl border border-emerald-100 w-full min-w-0 max-w-full">
           <ul className="grid gap-3 w-full min-w-0">
             {content.advantages.list.map((adv: string, i: number) => (
               <li key={i} className="flex items-start gap-2 text-emerald-900 text-sm w-full min-w-0 break-words">
@@ -159,10 +169,10 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     return (
       <Section title={content.cleaning_procedures.title}>
         {content.cleaning_procedures.sections.map((sec: any, i: number) => (
-          <div key={i} className="mb-6 last:mb-0 w-full min-w-0">
+          <div key={i} className="mb-6 last:mb-0 w-full min-w-0 max-w-full">
             <SubHeading>{sec.title}</SubHeading>
             <div
-              className="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none w-full min-w-0 break-words overflow-x-auto"
+              className={`text-gray-700 ${PROSE_CLASSES}`}
               dangerouslySetInnerHTML={{ __html: sec.content }}
             />
           </div>
@@ -175,7 +185,7 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     return (
       <Section title={content.teepol_detergent.title}>
         <div
-          className="text-sm leading-relaxed prose prose-sm max-w-none w-full min-w-0 break-words overflow-x-auto"
+          className={`text-gray-800 ${PROSE_CLASSES}`}
           dangerouslySetInnerHTML={{ __html: content.teepol_detergent.htmlContent }}
         />
       </Section>
@@ -186,9 +196,9 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     return (
       <Section title={content.sip.title}>
         <p className="mb-4 text-gray-600 break-words w-full min-w-0">{content.sip.intro}</p>
-        <div className="bg-red-50 p-5 rounded-xl border border-red-100 w-full min-w-0">
+        <div className="bg-red-50 p-5 rounded-xl border border-red-100 w-full min-w-0 max-w-full overflow-hidden">
           <div
-            className="prose prose-sm max-w-none text-red-900 leading-relaxed w-full min-w-0 break-words overflow-x-auto"
+            className={`text-red-900 ${PROSE_CLASSES}`}
             dangerouslySetInnerHTML={{ __html: content.sip.process }}
           />
         </div>
@@ -200,9 +210,9 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     return (
       <Section title={content.biofilm.title}>
         <p className="mb-4 text-gray-600 break-words w-full min-w-0">{content.biofilm.intro}</p>
-        <div className="bg-rose-50 p-5 rounded-xl border border-rose-200 w-full min-w-0">
+        <div className="bg-rose-50 p-5 rounded-xl border border-rose-200 w-full min-w-0 max-w-full overflow-hidden">
           <div
-            className="prose prose-sm max-w-none text-rose-900 leading-relaxed w-full min-w-0 break-words overflow-x-auto"
+            className={`text-rose-900 ${PROSE_CLASSES}`}
             dangerouslySetInnerHTML={{ __html: content.biofilm.htmlContent }}
           />
         </div>
@@ -214,9 +224,9 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     return (
       <Section title={content.water_quality.title}>
         <p className="mb-4 text-gray-600 break-words w-full min-w-0">{content.water_quality.intro}</p>
-        <div className="bg-sky-50 p-5 rounded-xl border border-sky-200 w-full min-w-0">
+        <div className="bg-sky-50 p-5 rounded-xl border border-sky-200 w-full min-w-0 max-w-full overflow-hidden">
           <div
-            className="prose prose-sm max-w-none text-sky-900 leading-relaxed w-full min-w-0 break-words overflow-x-auto"
+            className={`text-sky-900 ${PROSE_CLASSES}`}
             dangerouslySetInnerHTML={{ __html: content.water_quality.htmlContent }}
           />
         </div>
@@ -228,9 +238,9 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     return (
       <Section title={content.environmental_compliance.title}>
         <p className="mb-4 text-gray-600 break-words w-full min-w-0">{content.environmental_compliance.intro}</p>
-        <div className="bg-green-50 p-5 rounded-xl border border-green-200 w-full min-w-0">
+        <div className="bg-green-50 p-5 rounded-xl border border-green-200 w-full min-w-0 max-w-full overflow-hidden">
           <div
-            className="prose prose-sm max-w-none text-green-900 leading-relaxed w-full min-w-0 break-words overflow-x-auto"
+            className={`text-green-900 ${PROSE_CLASSES}`}
             dangerouslySetInnerHTML={{ __html: content.environmental_compliance.htmlContent }}
           />
         </div>
@@ -242,9 +252,9 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     return (
       <Section title={content.haccp_cip.title}>
         <p className="mb-4 text-gray-600 break-words w-full min-w-0">{content.haccp_cip.intro}</p>
-        <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 w-full min-w-0">
+        <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 w-full min-w-0 max-w-full overflow-hidden">
           <div
-            className="prose prose-sm max-w-none text-slate-800 leading-relaxed w-full min-w-0 break-words overflow-x-auto"
+            className={`text-slate-800 ${PROSE_CLASSES}`}
             dangerouslySetInnerHTML={{ __html: content.haccp_cip.htmlContent }}
           />
         </div>
@@ -256,13 +266,13 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
     return (
       <Section title={content.solution_strength.title}>
         <p className="mb-4 text-gray-600 break-words w-full min-w-0">{content.solution_strength.intro}</p>
-        <div className="mt-4 p-5 bg-indigo-50 border border-indigo-100 rounded-xl w-full min-w-0">
+        <div className="mt-4 p-5 bg-indigo-50 border border-indigo-100 rounded-xl w-full min-w-0 max-w-full overflow-hidden">
           <h4 className="font-bold text-indigo-900 mb-3 flex items-center gap-2 text-base break-words w-full min-w-0">
             <TestTube className="w-5 h-5 shrink-0" />
             <span className="flex-1 break-words">{content.solution_strength.alkalinity_test.title}</span>
           </h4>
           <div
-            className="text-indigo-900 text-sm leading-relaxed prose prose-sm max-w-none w-full min-w-0 break-words overflow-x-auto"
+            className={`text-indigo-900 ${PROSE_CLASSES}`}
             dangerouslySetInnerHTML={{ __html: content.solution_strength.alkalinity_test.content }}
           />
         </div>
@@ -332,7 +342,6 @@ export function CipProcessModal({
 
   if (!content) return null;
 
-  // Build topics with resolved titles
   const topics = TOPIC_CONFIGS.map((cfg) => {
     const section = content[cfg.titleKey] as any;
     return {
@@ -362,7 +371,6 @@ export function CipProcessModal({
     }
   }, [activeTopic]);
 
-  // Group topics by category
   const categories = (["core", "advanced", "compliance"] as const).map((cat) => ({
     key: cat,
     label: language === "hi"
@@ -374,29 +382,28 @@ export function CipProcessModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      {/* Ensure main modal wrapper itself never exceeds the viewport and hides global overflow */}
       <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[92vh] flex flex-col p-0 sm:p-6 gap-0 overflow-hidden">
         {/* Header */}
-        <DialogHeader className="px-4 pt-4 pb-3 sm:px-0 sm:pt-0 shrink-0 border-b border-border sm:border-none w-full">
-          <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-primary font-headline break-words w-full">
+        <DialogHeader className="px-4 pt-4 pb-3 sm:px-0 sm:pt-0 shrink-0 border-b border-border sm:border-none w-full max-w-full">
+          <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-primary font-headline break-words w-full max-w-full">
             {content.main_title}
           </DialogTitle>
-          <DialogDescription className="text-center text-sm sm:text-base text-muted-foreground mt-1 break-words w-full">
+          <DialogDescription className="text-center text-sm sm:text-base text-muted-foreground mt-1 break-words w-full max-w-full">
             {selectedTopic ? selectedTopic.title : content.main_description}
           </DialogDescription>
         </DialogHeader>
 
         {/* Body */}
         {selectedTopic && ActiveComponent ? (
-          <div className="flex-1 flex flex-col min-h-0 min-w-0 w-full overflow-hidden">
+          <div className="flex-1 flex flex-col min-h-0 min-w-0 max-w-full w-full overflow-hidden">
             {/* Back button + breadcrumb */}
-            <div className="flex items-center gap-2 px-4 pt-3 pb-1 sm:px-0 w-full min-w-0 shrink-0">
+            <div className="flex items-center gap-2 px-4 pt-3 pb-1 sm:px-0 w-full min-w-0 max-w-full shrink-0">
               <Button variant="ghost" size="sm" onClick={handleBack} className="hover:bg-slate-100 gap-1.5 shrink-0">
                 <ArrowLeft className="w-4 h-4" />
                 <span className="hidden sm:inline">Back to Topics</span>
                 <span className="sm:hidden">Back</span>
               </Button>
-              <span className="text-muted-foreground text-xs hidden sm:flex items-center gap-1 min-w-0">
+              <span className="text-muted-foreground text-xs hidden sm:flex items-center gap-1 min-w-0 max-w-full">
                 <span className="shrink-0">/</span>
                 <span
                   className={`px-2 py-0.5 rounded-full text-xs font-medium truncate ${selectedTopic.badgeClass}`}
@@ -405,20 +412,20 @@ export function CipProcessModal({
                 </span>
               </span>
             </div>
-            {/* Main content wrapper */}
-            <ScrollArea className="flex-1 mt-2 sm:pr-2 w-full min-w-0">
-              <div className="px-4 pb-6 sm:px-0 sm:pb-4 w-full min-w-0">
+            
+            {/* Added max-w-[100vw] to prevent ScrollArea itself from bursting horizontally */}
+            <ScrollArea className="flex-1 mt-2 sm:pr-2 w-full min-w-0 max-w-[100vw] overflow-hidden">
+              <div className="px-4 pb-6 sm:px-0 sm:pb-4 w-full min-w-0 max-w-full">
                 <ActiveComponent content={content} />
               </div>
             </ScrollArea>
           </div>
         ) : (
           /* Topic Grid */
-          <ScrollArea className="flex-1 mt-3 w-full min-w-0" viewportRef={scrollAreaRef}>
-            <div className="px-4 pb-6 sm:px-2 space-y-6 w-full min-w-0">
+          <ScrollArea className="flex-1 mt-3 w-full min-w-0 max-w-full" viewportRef={scrollAreaRef}>
+            <div className="px-4 pb-6 sm:px-2 space-y-6 w-full min-w-0 max-w-full">
               {categories.map((cat) => (
-                <div key={cat.key} className="w-full min-w-0">
-                  {/* Category header */}
+                <div key={cat.key} className="w-full min-w-0 max-w-full">
                   <div className={`flex items-center gap-2 mb-3 pb-2 border-b ${cat.color} w-full`}>
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-500 shrink-0">
                       {cat.label}
@@ -427,8 +434,7 @@ export function CipProcessModal({
                       {cat.topics.length} topics
                     </span>
                   </div>
-                  {/* Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full min-w-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full min-w-0 max-w-full">
                     {cat.topics.map((topic) => (
                       <button
                         key={topic.value}
@@ -437,7 +443,7 @@ export function CipProcessModal({
                           flex items-center p-4 rounded-xl border transition-all duration-200
                           text-left shadow-sm hover:shadow-md active:scale-[0.98]
                           ${topic.bgClass} ${topic.borderClass} ${topic.hoverClass}
-                          group w-full min-w-0
+                          group w-full min-w-0 max-w-full
                         `}
                       >
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-4 shrink-0 ${topic.badgeClass} transition-transform duration-200 group-hover:scale-110`}>
