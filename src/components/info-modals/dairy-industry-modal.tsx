@@ -1,444 +1,364 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/context/language-context";
 import { dairyIndustryContent } from "@/lib/content/dairy-industry-content";
 import { Button } from "../ui/button";
 import {
-  ArrowLeft, BookOpen, Users, TrendingUp, Ship, CheckCircle,
-  BarChart4, Leaf, Microscope, FlaskConical, Dna, Thermometer,
-  ShieldCheck, Globe, Landmark, ChevronRight
+  ArrowLeft,
+  BookOpen,
+  Users,
+  TrendingUp,
+  Ship,
+  CheckCircle,
+  BarChart4,
+  Leaf,
+  FlaskConical,
+  Dna,
+  Thermometer,
+  ShieldCheck,
+  Globe,
+  Landmark,
+  ChevronRight,
+  LayoutGrid,
+  Beaker,
+  Milk,
+  Building2,
+  Factory
 } from "lucide-react";
 
 // ─────────────────────────────────────────────
-// Helper Components
+// Language-aware UI label helpers
 // ─────────────────────────────────────────────
+const LABELS = {
+  hi: {
+    backToTopics: "Topics par Wapas",
+    topics: "Topics",
+    modules: "Modules",
+    langPill: "Dairy Industry Hindi Content",
+    topicsCount: (n: number) => `${n} topics`,
+  },
+  en: {
+    backToTopics: "Back to Topics",
+    topics: "Topics",
+    modules: "Modules",
+    langPill: "Dairy Industry English Content",
+    topicsCount: (n: number) => `${n} topics`,
+  },
+};
 
-const SectionTitle = ({ title, id }: { title: string; id: string }) => (
-  <h2
-    id={id}
-    className="text-2xl font-bold text-primary mt-8 mb-4 border-b-2 border-primary/20 pb-2 scroll-mt-24 font-headline"
-  >
-    {title}
-  </h2>
-);
+// ─────────────────────────────────────────────
+// Table Scroll & Prose Wrapper
+// ─────────────────────────────────────────────
+const wrapTablesInScrollDiv = (container: HTMLElement) => {
+  container.querySelectorAll("table").forEach((table) => {
+    if (table.parentElement?.classList.contains("table-scroll-wrap")) return;
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-scroll-wrap overflow-x-auto w-full my-4 rounded-xl border border-gray-200 shadow-sm";
+    table.parentNode?.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+    table.style.borderCollapse = "collapse";
+    table.style.fontSize = "12px";
+    table.style.width = "max-content";
+    table.style.minWidth = "100%";
+    table.querySelectorAll("td").forEach((td) => {
+      (td as HTMLElement).style.border = "1px solid #e5e7eb";
+      (td as HTMLElement).style.padding = "8px 12px";
+      (td as HTMLElement).style.verticalAlign = "top";
+      (td as HTMLElement).style.whiteSpace = "normal";
+      (td as HTMLElement).style.minWidth = "120px";
+    });
+    table.querySelectorAll("th").forEach((th) => {
+      (th as HTMLElement).style.border = "1px solid #e5e7eb";
+      (th as HTMLElement).style.padding = "8px 12px";
+      (th as HTMLElement).style.backgroundColor = "#f8fafc";
+      (th as HTMLElement).style.fontWeight = "600";
+      (th as HTMLElement).style.textAlign = "left";
+      (th as HTMLElement).style.whiteSpace = "nowrap";
+      (th as HTMLElement).style.color = "#334155";
+    });
+  });
+};
 
-const SubSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="p-4 bg-card/50 rounded-lg border border-border mt-6 shadow-sm">
-    <h4 className="text-lg font-bold text-primary mb-3 font-headline">{title}</h4>
-    <div className="space-y-3 text-gray-700 text-sm leading-relaxed prose-sm max-w-none break-words">
+const SectionBody = ({ children }: { children: React.ReactNode }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => { if (ref.current) wrapTablesInScrollDiv(ref.current); }, [children]);
+  return (
+    <div ref={ref} className="p-4 sm:p-6 md:p-8 text-sm sm:text-base text-gray-700 leading-relaxed
+      [&_h4]:font-bold [&_h4]:text-indigo-900 [&_h4]:mt-6 [&_h4]:mb-3 [&_h4]:text-sm sm:[&_h4]:text-lg [&_h4]:border-b [&_h4]:border-indigo-100 [&_h4]:pb-1
+      [&_h5]:font-semibold [&_h5]:text-gray-800 [&_h5]:mt-4 [&_h5]:mb-2 [&_h5]:text-xs sm:[&_h5]:text-sm
+      [&_p]:leading-relaxed [&_p]:mb-4 [&_p]:break-words
+      [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1.5 [&_ul]:mb-4
+      [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-1.5 [&_ol]:mb-4
+      [&_li]:leading-relaxed [&_li]:break-words [&_li]:text-gray-600
+      [&_strong]:text-gray-900 [&_em]:italic
+      [&_code]:bg-slate-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-[11px] sm:[&_code]:text-[13px] [&_code]:font-mono [&_code]:break-all
+      [&_sub]:text-[10px] [&_sup]:text-[10px]
+    ">
       {children}
     </div>
-  </div>
-);
-
-const InfoTable = ({ rows, header1, header2 }: {
-  rows: { col1: string; col2: string }[];
-  header1: string;
-  header2: string;
-}) => (
-  <div className="overflow-x-auto mt-4 rounded-lg border">
-    <Table>
-      <TableHeader className="bg-muted/50">
-        <TableRow>
-          <TableHead className="font-bold text-primary">{header1}</TableHead>
-          <TableHead className="font-bold text-primary">{header2}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {rows.map((row, i) => (
-          <TableRow key={i} className={i % 2 === 0 ? "bg-white" : "bg-muted/20"}>
-            <TableCell className="font-medium">{row.col1}</TableCell>
-            <TableCell>{row.col2}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </div>
-);
-
-// ─────────────────────────────────────────────
-// Content Section Components
-// ─────────────────────────────────────────────
-
-const IntroContent = ({ content }: { content: any }) => (
-  <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed break-words">
-    <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 mb-6">
-      <p dangerouslySetInnerHTML={{ __html: content.intro1 }} />
-      <br />
-      <p dangerouslySetInnerHTML={{ __html: content.intro2 }} />
-    </div>
-  </div>
-);
-
-const OverviewContent = ({ content }: { content: any }) => {
-  const t = content.overview.drivers_challenges.table;
-  const rows = [
-    { col1: t.row1_col1, col2: t.row1_col2 },
-    { col1: t.row2_col1, col2: t.row2_col2 },
-    { col1: t.row3_col1, col2: t.row3_col2 },
-    { col1: t.row4_col1, col2: t.row4_col2 },
-    { col1: t.row5_col1, col2: t.row5_col2 },
-    { col1: t.row6_col1, col2: t.row6_col2 },
-    { col1: t.row7_col1, col2: t.row7_col2 },
-    { col1: t.row8_col1, col2: t.row8_col2 },
-    { col1: t.row9_col1, col2: t.row9_col2 },
-    { col1: t.row10_col1, col2: t.row10_col2 },
-  ].filter(r => r.col1);
-  return (
-    <>
-      <SectionTitle title={content.overview.title} id="overview" />
-      <SubSection title={content.overview.market_size.title}>
-        <p dangerouslySetInnerHTML={{ __html: content.overview.market_size.text }} />
-      </SubSection>
-      <SubSection title={content.overview.contribution.title}>
-        <p dangerouslySetInnerHTML={{ __html: content.overview.contribution.text }} />
-      </SubSection>
-      <SubSection title={content.overview.production_trends.title}>
-        <p dangerouslySetInnerHTML={{ __html: content.overview.production_trends.text1 }} />
-        <p dangerouslySetInnerHTML={{ __html: content.overview.production_trends.text2 }} />
-      </SubSection>
-      <SubSection title={content.overview.drivers_challenges.title}>
-        <p dangerouslySetInnerHTML={{ __html: content.overview.drivers_challenges.drivers }} />
-        <p className="mt-2" dangerouslySetInnerHTML={{ __html: content.overview.drivers_challenges.challenges }} />
-        <p className="mt-2" dangerouslySetInnerHTML={{ __html: content.overview.drivers_challenges.opportunities }} />
-        <InfoTable rows={rows} header1={t.header1} header2={t.header2} />
-      </SubSection>
-    </>
   );
 };
 
-const AnimalNutritionContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.animal_nutrition.title} id="animal_nutrition" />
-    <SubSection title={content.animal_nutrition.title}>
+// ─────────────────────────────────────────────
+// Section Wrapper for Details
+// ─────────────────────────────────────────────
+const Section = ({
+  title,
+  children,
+  icon: Icon,
+  accentColor = "blue",
+}: {
+  title: string;
+  children: React.ReactNode;
+  icon?: React.ElementType;
+  accentColor?: string;
+}) => {
+  const headerGradients: Record<string, string> = {
+    blue:    "from-blue-600 to-blue-500",
+    orange:  "from-orange-600 to-orange-500",
+    cyan:    "from-cyan-600 to-cyan-500",
+    emerald: "from-emerald-600 to-emerald-500",
+    red:     "from-red-600 to-red-500",
+    purple:  "from-purple-600 to-purple-500",
+    rose:    "from-rose-600 to-rose-500",
+    amber:   "from-amber-600 to-amber-500",
+    teal:    "from-teal-600 to-teal-500",
+    indigo:  "from-indigo-600 to-indigo-500",
+    violet:  "from-violet-600 to-violet-500",
+    sky:     "from-sky-600 to-sky-500",
+    lime:    "from-lime-600 to-lime-500",
+    pink:    "from-pink-600 to-pink-500",
+    fuchsia: "from-fuchsia-600 to-fuchsia-500",
+    green:   "from-green-600 to-green-500",
+  };
+  const gradient = headerGradients[accentColor] ?? headerGradients.blue;
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl shadow-sm mb-4 sm:mb-5">
+      <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-5 flex items-center gap-2 sm:gap-3 rounded-t-xl sm:rounded-t-2xl`}>
+        {Icon && (
+          <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg sm:rounded-xl shrink-0">
+            <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+          </div>
+        )}
+        <h2 className="text-sm sm:text-xl font-bold text-white font-headline leading-tight">{title}</h2>
+      </div>
+      <SectionBody>{children}</SectionBody>
+    </div>
+  );
+};
+
+// Custom Table Component for Overview Section
+const InfoTable = ({ rows, header1, header2 }: { rows: { col1: string; col2: string }[]; header1: string; header2: string; }) => (
+  <table className="w-full text-sm text-left">
+    <thead>
+      <tr><th>{header1}</th><th>{header2}</th></tr>
+    </thead>
+    <tbody>
+      {rows.map((row, i) => (
+        <tr key={i}><td>{row.col1}</td><td>{row.col2}</td></tr>
+      ))}
+    </tbody>
+  </table>
+);
+
+// ─────────────────────────────────────────────
+// Topic → Component map
+// ─────────────────────────────────────────────
+const topicComponents: Record<string, React.FC<{ content: any; accent?: string; lang?: "hi" | "en" }>> = {
+  intro: ({ content, accent }) => (
+    <Section title="Introduction" icon={BookOpen} accentColor={accent}>
+      <div className="bg-blue-50/50 p-4 sm:p-6 rounded-xl border border-blue-100/50 mb-6">
+        <p dangerouslySetInnerHTML={{ __html: content.intro1 }} />
+        <p dangerouslySetInnerHTML={{ __html: content.intro2 }} />
+      </div>
+    </Section>
+  ),
+  overview: ({ content, accent }) => {
+    const t = content.overview.drivers_challenges.table;
+    const rows = [
+      { col1: t.row1_col1, col2: t.row1_col2 }, { col1: t.row2_col1, col2: t.row2_col2 },
+      { col1: t.row3_col1, col2: t.row3_col2 }, { col1: t.row4_col1, col2: t.row4_col2 },
+      { col1: t.row5_col1, col2: t.row5_col2 }, { col1: t.row6_col1, col2: t.row6_col2 },
+      { col1: t.row7_col1, col2: t.row7_col2 }, { col1: t.row8_col1, col2: t.row8_col2 },
+      { col1: t.row9_col1, col2: t.row9_col2 }, { col1: t.row10_col1, col2: t.row10_col2 },
+    ].filter(r => r.col1);
+    return (
+      <Section title={content.overview.title} icon={BarChart4} accentColor={accent}>
+        <h4>{content.overview.market_size.title}</h4>
+        <p dangerouslySetInnerHTML={{ __html: content.overview.market_size.text }} />
+        <h4>{content.overview.contribution.title}</h4>
+        <p dangerouslySetInnerHTML={{ __html: content.overview.contribution.text }} />
+        <h4>{content.overview.production_trends.title}</h4>
+        <p dangerouslySetInnerHTML={{ __html: content.overview.production_trends.text1 }} />
+        <p dangerouslySetInnerHTML={{ __html: content.overview.production_trends.text2 }} />
+        <h4>{content.overview.drivers_challenges.title}</h4>
+        <p dangerouslySetInnerHTML={{ __html: content.overview.drivers_challenges.drivers }} />
+        <p dangerouslySetInnerHTML={{ __html: content.overview.drivers_challenges.challenges }} />
+        <p dangerouslySetInnerHTML={{ __html: content.overview.drivers_challenges.opportunities }} />
+        <InfoTable rows={rows} header1={t.header1} header2={t.header2} />
+      </Section>
+    );
+  },
+  animal_nutrition: ({ content, accent }) => (
+    <Section title={content.animal_nutrition.title} icon={Leaf} accentColor={accent}>
       <p dangerouslySetInnerHTML={{ __html: content.animal_nutrition.text1 }} />
-      <p className="mt-3" dangerouslySetInnerHTML={{ __html: content.animal_nutrition.text2 }} />
-    </SubSection>
-  </>
-);
-
-const AnimalHealthContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.animal_health.title} id="animal_health" />
-    <SubSection title={content.animal_health.title}>
+      <p dangerouslySetInnerHTML={{ __html: content.animal_nutrition.text2 }} />
+    </Section>
+  ),
+  animal_health: ({ content, accent }) => (
+    <Section title={content.animal_health.title} icon={Thermometer} accentColor={accent}>
       <p dangerouslySetInnerHTML={{ __html: content.animal_health.text1 }} />
-      <p className="mt-3" dangerouslySetInnerHTML={{ __html: content.animal_health.text2 }} />
-    </SubSection>
-  </>
-);
-
-const MilkScienceContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.milk_science.title} id="milk_science" />
-    <SubSection title={content.milk_science.title}>
+      <p dangerouslySetInnerHTML={{ __html: content.animal_health.text2 }} />
+    </Section>
+  ),
+  milk_science: ({ content, accent }) => (
+    <Section title={content.milk_science.title} icon={FlaskConical} accentColor={accent}>
       <p dangerouslySetInnerHTML={{ __html: content.milk_science.text1 }} />
-      <p className="mt-3" dangerouslySetInnerHTML={{ __html: content.milk_science.text2 }} />
-    </SubSection>
-  </>
-);
-
-const CooperativesContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.cooperatives.title} id="cooperatives" />
-    <SubSection title={content.cooperatives.operation_flood.title}>
+      <p dangerouslySetInnerHTML={{ __html: content.milk_science.text2 }} />
+    </Section>
+  ),
+  cooperatives: ({ content, accent }) => (
+    <Section title={content.cooperatives.title} icon={Users} accentColor={accent}>
+      <h4>{content.cooperatives.operation_flood.title}</h4>
       <p dangerouslySetInnerHTML={{ __html: content.cooperatives.operation_flood.text }} />
-      <h5 className="font-bold mt-4 text-primary">{content.cooperatives.operation_flood.objectives_title}</h5>
-      <ul className="list-disc pl-5 mt-2 space-y-1">
+      <h5>{content.cooperatives.operation_flood.objectives_title}</h5>
+      <ul>
         {content.cooperatives.operation_flood.objectives.map((obj: string, i: number) => (
           <li key={i}>{obj}</li>
         ))}
       </ul>
-      <h5 className="font-bold mt-4 text-primary">{content.cooperatives.operation_flood.phases_title}</h5>
-      <ul className="list-disc pl-5 mt-2 space-y-2">
+      <h5>{content.cooperatives.operation_flood.phases_title}</h5>
+      <ul>
         {content.cooperatives.operation_flood.phases.map((phase: string, i: number) => (
           <li key={i} dangerouslySetInnerHTML={{ __html: phase }} />
         ))}
       </ul>
-    </SubSection>
-    <SubSection title={content.cooperatives.anand_pattern.title}>
+      <h4>{content.cooperatives.anand_pattern.title}</h4>
       <p dangerouslySetInnerHTML={{ __html: content.cooperatives.anand_pattern.intro }} />
-      <ul className="list-disc pl-5 mt-3 space-y-2">
+      <ul>
         {content.cooperatives.anand_pattern.tiers.map((tier: string, i: number) => (
           <li key={i} dangerouslySetInnerHTML={{ __html: tier }} />
         ))}
       </ul>
-    </SubSection>
-    <SubSection title={content.cooperatives.empowerment.title}>
+      <h4>{content.cooperatives.empowerment.title}</h4>
       <p dangerouslySetInnerHTML={{ __html: content.cooperatives.empowerment.text }} />
-    </SubSection>
-  </>
-);
-
-const BreedingGeneticsContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.breeding_genetics.title} id="breeding_genetics" />
-    <SubSection title={content.breeding_genetics.title}>
+    </Section>
+  ),
+  breeding_genetics: ({ content, accent }) => (
+    <Section title={content.breeding_genetics.title} icon={Dna} accentColor={accent}>
       <p dangerouslySetInnerHTML={{ __html: content.breeding_genetics.text1 }} />
-      <p className="mt-3" dangerouslySetInnerHTML={{ __html: content.breeding_genetics.text2 }} />
-    </SubSection>
-  </>
-);
-
-const ColdChainContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.cold_chain.title} id="cold_chain" />
-    <SubSection title={content.cold_chain.title}>
+      <p dangerouslySetInnerHTML={{ __html: content.breeding_genetics.text2 }} />
+    </Section>
+  ),
+  cold_chain: ({ content, accent }) => (
+    <Section title={content.cold_chain.title} icon={Thermometer} accentColor={accent}>
       <p dangerouslySetInnerHTML={{ __html: content.cold_chain.text1 }} />
-      <p className="mt-3" dangerouslySetInnerHTML={{ __html: content.cold_chain.text2 }} />
-    </SubSection>
-  </>
-);
-
-const QualityStandardsContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.quality_standards.title} id="quality_standards" />
-    <SubSection title={content.quality_standards.title}>
+      <p dangerouslySetInnerHTML={{ __html: content.cold_chain.text2 }} />
+    </Section>
+  ),
+  quality_standards: ({ content, accent }) => (
+    <Section title={content.quality_standards.title} icon={ShieldCheck} accentColor={accent}>
       <p dangerouslySetInnerHTML={{ __html: content.quality_standards.text1 }} />
-      <p className="mt-3" dangerouslySetInnerHTML={{ __html: content.quality_standards.text2 }} />
-    </SubSection>
-  </>
-);
-
-const TrendsContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.trends.title} id="trends" />
-    <SubSection title={content.trends.modernization.title}>
+      <p dangerouslySetInnerHTML={{ __html: content.quality_standards.text2 }} />
+    </Section>
+  ),
+  trends: ({ content, accent }) => (
+    <Section title={content.trends.title} icon={TrendingUp} accentColor={accent}>
+      <h4>{content.trends.modernization.title}</h4>
       <p dangerouslySetInnerHTML={{ __html: content.trends.modernization.text }} />
-    </SubSection>
-    <SubSection title={content.trends.startups.title}>
+      <h4>{content.trends.startups.title}</h4>
       <p dangerouslySetInnerHTML={{ __html: content.trends.startups.text1 }} />
-      <p className="mt-2" dangerouslySetInnerHTML={{ __html: content.trends.startups.text2 }} />
-    </SubSection>
-    {content.trends.sustainability && (
-      <SubSection title={content.trends.sustainability.title}>
-        <p dangerouslySetInnerHTML={{ __html: content.trends.sustainability.text }} />
-      </SubSection>
-    )}
-  </>
-);
-
-const ExportsContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.exports.title} id="exports" />
-    <SubSection title={content.exports.status.title}>
+      <p dangerouslySetInnerHTML={{ __html: content.trends.startups.text2 }} />
+      {content.trends.sustainability && (
+        <>
+          <h4>{content.trends.sustainability.title}</h4>
+          <p dangerouslySetInnerHTML={{ __html: content.trends.sustainability.text }} />
+        </>
+      )}
+    </Section>
+  ),
+  exports: ({ content, accent }) => (
+    <Section title={content.exports.title} icon={Ship} accentColor={accent}>
+      <h4>{content.exports.status.title}</h4>
       <p dangerouslySetInnerHTML={{ __html: content.exports.status.text1 }} />
-      <p className="mt-2" dangerouslySetInnerHTML={{ __html: content.exports.status.text2 }} />
-    </SubSection>
-  </>
-);
-
-const PolicyContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.policy_governance.title} id="policy_governance" />
-    <SubSection title={content.policy_governance.title}>
+      <p dangerouslySetInnerHTML={{ __html: content.exports.status.text2 }} />
+    </Section>
+  ),
+  policy_governance: ({ content, accent }) => (
+    <Section title={content.policy_governance.title} icon={Landmark} accentColor={accent}>
       <p dangerouslySetInnerHTML={{ __html: content.policy_governance.text }} />
-    </SubSection>
-  </>
-);
-
-const GlobalComparisonContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.global_comparison.title} id="global_comparison" />
-    <SubSection title={content.global_comparison.title}>
+    </Section>
+  ),
+  global_comparison: ({ content, accent }) => (
+    <Section title={content.global_comparison.title} icon={Globe} accentColor={accent}>
       <p dangerouslySetInnerHTML={{ __html: content.global_comparison.text }} />
-    </SubSection>
-  </>
-);
-
-const ConclusionContent = ({ content }: { content: any }) => (
-  <>
-    <SectionTitle title={content.conclusion.title} id="conclusion" />
-    <div className="bg-green-50 p-6 rounded-lg border border-green-100">
-      <p
-        className="text-base font-medium text-green-900 leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: content.conclusion.text }}
-      />
-    </div>
-  </>
-);
-
-// ─────────────────────────────────────────────
-// Topic Registry
-// ─────────────────────────────────────────────
-
-const topicComponents: Record<string, React.ComponentType<{ content: any }>> = {
-  intro: IntroContent,
-  overview: OverviewContent,
-  animal_nutrition: AnimalNutritionContent,
-  animal_health: AnimalHealthContent,
-  milk_science: MilkScienceContent,
-  cooperatives: CooperativesContent,
-  breeding_genetics: BreedingGeneticsContent,
-  cold_chain: ColdChainContent,
-  quality_standards: QualityStandardsContent,
-  trends: TrendsContent,
-  exports: ExportsContent,
-  policy_governance: PolicyContent,
-  global_comparison: GlobalComparisonContent,
-  conclusion: ConclusionContent,
+    </Section>
+  ),
+  conclusion: ({ content, accent }) => (
+    <Section title={content.conclusion.title} icon={CheckCircle} accentColor={accent}>
+      <div className="bg-emerald-50 p-4 sm:p-6 rounded-xl border border-emerald-100">
+        <p className="text-emerald-900 m-0 font-medium" dangerouslySetInnerHTML={{ __html: content.conclusion.text }} />
+      </div>
+    </Section>
+  ),
 };
 
-// ─────────────────────────────────────────────
-// Topic Definitions with Color Themes
-// ─────────────────────────────────────────────
 
-const getTopics = (content: any) => [
-  {
-    value: "intro",
-    label: "Introduction",
-    icon: BookOpen,
-    colorClass: "text-blue-700",
-    bgClass: "bg-blue-50",
-    borderClass: "border-blue-200",
-    hoverClass: "hover:bg-blue-100",
-    badgeClass: "bg-blue-100 text-blue-700",
-  },
-  {
-    value: "overview",
-    label: content.overview.title,
-    icon: BarChart4,
-    colorClass: "text-indigo-700",
-    bgClass: "bg-indigo-50",
-    borderClass: "border-indigo-200",
-    hoverClass: "hover:bg-indigo-100",
-    badgeClass: "bg-indigo-100 text-indigo-700",
-  },
-  {
-    value: "animal_nutrition",
-    label: content.animal_nutrition.title,
-    icon: Leaf,
-    colorClass: "text-lime-700",
-    bgClass: "bg-lime-50",
-    borderClass: "border-lime-200",
-    hoverClass: "hover:bg-lime-100",
-    badgeClass: "bg-lime-100 text-lime-700",
-  },
-  {
-    value: "animal_health",
-    label: content.animal_health.title,
-    icon: Thermometer,
-    colorClass: "text-red-700",
-    bgClass: "bg-red-50",
-    borderClass: "border-red-200",
-    hoverClass: "hover:bg-red-100",
-    badgeClass: "bg-red-100 text-red-700",
-  },
-  {
-    value: "milk_science",
-    label: content.milk_science.title,
-    icon: FlaskConical,
-    colorClass: "text-amber-700",
-    bgClass: "bg-amber-50",
-    borderClass: "border-amber-200",
-    hoverClass: "hover:bg-amber-100",
-    badgeClass: "bg-amber-100 text-amber-700",
-  },
-  {
-    value: "cooperatives",
-    label: content.cooperatives.title,
-    icon: Users,
-    colorClass: "text-emerald-700",
-    bgClass: "bg-emerald-50",
-    borderClass: "border-emerald-200",
-    hoverClass: "hover:bg-emerald-100",
-    badgeClass: "bg-emerald-100 text-emerald-700",
-  },
-  {
-    value: "breeding_genetics",
-    label: content.breeding_genetics.title,
-    icon: Dna,
-    colorClass: "text-pink-700",
-    bgClass: "bg-pink-50",
-    borderClass: "border-pink-200",
-    hoverClass: "hover:bg-pink-100",
-    badgeClass: "bg-pink-100 text-pink-700",
-  },
-  {
-    value: "cold_chain",
-    label: content.cold_chain.title,
-    icon: Thermometer,
-    colorClass: "text-sky-700",
-    bgClass: "bg-sky-50",
-    borderClass: "border-sky-200",
-    hoverClass: "hover:bg-sky-100",
-    badgeClass: "bg-sky-100 text-sky-700",
-  },
-  {
-    value: "quality_standards",
-    label: content.quality_standards.title,
-    icon: ShieldCheck,
-    colorClass: "text-teal-700",
-    bgClass: "bg-teal-50",
-    borderClass: "border-teal-200",
-    hoverClass: "hover:bg-teal-100",
-    badgeClass: "bg-teal-100 text-teal-700",
-  },
-  {
-    value: "trends",
-    label: content.trends.title,
-    icon: TrendingUp,
-    colorClass: "text-violet-700",
-    bgClass: "bg-violet-50",
-    borderClass: "border-violet-200",
-    hoverClass: "hover:bg-violet-100",
-    badgeClass: "bg-violet-100 text-violet-700",
-  },
-  {
-    value: "exports",
-    label: content.exports.title,
-    icon: Ship,
-    colorClass: "text-cyan-700",
-    bgClass: "bg-cyan-50",
-    borderClass: "border-cyan-200",
-    hoverClass: "hover:bg-cyan-100",
-    badgeClass: "bg-cyan-100 text-cyan-700",
-  },
-  {
-    value: "policy_governance",
-    label: content.policy_governance.title,
-    icon: Landmark,
-    colorClass: "text-orange-700",
-    bgClass: "bg-orange-50",
-    borderClass: "border-orange-200",
-    hoverClass: "hover:bg-orange-100",
-    badgeClass: "bg-orange-100 text-orange-700",
-  },
-  {
-    value: "global_comparison",
-    label: content.global_comparison.title,
-    icon: Globe,
-    colorClass: "text-fuchsia-700",
-    bgClass: "bg-fuchsia-50",
-    borderClass: "border-fuchsia-200",
-    hoverClass: "hover:bg-fuchsia-100",
-    badgeClass: "bg-fuchsia-100 text-fuchsia-700",
-  },
-  {
-    value: "conclusion",
-    label: content.conclusion.title,
-    icon: CheckCircle,
-    colorClass: "text-green-700",
-    bgClass: "bg-green-50",
-    borderClass: "border-green-200",
-    hoverClass: "hover:bg-green-100",
-    badgeClass: "bg-green-100 text-green-700",
-  },
-];
+// ─────────────────────────────────────────────
+// Topic group config — bilingual
+// ─────────────────────────────────────────────
+const getTopicGroups = (c: any, lang: "hi" | "en") => {
+  return [
+    {
+      groupLabel: lang === "hi" ? "परिचय और विज्ञान (Introduction & Sciences)" : "Introduction & Sciences",
+      groupIcon: Microscope,
+      topics: [
+        { value: "intro", title: "Introduction", subtitle: "Dairy basics & foundational concepts", icon: BookOpen, accent: "blue", badge: "Foundation", badgeVariant: "secondary" as const, colorClass: "text-blue-600", bgClass: "bg-blue-50 hover:bg-blue-100", borderClass: "border-blue-200 hover:border-blue-400" },
+        { value: "milk_science", title: c.milk_science.title, subtitle: "Composition & biochemistry of milk", icon: FlaskConical, accent: "amber", badge: "Science", badgeVariant: "secondary" as const, colorClass: "text-amber-600", bgClass: "bg-amber-50 hover:bg-amber-100", borderClass: "border-amber-200 hover:border-amber-400" },
+        { value: "animal_nutrition", title: c.animal_nutrition.title, subtitle: "Fodder, feed & yield management", icon: Leaf, accent: "lime", badge: "Nutrition", badgeVariant: "secondary" as const, colorClass: "text-lime-600", bgClass: "bg-lime-50 hover:bg-lime-100", borderClass: "border-lime-200 hover:border-lime-400" },
+        { value: "animal_health", title: c.animal_health.title, subtitle: "Veterinary care & disease control", icon: Thermometer, accent: "red", badge: "Health", badgeVariant: "destructive" as const, colorClass: "text-red-600", bgClass: "bg-red-50 hover:bg-red-100", borderClass: "border-red-200 hover:border-red-400" },
+        { value: "breeding_genetics", title: c.breeding_genetics.title, subtitle: "Artificial insemination & genetics", icon: Dna, accent: "pink", badge: "Genetics", badgeVariant: "secondary" as const, colorClass: "text-pink-600", bgClass: "bg-pink-50 hover:bg-pink-100", borderClass: "border-pink-200 hover:border-pink-400" },
+      ],
+    },
+    {
+      groupLabel: lang === "hi" ? "बाजार और रुझान (Market & Trends)" : "Market & Trends",
+      groupIcon: TrendingUp,
+      topics: [
+        { value: "overview", title: c.overview.title, subtitle: "Market size, growth & drivers", icon: BarChart4, accent: "indigo", badge: "Market", badgeVariant: "secondary" as const, colorClass: "text-indigo-600", bgClass: "bg-indigo-50 hover:bg-indigo-100", borderClass: "border-indigo-200 hover:border-indigo-400", wide: true },
+        { value: "trends", title: c.trends.title, subtitle: "Modernization & emerging startups", icon: TrendingUp, accent: "violet", badge: "Future", badgeVariant: "secondary" as const, colorClass: "text-violet-600", bgClass: "bg-violet-50 hover:bg-violet-100", borderClass: "border-violet-200 hover:border-violet-400" },
+        { value: "exports", title: c.exports.title, subtitle: "International trade & status", icon: Ship, accent: "cyan", badge: "Trade", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400" },
+        { value: "global_comparison", title: c.global_comparison.title, subtitle: "India vs the world dairy market", icon: Globe, accent: "fuchsia", badge: "Global", badgeVariant: "secondary" as const, colorClass: "text-fuchsia-600", bgClass: "bg-fuchsia-50 hover:bg-fuchsia-100", borderClass: "border-fuchsia-200 hover:border-fuchsia-400" },
+      ],
+    },
+    {
+      groupLabel: lang === "hi" ? "संचालन और प्रशासन (Operations & Governance)" : "Operations & Governance",
+      groupIcon: Building2,
+      topics: [
+        { value: "cooperatives", title: c.cooperatives.title, subtitle: "Amul model & Operation Flood", icon: Users, accent: "emerald", badge: "Core Model", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400" },
+        { value: "cold_chain", title: c.cold_chain.title, subtitle: "Logistics, storage & preservation", icon: Thermometer, accent: "sky", badge: "Logistics", badgeVariant: "secondary" as const, colorClass: "text-sky-600", bgClass: "bg-sky-50 hover:bg-sky-100", borderClass: "border-sky-200 hover:border-sky-400" },
+        { value: "quality_standards", title: c.quality_standards.title, subtitle: "FSSAI compliance & testing", icon: ShieldCheck, accent: "teal", badge: "Safety", badgeVariant: "secondary" as const, colorClass: "text-teal-600", bgClass: "bg-teal-50 hover:bg-teal-100", borderClass: "border-teal-200 hover:border-teal-400" },
+        { value: "policy_governance", title: c.policy_governance.title, subtitle: "Government schemes & support", icon: Landmark, accent: "orange", badge: "Govt", badgeVariant: "secondary" as const, colorClass: "text-orange-600", bgClass: "bg-orange-50 hover:bg-orange-100", borderClass: "border-orange-200 hover:border-orange-400" },
+        { value: "conclusion", title: c.conclusion.title, subtitle: "Summary & path forward", icon: CheckCircle, accent: "green", badge: "Wrap Up", badgeVariant: "secondary" as const, colorClass: "text-green-600", bgClass: "bg-green-50 hover:bg-green-100", borderClass: "border-green-200 hover:border-green-400" },
+      ],
+    },
+  ];
+};
+
 
 // ─────────────────────────────────────────────
 // Main Modal Component
 // ─────────────────────────────────────────────
-
 export function DairyIndustryModal({
   isOpen,
   setIsOpen,
@@ -446,30 +366,34 @@ export function DairyIndustryModal({
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const lang = ((language ?? "hi") === "en" ? "en" : "hi") as "hi" | "en";
+  const lbl = LABELS[lang];
+
   const content = t(dairyIndustryContent);
+
   const [activeTopic, setActiveTopic] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const scrollPosition = useRef(0);
+
+  if (!content) return null;
+
+  const TOPIC_GROUPS = getTopicGroups(content, lang);
+  const ALL_TOPICS = TOPIC_GROUPS.flatMap((g) => g.topics);
 
   const handleOpenChange = (open: boolean) => {
     if (!open) setActiveTopic(null);
     setIsOpen(open);
   };
 
-  if (!content) return null;
+  const selectedTopicInfo = ALL_TOPICS.find((tp) => tp.value === activeTopic);
+  const ActiveComponent = activeTopic ? topicComponents[activeTopic] : null;
 
-  const topics = getTopics(content);
-  const selectedTopic = topics.find((tp) => tp.value === activeTopic);
-  const ActiveComponent = activeTopic
-    ? topicComponents[activeTopic]
-    : null;
-
-  const handleSelectTopic = (topicValue: string) => {
+  const handleSelectTopic = (value: string) => {
     if (scrollAreaRef.current) {
       scrollPosition.current = scrollAreaRef.current.scrollTop;
     }
-    setActiveTopic(topicValue);
+    setActiveTopic(value);
   };
 
   const handleBack = () => setActiveTopic(null);
@@ -477,180 +401,162 @@ export function DairyIndustryModal({
   useEffect(() => {
     if (!activeTopic && scrollAreaRef.current) {
       setTimeout(() => {
-        if (scrollAreaRef.current) {
+        if (scrollAreaRef.current)
           scrollAreaRef.current.scrollTop = scrollPosition.current;
-        }
       }, 0);
     }
   }, [activeTopic]);
 
-  // Navigation: prev / next topic
-  const currentIndex = topics.findIndex((tp) => tp.value === activeTopic);
-  const prevTopic = currentIndex > 0 ? topics[currentIndex - 1] : null;
-  const nextTopic = currentIndex >= 0 && currentIndex < topics.length - 1 ? topics[currentIndex + 1] : null;
+  const totalTopics = ALL_TOPICS.length;
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-4xl lg:max-w-5xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6 gap-0">
+      <DialogContent className="
+        w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none
+        sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
+        lg:max-w-6xl
+        flex flex-col p-0 gap-0 overflow-hidden shadow-2xl
+      ">
 
-        {/* ── Header ── */}
-        <DialogHeader className="p-4 sm:p-0 pb-2 shrink-0">
-          <DialogTitle className="font-headline text-2xl md:text-3xl text-center">
-            {content.main_title}
-          </DialogTitle>
-          <DialogDescription className="text-center text-base text-gray-500 mt-1">
-            {selectedTopic ? (
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${selectedTopic.badgeClass}`}>
-                <selectedTopic.icon className="w-3.5 h-3.5" />
-                {selectedTopic.label}
+        {/* ── Top Header Bar ─────────────────────── */}
+        <div className="bg-gradient-to-br from-indigo-900 via-slate-800 to-indigo-950 px-3 sm:px-6 py-2 sm:py-4 shrink-0">
+          <DialogHeader>
+            <DialogTitle className="text-sm sm:text-xl md:text-2xl font-bold text-center text-white font-headline tracking-tight leading-tight">
+              🐄 {content.main_title}
+            </DialogTitle>
+            <DialogDescription className={`text-center text-slate-300 text-[10px] sm:text-sm line-clamp-1 px-2 mt-1 ${activeTopic ? "hidden sm:block" : "block"}`}>
+              {selectedTopicInfo
+                ? selectedTopicInfo.subtitle
+                : content.description}
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* Stats pills — hidden on mobile to save vertical space */}
+          {!activeTopic && (
+            <div className="hidden sm:flex flex-wrap justify-center gap-1.5 mt-2 sm:mt-3">
+              <span className="inline-flex items-center gap-1 bg-white/10 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20">
+                <LayoutGrid className="w-3 h-3 shrink-0" /> {totalTopics} {lbl.topics}
               </span>
-            ) : (
-              content.description
-            )}
-          </DialogDescription>
-        </DialogHeader>
+              <span className="inline-flex items-center gap-1 bg-white/10 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20">
+                <Factory className="w-3 h-3 shrink-0" /> 3 {lbl.modules}
+              </span>
+              <span className="inline-flex items-center gap-1 bg-indigo-500/30 text-indigo-200 text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-indigo-500/40">
+                <Milk className="w-3 h-3 shrink-0" /> {lbl.langPill}
+              </span>
+            </div>
+          )}
 
-        {/* ── Detail View ── */}
-        {selectedTopic && ActiveComponent ? (
-          <div className="flex-1 flex flex-col min-h-0 mt-2">
-
-            {/* Top nav bar */}
-            <div className="flex items-center justify-between px-4 sm:px-0 mb-2 shrink-0">
-              <Button variant="ghost" size="sm" onClick={handleBack} className="hover:bg-slate-100 text-sm">
-                <ArrowLeft className="w-4 h-4 mr-1.5" />
-                All Topics
+          {/* Back button */}
+          {activeTopic && selectedTopicInfo && (
+            <div className="flex items-center gap-2 mt-1.5 sm:mt-2 min-w-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleBack}
+                className="text-white hover:bg-white/20 hover:text-white border border-white/30 rounded-lg shrink-0 text-xs px-2 h-6 sm:h-7"
+              >
+                <ArrowLeft className="w-3 h-3 mr-1" />
+                {lbl.backToTopics}
               </Button>
-              <div className="flex gap-2">
-                {prevTopic && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleSelectTopic(prevTopic.value)}
-                    className="text-xs hidden sm:flex items-center gap-1"
-                  >
-                    <ArrowLeft className="w-3 h-3" />
-                    {prevTopic.label}
-                  </Button>
-                )}
-                {nextTopic && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleSelectTopic(nextTopic.value)}
-                    className={`text-xs hidden sm:flex items-center gap-1 ${nextTopic.colorClass} border-current`}
-                  >
-                    {nextTopic.label}
-                    <ChevronRight className="w-3 h-3" />
-                  </Button>
-                )}
+              <div className="flex items-center gap-1.5 text-white/70 text-[10px] sm:text-xs min-w-0 overflow-hidden">
+                <selectedTopicInfo.icon className="w-3 h-3 shrink-0" />
+                <span className="font-medium truncate min-w-0">{selectedTopicInfo.title}</span>
+                <Badge variant="secondary" className="text-[9px] px-1 py-0 shrink-0 hidden sm:inline-flex bg-white/20 text-white border-none">
+                  {selectedTopicInfo.badge}
+                </Badge>
               </div>
             </div>
+          )}
+        </div>
 
-            {/* Progress bar */}
-            <div className="px-4 sm:px-0 mb-3 shrink-0">
-              <div className="w-full bg-muted rounded-full h-1.5">
-                <div
-                  className="bg-primary h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: `${((currentIndex + 1) / topics.length) * 100}%` }}
-                />
-              </div>
-              <p className="text-xs text-gray-400 mt-1 text-right">
-                {currentIndex + 1} / {topics.length}
-              </p>
+        {/* ── Content Area ───────────────────────── */}
+        {selectedTopicInfo && ActiveComponent ? (
+
+          /* ── Topic Detail View ─────────────────── */
+          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-auto bg-slate-50">
+            <div className="p-2 sm:p-4 md:p-6 max-w-5xl mx-auto">
+              <ActiveComponent
+                content={content}
+                accent={selectedTopicInfo.accent}
+                lang={lang}
+              />
             </div>
-
-            {/* Scrollable content */}
-            <ScrollArea className="flex-1 sm:pr-4">
-              <div className="p-4 pt-0 sm:p-0 prose prose-sm max-w-none text-gray-700 leading-relaxed break-words">
-                <ActiveComponent content={content} />
-              </div>
-
-              {/* Bottom navigation (mobile-friendly) */}
-              <div className="flex justify-between mt-8 pt-4 border-t p-4 sm:p-0 gap-3">
-                {prevTopic ? (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleSelectTopic(prevTopic.value)}
-                    className="flex items-center gap-1.5 text-sm"
-                  >
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                    <span className="hidden xs:inline">{prevTopic.label}</span>
-                    <span className="xs:hidden">Prev</span>
-                  </Button>
-                ) : <div />}
-                {nextTopic ? (
-                  <Button
-                    size="sm"
-                    onClick={() => handleSelectTopic(nextTopic.value)}
-                    className={`flex items-center gap-1.5 text-sm text-white`}
-                  >
-                    <span className="hidden xs:inline">{nextTopic.label}</span>
-                    <span className="xs:hidden">Next</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleBack}
-                    className="flex items-center gap-1.5 text-sm"
-                  >
-                    All Topics
-                  </Button>
-                )}
-              </div>
-            </ScrollArea>
           </div>
 
         ) : (
-          /* ── Topic Grid ── */
-          <ScrollArea className="flex-1 mt-3 sm:pr-2" viewportRef={scrollAreaRef}>
-            <p className="text-xs text-center text-gray-400 mb-4 px-4">
-              {topics.length} topics — select one to explore
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-2">
-              {topics.map((topic, idx) => (
-                <button
-                  key={topic.value}
-                  onClick={() => handleSelectTopic(topic.value)}
-                  className={`
-                    relative flex items-center p-5 rounded-xl border transition-all duration-200
-                    text-left shadow-sm hover:shadow-md active:scale-[0.98]
-                    ${topic.bgClass} ${topic.borderClass} ${topic.hoverClass}
-                    group
-                  `}
-                >
-                  {/* Index badge */}
-                  <span className={`
-                    absolute top-2.5 right-3 text-xs font-mono opacity-40 font-bold
-                    ${topic.colorClass}
-                  `}>
-                    {String(idx + 1).padStart(2, "0")}
-                  </span>
 
-                  {/* Icon */}
-                  <div className={`
-                    w-10 h-10 mr-4 shrink-0 rounded-lg flex items-center justify-center
-                    transition-transform duration-200 group-hover:scale-110
-                    ${topic.bgClass} border ${topic.borderClass}
-                  `}>
-                    <topic.icon className={`w-5 h-5 ${topic.colorClass}`} />
+          /* ── Topic Grid / Home View ─────────────── */
+          <div className="flex-1 min-h-0 overflow-hidden bg-slate-50/50">
+            <ScrollArea className="h-full w-full" viewportRef={scrollAreaRef}>
+              <div className="p-2 sm:p-4 md:p-6 space-y-4 sm:space-y-7 max-w-6xl mx-auto">
+                {TOPIC_GROUPS.map((group) => (
+                  <div key={group.groupLabel}>
+
+                    {/* Group header */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-1.5">
+                        <group.groupIcon className="w-4 h-4 text-indigo-400" />
+                        <h3 className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-indigo-500">
+                          {group.groupLabel}
+                        </h3>
+                      </div>
+                      <div className="flex-1 h-px bg-gradient-to-r from-indigo-200 to-transparent" />
+                      <span className="text-[10px] text-indigo-500 font-medium tabular-nums bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
+                        {lbl.topicsCount(group.topics.length)}
+                      </span>
+                    </div>
+
+                    {/* Cards grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
+                      {group.topics.map((topic) => (
+                        <button
+                          key={topic.value}
+                          onClick={() => handleSelectTopic(topic.value)}
+                          className={`
+                            relative flex items-start p-3 sm:p-4 rounded-xl border-2 transition-all duration-200
+                            text-left shadow-sm hover:shadow-md hover:-translate-y-1
+                            ${topic.bgClass} ${topic.borderClass}
+                            group w-full bg-white
+                            ${(topic as any).wide ? "sm:col-span-2 lg:col-span-3" : ""}
+                          `}
+                        >
+                          {/* Icon */}
+                          <div className={`p-2 rounded-lg shadow-sm mr-3 shrink-0 transition-transform duration-200 group-hover:scale-110 bg-white border border-gray-100`}>
+                            <topic.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${topic.colorClass}`} />
+                          </div>
+
+                          {/* Text */}
+                          <div className="flex-1 min-w-0 overflow-hidden pt-0.5">
+                            <div className="flex items-start gap-1.5 flex-wrap mb-1">
+                              <span className="font-bold text-gray-800 text-xs sm:text-[15px] leading-tight break-words group-hover:text-black transition-colors">
+                                {topic.title}
+                              </span>
+                              <Badge
+                                variant={topic.badgeVariant}
+                                className="text-[9px] px-1.5 py-0 shrink-0 hidden xs:inline-flex font-medium"
+                              >
+                                {topic.badge}
+                              </Badge>
+                            </div>
+                            <p className="text-[10px] sm:text-xs text-gray-500 leading-snug line-clamp-2 break-words">
+                              {topic.subtitle}
+                            </p>
+                          </div>
+
+                          {/* Arrow */}
+                          <ChevronRight
+                            className={`w-4 h-4 shrink-0 ml-1 mt-1 transition-transform duration-200 group-hover:translate-x-1 ${topic.colorClass} opacity-50`}
+                          />
+                        </button>
+                      ))}
+                    </div>
                   </div>
+                ))}
 
-                  {/* Label */}
-                  <div className="flex-1 min-w-0">
-                    <span className="font-bold font-headline text-sm text-gray-800 group-hover:text-black line-clamp-2 leading-snug block">
-                      {topic.label}
-                    </span>
-                  </div>
-
-                  {/* Arrow */}
-                  <ChevronRight className={`w-4 h-4 ml-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity ${topic.colorClass}`} />
-                </button>
-              ))}
-            </div>
-          </ScrollArea>
+                <div className="h-6" />
+              </div>
+            </ScrollArea>
+          </div>
         )}
       </DialogContent>
     </Dialog>
