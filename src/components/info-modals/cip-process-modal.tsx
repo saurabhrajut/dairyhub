@@ -85,32 +85,17 @@ const CollapsibleStep = ({ step, index, total }: { step: any; index: number; tot
 // ─────────────────────────────────────────────
 
 const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
-  intro({ content }) {
-    return (
-      <Section title={content.intro.title}>
-        <div className="strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.intro.htmlContent }} />
-      </Section>
-    );
-  },
-
+  intro({ content }) { return <Section title={content.intro.title}><div className="strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.intro.htmlContent }} /></Section>; },
   cip_cycle({ content }) {
     return (
       <Section title={content.cip_cycle.title}>
         <p className="mb-5 text-gray-600 strict-html-wrap">{content.cip_cycle.intro}</p>
         <div className="space-y-1 w-full min-w-0 max-w-full">
-          {content.cip_cycle.steps.map((step: any, i: number) => (
-            <CollapsibleStep
-              key={i}
-              step={step}
-              index={i}
-              total={content.cip_cycle.steps.length}
-            />
-          ))}
+          {content.cip_cycle.steps.map((step: any, i: number) => <CollapsibleStep key={i} step={step} index={i} total={content.cip_cycle.steps.length} />)}
         </div>
       </Section>
     );
   },
-
   chemicals({ content }) {
     return (
       <Section title={content.chemicals.title}>
@@ -119,20 +104,15 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
           {content.chemicals.types.map((type: any, i: number) => (
             <div key={i} className="bg-purple-50 p-5 rounded-xl border border-purple-100 w-full min-w-0 max-w-full">
               <h3 className="text-base font-bold mb-2 text-purple-900 flex items-center gap-2 w-full min-w-0">
-                <FlaskConical className="w-4 h-4 shrink-0" />
-                <span className="flex-1 strict-html-wrap">{type.title}</span>
+                <FlaskConical className="w-4 h-4 shrink-0" /><span className="flex-1 strict-html-wrap">{type.title}</span>
               </h3>
-              <div
-                className="text-purple-800 strict-html-wrap prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: type.details }}
-              />
+              <div className="text-purple-800 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: type.details }} />
             </div>
           ))}
         </div>
       </Section>
     );
   },
-
   advantages({ content }) {
     return (
       <Section title={content.advantages.title}>
@@ -140,8 +120,7 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
           <ul className="grid gap-3 w-full min-w-0">
             {content.advantages.list.map((adv: string, i: number) => (
               <li key={i} className="flex items-start gap-2 text-emerald-900 text-sm w-full min-w-0">
-                <ChevronsRight className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
-                <span className="flex-1 strict-html-wrap">{adv}</span>
+                <ChevronsRight className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" /><span className="flex-1 strict-html-wrap">{adv}</span>
               </li>
             ))}
           </ul>
@@ -149,117 +128,43 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
       </Section>
     );
   },
-
   cleaning_procedures({ content }) {
     return (
       <Section title={content.cleaning_procedures.title}>
         {content.cleaning_procedures.sections.map((sec: any, i: number) => (
           <div key={i} className="mb-6 last:mb-0 w-full min-w-0 max-w-full">
             <SubHeading>{sec.title}</SubHeading>
-            <div
-              className="text-gray-700 strict-html-wrap prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: sec.content }}
-            />
+            <div className="text-gray-700 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: sec.content }} />
           </div>
         ))}
       </Section>
     );
   },
-
-  teepol_detergent({ content }) {
-    return (
-      <Section title={content.teepol_detergent.title}>
-        <div
-          className="text-gray-800 strict-html-wrap prose prose-sm max-w-none"
-          dangerouslySetInnerHTML={{ __html: content.teepol_detergent.htmlContent }}
-        />
-      </Section>
-    );
-  },
-
+  teepol_detergent({ content }) { return <Section title={content.teepol_detergent.title}><div className="text-gray-800 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.teepol_detergent.htmlContent }} /></Section>; },
   sip({ content }) {
-    return (
-      <Section title={content.sip.title}>
-        <p className="mb-4 text-gray-600 strict-html-wrap">{content.sip.intro}</p>
-        <div className="bg-red-50 p-5 rounded-xl border border-red-100 w-full min-w-0 max-w-full">
-          <div
-            className="text-red-900 strict-html-wrap prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{ __html: content.sip.process }}
-          />
-        </div>
-      </Section>
-    );
+    return <Section title={content.sip.title}><p className="mb-4 text-gray-600 strict-html-wrap">{content.sip.intro}</p><div className="bg-red-50 p-5 rounded-xl border border-red-100 w-full min-w-0 max-w-full"><div className="text-red-900 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.sip.process }} /></div></Section>;
   },
-
   biofilm({ content }) {
-    return (
-      <Section title={content.biofilm.title}>
-        <p className="mb-4 text-gray-600 strict-html-wrap">{content.biofilm.intro}</p>
-        <div className="bg-rose-50 p-5 rounded-xl border border-rose-200 w-full min-w-0 max-w-full">
-          <div
-            className="text-rose-900 strict-html-wrap prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{ __html: content.biofilm.htmlContent }}
-          />
-        </div>
-      </Section>
-    );
+    return <Section title={content.biofilm.title}><p className="mb-4 text-gray-600 strict-html-wrap">{content.biofilm.intro}</p><div className="bg-rose-50 p-5 rounded-xl border border-rose-200 w-full min-w-0 max-w-full"><div className="text-rose-900 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.biofilm.htmlContent }} /></div></Section>;
   },
-
   water_quality({ content }) {
-    return (
-      <Section title={content.water_quality.title}>
-        <p className="mb-4 text-gray-600 strict-html-wrap">{content.water_quality.intro}</p>
-        <div className="bg-sky-50 p-5 rounded-xl border border-sky-200 w-full min-w-0 max-w-full">
-          <div
-            className="text-sky-900 strict-html-wrap prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{ __html: content.water_quality.htmlContent }}
-          />
-        </div>
-      </Section>
-    );
+    return <Section title={content.water_quality.title}><p className="mb-4 text-gray-600 strict-html-wrap">{content.water_quality.intro}</p><div className="bg-sky-50 p-5 rounded-xl border border-sky-200 w-full min-w-0 max-w-full"><div className="text-sky-900 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.water_quality.htmlContent }} /></div></Section>;
   },
-
   environmental_compliance({ content }) {
-    return (
-      <Section title={content.environmental_compliance.title}>
-        <p className="mb-4 text-gray-600 strict-html-wrap">{content.environmental_compliance.intro}</p>
-        <div className="bg-green-50 p-5 rounded-xl border border-green-200 w-full min-w-0 max-w-full">
-          <div
-            className="text-green-900 strict-html-wrap prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{ __html: content.environmental_compliance.htmlContent }}
-          />
-        </div>
-      </Section>
-    );
+    return <Section title={content.environmental_compliance.title}><p className="mb-4 text-gray-600 strict-html-wrap">{content.environmental_compliance.intro}</p><div className="bg-green-50 p-5 rounded-xl border border-green-200 w-full min-w-0 max-w-full"><div className="text-green-900 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.environmental_compliance.htmlContent }} /></div></Section>;
   },
-
   haccp_cip({ content }) {
-    return (
-      <Section title={content.haccp_cip.title}>
-        <p className="mb-4 text-gray-600 strict-html-wrap">{content.haccp_cip.intro}</p>
-        <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 w-full min-w-0 max-w-full">
-          <div
-            className="text-slate-800 strict-html-wrap prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{ __html: content.haccp_cip.htmlContent }}
-          />
-        </div>
-      </Section>
-    );
+    return <Section title={content.haccp_cip.title}><p className="mb-4 text-gray-600 strict-html-wrap">{content.haccp_cip.intro}</p><div className="bg-slate-50 p-5 rounded-xl border border-slate-200 w-full min-w-0 max-w-full"><div className="text-slate-800 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.haccp_cip.htmlContent }} /></div></Section>;
   },
-
   solution_strength({ content }) {
     return (
       <Section title={content.solution_strength.title}>
         <p className="mb-4 text-gray-600 strict-html-wrap">{content.solution_strength.intro}</p>
         <div className="mt-4 p-5 bg-indigo-50 border border-indigo-100 rounded-xl w-full min-w-0 max-w-full">
           <h4 className="font-bold text-indigo-900 mb-3 flex items-center gap-2 text-base w-full min-w-0">
-            <TestTube className="w-5 h-5 shrink-0" />
-            <span className="flex-1 strict-html-wrap">{content.solution_strength.alkalinity_test.title}</span>
+            <TestTube className="w-5 h-5 shrink-0" /><span className="flex-1 strict-html-wrap">{content.solution_strength.alkalinity_test.title}</span>
           </h4>
-          <div
-            className="text-indigo-900 strict-html-wrap prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{ __html: content.solution_strength.alkalinity_test.content }}
-          />
+          <div className="text-indigo-900 strict-html-wrap prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content.solution_strength.alkalinity_test.content }} />
         </div>
       </Section>
     );
@@ -270,17 +175,7 @@ const topicComponents: { [key: string]: React.FC<{ content: any }> } = {
 // Topic Configuration
 // ─────────────────────────────────────────────
 
-type TopicConfig = {
-  value: string;
-  titleKey: keyof typeof cipProcessContent.en;
-  icon: React.ComponentType<{ className?: string }>;
-  colorClass: string;
-  bgClass: string;
-  borderClass: string;
-  hoverClass: string;
-  badgeClass: string;
-  category: "core" | "advanced" | "compliance";
-};
+type TopicConfig = { value: string; titleKey: keyof typeof cipProcessContent.en; icon: React.ComponentType<{ className?: string }>; colorClass: string; bgClass: string; borderClass: string; hoverClass: string; badgeClass: string; category: "core" | "advanced" | "compliance"; };
 
 const TOPIC_CONFIGS: TopicConfig[] = [
   { value: "intro", titleKey: "intro", icon: BookOpen, colorClass: "text-blue-600", bgClass: "bg-blue-50", borderClass: "border-blue-200", hoverClass: "hover:bg-blue-100", badgeClass: "bg-blue-100 text-blue-700", category: "core" },
@@ -324,7 +219,7 @@ export function CipProcessModal({
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       setActiveTopic(null);
-      scrollPosition.current = 0; // Modal band hone par scroll reset
+      scrollPosition.current = 0;
     }
     setIsOpen(open);
   };
@@ -333,21 +228,20 @@ export function CipProcessModal({
 
   const topics = TOPIC_CONFIGS.map((cfg) => {
     const section = content[cfg.titleKey] as any;
-    return {
-      ...cfg,
-      title: section?.title ?? cfg.value,
-    };
+    return { ...cfg, title: section?.title ?? cfg.value };
   });
 
   const selectedTopic = topics.find((t) => t.value === activeTopic);
-  const ActiveComponent = activeTopic
-    ? topicComponents[activeTopic as keyof typeof topicComponents]
-    : null;
+  const ActiveComponent = activeTopic ? topicComponents[activeTopic as keyof typeof topicComponents] : null;
 
+  // Save the internal viewport scroll position
   const handleSelectTopic = (value: string) => {
-    // Naya topic kholne se pehle current scroll position save karein
     if (scrollAreaRef.current) {
-      scrollPosition.current = scrollAreaRef.current.scrollTop;
+      // Find the inner viewport element specific to Radix UI
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        scrollPosition.current = viewport.scrollTop;
+      }
     }
     setActiveTopic(value);
   };
@@ -356,24 +250,24 @@ export function CipProcessModal({
     setActiveTopic(null);
   };
 
-  // ✅ THE SCROLL RESTORE FIX: Wait for DOM to be ready before setting scroll
+  // Restore the scroll position targeting the correct Radix viewport
   useEffect(() => {
     if (!activeTopic) {
-      // 100ms ka chhota timeout diya hai taaki Radix UI ka viewport completely render ho jaye
       const timeoutId = setTimeout(() => {
         if (scrollAreaRef.current) {
-          scrollAreaRef.current.scrollTop = scrollPosition.current;
+          const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+          if (viewport) {
+            viewport.scrollTop = scrollPosition.current;
+          }
         }
-      }, 100);
+      }, 50); // slight delay ensures the DOM is painted first
       return () => clearTimeout(timeoutId);
     }
   }, [activeTopic]);
 
   const categories = (["core", "advanced", "compliance"] as const).map((cat) => ({
     key: cat,
-    label: language === "hi"
-      ? CATEGORY_LABELS[cat].hi
-      : CATEGORY_LABELS[cat].en,
+    label: language === "hi" ? CATEGORY_LABELS[cat].hi : CATEGORY_LABELS[cat].en,
     color: CATEGORY_LABELS[cat].color,
     topics: topics.filter((t) => t.category === cat),
   }));
@@ -423,9 +317,7 @@ export function CipProcessModal({
               </Button>
               <span className="text-muted-foreground text-xs hidden sm:flex items-center gap-1 min-w-0 max-w-full">
                 <span className="shrink-0">/</span>
-                <span
-                  className={`px-2 py-0.5 rounded-full text-xs font-medium truncate ${selectedTopic.badgeClass}`}
-                >
+                <span className={`px-2 py-0.5 rounded-full text-xs font-medium truncate ${selectedTopic.badgeClass}`}>
                   {selectedTopic.title}
                 </span>
               </span>
@@ -438,8 +330,8 @@ export function CipProcessModal({
             </ScrollArea>
           </div>
         ) : (
-          /* Topic Grid */
-          <ScrollArea className="flex-1 mt-3 w-full min-w-0 max-w-full overflow-hidden" viewportRef={scrollAreaRef}>
+          /* Topic Grid - Attached ref properly to ScrollArea */
+          <ScrollArea className="flex-1 mt-3 w-full min-w-0 max-w-full overflow-hidden" ref={scrollAreaRef}>
             <div className="px-4 pb-6 sm:px-2 space-y-6 w-full min-w-0 max-w-full">
               {categories.map((cat) => (
                 <div key={cat.key} className="w-full min-w-0 max-w-full">
