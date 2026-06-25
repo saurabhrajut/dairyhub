@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/context/language-context";
 import { etpModalContent } from "@/lib/content/etp-modal-content";
 import { Button } from "../ui/button";
@@ -32,45 +33,155 @@ import {
   Droplets,
   Scale,
   FileText,
+  ChevronRight,
+  LayoutGrid,
+  Activity,
+  Factory,
 } from "lucide-react";
 
-// ---------------------------------------------------------------------------
-// Helper Components
-// ---------------------------------------------------------------------------
+// ─────────────────────────────────────────────
+// Language-aware UI label helpers
+// ─────────────────────────────────────────────
+const LABELS = {
+  hi: {
+    backToTopics: "Topics par Wapas",
+    topics: "Topics",
+    modules: "Modules",
+    langPill: "ETP Hindi Content",
+    topicsCount: (n: number) => `${n} topics`,
+  },
+  en: {
+    backToTopics: "Back to Topics",
+    topics: "Topics",
+    modules: "Modules",
+    langPill: "ETP English Content",
+    topicsCount: (n: number) => `${n} topics`,
+  },
+};
 
+// ─────────────────────────────────────────────
+// Table Scroll & Prose Wrapper
+// ─────────────────────────────────────────────
+const wrapTablesInScrollDiv = (container: HTMLElement) => {
+  container.querySelectorAll("table").forEach((table) => {
+    // Skip if it's already inside our custom responsive DataTable
+    if (table.closest('.custom-data-table-wrapper')) return;
+    if (table.parentElement?.classList.contains("table-scroll-wrap")) return;
+    
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-scroll-wrap overflow-x-auto w-full my-4 rounded-xl border border-gray-200 shadow-sm";
+    table.parentNode?.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+    table.style.borderCollapse = "collapse";
+    table.style.fontSize = "12px";
+    table.style.width = "max-content";
+    table.style.minWidth = "100%";
+    table.querySelectorAll("td").forEach((td) => {
+      (td as HTMLElement).style.border = "1px solid #e5e7eb";
+      (td as HTMLElement).style.padding = "8px 12px";
+      (td as HTMLElement).style.verticalAlign = "top";
+      (td as HTMLElement).style.whiteSpace = "normal";
+      (td as HTMLElement).style.minWidth = "120px";
+    });
+    table.querySelectorAll("th").forEach((th) => {
+      (th as HTMLElement).style.border = "1px solid #e5e7eb";
+      (th as HTMLElement).style.padding = "8px 12px";
+      (th as HTMLElement).style.backgroundColor = "#f8fafc";
+      (th as HTMLElement).style.fontWeight = "600";
+      (th as HTMLElement).style.textAlign = "left";
+      (th as HTMLElement).style.whiteSpace = "nowrap";
+      (th as HTMLElement).style.color = "#334155";
+    });
+  });
+};
+
+const SectionBody = ({ children }: { children: React.ReactNode }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => { if (ref.current) wrapTablesInScrollDiv(ref.current); }, [children]);
+  return (
+    <div ref={ref} className="p-4 sm:p-6 md:p-8 text-sm sm:text-base text-gray-700 leading-relaxed
+      [&_h4]:font-bold [&_h4]:text-indigo-900 [&_h4]:mt-6 [&_h4]:mb-3 [&_h4]:text-sm sm:[&_h4]:text-lg [&_h4]:border-b [&_h4]:border-indigo-100 [&_h4]:pb-1
+      [&_h5]:font-semibold [&_h5]:text-gray-800 [&_h5]:mt-4 [&_h5]:mb-2 [&_h5]:text-xs sm:[&_h5]:text-sm
+      [&_p]:leading-relaxed [&_p]:mb-4 [&_p]:break-words
+      [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1.5 [&_ul]:mb-4
+      [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-1.5 [&_ol]:mb-4
+      [&_li]:leading-relaxed [&_li]:break-words [&_li]:text-gray-600
+      [&_strong]:text-gray-900 [&_em]:italic
+      [&_code]:bg-slate-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-[11px] sm:[&_code]:text-[13px] [&_code]:font-mono [&_code]:break-all
+      [&_sub]:text-[10px] [&_sup]:text-[10px]
+      w-full max-w-full overflow-hidden box-border
+    ">
+      {children}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// Section & SubSection Wrappers
+// ─────────────────────────────────────────────
 const Section = ({
   title,
   children,
+  icon: Icon,
+  accentColor = "blue",
 }: {
   title: string;
   children: React.ReactNode;
-}) => (
-  <div className="bg-card border border-border rounded-xl shadow-sm mb-8 overflow-hidden">
-    <div className="bg-muted/30 p-4 border-b border-border">
-      <h2 className="text-xl font-bold text-primary font-headline">{title}</h2>
+  icon?: React.ElementType;
+  accentColor?: string;
+}) => {
+  const headerGradients: Record<string, string> = {
+    blue:    "from-blue-600 to-blue-500",
+    orange:  "from-orange-600 to-orange-500",
+    cyan:    "from-cyan-600 to-cyan-500",
+    emerald: "from-emerald-600 to-emerald-500",
+    red:     "from-red-600 to-red-500",
+    purple:  "from-purple-600 to-purple-500",
+    rose:    "from-rose-600 to-rose-500",
+    amber:   "from-amber-600 to-amber-500",
+    teal:    "from-teal-600 to-teal-500",
+    indigo:  "from-indigo-600 to-indigo-500",
+    green:   "from-green-600 to-green-500",
+  };
+  const gradient = headerGradients[accentColor] ?? headerGradients.blue;
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl shadow-sm mb-4 sm:mb-5 w-full max-w-full overflow-hidden box-border">
+      <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-5 flex items-center gap-2 sm:gap-3 rounded-t-xl sm:rounded-t-2xl`}>
+        {Icon && (
+          <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg sm:rounded-xl shrink-0">
+            <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+          </div>
+        )}
+        <h2 className="text-sm sm:text-xl font-bold text-white font-headline leading-tight break-words">{title}</h2>
+      </div>
+      <SectionBody>{children}</SectionBody>
     </div>
-    <div className="p-3 sm:p-6 text-card-foreground prose max-w-none text-gray-700 leading-relaxed break-words overflow-hidden">
-      <div className="space-y-4">{children}</div>
-    </div>
-  </div>
-);
+  );
+};
 
 const SubSection = ({
   title,
   children,
-  accent = "border-gray-100",
+  accent = "border-gray-200",
 }: {
   title: string;
   children: React.ReactNode;
   accent?: string;
 }) => (
-  <div className="mt-6 mb-4">
-    <h3 className="text-lg font-bold text-gray-800 mb-2 font-headline flex items-center gap-2">
-      <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" />
-      {title}
+  <div className="mt-5 mb-4 w-full max-w-full overflow-hidden box-border">
+    <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-3 font-headline flex items-start gap-2">
+      <span className="w-2 h-2 rounded-full bg-primary inline-block shrink-0 mt-1.5"></span>
+      <span className="flex-1 break-words">{title}</span>
     </h3>
-    <div className={`pl-2 sm:pl-4 border-l-2 ${accent} text-gray-700 overflow-hidden`}>{children}</div>
+    <div className={`pl-3 sm:pl-4 border-l-2 ${accent} w-full max-w-full overflow-hidden box-border`}>
+      {children}
+    </div>
   </div>
+);
+
+const RawHTML = ({ html }: { html: string }) => (
+  <div className="w-full max-w-full overflow-hidden break-words strict-html-wrap" dangerouslySetInnerHTML={{ __html: html }} />
 );
 
 /**
@@ -88,27 +199,17 @@ const DataTable = ({
   cells: (row: any) => React.ReactNode[];
 }) => {
   return (
-    <>
-      {/* ── MOBILE CARD VIEW (hidden on sm+) ─────────────────────────── */}
+    <div className="custom-data-table-wrapper w-full max-w-full overflow-hidden">
+      {/* ── MOBILE CARD VIEW ─────────────────────────── */}
       <div className="sm:hidden mt-4 space-y-3">
         {rows.map((row, ri) => {
           const rowCells = cells(row);
           return (
-            <div
-              key={ri}
-              className="rounded-lg border border-gray-200 overflow-hidden"
-            >
+            <div key={ri} className="rounded-xl border border-gray-200 overflow-hidden shadow-sm bg-white">
               {rowCells.map((cell, ci) => (
-                <div
-                  key={ci}
-                  className={`flex gap-2 px-3 py-2 text-xs ${
-                    ci % 2 === 0 ? "bg-muted/30" : "bg-white"
-                  }`}
-                >
-                  <span className="font-bold text-primary shrink-0 w-2/5 leading-tight">
-                    {headers[ci]}
-                  </span>
-                  <span className={`w-3/5 break-words ${ci === 0 ? "font-semibold text-gray-800" : "text-gray-700"}`}>
+                <div key={ci} className={`flex gap-3 px-4 py-2.5 text-xs ${ci % 2 === 0 ? "bg-slate-50/50" : "bg-white"} border-b border-gray-100 last:border-0`}>
+                  <span className="font-bold text-slate-700 shrink-0 w-2/5 leading-tight">{headers[ci]}</span>
+                  <span className={`w-3/5 break-words ${ci === 0 ? "font-semibold text-gray-900" : "text-gray-700"}`}>
                     {cell}
                   </span>
                 </div>
@@ -118,13 +219,13 @@ const DataTable = ({
         })}
       </div>
 
-      {/* ── DESKTOP TABLE VIEW (hidden on mobile) ────────────────────── */}
-      <div className="hidden sm:block mt-4 rounded-lg border border-gray-200 overflow-x-auto">
-        <Table>
-          <TableHeader className="bg-muted/50">
+      {/* ── DESKTOP TABLE VIEW ────────────────────── */}
+      <div className="hidden sm:block mt-4 rounded-xl border border-gray-200 overflow-x-auto shadow-sm">
+        <Table className="w-full min-w-[500px]">
+          <TableHeader className="bg-slate-50 border-b border-gray-200">
             <TableRow>
               {headers.map((h, i) => (
-                <TableHead key={i} className="font-bold text-primary whitespace-nowrap text-sm px-4 py-2">
+                <TableHead key={i} className="font-bold text-slate-700 whitespace-nowrap text-sm px-4 py-3">
                   {h}
                 </TableHead>
               ))}
@@ -132,9 +233,9 @@ const DataTable = ({
           </TableHeader>
           <TableBody>
             {rows.map((row, ri) => (
-              <TableRow key={ri}>
+              <TableRow key={ri} className="hover:bg-slate-50/50 transition-colors">
                 {cells(row).map((cell, ci) => (
-                  <TableCell key={ci} className={`text-sm px-4 py-2 ${ci === 0 ? "font-medium" : ""}`}>
+                  <TableCell key={ci} className={`text-sm px-4 py-3 border-r border-gray-100 last:border-0 ${ci === 0 ? "font-medium text-slate-900" : "text-gray-700"}`}>
                     {cell}
                   </TableCell>
                 ))}
@@ -143,444 +244,333 @@ const DataTable = ({
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 };
 
-// ---------------------------------------------------------------------------
-// Topic Content Components
-// ---------------------------------------------------------------------------
-
-const topicComponents = {
-  // ── INTRODUCTION ──────────────────────────────────────────────────────────
-  intro: function Content({ content }: { content: any }) {
+// ─────────────────────────────────────────────
+// Topic Content Renderers
+// ─────────────────────────────────────────────
+const topicComponents: Record<string, React.FC<{ content: any; accent?: string }>> = {
+  intro: ({ content, accent }) => {
     const intro = content.sections.introduction;
     const chars = intro.subsections.characteristics;
     const why = intro.subsections.why_treatment;
 
     return (
-      <div className="prose prose-sm max-w-none break-words overflow-hidden w-full">
-        {/* Executive Summary */}
-        <Section title={content.sections.executive_summary.title}>
-          <div
-            className="bg-blue-50 p-4 rounded-lg border border-blue-100 text-blue-900"
-            dangerouslySetInnerHTML={{
-              __html: content.sections.executive_summary.content,
-            }}
-          />
+      <>
+        <Section title={content.sections.executive_summary.title} icon={BookOpen} accentColor={accent}>
+          <div className="bg-blue-50/50 p-4 sm:p-6 rounded-xl border border-blue-100/50 italic text-blue-900 mb-2">
+            <RawHTML html={content.sections.executive_summary.content} />
+          </div>
         </Section>
-
-        {/* Introduction */}
-        <Section title={intro.title}>
-          <div dangerouslySetInnerHTML={{ __html: intro.content }} />
-
-          {/* Characteristics */}
-          <SubSection title={chars.title} accent="border-blue-100">
-            <div dangerouslySetInnerHTML={{ __html: chars.content }} />
+        <Section title={intro.title} icon={BookOpen} accentColor={accent}>
+          <RawHTML html={intro.content} />
+          <SubSection title={chars.title} accent="border-blue-200">
+            <RawHTML html={chars.content} />
             <DataTable
-              headers={[
-                chars.table.header1,
-                chars.table.header2,
-                chars.table.header3,
-                chars.table.header4,
-                chars.table.header5,
-                chars.table.header6,
-                chars.table.header7,
-              ]}
+              headers={[chars.table.header1, chars.table.header2, chars.table.header3, chars.table.header4, chars.table.header5, chars.table.header6, chars.table.header7]}
               rows={chars.table.rows}
               cells={(r) => [
-                r.param,
-                r.butter,
-                r.cream,
-                r.milk,
-                r.cheese,
-                r.powdered,
-                <span className="text-red-600 font-semibold">{r.limit}</span>,
+                r.param, r.butter, r.cream, r.milk, r.cheese, r.powdered,
+                <span key="limit" className="text-red-600 font-semibold">{r.limit}</span>,
               ]}
             />
           </SubSection>
-
-          {/* Why Treatment */}
           {why && (
-            <SubSection title={why.title} accent="border-red-100">
-              <div
-                className="bg-red-50 p-4 rounded-lg border border-red-100"
-                dangerouslySetInnerHTML={{ __html: why.content }}
-              />
+            <SubSection title={why.title} accent="border-blue-200">
+              <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                <RawHTML html={why.content} />
+              </div>
             </SubSection>
           )}
         </Section>
-      </div>
+      </>
     );
   },
 
-  // ── TREATMENT PROCESSES ───────────────────────────────────────────────────
-  processes: function Content({ content }: { content: any }) {
+  processes: ({ content, accent }) => {
     const proc = content.sections.treatment_processes;
     return (
-      <div className="prose prose-sm max-w-none break-words">
-        <Section title={proc.title}>
-          <div dangerouslySetInnerHTML={{ __html: proc.content }} />
-          <div className="mt-8 space-y-4">
-            {proc.flowchart.map((step: any, index: number) => {
-              // step number badge
-              const num = step.step.match(/\d+/)?.[0] ?? index + 1;
-              return (
-                <div key={index} className="flex flex-col items-center">
-                  <div className="w-full bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                    <h4 className="font-bold text-lg text-emerald-800 flex items-center gap-2">
-                      <div className="bg-emerald-200 text-emerald-800 w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
-                        {num}
-                      </div>
-                      {step.title}
-                    </h4>
-                    <div
-                      className="mt-2 text-sm text-gray-700 pl-8"
-                      dangerouslySetInnerHTML={{ __html: step.details }}
-                    />
+      <Section title={proc.title} icon={Settings} accentColor={accent}>
+        <RawHTML html={proc.content} />
+        <div className="mt-8 space-y-4">
+          {proc.flowchart.map((step: any, index: number) => {
+            const num = step.step.match(/\d+/)?.[0] ?? index + 1;
+            return (
+              <div key={index} className="flex flex-col items-center">
+                <div className="w-full bg-emerald-50/50 border border-emerald-100 p-4 sm:p-5 rounded-xl shadow-sm">
+                  <h4 className="!mt-0 !mb-2 font-bold text-base sm:text-lg text-emerald-800 flex items-center gap-3 !border-none">
+                    <div className="bg-emerald-200 text-emerald-800 w-7 h-7 rounded-full flex items-center justify-center text-xs shrink-0 font-bold border border-emerald-300">
+                      {num}
+                    </div>
+                    {step.title}
+                  </h4>
+                  <div className="mt-2 text-sm text-gray-700 sm:pl-10">
+                    <RawHTML html={step.details} />
                   </div>
-                  {index < proc.flowchart.length - 1 && (
-                    <div className="text-2xl text-emerald-300 my-2">↓</div>
-                  )}
                 </div>
-              );
-            })}
-          </div>
-        </Section>
-      </div>
+                {index < proc.flowchart.length - 1 && (
+                  <div className="text-2xl text-emerald-300 my-2">↓</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </Section>
     );
   },
 
-  // ── BENEFITS ──────────────────────────────────────────────────────────────
-  benefits: function Content({ content }: { content: any }) {
+  benefits: ({ content, accent }) => {
     const ben = content.sections.benefits;
     const subs = ben.subsections;
-    const cards = [
-      { key: "environmental", color: "amber" },
-      { key: "economic", color: "amber" },
-      { key: "operational", color: "amber" },
-    ];
+    const cards = [{ key: "environmental" }, { key: "economic" }, { key: "operational" }];
     return (
-      <div className="prose prose-sm max-w-none break-words">
-        <Section title={ben.title}>
-          <div dangerouslySetInnerHTML={{ __html: ben.content }} />
-          <div className="grid gap-4 mt-4">
-            {cards.map(({ key }) => (
-              <div
-                key={key}
-                className="bg-amber-50 p-4 rounded-lg border border-amber-100"
-              >
-                <SubSection title={subs[key].title} accent="border-amber-200">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: subs[key].content }}
-                  />
-                </SubSection>
+      <Section title={ben.title} icon={Award} accentColor={accent}>
+        <RawHTML html={ben.content} />
+        <div className="grid gap-4 mt-5">
+          {cards.map(({ key }) => (
+            <div key={key} className="bg-amber-50/50 p-4 sm:p-5 rounded-xl border border-amber-100">
+              <h4 className="!mt-0 !mb-2 !border-none !text-amber-900 flex items-center gap-2">
+                <Award className="w-4 h-4" /> {subs[key].title}
+              </h4>
+              <div className="text-amber-800/90 text-sm">
+                <RawHTML html={subs[key].content} />
               </div>
-            ))}
-          </div>
-        </Section>
-      </div>
+            </div>
+          ))}
+        </div>
+      </Section>
     );
   },
 
-  // ── KEY FACTORS ───────────────────────────────────────────────────────────
-  factors: function Content({ content }: { content: any }) {
+  factors: ({ content, accent }) => {
     const kf = content.sections.key_factors;
     const comp = kf.subsections.compliance;
     const monitoring = kf.subsections.monitoring;
-
-    // Detect updated table shape (4-col vs 2-col)
-    const hasMultipleLimitCols =
-      comp.table.header3 !== undefined;
+    const hasMultipleLimitCols = comp.table.header3 !== undefined;
 
     return (
-      <div className="prose prose-sm max-w-none break-words overflow-hidden w-full">
-        <Section title={kf.title}>
-          <div dangerouslySetInnerHTML={{ __html: kf.content }} />
-
-          <SubSection title={kf.subsections.characteristics.title} accent="border-teal-100">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: kf.subsections.characteristics.content,
-              }}
+      <Section title={kf.title} icon={CheckCircle} accentColor={accent}>
+        <RawHTML html={kf.content} />
+        <SubSection title={kf.subsections.characteristics.title} accent="border-teal-200">
+          <RawHTML html={kf.subsections.characteristics.content} />
+        </SubSection>
+        <SubSection title={comp.title} accent="border-teal-200">
+          <RawHTML html={comp.content} />
+          {hasMultipleLimitCols ? (
+            <DataTable
+              headers={[comp.table.header1, comp.table.header2, comp.table.header3, comp.table.header4, comp.table.header5]}
+              rows={comp.table.rows}
+              cells={(r) => [r.param, r.general, r.inland, r.sewer, r.land]}
             />
-          </SubSection>
-
-          <SubSection title={comp.title} accent="border-teal-100">
-            <div dangerouslySetInnerHTML={{ __html: comp.content }} />
-            {hasMultipleLimitCols ? (
-              <DataTable
-                headers={[
-                  comp.table.header1,
-                  comp.table.header2,
-                  comp.table.header3,
-                  comp.table.header4,
-                  comp.table.header5,
-                ]}
-                rows={comp.table.rows}
-                cells={(r) => [
-                  r.param,
-                  r.general,
-                  r.inland,
-                  r.sewer,
-                  r.land,
-                ]}
-              />
-            ) : (
-              <DataTable
-                headers={[comp.table.header1, comp.table.header2]}
-                rows={comp.table.rows}
-                cells={(r) => [r.param, r.limit]}
-              />
-            )}
-          </SubSection>
-
-          <SubSection title={kf.subsections.technology.title} accent="border-teal-100">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: kf.subsections.technology.content,
-              }}
+          ) : (
+            <DataTable
+              headers={[comp.table.header1, comp.table.header2]}
+              rows={comp.table.rows}
+              cells={(r) => [r.param, r.limit]}
             />
-          </SubSection>
-
-          {/* NEW: Monitoring subsection */}
-          {monitoring && (
-            <SubSection title={monitoring.title} accent="border-teal-100">
-              <div
-                className="bg-teal-50 p-4 rounded-lg border border-teal-100"
-                dangerouslySetInnerHTML={{ __html: monitoring.content }}
-              />
-            </SubSection>
           )}
-        </Section>
-      </div>
+        </SubSection>
+        <SubSection title={kf.subsections.technology.title} accent="border-teal-200">
+          <RawHTML html={kf.subsections.technology.content} />
+        </SubSection>
+        {monitoring && (
+          <SubSection title={monitoring.title} accent="border-teal-200">
+            <div className="bg-teal-50/50 p-4 rounded-xl border border-teal-100">
+              <RawHTML html={monitoring.content} />
+            </div>
+          </SubSection>
+        )}
+      </Section>
     );
   },
 
-  // ── CHALLENGES ────────────────────────────────────────────────────────────
-  challenges: function Content({ content }: { content: any }) {
-    return (
-      <div className="prose prose-sm max-w-none break-words">
-        <Section title={content.sections.challenges.title}>
-          <div
-            className="bg-red-50 p-5 rounded-lg border border-red-100 text-gray-800"
-            dangerouslySetInnerHTML={{
-              __html: content.sections.challenges.content,
-            }}
-          />
-        </Section>
+  challenges: ({ content, accent }) => (
+    <Section title={content.sections.challenges.title} icon={AlertTriangle} accentColor={accent}>
+      <div className="bg-red-50/50 p-4 sm:p-6 rounded-xl border border-red-100 text-gray-800">
+        <RawHTML html={content.sections.challenges.content} />
       </div>
-    );
-  },
+    </Section>
+  ),
 
-  // ── FUTURE OUTLOOK ────────────────────────────────────────────────────────
-  future: function Content({ content }: { content: any }) {
+  future: ({ content, accent }) => {
     const fo = content.sections.future_outlook;
     const circular = fo.subsections.circular_economy;
-
     return (
-      <div className="prose prose-sm max-w-none break-words">
-        <Section title={fo.title}>
-          <div dangerouslySetInnerHTML={{ __html: fo.content }} />
-
-          <SubSection title={fo.subsections.innovations.title} accent="border-purple-100">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: fo.subsections.innovations.content,
-              }}
-            />
+      <Section title={fo.title} icon={TrendingUp} accentColor={accent}>
+        <RawHTML html={fo.content} />
+        <SubSection title={fo.subsections.innovations.title} accent="border-purple-200">
+          <RawHTML html={fo.subsections.innovations.content} />
+        </SubSection>
+        {circular && (
+          <SubSection title={circular.title} accent="border-purple-200">
+            <div className="bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+              <RawHTML html={circular.content} />
+            </div>
           </SubSection>
-
-          {/* NEW: Circular Economy */}
-          {circular && (
-            <SubSection title={circular.title} accent="border-purple-100">
-              <div
-                className="bg-purple-50 p-4 rounded-lg border border-purple-100"
-                dangerouslySetInnerHTML={{ __html: circular.content }}
-              />
-            </SubSection>
-          )}
-
-          <SubSection title={fo.subsections.conclusion.title} accent="border-purple-100">
-            <div
-              className="bg-purple-50 p-4 rounded-lg border border-purple-100"
-              dangerouslySetInnerHTML={{
-                __html: fo.subsections.conclusion.content,
-              }}
-            />
-          </SubSection>
-        </Section>
-      </div>
+        )}
+        <SubSection title={fo.subsections.conclusion.title} accent="border-purple-200">
+          <div className="bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+            <RawHTML html={fo.subsections.conclusion.content} />
+          </div>
+        </SubSection>
+      </Section>
     );
   },
 
-  // ── SCIENTIFIC PRINCIPLES (NEW) ───────────────────────────────────────────
-  science: function Content({ content }: { content: any }) {
+  science: ({ content, accent }) => {
     const sci = content.sections.science;
     if (!sci) return null;
     const subs = sci.subsections;
-
     return (
-      <div className="prose prose-sm max-w-none break-words">
-        <Section title={sci.title}>
-          <div dangerouslySetInnerHTML={{ __html: sci.content }} />
-
-          {subs?.microbiology && (
-            <SubSection title={subs.microbiology.title} accent="border-indigo-100">
-              <div
-                className="bg-indigo-50 p-4 rounded-lg border border-indigo-100"
-                dangerouslySetInnerHTML={{ __html: subs.microbiology.content }}
-              />
-            </SubSection>
-          )}
-
-          {subs?.chemistry && (
-            <SubSection title={subs.chemistry.title} accent="border-indigo-100">
-              <div
-                className="bg-indigo-50 p-4 rounded-lg border border-indigo-100"
-                dangerouslySetInnerHTML={{ __html: subs.chemistry.content }}
-              />
-            </SubSection>
-          )}
-        </Section>
-      </div>
+      <Section title={sci.title} icon={FlaskConical} accentColor={accent}>
+        <RawHTML html={sci.content} />
+        {subs?.microbiology && (
+          <SubSection title={subs.microbiology.title} accent="border-indigo-200">
+            <div className="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+              <RawHTML html={subs.microbiology.content} />
+            </div>
+          </SubSection>
+        )}
+        {subs?.chemistry && (
+          <SubSection title={subs.chemistry.title} accent="border-indigo-200">
+            <div className="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+              <RawHTML html={subs.chemistry.content} />
+            </div>
+          </SubSection>
+        )}
+      </Section>
     );
   },
 
-  // ── WATER QUALITY PARAMETERS (NEW) ────────────────────────────────────────
-  parameters: function Content({ content }: { content: any }) {
+  parameters: ({ content, accent }) => {
     const par = content.sections.parameters;
     if (!par) return null;
     const subs = par.subsections;
-
     return (
-      <div className="prose prose-sm max-w-none break-words">
-        <Section title={par.title}>
-          <div dangerouslySetInnerHTML={{ __html: par.content }} />
-
-          {subs?.physical && (
-            <SubSection title={subs.physical.title} accent="border-cyan-100">
-              <div
-                className="bg-cyan-50 p-4 rounded-lg border border-cyan-100"
-                dangerouslySetInnerHTML={{ __html: subs.physical.content }}
-              />
-            </SubSection>
-          )}
-
-          {subs?.chemical && (
-            <SubSection title={subs.chemical.title} accent="border-cyan-100">
-              <div
-                className="bg-cyan-50 p-4 rounded-lg border border-cyan-100"
-                dangerouslySetInnerHTML={{ __html: subs.chemical.content }}
-              />
-            </SubSection>
-          )}
-        </Section>
-      </div>
+      <Section title={par.title} icon={Droplets} accentColor={accent}>
+        <RawHTML html={par.content} />
+        {subs?.physical && (
+          <SubSection title={subs.physical.title} accent="border-cyan-200">
+            <div className="bg-cyan-50/50 p-4 rounded-xl border border-cyan-100">
+              <RawHTML html={subs.physical.content} />
+            </div>
+          </SubSection>
+        )}
+        {subs?.chemical && (
+          <SubSection title={subs.chemical.title} accent="border-cyan-200">
+            <div className="bg-cyan-50/50 p-4 rounded-xl border border-cyan-100">
+              <RawHTML html={subs.chemical.content} />
+            </div>
+          </SubSection>
+        )}
+      </Section>
     );
   },
 
-  // ── REGULATIONS (NEW) ─────────────────────────────────────────────────────
-  regulations: function Content({ content }: { content: any }) {
+  regulations: ({ content, accent }) => {
     const reg = content.sections.regulations;
     if (!reg) return null;
     const subs = reg.subsections;
-
     return (
-      <div className="prose prose-sm max-w-none break-words">
-        <Section title={reg.title}>
-          <div dangerouslySetInnerHTML={{ __html: reg.content }} />
-
-          {subs?.indian && (
-            <SubSection title={subs.indian.title} accent="border-orange-100">
-              <div
-                className="bg-orange-50 p-4 rounded-lg border border-orange-100"
-                dangerouslySetInnerHTML={{ __html: subs.indian.content }}
-              />
-            </SubSection>
-          )}
-
-          {subs?.international && (
-            <SubSection title={subs.international.title} accent="border-orange-100">
-              <div
-                className="bg-orange-50 p-4 rounded-lg border border-orange-100"
-                dangerouslySetInnerHTML={{ __html: subs.international.content }}
-              />
-            </SubSection>
-          )}
-        </Section>
-      </div>
+      <Section title={reg.title} icon={Scale} accentColor={accent}>
+        <RawHTML html={reg.content} />
+        {subs?.indian && (
+          <SubSection title={subs.indian.title} accent="border-orange-200">
+            <div className="bg-orange-50/50 p-4 rounded-xl border border-orange-100">
+              <RawHTML html={subs.indian.content} />
+            </div>
+          </SubSection>
+        )}
+        {subs?.international && (
+          <SubSection title={subs.international.title} accent="border-orange-200">
+            <div className="bg-orange-50/50 p-4 rounded-xl border border-orange-100">
+              <RawHTML html={subs.international.content} />
+            </div>
+          </SubSection>
+        )}
+      </Section>
     );
   },
 
-  // ── CASE STUDIES (NEW) ────────────────────────────────────────────────────
-  casestudy: function Content({ content }: { content: any }) {
+  casestudy: ({ content, accent }) => {
     const cs = content.sections.casestudy;
     if (!cs) return null;
     const subs = cs.subsections;
-
     return (
-      <div className="prose prose-sm max-w-none break-words">
-        <Section title={cs.title}>
-          <div dangerouslySetInnerHTML={{ __html: cs.content }} />
-
-          {subs?.case1 && (
-            <div className="mt-6 bg-green-50 border border-green-200 rounded-xl p-5">
-              <h3 className="text-lg font-bold text-green-800 mb-3 font-headline flex items-center gap-2">
-                <span className="bg-green-200 text-green-800 text-xs font-bold px-2 py-0.5 rounded-full">
-                  Case 1
-                </span>
-                {subs.case1.title}
-              </h3>
-              <div
-                className="text-sm text-gray-700"
-                dangerouslySetInnerHTML={{ __html: subs.case1.content }}
-              />
+      <Section title={cs.title} icon={FileText} accentColor={accent}>
+        <RawHTML html={cs.content} />
+        {subs?.case1 && (
+          <div className="mt-6 bg-green-50/50 border border-green-200 rounded-xl p-4 sm:p-5">
+            <h3 className="text-base sm:text-lg font-bold text-green-800 mb-3 font-headline flex items-center gap-2">
+              <span className="bg-green-200 text-green-800 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full shrink-0">
+                Case 1
+              </span>
+              {subs.case1.title}
+            </h3>
+            <div className="text-sm text-gray-700">
+              <RawHTML html={subs.case1.content} />
             </div>
-          )}
-
-          {subs?.case2 && (
-            <div className="mt-6 bg-sky-50 border border-sky-200 rounded-xl p-5">
-              <h3 className="text-lg font-bold text-sky-800 mb-3 font-headline flex items-center gap-2">
-                <span className="bg-sky-200 text-sky-800 text-xs font-bold px-2 py-0.5 rounded-full">
-                  Case 2
-                </span>
-                {subs.case2.title}
-              </h3>
-              <div
-                className="text-sm text-gray-700"
-                dangerouslySetInnerHTML={{ __html: subs.case2.content }}
-              />
+          </div>
+        )}
+        {subs?.case2 && (
+          <div className="mt-6 bg-sky-50/50 border border-sky-200 rounded-xl p-4 sm:p-5">
+            <h3 className="text-base sm:text-lg font-bold text-sky-800 mb-3 font-headline flex items-center gap-2">
+              <span className="bg-sky-200 text-sky-800 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full shrink-0">
+                Case 2
+              </span>
+              {subs.case2.title}
+            </h3>
+            <div className="text-sm text-gray-700">
+              <RawHTML html={subs.case2.content} />
             </div>
-          )}
-        </Section>
-      </div>
+          </div>
+        )}
+      </Section>
     );
   },
 };
 
-// ---------------------------------------------------------------------------
-// Topic Config
-// ---------------------------------------------------------------------------
+// ─────────────────────────────────────────────
+// Topic Group Configuration
+// ─────────────────────────────────────────────
+const getTopicGroups = (c: any, lang: "hi" | "en") => {
+  return [
+    {
+      groupLabel: lang === "hi" ? "बुनियाद और विज्ञान (Foundation & Science)" : "Foundation & Science",
+      groupIcon: BookOpen,
+      topics: [
+        { value: "intro", title: c.tabs.intro, subtitle: "Executive summary & basics", icon: BookOpen, accent: "blue", colorClass: "text-blue-600", bgClass: "bg-blue-50 hover:bg-blue-100", borderClass: "border-blue-200 hover:border-blue-400" },
+        { value: "science", title: c.tabs.science, subtitle: "Microbiology & Chemistry", icon: FlaskConical, accent: "indigo", badge: "New", badgeVariant: "secondary" as const, colorClass: "text-indigo-600", bgClass: "bg-indigo-50 hover:bg-indigo-100", borderClass: "border-indigo-200 hover:border-indigo-400" },
+        { value: "parameters", title: c.tabs.parameters, subtitle: "Physical & Chemical checks", icon: Droplets, accent: "cyan", badge: "New", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400" },
+      ],
+    },
+    {
+      groupLabel: lang === "hi" ? "प्रक्रिया और संचालन (Processes & Operations)" : "Processes & Operations",
+      groupIcon: Settings,
+      topics: [
+        { value: "processes", title: c.tabs.processes, subtitle: "Primary, secondary, tertiary", icon: Settings, accent: "emerald", colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400", wide: true },
+        { value: "factors", title: c.tabs.factors, subtitle: "Key operational factors", icon: CheckCircle, accent: "teal", colorClass: "text-teal-600", bgClass: "bg-teal-50 hover:bg-teal-100", borderClass: "border-teal-200 hover:border-teal-400" },
+        { value: "challenges", title: c.tabs.challenges, subtitle: "Issues & mitigations", icon: AlertTriangle, accent: "red", colorClass: "text-red-600", bgClass: "bg-red-50 hover:bg-red-100", borderClass: "border-red-200 hover:border-red-400" },
+      ],
+    },
+    {
+      groupLabel: lang === "hi" ? "अनुपालन और परिणाम (Compliance & Outcomes)" : "Compliance & Outcomes",
+      groupIcon: Award,
+      topics: [
+        { value: "regulations", title: c.tabs.regulations, subtitle: "Standards & guidelines", icon: Scale, accent: "orange", badge: "New", badgeVariant: "secondary" as const, colorClass: "text-orange-600", bgClass: "bg-orange-50 hover:bg-orange-100", borderClass: "border-orange-200 hover:border-orange-400" },
+        { value: "benefits", title: c.tabs.benefits, subtitle: "Environmental & Economic", icon: Award, accent: "amber", colorClass: "text-amber-600", bgClass: "bg-amber-50 hover:bg-amber-100", borderClass: "border-amber-200 hover:border-amber-400" },
+        { value: "casestudy", title: c.tabs.casestudy, subtitle: "Real-world implementations", icon: FileText, accent: "green", badge: "New", badgeVariant: "secondary" as const, colorClass: "text-green-600", bgClass: "bg-green-50 hover:bg-green-100", borderClass: "border-green-200 hover:border-green-400" },
+        { value: "future", title: c.tabs.future, subtitle: "Innovations & circular economy", icon: TrendingUp, accent: "purple", colorClass: "text-purple-600", bgClass: "bg-purple-50 hover:bg-purple-100", borderClass: "border-purple-200 hover:border-purple-400" },
+      ],
+    },
+  ];
+};
 
-type TopicKey = keyof typeof topicComponents;
-
-interface Topic {
-  value: TopicKey;
-  title: string;
-  icon: React.ElementType;
-  component: (props: { content: any }) => React.ReactElement | null;
-  colorClass: string;
-  bgClass: string;
-  borderClass: string;
-  hoverClass: string;
-  badge?: string;
-}
-
-// ---------------------------------------------------------------------------
+// ─────────────────────────────────────────────
 // Main Modal Component
-// ---------------------------------------------------------------------------
-
+// ─────────────────────────────────────────────
 export function EtpModal({
   isOpen,
   setIsOpen,
@@ -588,220 +578,219 @@ export function EtpModal({
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const lang = ((language ?? "hi") === "en" ? "en" : "hi") as "hi" | "en";
+  const lbl = LABELS[lang];
+
   const content = t(etpModalContent);
-  const [activeTopic, setActiveTopic] = useState<TopicKey | null>(null);
+  const [activeTopic, setActiveTopic] = useState<string | null>(null);
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const scrollPosition = useRef(0);
 
+  if (!content) return null;
+
+  const TOPIC_GROUPS = getTopicGroups(content, lang);
+  const ALL_TOPICS = TOPIC_GROUPS.flatMap((g) => g.topics);
+
   const handleOpenChange = (open: boolean) => {
-    if (!open) setActiveTopic(null);
+    if (!open) {
+      setActiveTopic(null);
+      scrollPosition.current = 0;
+    }
     setIsOpen(open);
   };
 
-  if (!content) return null;
+  const selectedTopicInfo = ALL_TOPICS.find((tp) => tp.value === activeTopic);
+  const ActiveComponent = activeTopic ? topicComponents[activeTopic] : null;
 
-  const topics: Topic[] = [
-    {
-      value: "intro",
-      title: content.tabs.intro,
-      icon: BookOpen,
-      component: topicComponents.intro,
-      colorClass: "text-blue-600",
-      bgClass: "bg-blue-50",
-      borderClass: "border-blue-200",
-      hoverClass: "hover:bg-blue-100",
-    },
-    {
-      value: "processes",
-      title: content.tabs.processes,
-      icon: Settings,
-      component: topicComponents.processes,
-      colorClass: "text-emerald-600",
-      bgClass: "bg-emerald-50",
-      borderClass: "border-emerald-200",
-      hoverClass: "hover:bg-emerald-100",
-    },
-    {
-      value: "benefits",
-      title: content.tabs.benefits,
-      icon: Award,
-      component: topicComponents.benefits,
-      colorClass: "text-amber-600",
-      bgClass: "bg-amber-50",
-      borderClass: "border-amber-200",
-      hoverClass: "hover:bg-amber-100",
-    },
-    {
-      value: "factors",
-      title: content.tabs.factors,
-      icon: CheckCircle,
-      component: topicComponents.factors,
-      colorClass: "text-teal-600",
-      bgClass: "bg-teal-50",
-      borderClass: "border-teal-200",
-      hoverClass: "hover:bg-teal-100",
-    },
-    {
-      value: "challenges",
-      title: content.tabs.challenges,
-      icon: AlertTriangle,
-      component: topicComponents.challenges,
-      colorClass: "text-red-600",
-      bgClass: "bg-red-50",
-      borderClass: "border-red-200",
-      hoverClass: "hover:bg-red-100",
-    },
-    {
-      value: "future",
-      title: content.tabs.future,
-      icon: TrendingUp,
-      component: topicComponents.future,
-      colorClass: "text-purple-600",
-      bgClass: "bg-purple-50",
-      borderClass: "border-purple-200",
-      hoverClass: "hover:bg-purple-100",
-    },
-    // ── NEW TOPICS ──────────────────────────────────────────────────────────
-    {
-      value: "science",
-      title: content.tabs.science,
-      icon: FlaskConical,
-      component: topicComponents.science,
-      colorClass: "text-indigo-600",
-      bgClass: "bg-indigo-50",
-      borderClass: "border-indigo-200",
-      hoverClass: "hover:bg-indigo-100",
-      badge: "New",
-    },
-    {
-      value: "parameters",
-      title: content.tabs.parameters,
-      icon: Droplets,
-      component: topicComponents.parameters,
-      colorClass: "text-cyan-600",
-      bgClass: "bg-cyan-50",
-      borderClass: "border-cyan-200",
-      hoverClass: "hover:bg-cyan-100",
-      badge: "New",
-    },
-    {
-      value: "regulations",
-      title: content.tabs.regulations,
-      icon: Scale,
-      component: topicComponents.regulations,
-      colorClass: "text-orange-600",
-      bgClass: "bg-orange-50",
-      borderClass: "border-orange-200",
-      hoverClass: "hover:bg-orange-100",
-      badge: "New",
-    },
-    {
-      value: "casestudy",
-      title: content.tabs.casestudy,
-      icon: FileText,
-      component: topicComponents.casestudy,
-      colorClass: "text-green-600",
-      bgClass: "bg-green-50",
-      borderClass: "border-green-200",
-      hoverClass: "hover:bg-green-100",
-      badge: "New",
-    },
-  ];
-
-  const selectedTopic = topics.find((t) => t.value === activeTopic);
-  const ActiveComponent = selectedTopic?.component ?? null;
-
-  const handleSelectTopic = (topicValue: TopicKey) => {
+  const handleSelectTopic = (value: string) => {
     if (scrollAreaRef.current) {
-      scrollPosition.current = scrollAreaRef.current.scrollTop;
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        scrollPosition.current = viewport.scrollTop;
+      }
     }
-    setActiveTopic(topicValue);
+    setActiveTopic(value);
   };
 
-  const handleBack = () => setActiveTopic(null);
+  const handleBack = () => {
+    setActiveTopic(null);
+  };
 
   useEffect(() => {
     if (!activeTopic && scrollAreaRef.current) {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         if (scrollAreaRef.current) {
-          scrollAreaRef.current.scrollTop = scrollPosition.current;
+          const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+          if (viewport) {
+            viewport.scrollTop = scrollPosition.current;
+          }
         }
-      }, 0);
+      }, 50);
+      return () => clearTimeout(timeoutId);
     }
   }, [activeTopic]);
 
+  const totalTopics = ALL_TOPICS.length;
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-4xl lg:max-w-6xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6">
-        <DialogHeader className="p-4 sm:p-0 shrink-0">
-          <DialogTitle className="text-2xl md:text-3xl font-bold text-center text-primary mb-2 font-headline">
-            {content.title}
-          </DialogTitle>
-          <DialogDescription className="text-center text-lg text-muted-foreground">
-            {selectedTopic ? selectedTopic.title : content.description}
-          </DialogDescription>
-        </DialogHeader>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .strict-html-wrap {
+          width: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+        }
+        .strict-html-wrap * {
+          overflow-wrap: break-word !important;
+          word-wrap: break-word !important;
+          word-break: break-word !important;
+          white-space: normal !important;
+          max-width: 100% !important;
+        }
+      `}} />
 
-        {selectedTopic && ActiveComponent ? (
-          /* ── DETAIL VIEW ─────────────────────────────────────────────────── */
-          <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-            <div className="px-4 sm:px-0 shrink-0">
+      <DialogContent className="
+        w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none
+        sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
+        lg:max-w-6xl
+        flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border
+      ">
+        {/* ── Top Header Bar ─────────────────────── */}
+        <div className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-800 px-3 sm:px-6 py-2 sm:py-4 shrink-0 border-b border-white/10">
+          <DialogHeader>
+            <DialogTitle className="text-sm sm:text-xl md:text-2xl font-bold text-center text-white font-headline tracking-tight leading-tight">
+              ♻️ {content.title}
+            </DialogTitle>
+            <DialogDescription className={`text-center text-emerald-200/80 text-[10px] sm:text-sm line-clamp-1 px-2 mt-1 ${activeTopic ? "hidden sm:block" : "block"}`}>
+              {selectedTopicInfo ? selectedTopicInfo.subtitle : content.description}
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* Stats pills — hidden on mobile to save vertical space */}
+          {!activeTopic && (
+            <div className="hidden sm:flex flex-wrap justify-center gap-1.5 mt-2 sm:mt-3">
+              <span className="inline-flex items-center gap-1 bg-white/10 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20">
+                <LayoutGrid className="w-3 h-3 shrink-0" /> {totalTopics} {lbl.topics}
+              </span>
+              <span className="inline-flex items-center gap-1 bg-white/10 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20">
+                <Factory className="w-3 h-3 shrink-0" /> {TOPIC_GROUPS.length} {lbl.modules}
+              </span>
+              <span className="inline-flex items-center gap-1 bg-emerald-500/30 text-emerald-200 text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-emerald-500/40">
+                <Activity className="w-3 h-3 shrink-0" /> {lbl.langPill}
+              </span>
+            </div>
+          )}
+
+          {/* Back button */}
+          {activeTopic && selectedTopicInfo && (
+            <div className="flex items-center gap-2 mt-1.5 sm:mt-2 min-w-0">
               <Button
                 variant="ghost"
+                size="sm"
                 onClick={handleBack}
-                className="hover:bg-slate-100"
+                className="text-white hover:bg-white/20 hover:text-white border border-white/30 rounded-lg shrink-0 text-xs px-2 h-6 sm:h-7"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Topics
+                <ArrowLeft className="w-3 h-3 mr-1" />
+                {lbl.backToTopics}
               </Button>
+              <div className="flex items-center gap-1.5 text-white/70 text-[10px] sm:text-xs min-w-0 overflow-hidden">
+                <selectedTopicInfo.icon className="w-3 h-3 shrink-0" />
+                <span className="font-medium truncate min-w-0">{selectedTopicInfo.title}</span>
+                <Badge variant="secondary" className="text-[9px] px-1 py-0 shrink-0 hidden sm:inline-flex bg-white/20 text-white border-none">
+                  {selectedTopicInfo.badge}
+                </Badge>
+              </div>
             </div>
-            <ScrollArea className="flex-1 mt-2 sm:pr-4">
-              <div className="p-3 pt-0 sm:p-0 max-w-full overflow-hidden">
-                <ActiveComponent content={content} />
+          )}
+        </div>
+
+        {/* ── Content Area ───────────────────────── */}
+        {selectedTopicInfo && ActiveComponent ? (
+
+          /* ── Topic Detail View ─────────────────── */
+          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-auto bg-slate-50 strict-html-wrap">
+            <div className="p-2 sm:p-4 md:p-6 max-w-5xl mx-auto w-full pb-10">
+              <ActiveComponent content={content} accent={selectedTopicInfo.accent} />
+            </div>
+          </div>
+
+        ) : (
+
+          /* ── Topic Grid / Home View ─────────────── */
+          <div className="flex-1 min-h-0 overflow-hidden bg-slate-50/50">
+            <ScrollArea className="h-full w-full" viewportRef={scrollAreaRef}>
+              <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-7 max-w-6xl mx-auto">
+                {TOPIC_GROUPS.map((group) => (
+                  <div key={group.groupLabel}>
+
+                    {/* Group header */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-1.5">
+                        <group.groupIcon className="w-4 h-4 text-emerald-500" />
+                        <h3 className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-emerald-600">
+                          {group.groupLabel}
+                        </h3>
+                      </div>
+                      <div className="flex-1 h-px bg-gradient-to-r from-emerald-200 to-transparent" />
+                      <span className="text-[10px] text-emerald-600 font-medium tabular-nums bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                        {lbl.topicsCount(group.topics.length)}
+                      </span>
+                    </div>
+
+                    {/* Cards grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                      {group.topics.map((topic) => (
+                        <button
+                          key={topic.value}
+                          onClick={() => handleSelectTopic(topic.value)}
+                          className={`
+                            relative flex items-start p-3 sm:p-4 rounded-xl border-2 transition-all duration-200
+                            text-left shadow-sm hover:shadow-md hover:-translate-y-1
+                            ${topic.bgClass} ${topic.borderClass}
+                            group w-full bg-white box-border
+                            ${(topic as any).wide ? "sm:col-span-2 lg:col-span-3 xl:col-span-4" : ""}
+                          `}
+                        >
+                          {/* Icon */}
+                          <div className={`p-2 sm:p-2.5 rounded-lg shadow-sm mr-3 shrink-0 transition-transform duration-200 group-hover:scale-110 bg-white border border-gray-100`}>
+                            <topic.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${topic.colorClass}`} />
+                          </div>
+
+                          {/* Text */}
+                          <div className="flex-1 min-w-0 overflow-hidden pt-0.5">
+                            <div className="flex items-start gap-1.5 flex-wrap mb-1">
+                              <span className="font-bold text-gray-800 text-[13px] sm:text-[15px] leading-tight break-words group-hover:text-black transition-colors">
+                                {topic.title}
+                              </span>
+                              {topic.badge && (
+                                <Badge
+                                  variant={topic.badgeVariant}
+                                  className="text-[9px] px-1.5 py-0 shrink-0 hidden xs:inline-flex font-medium"
+                                >
+                                  {topic.badge}
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-[10px] sm:text-xs text-gray-500 leading-snug line-clamp-2 break-words">
+                              {topic.subtitle}
+                            </p>
+                          </div>
+
+                          {/* Arrow */}
+                          <ChevronRight
+                            className={`w-4 h-4 shrink-0 ml-1 mt-1.5 transition-transform duration-200 group-hover:translate-x-1 ${topic.colorClass} opacity-50 hidden sm:block`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                <div className="h-6" />
               </div>
             </ScrollArea>
           </div>
-        ) : (
-          /* ── TOPIC GRID ──────────────────────────────────────────────────── */
-          <ScrollArea
-            className="flex-1 mt-4 sm:pr-4"
-            viewportRef={scrollAreaRef}
-          >
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 p-3 sm:p-2">
-              {topics.map((topic) => (
-                <button
-                  key={topic.value}
-                  onClick={() => handleSelectTopic(topic.value)}
-                  className={`
-                    relative flex flex-col sm:flex-row items-center sm:items-center
-                    p-3 sm:p-5 rounded-xl border transition-all duration-200
-                    text-center sm:text-left shadow-sm hover:shadow-md w-full min-w-0
-                    ${topic.bgClass} ${topic.borderClass} ${topic.hoverClass}
-                    group
-                  `}
-                >
-                  {/* "New" badge */}
-                  {topic.badge && (
-                    <span
-                      className={`
-                        absolute top-1.5 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full
-                        ${topic.colorClass} bg-white border ${topic.borderClass}
-                      `}
-                    >
-                      {topic.badge}
-                    </span>
-                  )}
-                  <topic.icon
-                    className={`w-6 h-6 sm:w-8 sm:h-8 mb-1.5 sm:mb-0 sm:mr-4 shrink-0 transition-transform duration-200 group-hover:scale-110 ${topic.colorClass}`}
-                  />
-                  <span className="font-bold font-headline text-xs sm:text-base text-gray-800 group-hover:text-black leading-tight min-w-0 break-words line-clamp-2">
-                    {topic.title}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </ScrollArea>
         )}
       </DialogContent>
     </Dialog>
