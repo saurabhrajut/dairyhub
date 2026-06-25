@@ -317,11 +317,15 @@ export function CipProcessModal({
   const { t, language } = useLanguage();
   const content = t(cipProcessContent);
   const [activeTopic, setActiveTopic] = useState<string | null>(null);
+  
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const scrollPosition = useRef(0);
 
   const handleOpenChange = (open: boolean) => {
-    if (!open) setActiveTopic(null);
+    if (!open) {
+      setActiveTopic(null);
+      scrollPosition.current = 0; // Modal band hone par scroll reset
+    }
     setIsOpen(open);
   };
 
@@ -341,18 +345,27 @@ export function CipProcessModal({
     : null;
 
   const handleSelectTopic = (value: string) => {
-    if (scrollAreaRef.current) scrollPosition.current = scrollAreaRef.current.scrollTop;
+    // Naya topic kholne se pehle current scroll position save karein
+    if (scrollAreaRef.current) {
+      scrollPosition.current = scrollAreaRef.current.scrollTop;
+    }
     setActiveTopic(value);
   };
 
-  const handleBack = () => setActiveTopic(null);
+  const handleBack = () => {
+    setActiveTopic(null);
+  };
 
+  // ✅ THE SCROLL RESTORE FIX: Wait for DOM to be ready before setting scroll
   useEffect(() => {
-    if (!activeTopic && scrollAreaRef.current) {
-      setTimeout(() => {
-        if (scrollAreaRef.current)
+    if (!activeTopic) {
+      // 100ms ka chhota timeout diya hai taaki Radix UI ka viewport completely render ho jaye
+      const timeoutId = setTimeout(() => {
+        if (scrollAreaRef.current) {
           scrollAreaRef.current.scrollTop = scrollPosition.current;
-      }, 0);
+        }
+      }, 100);
+      return () => clearTimeout(timeoutId);
     }
   }, [activeTopic]);
 
@@ -367,7 +380,6 @@ export function CipProcessModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      {/* GLOBAL CSS OVERRIDE: Yeh tag HTML engine ko force karega ki wo width break na kare */}
       <style dangerouslySetInnerHTML={{ __html: `
         .strict-html-wrap {
           width: 100% !important;
@@ -388,7 +400,6 @@ export function CipProcessModal({
         }
       `}} />
 
-      {/* Reduced w-[95vw] to w-[90vw] to guarantee mobile padding safety */}
       <DialogContent className="max-w-4xl lg:max-w-6xl w-[90vw] sm:w-[95vw] h-full max-h-[92vh] flex flex-col p-0 sm:p-6 gap-0 overflow-hidden box-border">
         {/* Header */}
         <DialogHeader className="px-4 pt-4 pb-3 sm:px-0 sm:pt-0 shrink-0 border-b border-border sm:border-none w-full max-w-full box-border">
@@ -403,7 +414,7 @@ export function CipProcessModal({
         {/* Body */}
         {selectedTopic && ActiveComponent ? (
           <div className="flex-1 flex flex-col min-h-0 min-w-0 max-w-full w-full overflow-hidden box-border">
-            {/* Back button + breadcrumb */}
+            {/* Back button */}
             <div className="flex items-center gap-2 px-4 pt-3 pb-1 sm:px-0 w-full min-w-0 max-w-full shrink-0">
               <Button variant="ghost" size="sm" onClick={handleBack} className="hover:bg-slate-100 gap-1.5 shrink-0">
                 <ArrowLeft className="w-4 h-4" />
