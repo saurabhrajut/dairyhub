@@ -28,14 +28,16 @@ const LABELS = {
   hi: {
     backToTopics: "विषयों पर वापस (Back)",
     topics: "Concepts",
-    modules: "Chemistry",
+    modules: "Categories",
     langPill: "Chem Hindi",
+    topicsCount: (n: number) => `${n} topics`,
   },
   en: {
     backToTopics: "Back to Topics",
     topics: "Concepts",
-    modules: "Chemistry",
+    modules: "Categories",
     langPill: "Chem English",
+    topicsCount: (n: number) => `${n} topics`,
   },
 };
 
@@ -60,10 +62,8 @@ const CONTENT_STYLES = `
 
 const HScroll = ({ children }: { children: React.ReactNode }) => (
   <div
-    className="w-full rounded-xl border border-slate-200 overflow-hidden shadow-sm"
+    className="w-full rounded-xl border border-slate-200 overflow-x-auto shadow-sm my-4 bg-white"
     style={{
-      overflowX: "auto",
-      overflowY: "visible",
       WebkitOverflowScrolling: "touch",
       maxWidth: "100%",
     }}
@@ -90,14 +90,14 @@ const P = ({
   if (dangerouslySetInnerHTML) {
     return (
       <p
-        className={`text-sm leading-relaxed text-slate-700 ${className}`}
+        className={`text-sm leading-relaxed text-slate-700 mb-3 ${className}`}
         style={style}
         dangerouslySetInnerHTML={dangerouslySetInnerHTML}
       />
     );
   }
   return (
-    <p className={`text-sm leading-relaxed text-slate-700 ${className}`} style={style}>
+    <p className={`text-sm leading-relaxed text-slate-700 mb-3 ${className}`} style={style}>
       {children}
     </p>
   );
@@ -127,11 +127,11 @@ const Card = ({
   const c = accentStyles[accent] ?? accentStyles.teal;
   return (
     <div
-      className={`border-l-4 ${c.border} ${c.bg} rounded-r-2xl px-4 py-4 sm:px-5 sm:py-5 shadow-sm w-full`}
+      className={`border-l-4 ${c.border} ${c.bg} rounded-r-2xl px-4 py-4 sm:px-5 sm:py-5 shadow-sm w-full mb-4`}
       style={{ maxWidth: "100%", overflow: "hidden" }}
     >
       {title && (
-        <p className={`text-[11px] font-bold uppercase tracking-widest mb-3 ${c.head}`}>
+        <p className={`text-sm font-bold uppercase tracking-widest mb-3 ${c.head}`}>
           {title}
         </p>
       )}
@@ -493,7 +493,7 @@ function FatContent({ content }: { content: any }) {
             <div className="mt-3 bg-slate-900 text-green-400 rounded-xl p-4 shadow-sm overflow-x-auto">
               <p className="font-mono text-[13px] font-bold mb-3 break-all text-white">{d.stability.creaming.stokesLaw.formula}</p>
               {d.stability.creaming.stokesLaw.terms?.map((t: string, i: number) => (
-                <p key={i} className="text-xs text-green-300 leading-relaxed">{t}</p>
+                <p key={i} className="text-xs text-green-300 leading-relaxed mb-1">{t}</p>
               ))}
               {d.stability.creaming.stokesLaw.explanation && (
                 <p className="mt-3 text-xs text-green-100 leading-relaxed pt-2 border-t border-slate-700" style={{ whiteSpace: "pre-wrap" }}>
@@ -727,7 +727,7 @@ function OtherContent({ content }: { content: any }) {
   if (!d) return null;
   return (
     <div className="space-y-4">
-      <SectionHead title={d.title} icon={FlaskConical} />
+      <SectionHead title={d.title} icon={Layers} />
       {d.minor && (
         <Card title={d.minor.title} accent="slate">
           <div className="space-y-3">
@@ -759,11 +759,11 @@ function OtherContent({ content }: { content: any }) {
 
 // Generic fallback for new topics that may exist in content
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function GenericContent({ data, icon }: { data: any; icon: React.ElementType }) {
+function GenericContent({ data, icon: Icon }: { data: any; icon: React.ElementType }) {
   if (!data) return null;
   return (
     <div className="space-y-4">
-      <SectionHead title={data.title || "Topic"} icon={icon} />
+      <SectionHead title={data.title || "Topic"} icon={Icon} />
       {Object.entries(data).map(([key, value]) => {
         if (key === "title") return null;
         if (typeof value === "string") {
@@ -815,89 +815,35 @@ function GenericContent({ data, icon }: { data: any; icon: React.ElementType }) 
   );
 }
 
-// ── Topic Card (Premium Square) ──
-const TopicCard = ({
-  topic,
-  tabTitle,
-  onClick,
-}: {
-  topic: (typeof TOPICS)[0];
-  tabTitle: string;
-  onClick: (val: string) => void;
-}) => (
-  <button
-    onClick={() => onClick(topic.key)}
-    className={cn(
-      "group relative flex flex-col items-center justify-center",
-      "p-3 sm:p-5 bg-white hover:shadow-lg rounded-xl sm:rounded-2xl",
-      "border border-gray-100 hover:border-transparent",
-      "text-center aspect-square",
-      "transition-all duration-300 transform hover:scale-[1.03]",
-      "active:scale-95",
-      "hover:ring-2 hover:ring-offset-1 hover:ring-indigo-200 box-border w-full"
-    )}
-  >
-    <div className={cn("absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity", topic.bgLight)} />
-    
-    {topic.badge && (
-      <span className="absolute top-2 right-2 z-20">
-        <Badge variant="secondary" className={cn(
-          "text-[9px] px-1.5 py-0 font-bold leading-4 border", 
-          topic.badge === "Advanced" ? "bg-purple-100 text-purple-700 border-purple-200" : "bg-blue-100 text-blue-700 border-blue-200"
-        )}>
-          {topic.badge}
-        </Badge>
-      </span>
-    )}
-
-    <div className="relative z-10">
-      <div className={cn("p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-br text-white mb-2 sm:mb-3 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md", topic.color)}>
-        <topic.icon className="w-5 h-5 sm:w-7 sm:h-7" />
-      </div>
-    </div>
-    <span className="relative z-10 font-bold text-[10px] sm:text-[13px] font-headline text-slate-600 group-hover:text-slate-800 transition-colors leading-tight line-clamp-2 px-0.5 break-words w-full">
-      {tabTitle}
-    </span>
-    {topic.sub && (
-      <span className="relative z-10 text-[9px] sm:text-[10px] text-slate-400 mt-1 line-clamp-1 group-hover:text-slate-500 transition-colors hidden sm:block">
-        {topic.sub}
-      </span>
-    )}
-    <ChevronRight className="absolute bottom-1 right-1 h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
-    <Sparkles className="absolute top-1 right-1 h-2.5 w-2.5 text-yellow-400 opacity-0 group-hover:opacity-100 transition-all group-hover:rotate-12" />
-  </button>
-);
-
 // ─────────────────────────────────────────────────────────────────
-// TOPIC CONFIG  — 18 topics covering full thesis scope
+// TOPIC CONFIG  — Grouping definitions
 // ─────────────────────────────────────────────────────────────────
-
 const TOPICS = [
-  { key: "composition", icon: BookOpen, color: "from-teal-400 to-teal-600", bgLight: "bg-teal-50 hover:bg-teal-100", Component: CompositionContent, badge: "Core", sub: "Basic Components" },
-  { key: "mammaryGland", icon: Cpu, color: "from-pink-400 to-rose-600", bgLight: "bg-pink-50 hover:bg-pink-100", Component: MammaryGlandContent, sub: "Physiology & Structure" },
-  { key: "proteins", icon: Dna, color: "from-violet-400 to-purple-600", bgLight: "bg-violet-50 hover:bg-violet-100", Component: ProteinsContent, badge: "Core", sub: "Casein & Whey" },
-  { key: "fat", icon: Droplets, color: "from-amber-400 to-orange-500", bgLight: "bg-amber-50 hover:bg-amber-100", Component: FatContent, badge: "Core", sub: "MFGM & Characteristics" },
-  { key: "lactose", icon: Atom, color: "from-cyan-400 to-sky-600", bgLight: "bg-cyan-50 hover:bg-cyan-100", Component: LactoseContent, badge: "Core", sub: "Properties & Reactions" },
-  { key: "minerals", icon: Gem, color: "from-emerald-400 to-green-600", bgLight: "bg-emerald-50 hover:bg-emerald-100", Component: MineralsContent, sub: "Salts & Trace Elements" },
-  { key: "vitaminsEnzymes", icon: FlaskConical, color: "from-orange-400 to-red-500", bgLight: "bg-orange-50 hover:bg-orange-100", Component: VitaminsEnzymesContent, sub: "Biological Catalysts" },
-  { key: "properties", icon: TestTube, color: "from-indigo-400 to-blue-600", bgLight: "bg-indigo-50 hover:bg-indigo-100", Component: PropertiesContent, sub: "Physical & Chemical" },
-  { key: "other", icon: Layers, color: "from-slate-400 to-slate-600", bgLight: "bg-slate-50 hover:bg-slate-100", Component: OtherContent, sub: "Minor Constituents" },
-  // Extended thesis topics
-  { key: "microbiology", icon: Microscope, color: "from-lime-400 to-green-500", bgLight: "bg-lime-50 hover:bg-lime-100", Component: null, badge: "Advanced", sub: "Pathogens & Spoilage" },
-  { key: "thermal", icon: Thermometer, color: "from-red-400 to-rose-600", bgLight: "bg-red-50 hover:bg-red-100", Component: null, badge: "Advanced", sub: "Heat Processing" },
-  { key: "fermentation", icon: Beaker, color: "from-fuchsia-400 to-pink-600", bgLight: "bg-fuchsia-50 hover:bg-fuchsia-100", Component: null, badge: "Advanced", sub: "Lactic Acid Bacteria" },
-  { key: "analytical", icon: BarChart3, color: "from-sky-400 to-blue-600", bgLight: "bg-sky-50 hover:bg-sky-100", Component: null, badge: "Advanced", sub: "Testing Methods" },
-  { key: "quality", icon: Shield, color: "from-teal-400 to-cyan-600", bgLight: "bg-teal-50 hover:bg-teal-100", Component: null, badge: "Advanced", sub: "Safety & Standards" },
-  { key: "colloidal", icon: Activity, color: "from-indigo-400 to-violet-600", bgLight: "bg-indigo-50 hover:bg-indigo-100", Component: null, badge: "Advanced", sub: "Suspensions & Emulsions" },
-  { key: "processing", icon: Zap, color: "from-yellow-400 to-amber-600", bgLight: "bg-yellow-50 hover:bg-yellow-100", Component: null, badge: "Advanced", sub: "Industrial Ops" },
-  { key: "bioactive", icon: Dna, color: "from-rose-400 to-pink-600", bgLight: "bg-rose-50 hover:bg-rose-100", Component: null, badge: "Advanced", sub: "Health Benefits" },
-  { key: "thermodynamics", icon: Activity, color: "from-cyan-500 to-teal-600", bgLight: "bg-cyan-50 hover:bg-cyan-100", Component: null, badge: "Advanced", sub: "Energy Kinetics" },
+  { key: "composition", icon: BookOpen, color: "from-teal-400 to-teal-600", bgLight: "bg-teal-50 hover:bg-teal-100", Component: CompositionContent, badge: "Core", sub: "Basic Components", group: "core" },
+  { key: "mammaryGland", icon: Cpu, color: "from-pink-400 to-rose-600", bgLight: "bg-pink-50 hover:bg-pink-100", Component: MammaryGlandContent, badge: "Core", sub: "Physiology & Structure", group: "core" },
+  { key: "proteins", icon: Dna, color: "from-violet-400 to-purple-600", bgLight: "bg-violet-50 hover:bg-violet-100", Component: ProteinsContent, badge: "Core", sub: "Casein & Whey", group: "core" },
+  { key: "fat", icon: Droplets, color: "from-amber-400 to-orange-500", bgLight: "bg-amber-50 hover:bg-amber-100", Component: FatContent, badge: "Core", sub: "MFGM & Characteristics", group: "core" },
+  { key: "lactose", icon: Atom, color: "from-cyan-400 to-sky-600", bgLight: "bg-cyan-50 hover:bg-cyan-100", Component: LactoseContent, badge: "Core", sub: "Properties & Reactions", group: "core" },
+  { key: "minerals", icon: Gem, color: "from-emerald-400 to-green-600", bgLight: "bg-emerald-50 hover:bg-emerald-100", Component: MineralsContent, badge: "Core", sub: "Salts & Trace Elements", group: "core" },
+  { key: "vitaminsEnzymes", icon: FlaskConical, color: "from-orange-400 to-red-500", bgLight: "bg-orange-50 hover:bg-orange-100", Component: VitaminsEnzymesContent, badge: "Core", sub: "Biological Catalysts", group: "core" },
+  { key: "properties", icon: TestTube, color: "from-indigo-400 to-blue-600", bgLight: "bg-indigo-50 hover:bg-indigo-100", Component: PropertiesContent, badge: "Core", sub: "Physical & Chemical", group: "core" },
+  { key: "other", icon: Layers, color: "from-slate-400 to-slate-600", bgLight: "bg-slate-50 hover:bg-slate-100", Component: OtherContent, badge: "Core", sub: "Minor Constituents", group: "core" },
+  
+  // Advanced topics
+  { key: "microbiology", icon: Microscope, color: "from-lime-400 to-green-500", bgLight: "bg-lime-50 hover:bg-lime-100", Component: null, badge: "Advanced", sub: "Pathogens & Spoilage", group: "advanced" },
+  { key: "thermal", icon: Thermometer, color: "from-red-400 to-rose-600", bgLight: "bg-red-50 hover:bg-red-100", Component: null, badge: "Advanced", sub: "Heat Processing", group: "advanced" },
+  { key: "fermentation", icon: Beaker, color: "from-fuchsia-400 to-pink-600", bgLight: "bg-fuchsia-50 hover:bg-fuchsia-100", Component: null, badge: "Advanced", sub: "Lactic Acid Bacteria", group: "advanced" },
+  { key: "analytical", icon: BarChart3, color: "from-sky-400 to-blue-600", bgLight: "bg-sky-50 hover:bg-sky-100", Component: null, badge: "Advanced", sub: "Testing Methods", group: "advanced" },
+  { key: "quality", icon: Shield, color: "from-teal-400 to-cyan-600", bgLight: "bg-teal-50 hover:bg-teal-100", Component: null, badge: "Advanced", sub: "Safety & Standards", group: "advanced" },
+  { key: "colloidal", icon: Activity, color: "from-indigo-400 to-violet-600", bgLight: "bg-indigo-50 hover:bg-indigo-100", Component: null, badge: "Advanced", sub: "Suspensions & Emulsions", group: "advanced" },
+  { key: "processing", icon: Zap, color: "from-yellow-400 to-amber-600", bgLight: "bg-yellow-50 hover:bg-yellow-100", Component: null, badge: "Advanced", sub: "Industrial Ops", group: "advanced" },
+  { key: "bioactive", icon: Dna, color: "from-rose-400 to-pink-600", bgLight: "bg-rose-50 hover:bg-rose-100", Component: null, badge: "Advanced", sub: "Health Benefits", group: "advanced" },
+  { key: "thermodynamics", icon: Activity, color: "from-cyan-500 to-teal-600", bgLight: "bg-cyan-50 hover:bg-cyan-100", Component: null, badge: "Advanced", sub: "Energy Kinetics", group: "advanced" },
 ];
 
 // ─────────────────────────────────────────────────────────────────
 // MAIN MODAL
 // ─────────────────────────────────────────────────────────────────
-
 export function MilkChemistryModal({
   isOpen,
   setIsOpen,
@@ -928,23 +874,24 @@ export function MilkChemistryModal({
   };
 
   const handleSelectTopic = (val: string) => {
-    const viewport = document.querySelector('#home-grid-area [data-radix-scroll-area-viewport]');
-    if (viewport) {
-      scrollPosition.current = viewport.scrollTop;
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) scrollPosition.current = viewport.scrollTop;
     }
     setActiveKey(val);
   };
 
-  const handleBack = () => setActiveKey(null);
+  const handleBack = () => {
+    setActiveKey(null);
+    setSearchQuery("");
+  };
 
   useEffect(() => {
-    if (!activeKey) {
+    if (!activeKey && scrollAreaRef.current) {
       const timer = setTimeout(() => {
-        const viewport = document.querySelector('#home-grid-area [data-radix-scroll-area-viewport]');
-        if (viewport) {
-          viewport.scrollTop = scrollPosition.current;
-        }
-      }, 15);
+        const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+        if (viewport) viewport.scrollTop = scrollPosition.current;
+      }, 50);
       return () => clearTimeout(timer);
     }
   }, [activeKey]);
@@ -958,8 +905,21 @@ export function MilkChemistryModal({
     .filter((t) => t.title !== null);
 
   const filteredTopics = searchQuery.trim()
-    ? validTopics.filter(t => (t.title || "").toLowerCase().includes(searchQuery.toLowerCase()))
+    ? validTopics.filter(t => (t.title || "").toLowerCase().includes(searchQuery.toLowerCase()) || (t.sub || "").toLowerCase().includes(searchQuery.toLowerCase()))
     : validTopics;
+
+  const groupedTopics = [
+    {
+      groupLabel: lang === "hi" ? "मूल रसायन (Core Chemistry)" : "Core Chemistry",
+      groupIcon: FlaskConical,
+      topics: filteredTopics.filter(t => t.group === "core"),
+    },
+    {
+      groupLabel: lang === "hi" ? "उन्नत विषय (Advanced Topics)" : "Advanced Topics",
+      groupIcon: Microscope,
+      topics: filteredTopics.filter(t => t.group === "advanced"),
+    },
+  ].filter(g => g.topics.length > 0);
 
   const activeTopic = activeKey ? validTopics.find((t) => t.key === activeKey) : null;
 
@@ -1009,7 +969,7 @@ export function MilkChemistryModal({
                 <LayoutGrid className="w-3 h-3 shrink-0" /> {validTopics.length} {lbl.topics}
               </span>
               <span className="inline-flex items-center gap-1 bg-white/10 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/20">
-                <PackageCheck className="w-3 h-3 shrink-0" /> {lbl.modules}
+                <PackageCheck className="w-3 h-3 shrink-0" /> {groupedTopics.length} {lbl.modules}
               </span>
               <span className="inline-flex items-center gap-1 bg-indigo-500/30 text-indigo-200 text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-indigo-500/40">
                 <Activity className="w-3 h-3 shrink-0" /> {lbl.langPill}
@@ -1032,6 +992,9 @@ export function MilkChemistryModal({
               <div className="flex items-center gap-1.5 text-white/70 text-[10px] sm:text-xs min-w-0 overflow-hidden">
                 <activeTopic.icon className="w-3 h-3 shrink-0" />
                 <span className="font-medium truncate min-w-0">{activeTopic.title}</span>
+                <Badge variant="secondary" className="text-[9px] px-1 py-0 shrink-0 hidden sm:inline-flex bg-white/20 text-white border-none">
+                  {activeTopic.badge}
+                </Badge>
               </div>
             </div>
           )}
@@ -1067,33 +1030,80 @@ export function MilkChemistryModal({
               </p>
             </div>
 
-            <ScrollArea className="flex-1 h-full w-full" id="home-grid-area" viewportRef={scrollAreaRef}>
+            <ScrollArea className="flex-1 h-full w-full" viewportRef={scrollAreaRef}>
               <div className="p-3 sm:p-4 md:p-6 pb-10 max-w-6xl mx-auto space-y-6 sm:space-y-8">
+                {groupedTopics.length > 0 ? (
+                  groupedTopics.map((group) => (
+                    <div key={group.groupLabel}>
+                      {/* Group header */}
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="flex items-center gap-1.5">
+                          <group.groupIcon className="w-4 h-4 text-indigo-500" />
+                          <h3 className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-indigo-600">
+                            {group.groupLabel}
+                          </h3>
+                        </div>
+                        <div className="flex-1 h-px bg-gradient-to-r from-indigo-200 to-transparent" />
+                        <span className="text-[10px] text-indigo-600 font-medium tabular-nums bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
+                          {lbl.topicsCount(group.topics.length)}
+                        </span>
+                      </div>
 
-                {/* Topic grid */}
-                {filteredTopics.length > 0 && (
-                  <div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-                      {filteredTopics.map((topic) => (
-                        <TopicCard 
-                          key={topic.key} 
-                          topic={topic} 
-                          tabTitle={topic.title || ""}
-                          onClick={handleSelectTopic} 
-                        />
-                      ))}
+                      {/* Cards grid */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+                        {group.topics.map((topic) => (
+                          <button
+                            key={topic.key}
+                            onClick={() => handleSelectTopic(topic.key)}
+                            className={cn(
+                              "group relative flex flex-col items-center justify-center",
+                              "p-3 sm:p-5 bg-white hover:shadow-lg rounded-xl sm:rounded-2xl",
+                              "border border-gray-100 hover:border-transparent",
+                              "text-center aspect-square",
+                              "transition-all duration-300 transform hover:scale-[1.03]",
+                              "active:scale-95",
+                              "hover:ring-2 hover:ring-offset-1 hover:ring-indigo-200 box-border w-full"
+                            )}
+                          >
+                            <div className={cn("absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity", topic.bgLight)} />
+                            
+                            {topic.badge && (
+                              <span className="absolute top-2 right-2 z-20 hidden sm:block">
+                                <Badge variant="secondary" className={cn(
+                                  "text-[9px] px-1.5 py-0 font-bold leading-4 border", 
+                                  topic.badge === "Advanced" ? "bg-purple-100 text-purple-700 border-purple-200" : "bg-blue-100 text-blue-700 border-blue-200"
+                                )}>
+                                  {topic.badge}
+                                </Badge>
+                              </span>
+                            )}
+
+                            <div className="relative z-10">
+                              <div className={cn("p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-br text-white mb-2 sm:mb-3 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md", topic.color)}>
+                                <topic.icon className="w-5 h-5 sm:w-7 sm:h-7" />
+                              </div>
+                            </div>
+                            <span className="relative z-10 font-bold text-[10px] sm:text-[13px] font-headline text-slate-600 group-hover:text-slate-800 transition-colors leading-tight line-clamp-2 px-0.5 break-words w-full">
+                              {topic.title}
+                            </span>
+                            {topic.sub && (
+                              <span className="relative z-10 text-[9px] sm:text-[10px] text-slate-400 mt-1 line-clamp-1 group-hover:text-slate-500 transition-colors hidden sm:block">
+                                {topic.sub}
+                              </span>
+                            )}
+                            <ChevronRight className="absolute bottom-1 right-1 h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <Sparkles className="absolute top-1 right-1 h-2.5 w-2.5 text-yellow-400 opacity-0 group-hover:opacity-100 transition-all group-hover:rotate-12" />
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-
-                {/* Empty State */}
-                {filteredTopics.length === 0 && (
+                  ))
+                ) : (
                   <div className="flex flex-col items-center justify-center py-20 text-slate-400">
                     <Search className="w-10 h-10 mb-3 opacity-20" />
                     <p className="text-sm font-medium">No concepts match "{searchQuery}"</p>
                   </div>
                 )}
-
               </div>
             </ScrollArea>
           </div>
