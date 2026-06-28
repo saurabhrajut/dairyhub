@@ -958,17 +958,12 @@ export function MilkChemistryModal({
           max-width: 100% !important;
           box-sizing: border-box !important;
         }
-        .strict-html-wrap, .strict-html-wrap * {
+        .strict-html-wrap, .strict-html-wrap *:not(table):not(thead):not(tbody):not(tr):not(th):not(td) {
           overflow-wrap: break-word !important;
           word-wrap: break-word !important;
           word-break: break-word !important;
           white-space: normal !important;
           max-width: 100% !important;
-        }
-        .strict-html-wrap table {
-          display: block !important;
-          overflow-x: auto !important;
-          width: 100% !important;
         }
       `}} />
 
