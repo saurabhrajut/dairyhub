@@ -611,7 +611,7 @@ export function ProductionCalculationsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[calc(100vw-1rem)] sm:w-full sm:max-w-5xl h-[95vh] flex flex-col p-4 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-x-hidden">
+      <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-[95vh] sm:max-w-5xl sm:max-h-[95vh] sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
             <DialogHeader className="flex flex-row flex-wrap items-center gap-3 sm:space-x-4 shrink-0">
@@ -13682,7 +13682,7 @@ function BatchScalingCalc() {
   const [batchSize, setBatchSize] = useState("100");
 
   // Core target (always visible)
-  const [coreTarget, setCoreTarget] = useState({
+  const [coreTarget, setCoreTarget] = useState<Record<string, string>>({
     fat:        "10",
     snf:        "11",
     sugar:      "14.5",
@@ -13824,7 +13824,7 @@ function BatchScalingCalc() {
       ...optionalTargets.map(o => ({
         name:  o.label,
         qty:   ((parseFloat(o.value) || 0) / 100) * size,
-        dbKey: OPTIONAL_KEY_TO_DB[o.key] || "Other (Custom)",
+        dbKey: OPTIONAL_KEY_TO_DB[o.key as keyof typeof OPTIONAL_KEY_TO_DB] || "Other (Custom)",
       })),
     ].filter(i => i.qty > 0);
 
@@ -13835,7 +13835,7 @@ function BatchScalingCalc() {
 
     let fixedTotal = 0, fixedFat = 0, fixedSnf = 0;
     fixedList.forEach(({ qty, dbKey }) => {
-      const db = IC_INGREDIENT_DB[dbKey] || {};
+      const db = IC_INGREDIENT_DB[dbKey as keyof typeof IC_INGREDIENT_DB] || {};
       fixedTotal += qty;
       fixedFat   += qty * ((db.fat ?? 0) / 100);
       fixedSnf   += qty * ((db.snf ?? 0) / 100);
@@ -13896,10 +13896,10 @@ function BatchScalingCalc() {
   }, [batchSize, coreTarget, optionalTargets, rawMaterials, extraSources, productType, toast]);
 
   // ── Manual tab ────────────────────────────────────────────────────────────
-  const handleManualChange   = (id, field, value) => setManualRows(p => p.map(r => r.id === id ? { ...r, [field]: value } : r));
-  const handleManualSelect   = (id, name)         => setManualRows(p => p.map(r => r.id === id ? { ...r, name } : r));
+  const handleManualChange   = (id: number, field: string, value: string) => setManualRows(p => p.map(r => r.id === id ? { ...r, [field]: value } : r));
+  const handleManualSelect   = (id: number, name: string)         => setManualRows(p => p.map(r => r.id === id ? { ...r, name } : r));
   const addManualRow         = ()                  => setManualRows(p => [...p, { id: Date.now(), name: "Milk (Full Fat 6%)", amount: "" }]);
-  const removeManualRow      = (id)                => { if (manualRows.length > 1) setManualRows(p => p.filter(r => r.id !== id)); };
+  const removeManualRow      = (id: number)                => { if (manualRows.length > 1) setManualRows(p => p.filter(r => r.id !== id)); };
 
   // Already-added optional keys (to hide from dropdown)
   const addedKeys = optionalTargets.map(o => o.key);
@@ -14220,7 +14220,7 @@ function BatchScalingCalc() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {solverResult.map((res, i) => (
+                      {solverResult.map((res: any, i: number) => (
                         <TableRow key={i} className="border-green-100 hover:bg-green-100/50">
                           <TableCell className="py-2 text-xs font-medium">{res.name}</TableCell>
                           <TableCell className="py-2 text-right text-sm font-bold">{res.amount.toFixed(2)}</TableCell>
@@ -14230,7 +14230,7 @@ function BatchScalingCalc() {
                       <TableRow className="bg-green-200/50 font-bold border-t-2 border-green-300">
                         <TableCell className="py-2 text-xs">Total</TableCell>
                         <TableCell className="py-2 text-right text-sm">
-                          {solverResult.reduce((a, b) => a + b.amount, 0).toFixed(2)}
+                          {solverResult.reduce((a: number, b: any) => a + b.amount, 0).toFixed(2)}
                         </TableCell>
                         <TableCell className="py-2 text-right text-xs">100%</TableCell>
                       </TableRow>
@@ -14605,7 +14605,7 @@ function FreezingPointCalc() {
               unit="°C"
               confidence="high"
               icon={<Target className="h-5 w-5" />}
-              colorScheme="cyan"
+              colorScheme="blue"
               subtitle="Below 0°C"
             />
           </div>
