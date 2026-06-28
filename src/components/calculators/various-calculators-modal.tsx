@@ -183,7 +183,7 @@ export function VariousCalculatorsModal({
   
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-4xl w-[95vw] h-full max-h-[90vh] flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
+      <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-full sm:max-h-[90vh] sm:max-w-4xl sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
             <>
                 <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
@@ -204,8 +204,8 @@ export function VariousCalculatorsModal({
                         </div>
                      </div>
                 </DialogHeader>
-                <ScrollArea className="h-full mt-4 pr-4 w-full">
-                    <div className="p-4 sm:p-0 px-1">
+                <ScrollArea className="h-full mt-4 pr-4 w-full min-w-0">
+                    <div className="p-4 sm:p-0 px-1 w-full min-w-0">
                       <ActiveCalculatorComponent />
                     </div>
                 </ScrollArea>
@@ -222,7 +222,7 @@ export function VariousCalculatorsModal({
                     <DialogDescription className="text-center">Choose a specific analysis tool below.</DialogDescription>
                 </DialogHeader>
                 
-                <ScrollArea className="h-full mt-4 pr-4">
+                <ScrollArea className="h-full mt-4 pr-4 w-full min-w-0">
                     {/* ✅ UPDATED GRID: Buttons with Gradient Backgrounds */}
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
                        {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon, color }]) => (
