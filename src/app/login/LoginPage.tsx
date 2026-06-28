@@ -106,31 +106,35 @@ export default function LoginPage() {
 
             {/* Login Card Overlay (Centered) */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-sm px-4 sm:px-0">
-                <div className="liquid-glass bg-white/[0.06] rounded-3xl p-8 border border-white/20 shadow-2xl relative">
+                {/* Glowing decorative background bubbles */}
+                <div className="absolute -top-12 -left-12 w-48 h-48 bg-teal-500/25 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-indigo-500/25 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="backdrop-blur-xl bg-gradient-to-br from-teal-950/95 via-slate-950/98 to-indigo-950/95 rounded-3xl p-8 border-2 border-teal-500/30 shadow-[0_20px_50px_rgba(13,148,136,0.35)] relative">
                     <Link href="/" className="absolute top-4 left-4 text-white/50 hover:text-white transition-colors">
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
                     
                     <div className="text-center mb-6">
-                        <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
-                            <Milk className="w-7 h-7 text-white fill-white/10" strokeWidth={1.5} />
+                        <div className="w-14 h-14 bg-teal-500/10 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner border border-teal-500/20">
+                            <Milk className="w-7 h-7 text-teal-400 fill-teal-400/10" strokeWidth={1.5} />
                         </div>
                         <h1 className="text-2xl font-bold text-white tracking-tight">
-                            Welcome to <span className="underline decoration-white/20">Dairy Hub</span>
+                            Welcome to <span className="underline decoration-teal-500/30 text-teal-300">Dairy Hub</span>
                         </h1>
-                        <p className="text-white/50 mt-1.5 text-xs">Sign in to continue</p>
+                        <p className="text-teal-200/50 mt-1.5 text-xs">Sign in to continue</p>
                     </div>
 
                     <form onSubmit={handleLogin} className="space-y-4">
                         <div>
-                            <label htmlFor="email" className="block text-xs font-semibold text-white/80 mb-1">Email Address</label>
+                            <label htmlFor="email" className="block text-xs font-semibold text-teal-200/80 mb-1">Email Address</label>
                             <div className="relative mt-1">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 w-4 h-4" />
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-300/40 w-4 h-4" />
                                 <input
                                     type="email"
                                     id="email"
                                     placeholder="you@example.com"
-                                    className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:bg-white/10 focus:border-white/20 outline-none transition-all text-xs"
+                                    className="w-full pl-9 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:bg-white/25 focus:border-teal-400 focus:ring-1 focus:ring-teal-400 outline-none transition-all text-xs"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -138,14 +142,14 @@ export default function LoginPage() {
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="password" className="block text-xs font-semibold text-white/80 mb-1">Password</label>
+                            <label htmlFor="password" className="block text-xs font-semibold text-teal-200/80 mb-1">Password</label>
                             <div className="relative mt-1">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 w-4 h-4" />
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-300/40 w-4 h-4" />
                                 <input
                                     type="password"
                                     id="password"
                                     placeholder="••••••••"
-                                    className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:bg-white/10 focus:border-white/20 outline-none transition-all text-xs"
+                                    className="w-full pl-9 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:bg-white/25 focus:border-teal-400 focus:ring-1 focus:ring-teal-400 outline-none transition-all text-xs"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
@@ -155,7 +159,7 @@ export default function LoginPage() {
                         
                         <button 
                             type="submit"
-                            className="w-full bg-white text-black font-semibold py-2.5 rounded-full hover:bg-white/90 transition-all flex items-center justify-center text-xs mt-6 shadow-lg shadow-black/10"
+                            className="w-full bg-gradient-to-r from-teal-400 to-emerald-500 text-white font-bold py-2.5 rounded-full hover:from-teal-500 hover:to-emerald-600 transition-all flex items-center justify-center text-xs mt-6 shadow-lg shadow-teal-500/20 active:scale-95"
                             disabled={isEmailLoading}
                         >
                             {isEmailLoading ? <Loader2 className="animate-spin w-4 h-4" /> : 'Sign In'}
@@ -167,14 +171,14 @@ export default function LoginPage() {
                             <span className="w-full border-t border-white/10"></span>
                         </div>
                         <div className="relative flex justify-center text-[10px] uppercase">
-                            <span className="bg-transparent px-2 text-white/40 font-medium">Or continue with</span>
+                            <span className="bg-transparent px-2 text-teal-200/40 font-medium">Or continue with</span>
                         </div>
                     </div>
 
                     <div className="space-y-2.5">
                         <button 
                             onClick={handleGoogleSignIn} 
-                            className="w-full liquid-glass text-white border border-white/10 font-semibold py-2.5 rounded-full hover:bg-white/5 transition-all flex items-center justify-center text-xs" 
+                            className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold py-2.5 rounded-full transition-all flex items-center justify-center text-xs" 
                             disabled={isGoogleLoading || isGuestLoading || isEmailLoading}
                         >
                             {isGoogleLoading ? <Loader2 className="animate-spin w-4 h-4" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
@@ -182,7 +186,7 @@ export default function LoginPage() {
                         </button>
                         <button 
                             onClick={handleGuestLogin}
-                            className="w-full liquid-glass text-white border border-white/10 font-semibold py-2.5 rounded-full hover:bg-white/5 transition-all flex items-center justify-center text-xs"
+                            className="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold py-2.5 rounded-full transition-all flex items-center justify-center text-xs"
                             disabled={isGuestLoading || isGoogleLoading || isEmailLoading}
                         >
                             {isGuestLoading ? <Loader2 className="animate-spin w-4 h-4" /> : <UserCheck className="mr-2 h-4 w-4" />}
@@ -191,9 +195,9 @@ export default function LoginPage() {
                     </div>
                     
                     <div className="text-center mt-5">
-                        <p className="text-xs text-white/60">
+                        <p className="text-xs text-teal-200/60">
                             Don't have an account?
-                            <Link href="/signup" className="text-white hover:underline font-semibold ml-1">
+                            <Link href="/signup" className="text-teal-300 hover:underline font-semibold ml-1">
                                 Sign Up
                             </Link>
                         </p>
