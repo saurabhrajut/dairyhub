@@ -152,7 +152,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       {/* ✅ Mobile Width Fix: w-[95vw] */}
-      <DialogContent className="max-w-4xl w-[95vw] h-[90vh] flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
+      <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-[90vh] sm:max-w-4xl sm:max-h-[90vh] sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
             {/* ✅ Header Update: Added Colorful Icon here */}
@@ -174,8 +174,8 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
               </div>
             </DialogHeader>
             
-            <ScrollArea className="h-full mt-4 pr-2 w-full">
-              <div className="p-2 sm:p-0 px-1">
+            <ScrollArea className="h-full mt-4 pr-2 w-full min-w-0">
+              <div className="p-2 sm:p-0 px-1 w-full min-w-0">
                 <ActiveCalculatorComponent />
               </div>
             </ScrollArea>
@@ -197,7 +197,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
               </DialogDescription>
             </DialogHeader>
 
-            <ScrollArea className="flex-1 mt-4 pr-2">
+            <ScrollArea className="flex-1 mt-4 pr-2 w-full min-w-0">
               {/* ✅ Grid Layout Update: Colorful Buttons */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 p-4">
                 {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon, color }]) => (
