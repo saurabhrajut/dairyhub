@@ -78,7 +78,7 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
             setIsOpen(true);
         }
     }}>
-      <DialogContent className="max-w-5xl h-[92vh] flex flex-col p-0 sm:p-6">
+      <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-[92vh] sm:max-w-5xl sm:max-h-[92dvh] sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
             <>
               <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
@@ -1886,16 +1886,17 @@ function StandardizationCalc() {
                 </div>`;
                 
             } else if (chemical.type === 'liquid') {
-                const stockMolarity = (chemical.purity / 100 * chemical.density * 1000) / chemical.molarMass;
-                const stockNormality = stockMolarity * chemical.nFactor;
+                const liquidChem = chemical as any;
+                const stockMolarity = (liquidChem.purity / 100 * liquidChem.density * 1000) / liquidChem.molarMass;
+                const stockNormality = stockMolarity * liquidChem.nFactor;
                 const vol_to_add_ml = (equivalents_to_add / stockNormality) * 1000;
                 
                 resultMsg = `<div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border-2 border-purple-300">
                     <h4 class="font-bold text-lg mb-3 text-purple-800">💧 Fortification Required (Liquid)</h4>
                     <p class="mb-3">To increase normality from <strong class="text-purple-900">${n_have.toFixed(4)} N</strong> to <strong class="text-purple-900">${n_req} N</strong>:</p>
                     <div class="bg-white p-3 rounded border border-purple-200">
-                        <p class="text-lg"><strong>Add ${vol_to_add_ml.toFixed(3)} mL</strong> of concentrated <strong>${chemical.name}</strong></p>
-                        <p class="text-sm text-gray-600 mt-2">Stock: ${stockNormality.toFixed(4)} N (${chemical.purity}%, ${chemical.density} g/mL)</p>
+                        <p class="text-lg"><strong>Add ${vol_to_add_ml.toFixed(3)} mL</strong> of concentrated <strong>${liquidChem.name}</strong></p>
+                        <p class="text-sm text-gray-600 mt-2">Stock: ${stockNormality.toFixed(4)} N (${liquidChem.purity}%, ${liquidChem.density} g/mL)</p>
                         <p class="text-sm text-gray-600">To ${currentVolume} ${volumeUnit} of solution</p>
                     </div>
                     <div class="mt-3 p-2 bg-red-50 rounded border border-red-300">
