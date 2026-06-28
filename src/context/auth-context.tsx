@@ -4,8 +4,7 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import { useSubscription } from './subscription-context';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, User as FirebaseUser, updateProfile } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
-import { Capacitor } from '@capacitor/core';
-import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+// Dynamically imported on the client to avoid SSR compilation failures
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
 
@@ -90,18 +89,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         // Handle redirect result if user returns from redirect sign-in
-        if (!Capacitor.isNativePlatform()) {
-            const { auth } = initializeFirebase();
-            getRedirectResult(auth)
-                .then((result) => {
-                    if (result?.user) {
-                        handleGoogleUserSetup(result.user);
-                    }
-                })
-                .catch((err) => {
-                    console.error("Firebase Redirect Sign-in Error:", err);
-                });
-        }
+        import('@capacitor/core').then(({ Capacitor }) => {
+            if (!Capacitor.isNativePlatform()) {
+                const { auth } = initializeFirebase();
+                getRedirectResult(auth)
+                    .then((result) => {
+                        if (result?.user) {
+                            handleGoogleUserSetup(result.user);
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("Firebase Redirect Sign-in Error:", err);
+                    });
+            }
+        }).catch((err) => {
+            console.error("Capacitor import failed in SSR", err);
+        });
     } catch (error) {
         console.error("Failed to parse user from localStorage", error);
         localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
@@ -187,7 +190,9 @@ const login = async (email: string, password: string) => {
     const provider = new GoogleAuthProvider();
     try {
         let firebaseUser: any = null;
+        const { Capacitor } = await import('@capacitor/core');
         if (Capacitor.isNativePlatform()) {
+            const { FirebaseAuthentication } = await import('@capacitor-firebase/authentication');
             const result = await FirebaseAuthentication.signInWithGoogle();
             firebaseUser = result.user;
             if (!firebaseUser) {
