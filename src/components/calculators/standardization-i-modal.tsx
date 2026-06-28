@@ -258,7 +258,7 @@ export function StandardizationIModal({
   // --- RENDER ---
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="w-[95vw] max-w-5xl h-[95vh] md:h-[90vh] p-0 md:p-6 bg-gradient-to-br from-slate-50 via-white to-blue-50">
+      <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-[95vh] sm:max-w-5xl sm:max-h-[90vh] sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden">
         
         <ScrollArea className="h-full">
           <div className="p-4 md:p-2">
