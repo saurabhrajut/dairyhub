@@ -1,11 +1,11 @@
-
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useSubscription } from './subscription-context';
-import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseUser, updateProfile } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, User as FirebaseUser, updateProfile } from 'firebase/auth';
 import { initializeFirebase } from '@/firebase';
-
+import { Capacitor } from '@capacitor/core';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
 
@@ -42,6 +42,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { loadSubscription } = useSubscription();
 
+  const handleGoogleUserSetup = (firebaseUser: any) => {
+    if (!firebaseUser) return;
+    const allUsers = getUsers();
+    let appUser = allUsers.find(u => 
+        (u.uid === firebaseUser.uid || (u.email && u.email === firebaseUser.email)) && 
+        !u.isAnonymous
+    );
+
+    if (!appUser) {
+        // New user, create an account
+        appUser = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            isAnonymous: false,
+            displayName: firebaseUser.displayName,
+            photoURL: firebaseUser.photoURL || firebaseUser.photoUrl,
+            department: 'process-access',
+            gender: 'other',
+        };
+        const updatedUsers = [...allUsers, appUser];
+        saveUsers(updatedUsers);
+    } else {
+        // Ensure properties are updated or synced
+        if (appUser.uid !== firebaseUser.uid) {
+            appUser.uid = firebaseUser.uid;
+            appUser.photoURL = firebaseUser.photoURL || firebaseUser.photoUrl || appUser.photoURL;
+            saveUsers(allUsers.map(u => u.email === firebaseUser.email ? appUser! : u));
+        }
+    }
+
+    setUser(appUser);
+    localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(appUser));
+    loadSubscription(appUser.uid);
+  };
+
   useEffect(() => {
     setLoading(true);
     try {
@@ -52,6 +87,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (parsedUser?.uid) {
               loadSubscription(parsedUser.uid);
             }
+        }
+
+        // Handle redirect result if user returns from redirect sign-in
+        if (!Capacitor.isNativePlatform()) {
+            const { auth } = initializeFirebase();
+            getRedirectResult(auth)
+                .then((result) => {
+                    if (result?.user) {
+                        handleGoogleUserSetup(result.user);
+                    }
+                })
+                .catch((err) => {
+                    console.error("Firebase Redirect Sign-in Error:", err);
+                });
         }
     } catch (error) {
         console.error("Failed to parse user from localStorage", error);
@@ -87,7 +136,7 @@ const login = async (email: string, password: string) => {
     } else {
         throw new Error("User not found. Please check your credentials or sign up.");
     }
-  };
+};
 
   const anonymousLogin = async () => {
     const guestUser: AppUser = {
@@ -106,8 +155,13 @@ const login = async (email: string, password: string) => {
 
   const signup = async (email: string, password: string, displayName: string, gender: 'male' | 'female' | 'other', department: Department) => {
     const allUsers = getUsers();
-    if (allUsers.some(u => u.email === email && !u.isAnonymous)) {
-        throw new Error("An account with this email already exists.");
+    const existingUser = allUsers.find(u => u.email === email && !u.isAnonymous);
+    
+    if (existingUser) {
+        setUser(existingUser);
+        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(existingUser));
+        loadSubscription(existingUser.uid);
+        return;
     }
 
     const newUser: AppUser = {
@@ -118,44 +172,50 @@ const login = async (email: string, password: string) => {
       gender,
       department,
       photoURL: `https://placehold.co/128x128/E0E0E0/333?text=${displayName.charAt(0).toUpperCase()}`,
+    };
+  
+    const updatedUsers = [...allUsers, newUser];
+    saveUsers(updatedUsers);
+    
+    localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(newUser));
+    setUser(newUser);
+    loadSubscription(newUser.uid);
   };
-  
-  const updatedUsers = [...allUsers, newUser];
-  saveUsers(updatedUsers);
-  
-  localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(newUser));
-  setUser(newUser);
-  loadSubscription(newUser.uid);
-};
 
-const signInWithGoogle = async () => {
+  const signInWithGoogle = async () => {
     const { auth } = initializeFirebase();
     const provider = new GoogleAuthProvider();
     try {
-        const result = await signInWithPopup(auth, provider);
-        const firebaseUser = result.user;
-
-        const allUsers = getUsers();
-        let appUser = allUsers.find(u => u.uid === firebaseUser.uid && !u.isAnonymous);
-
-        if (!appUser) {
-            // New user, create an account
-            appUser = {
-                uid: firebaseUser.uid,
-                email: firebaseUser.email,
-                isAnonymous: false,
-                displayName: firebaseUser.displayName,
-                photoURL: firebaseUser.photoURL,
-                department: 'process-access',
-                gender: 'other',
-            };
-            const updatedUsers = [...allUsers, appUser];
-            saveUsers(updatedUsers);
+        let firebaseUser: any = null;
+        if (Capacitor.isNativePlatform()) {
+            const result = await FirebaseAuthentication.signInWithGoogle();
+            firebaseUser = result.user;
+            if (!firebaseUser) {
+                throw new Error("No user profile returned from Google Sign-In.");
+            }
+            handleGoogleUserSetup(firebaseUser);
+        } else {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                firebaseUser = result.user;
+                if (!firebaseUser) {
+                    throw new Error("No user profile returned from Google Sign-In.");
+                }
+                handleGoogleUserSetup(firebaseUser);
+            } catch (popupError: any) {
+                console.warn("Popup blocked or failed, attempting redirect...", popupError);
+                if (
+                    popupError.code === 'auth/popup-blocked' ||
+                    popupError.code === 'auth/popup-closed-by-user' ||
+                    /popup/i.test(popupError.message)
+                ) {
+                    // Fallback to Redirect method on mobile / blocked popups
+                    await signInWithRedirect(auth, provider);
+                } else {
+                    throw popupError;
+                }
+            }
         }
-
-        setUser(appUser);
-        localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(appUser));
-        loadSubscription(appUser.uid);
     } catch (error: any) {
         console.error("Google Sign-In Error:", error);
         if (error.code === 'auth/popup-closed-by-user') {
@@ -166,12 +226,25 @@ const signInWithGoogle = async () => {
         }
         throw new Error(error.message || "An unknown error occurred during Google sign-in.");
     }
-};
+  };
 
-const logout = async () => {
-  localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
-  setUser(null);
-};
+  const logout = async () => {
+    localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
+    setUser(null);
+    try {
+        const { auth } = initializeFirebase();
+        await auth.signOut();
+    } catch (err) {
+        console.error("Firebase JS signOut error:", err);
+    }
+    try {
+        if (Capacitor.isNativePlatform()) {
+            await FirebaseAuthentication.signOut();
+        }
+    } catch (err) {
+        console.error("Capacitor Native signOut error:", err);
+    }
+  };
 
 const updateUserProfile = async (profileData: Partial<AppUser>) => {
    if (user) {
@@ -194,7 +267,7 @@ const updateUserProfile = async (profileData: Partial<AppUser>) => {
   const updateUserPhoto = async (file: File) => {
     if (!user || user.isAnonymous) return;
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
