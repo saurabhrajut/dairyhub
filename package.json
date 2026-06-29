@@ -12,6 +12,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@capacitor-firebase/authentication": "latest",
+    "@capacitor/core": "latest",
     "@genkit-ai/firebase": "^1.19.2",
     "@genkit-ai/googleai": "^1.19.2",
     "@genkit-ai/next": "^1.19.2",
