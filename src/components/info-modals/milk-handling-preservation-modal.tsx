@@ -484,6 +484,7 @@ export function MilkHandlingPreservationModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border
+        [&>button]:!text-white
       ">
         {/* ── Top Header Bar ─────────────────────── */}
         <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 px-3 sm:px-6 py-2 sm:py-4 shrink-0 border-b border-white/10">
@@ -526,7 +527,7 @@ export function MilkHandlingPreservationModal({
               <div className="flex items-center gap-1.5 text-white/70 text-[10px] sm:text-xs min-w-0 overflow-hidden">
                 <selectedTopicInfo.icon className="w-3 h-3 shrink-0" />
                 <span className="font-medium truncate min-w-0">{selectedTopicInfo.title}</span>
-                <Badge variant="secondary" className="text-[9px] px-1 py-0 shrink-0 hidden sm:inline-flex bg-white/20 text-white border-none">
+                <Badge variant={selectedTopicInfo.badgeVariant} className="text-[9px] px-1 py-0 shrink-0 hidden sm:inline-flex bg-white/20 text-white border-none">
                   {selectedTopicInfo.badge}
                 </Badge>
               </div>
