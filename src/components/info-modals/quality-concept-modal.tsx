@@ -994,7 +994,7 @@ const TOPICS = [
   { value: "what_is_quality",icon: CheckSquare,     palette: "indigo"  as PaletteKey, titleKey: "whatIsQuality" },
   { value: "qc",             icon: TestTube,        palette: "cyan"    as PaletteKey, tabKey: "qc"             },
   { value: "qa",             icon: BadgeCheck,      palette: "teal"    as PaletteKey, tabKey: "qa"             },
-  { value: "prps",           icon: Settings,        palette: "emerald" as PaletteKey, tabKey: "prps"           },
+  { value: "prps",           icon: Settings,        palette: "emerald" as PaletteKey, tabKey: "prps"          },
   { value: "oprps",          icon: ShieldCheck,     palette: "green"   as PaletteKey, tabKey: "oprps"          },
   { value: "fiveS",          icon: SortAsc,         palette: "orange"  as PaletteKey, tabKey: "fiveS"          },
   { value: "sop",            icon: FileText,        palette: "slate"   as PaletteKey, tabKey: "sop"            },
@@ -1034,7 +1034,10 @@ export function QualityConceptModal({
   const scrollPosition = useRef(0);
 
   const handleOpenChange = (open: boolean) => {
-    if (!open) setActiveTopic(null);
+    if (!open) {
+      setActiveTopic(null);
+      scrollPosition.current = 0;
+    }
     setIsOpen(open);
   };
 
@@ -1090,12 +1093,13 @@ export function QualityConceptModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border strict-html-wrap
+        [&>button]:!text-white
       ">
         {/* ── Top Header Bar ─────────────────────── */}
         <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 px-3 sm:px-6 py-2 sm:py-4 shrink-0 border-b border-white/10">
           <DialogHeader>
             <DialogTitle className="text-sm sm:text-xl md:text-2xl font-bold text-center text-white font-headline tracking-tight leading-tight">
-              ✅ {content.title || "Quality Processing"}
+              🏆 {content.title}
             </DialogTitle>
             <DialogDescription className={`text-center text-indigo-200/80 text-[10px] sm:text-sm line-clamp-1 px-2 mt-1 ${activeTopic ? "hidden sm:block" : "block"}`}>
               {getDialogDescription()}
@@ -1117,7 +1121,7 @@ export function QualityConceptModal({
             </div>
           )}
 
-          {/* Back button Breadcrumb */}
+          {/* Back button */}
           {activeTopic && selectedTopic && (
             <div className="flex items-center gap-2 mt-1.5 sm:mt-2 min-w-0">
               <Button
@@ -1138,15 +1142,17 @@ export function QualityConceptModal({
         </div>
 
         {/* ── Content Area ───────────────────────── */}
-        {activeTopic && selectedTopic && ActiveComponent ? (
-          <div className="flex-1 min-h-0 overflow-hidden bg-slate-50">
-            <ScrollArea className="h-full w-full max-w-full">
-              <div className="p-2 sm:p-4 md:p-6 max-w-5xl mx-auto w-full pb-10 mt-3">
-                <ActiveComponent content={content} />
-              </div>
-            </ScrollArea>
+        {selectedTopic && ActiveComponent ? (
+
+          /* ── Topic Detail View ─────────────────── */
+          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-auto bg-slate-50 strict-html-wrap">
+            <div className="p-2 sm:p-4 md:p-6 max-w-5xl mx-auto w-full pb-10">
+              <ActiveComponent content={content} />
+            </div>
           </div>
+
         ) : (
+
           /* ── Topic Grid / Home View ─────────────── */
           <div className="flex-1 min-h-0 overflow-hidden bg-slate-50/50">
             <ScrollArea className="h-full w-full" viewportRef={scrollAreaRef}>
@@ -1154,30 +1160,29 @@ export function QualityConceptModal({
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                   {topics.map((topic) => {
                     const p = PALETTE[topic.palette];
-                    const Icon = topic.icon;
                     return (
                       <button
                         key={topic.value}
                         onClick={() => handleSelectTopic(topic.value)}
-                        className={cn(
-                          "group relative flex flex-col items-center justify-center",
-                          "p-3 sm:p-5 bg-white hover:shadow-lg rounded-xl sm:rounded-2xl",
-                          "border border-gray-100 hover:border-transparent",
-                          "text-center aspect-square",
-                          "transition-all duration-300 transform hover:scale-[1.03]",
-                          "active:scale-95",
-                          "hover:ring-2 hover:ring-offset-1 hover:ring-indigo-200 box-border"
-                        )}
+                        className={`
+                          group relative flex flex-col items-center justify-center p-3 sm:p-5
+                          bg-white rounded-xl sm:rounded-2xl border border-gray-100 hover:border-transparent
+                          text-center aspect-square transition-all duration-300 transform hover:scale-[1.03]
+                          active:scale-95 hover:ring-2 hover:ring-offset-1 hover:ring-indigo-200 box-border w-full
+                        `}
                       >
                         <div className={cn("absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity", p.bgLight)} />
+                        
                         <div className="relative z-10">
                           <div className={cn("p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-br text-white mb-2 sm:mb-3 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md", p.color)}>
-                            <Icon className="w-5 h-5 sm:w-7 sm:h-7" />
+                            <topic.icon className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
                           </div>
                         </div>
+                        
                         <span className="relative z-10 font-bold text-[10px] sm:text-[13px] font-headline text-slate-600 group-hover:text-slate-800 transition-colors leading-tight line-clamp-2 px-0.5">
                           {topic.title}
                         </span>
+                        
                         <ChevronRight className="absolute bottom-1 right-1 h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                         <Sparkles className="absolute top-1 right-1 h-2.5 w-2.5 text-yellow-400 opacity-0 group-hover:opacity-100 transition-all group-hover:rotate-12" />
                       </button>
