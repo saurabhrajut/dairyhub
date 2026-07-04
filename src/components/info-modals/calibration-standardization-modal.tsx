@@ -327,7 +327,7 @@ const topicComponents: Record<string, React.FC<{ content: any }>> = {
           <MethodCard title={c.methods.comparison.title} color="blue">
             <p className="text-gray-700 text-sm">{c.methods.comparison.desc}</p>
             <BulletList items={c.methods.comparison.points || []} />
-            <p className="mt-3 text-sm font-medium text-gray-700">{c.methods.comparison.conclusion}</p>
+            <p className="mt-3 text-sm font-medium text-gray-700">{c.methods.conclusion || c.methods.comparison.conclusion}</p>
           </MethodCard>
         )}
 
@@ -829,6 +829,7 @@ export function CalibrationStandardizationModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border strict-html-wrap
+        [&>button]:!text-white [&>button]:opacity-80 [&>button]:hover:opacity-100
       ">
         {/* ── Top Header Bar ─────────────────────── */}
         <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 px-3 sm:px-6 py-2 sm:py-4 shrink-0 border-b border-white/10">
