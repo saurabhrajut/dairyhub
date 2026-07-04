@@ -287,6 +287,7 @@ export function LabEquipmentsModal({ isOpen, setIsOpen }: { isOpen: boolean; set
         w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-5xl sm:max-h-[95dvh] sm:rounded-2xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border
+        [&>button]:!text-white
       ">
         
         {/* ── Top Header Bar ─────────────────────── */}
