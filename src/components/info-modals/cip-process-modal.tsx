@@ -456,6 +456,7 @@ export function CipProcessModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border
+        [&>button]:!text-white
       ">
         {/* ── Top Header Bar ─────────────────────── */}
         <div className="bg-gradient-to-br from-indigo-900 via-sky-900 to-indigo-950 px-3 sm:px-6 py-2 sm:py-4 shrink-0 border-b border-white/10">
