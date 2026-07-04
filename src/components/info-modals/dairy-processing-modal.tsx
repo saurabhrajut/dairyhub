@@ -331,8 +331,8 @@ export function DairyProcessingModal({
     [t]
   );
 
-  const TOPIC_GROUPS = getTopicGroups(topicMap, lang);
-  const ALL_TOPICS = TOPIC_GROUPS.flatMap((g) => g.topics);
+  const TOPIC_GROUPS = getTopicGroups(topicMap, lang) as any;
+  const ALL_TOPICS = TOPIC_GROUPS.flatMap((g: any) => g.topics) as any[];
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
@@ -342,8 +342,8 @@ export function DairyProcessingModal({
     setIsOpen(open);
   };
 
-  const selectedTopicInfo = ALL_TOPICS.find((tp) => tp.value === activeTopic);
-  const selectedContent = activeTopic ? topicMap[activeTopic as keyof typeof topicMap] : null;
+  const selectedTopicInfo = ALL_TOPICS.find((tp: any) => tp.value === activeTopic);
+  const selectedContent = activeTopic ? (topicMap[activeTopic as keyof typeof topicMap] as any) : null;
 
   const handleSelectTopic = (value: string) => {
     if (scrollAreaRef.current) {
@@ -384,6 +384,7 @@ export function DairyProcessingModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border
+        [&>button]:!text-white
       ">
         {/* ── Top Header Bar ─────────────────────── */}
         <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 px-3 sm:px-6 py-2 sm:py-4 shrink-0 border-b border-white/10">
@@ -485,7 +486,7 @@ export function DairyProcessingModal({
           <div className="flex-1 min-h-0 overflow-hidden bg-slate-50/50">
             <ScrollArea className="h-full w-full" viewportRef={scrollAreaRef}>
               <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-7 max-w-6xl mx-auto">
-                {TOPIC_GROUPS.map((group) => (
+                {TOPIC_GROUPS.map((group: any) => (
                   <div key={group.groupLabel}>
                     {/* Group header */}
                     <div className="flex items-center gap-2 mb-3">
@@ -503,7 +504,7 @@ export function DairyProcessingModal({
 
                     {/* Cards grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-                      {group.topics.map((topic) => (
+                      {group.topics.map((topic: any) => (
                         <button
                           key={topic.value}
                           onClick={() => handleSelectTopic(topic.value)}
