@@ -406,6 +406,7 @@ export function AuditsModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl
+        [&>button]:!text-white
       ">
 
         {/* ── Top Header Bar ─────────────────────── */}
