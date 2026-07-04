@@ -690,9 +690,9 @@ const topics = [
   { value: "butter", icon: Factory, color: "from-amber-400 to-yellow-500", bgLight: "bg-yellow-50 hover:bg-yellow-100", borderClass: "border-yellow-200", badge: null },
   { value: "milkPowders", icon: Wind, color: "from-slate-400 to-gray-500", bgLight: "bg-slate-50 hover:bg-slate-100", borderClass: "border-slate-200", badge: null },
   { value: "fermented", icon: Beaker, color: "from-lime-400 to-green-500", bgLight: "bg-lime-50 hover:bg-lime-100", borderClass: "border-lime-200", badge: null },
-  { value: "iceCream", icon: IceCreamIcon, color: "from-fuchsia-400 to-purple-500", bgLight: "bg-fuchsia-50 hover:bg-fuchsia-100", borderClass: "border-fuchsia-200", badge: null },
+  { value: "iceCream", icon: IceCreamIcon as any, color: "from-fuchsia-400 to-purple-500", bgLight: "bg-fuchsia-50 hover:bg-fuchsia-100", borderClass: "border-fuchsia-200", badge: null },
   { value: "frozenDessert", icon: Snowflake, color: "from-cyan-400 to-teal-500", bgLight: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200", badge: null },
-  { value: "chhanaPaneer", icon: PaneerIcon, color: "from-emerald-400 to-green-500", bgLight: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200", badge: null },
+  { value: "chhanaPaneer", icon: PaneerIcon as any, color: "from-emerald-400 to-green-500", bgLight: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200", badge: null },
   { value: "cheese", icon: Component, color: "from-orange-500 to-amber-600", bgLight: "bg-orange-50 hover:bg-orange-100", borderClass: "border-orange-200", badge: null },
   { value: "dairyAnalogues", icon: AlertTriangle, color: "from-amber-600 to-red-600", bgLight: "bg-amber-50 hover:bg-amber-100", borderClass: "border-amber-200", badge: "New" },
   { value: "casein", icon: FlaskConical, color: "from-violet-400 to-purple-500", bgLight: "bg-violet-50 hover:bg-violet-100", borderClass: "border-violet-200", badge: null },
@@ -799,6 +799,7 @@ export function FssaiStandardsModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border strict-html-wrap
+        [&>button]:!text-white
       ">
         {/* ── Top Header Bar ─────────────────────── */}
         <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 px-3 sm:px-6 py-2 sm:py-4 shrink-0 border-b border-white/10">
