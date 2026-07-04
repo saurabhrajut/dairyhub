@@ -379,15 +379,15 @@ export function DairyIndustryModal({
 
   if (!content) return null;
 
-  const TOPIC_GROUPS = getTopicGroups(content, lang);
-  const ALL_TOPICS = TOPIC_GROUPS.flatMap((g) => g.topics);
+  const TOPIC_GROUPS = getTopicGroups(content, lang) as any;
+  const ALL_TOPICS = TOPIC_GROUPS.flatMap((g: any) => g.topics) as any[];
 
   const handleOpenChange = (open: boolean) => {
     if (!open) setActiveTopic(null);
     setIsOpen(open);
   };
 
-  const selectedTopicInfo = ALL_TOPICS.find((tp) => tp.value === activeTopic);
+  const selectedTopicInfo = ALL_TOPICS.find((tp: any) => tp.value === activeTopic);
   const ActiveComponent = activeTopic ? topicComponents[activeTopic] : null;
 
   const handleSelectTopic = (value: string) => {
@@ -417,6 +417,7 @@ export function DairyIndustryModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl
+        [&>button]:!text-white
       ">
 
         {/* ── Top Header Bar ─────────────────────── */}
@@ -490,7 +491,7 @@ export function DairyIndustryModal({
           <div className="flex-1 min-h-0 overflow-hidden bg-slate-50/50">
             <ScrollArea className="h-full w-full" viewportRef={scrollAreaRef}>
               <div className="p-2 sm:p-4 md:p-6 space-y-4 sm:space-y-7 max-w-6xl mx-auto">
-                {TOPIC_GROUPS.map((group) => (
+                {TOPIC_GROUPS.map((group: any) => (
                   <div key={group.groupLabel}>
 
                     {/* Group header */}
@@ -509,7 +510,7 @@ export function DairyIndustryModal({
 
                     {/* Cards grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
-                      {group.topics.map((topic) => (
+                      {group.topics.map((topic: any) => (
                         <button
                           key={topic.value}
                           onClick={() => handleSelectTopic(topic.value)}
