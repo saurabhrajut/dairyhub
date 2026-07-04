@@ -1277,12 +1277,12 @@ export const milkHandlingPreservationContent = {
                     },
 
                     other: {
-                        title: "Other Chemical Preservatives aur Modern Approaches",
+                        title: "Other Chemical Preservatives and Modern Approaches",
                         items: [
-                            "Sodium benzoate: Primarily antifungal, effective pH <4.5 — mainly fruit-flavoured dairy drinks mein; FSSAI allows in flavoured milk up to 600 ppm",
-                            "Potassium sorbate: Sorbic acid (CH3CH=CHCH=CHCOOH) — antifungal; more effective at pH 4.0-6.0; used in dairy spreads, cheese coatings; FSSAI permits 1000 ppm in some categories",
+                            "Sodium benzoate: Primarily antifungal, effective at pH <4.5 — mainly in fruit-flavoured dairy drinks; FSSAI allows up to 600 ppm in flavoured milk",
+                            "Potassium sorbate: Sorbic acid (CH₃CH=CHCH=CHCOOH) — antifungal; more effective at pH 4.0-6.0; used in dairy spreads, cheese coatings; FSSAI permits 1000 ppm in some categories",
                             "Lysozyme: Natural enzyme from egg white; cleaves bacterial cell wall (peptidoglycan); used in hard cheese to prevent late blowing by Clostridium tyrobutyricum; E1105 in EU",
-                            "Carbon Dioxide (CO2): Dissolved CO2 (Hyperbaric CO2 treatment) inhibits many bacteria; used in some ESL milk applications; 'carbonic acid' antimicrobial effect",
+                            "Carbon Dioxide (CO₂): Dissolved CO₂ (Hyperbaric CO₂ treatment) inhibits many bacteria; used in some ESL milk applications; antimicrobial effect via carbonic acid formation",
                             "Bacteriophages: Viruses that infect bacteria; FDA-approved ListShield™ (against L. monocytogenes) for ready-to-eat foods; research stage for dairy applications",
                             "Essential Oils: Thymol (thyme), carvacrol (oregano), eugenol (clove) — potent antimicrobials; application limited by strong flavour contribution to dairy products"
                         ]
@@ -1293,16 +1293,16 @@ export const milkHandlingPreservationContent = {
                     title: "Non-Thermal Preservation Technologies",
                     hpProcessing: {
                         title: "High Pressure Processing (HPP)",
-                        p1: "HPP (ya Pascalization): 400-600 MPa (4,000-6,000 atm) hydrostatic pressure applied for 3-10 minutes at low temperatures (5-20°C). Mechanism: non-covalent bonds disruption (hydrogen bonds, hydrophobic interactions, electrostatic interactions) → enzyme inactivation, protein denaturation, cell membrane disruption → microbial death. Pressure transmitted uniformly through liquid (Pascal's principle) — no hot spots.",
+                        p1: "HPP (or Pascalization): 400-600 MPa (4,000-6,000 atm) hydrostatic pressure applied for 3-10 minutes at low temperatures (5-20°C). Mechanism: disruption of non-covalent bonds (hydrogen bonds, hydrophobic interactions, electrostatic interactions) → enzyme inactivation, protein denaturation, cell membrane disruption → microbial death. Pressure is transmitted uniformly through the liquid (Pascal's principle) — no hot spots.",
                         advantages: [
                             "Equivalent pathogen reduction to pasteurization (5-log reduction) without heat",
-                            "Preserves heat-labile nutrients (vitamin C, folate) aur fresh milk taste",
-                            "Inactivates most vegetative bacteria aur viruses",
-                            "Extends shelf life: HPP milk — up to 30-40 days at refrigeration",
-                            "Approved for raw milk cheese aging alternative (USA — 60-day aging rule)"
+                            "Preserves heat-labile nutrients (vitamin C, folate) and fresh milk taste",
+                            "Inactivates most vegetative bacteria and viruses",
+                            "Extends shelf life: HPP milk — up to 30-40 days under refrigeration",
+                            "Approved as an alternative to 60-day aging rule for raw milk cheese (USA)"
                         ],
                         limitations: [
-                            "Spores resistant (Bacillus, Clostridium) — cannot achieve commercial sterility",
+                            "Spores are resistant (Bacillus, Clostridium) — cannot achieve commercial sterility",
                             "High capital cost (HPP equipment: $500,000-$2.5 million)",
                             "Batch process — limited throughput",
                             "Some enzyme activity may persist (plasmin — age gelation in UHT)",
@@ -1312,31 +1312,31 @@ export const milkHandlingPreservationContent = {
 
                     pulsedElectricField: {
                         title: "Pulsed Electric Field (PEF) Treatment",
-                        p1: "PEF: milk ko high-intensity (20-80 kV/cm), short-duration (1-100 µs) electric field pulses ke through pass kiya jata hai. Mechanism: 'electroporation' — cell membrane mein transient ya permanent pores formation → intracellular components leakage → cell death. Temperature rise minimal (25-55°C during treatment). Effectiveness: 4-5 log reduction in vegetative bacteria, combined with mild heat (55-60°C) effectiveness increases.",
-                        applications: "Continuous flow systems mein milk treatment (10,000-100,000 L/hr possible), ESL milk production, fresh juices. Commercial applications growing in Europe (Netherlands, Germany). PEF-treated milk nutritional profile: comparable to raw milk — heat-labile vitamins well-preserved. Spores resistant — limitation similar to HPP."
+                        p1: "PEF: milk is passed through high-intensity (20-80 kV/cm), short-duration (1-100 µs) electric field pulses. Mechanism: 'electroporation' — formation of transient or permanent pores in the cell membrane → leakage of intracellular components → cell death. Temperature rise is minimal (25-55°C during treatment). Effectiveness: 4-5 log reduction in vegetative bacteria; effectiveness increases when combined with mild heat (55-60°C).",
+                        applications: "Milk treatment in continuous flow systems (10,000-100,000 L/hr possible), ESL milk production, fresh juices. Commercial applications are growing in Europe (Netherlands, Germany). Nutritional profile of PEF-treated milk: comparable to raw milk — heat-labile vitamins well-preserved. Spores are resistant — a limitation similar to HPP."
                     },
 
                     uvTreatment: {
                         title: "UV Light Treatment",
-                        p1: "UV-C light (254 nm wavelength) — germicidal radiation jo DNA/RNA damage karta hai (thymine dimers formation → replication impossible). Milk treatment challenge: UV absorption by milk components (riboflavin, proteins, fat) limits penetration depth (few mm). Solution: thin-film UV reactors (turbulent flow through UV-transparent tubes — swirl flow/Taylor-Couette reactors). Commercial system: Salcor 3450 system, microGAPS (thin film annular UV reactors). Effectiveness in clear milk: 4+ log reduction; whole milk: 2-3 log reduction. Advantage: no chemical residues, minimal heat. Approved in some states (USA) as alternative to pasteurization for specific applications."
+                        p1: "UV-C light (254 nm wavelength) — germicidal radiation that damages DNA/RNA (thymine dimer formation → replication impossible). Challenge for milk treatment: UV absorption by milk components (riboflavin, proteins, fat) limits penetration depth (a few mm). Solution: thin-film UV reactors (turbulent flow through UV-transparent tubes — swirl flow/Taylor-Couette reactors). Commercial systems: Salcor 3450 system, microGAPS (thin film annular UV reactors). Effectiveness in clear milk: 4+ log reduction; whole milk: 2-3 log reduction. Advantage: no chemical residues, minimal heat. Approved in some US states as an alternative to pasteurization for specific applications."
                     },
 
                     microfiltration: {
                         title: "Microfiltration (MF) — Cold Physical Separation",
-                        p1: "MF (1.4 µm membranes — Bactocatch® Tetra Pak system): bacteria physical separation by size exclusion. Process: cream aur skim milk separate kiye jate hain pehle (centrifugal separator se), skim milk MF membrane se pass hoti hai (99.5% bacteria removal), concentrate (bacteria-rich) separately heat-treated (130°C/4 sec), phir cream aur treated skim milk recombine kiye jate hain. Result: ESL milk with 6+ log bacterial reduction, minimal heat treatment. Advantage: fresh milk taste preserved (no cooked flavour), nutritional profile near-raw milk. Used extensively in Scandinavian countries (especially Sweden — Bactocatch system widely deployed)."
+                        p1: "MF (1.4 µm membranes — Bactocatch® Tetra Pak system): physical separation of bacteria by size exclusion. Process: cream and skim milk are first separated (via centrifugal separator), skim milk passes through the MF membrane (99.5% bacteria removal), the concentrate (bacteria-rich) is separately heat-treated (130°C/4 sec), then cream and treated skim milk are recombined. Result: ESL milk with 6+ log bacterial reduction, minimal heat treatment. Advantage: fresh milk taste preserved (no cooked flavour), nutritional profile near that of raw milk. Used extensively in Scandinavian countries (especially Sweden — Bactocatch system widely deployed)."
                     }
                 },
 
                 regulatory: {
-                    title: "Chemical Preservatives ki Regulatory Framework",
+                    title: "Regulatory Framework for Chemical Preservatives",
                     india: {
                         title: "India — FSSAI Regulations",
                         items: [
-                            "Food Safety and Standards (Food Products Standards and Food Additives) Regulations, 2011 — Schedule II aur III",
-                            "Schedule II: Prohibited substances — formalin, boric acid, salicylic acid, benzoic acid (fluid milk mein), sodium carbonate/bicarbonate (as neutralizers), hydrogen peroxide (unless specifically permitted)",
-                            "Schedule III: Permitted preservatives with max limits",
+                            "Food Safety and Standards (Food Products Standards and Food Additives) Regulations, 2011 — Schedule II and III",
+                            "Schedule II: Prohibited substances — formalin, boric acid, salicylic acid, benzoic acid (in fluid milk), sodium carbonate/bicarbonate (as neutralizers), hydrogen peroxide (unless specifically permitted)",
+                            "Schedule III: Permitted preservatives with maximum limits",
                             "Raw milk: NO preservatives permitted by law",
-                            "Pasteurized milk: No added preservatives (except LP-system activation — WHO/FAO/FSSAI guidelines under consideration)",
+                            "Pasteurized milk: No added preservatives (except LP-system activation — under WHO/FAO/FSSAI guidelines consideration)",
                             "UHT milk: No preservatives needed/permitted (sterilization sufficient)",
                             "Cheese: Natamycin (surface only, 1 mg/dm²), Lysozyme (as per CODEX)",
                             "Dairy beverages/flavoured milk: Sodium benzoate (600 ppm), potassium sorbate (1000 ppm)"
@@ -1348,31 +1348,31 @@ export const milkHandlingPreservationContent = {
                             "Codex Alimentarius (CODEX STAN 192-1995, General Standard for Food Additives — GSFA): International reference standard",
                             "EU: Regulation (EC) 1333/2008 on food additives — strict list of permitted additives for dairy",
                             "USA FDA: 21 CFR Parts 130-135 (dairy standards), GRAS substances list",
-                            "WHO/FAO Joint Expert Committee on Food Additives (JECFA): ADI (Acceptable Daily Intake) establish karta hai",
+                            "WHO/FAO Joint Expert Committee on Food Additives (JECFA): Establishes ADI (Acceptable Daily Intake)",
                             "Codex Committee on Food Additives (CCFA): International harmonization"
                         ]
                     },
                     adulteration: {
-                        title: "Common Milk Adulterants aur Detection Methods",
+                        title: "Common Milk Adulterants and Detection Methods",
                         items: [
                             "Water addition: Lactometer (LR <28 at 27°C), cryoscopy (freezing point >-0.525°C), electrical conductivity",
-                            "Skim milk/removal of fat: Gerber/Rose-Gottlieb fat test (<3.0% fat in toned milk suspect)",
+                            "Skim milk/fat removal: Gerber/Rose-Gottlieb fat test (<3.0% fat in toned milk is suspect)",
                             "Urea (exogenous): Urease strip test, DMAB (para-dimethylaminobenzaldehyde) reaction",
                             "Detergent: Methylene blue stability test, bromocresol purple test",
                             "Starch: Iodine test (blue/black colour)",
-                            "Formalin: Hestrin method, FeCl3 test",
-                            "Hydrogen peroxide: Vanadium pentoxide + H2SO4 test",
-                            "Neutralizers (NaHCO3, Na2CO3): Rosolic acid test (rose/crimson colour)",
+                            "Formalin: Hestrin method, FeCl₃ test",
+                            "Hydrogen peroxide: Vanadium pentoxide + H₂SO₄ test",
+                            "Neutralizers (NaHCO₃, Na₂CO₃): Rosolic acid test (rose/crimson colour)",
                             "Glucose: Fehling's test, enzyme-based glucose strips",
                             "Synthetic milk (urea + oil + detergent + water): Microscopy, GC-MS analysis",
-                            "Melamine (protein-adulteration): HPLC, LC-MS/MS — Kjeldahl nitrogen false elevation detect karta hai"
+                            "Melamine (protein adulteration): HPLC, LC-MS/MS — detects false elevation of Kjeldahl nitrogen"
                         ]
                     }
                 },
 
                 comparison: {
-                    title: "Preservation Methods ka Comprehensive Comparative Analysis",
-                    p1: "Doodh preservation method ka choice effectiveness, safety, cost, consumer acceptance aur product characteristics par impact ke careful balancing ko involve karta hai — ek multi-criteria decision process.",
+                    title: "Comprehensive Comparative Analysis of Preservation Methods",
+                    p1: "The choice of milk preservation method involves careful balancing of effectiveness, safety, cost, consumer acceptance, and impact on product characteristics — a multi-criteria decision process.",
 
                     methodsComparison: {
                         title: "Major Preservation Methods — Scientific Comparison",
@@ -1390,8 +1390,8 @@ export const milkHandlingPreservationContent = {
                             principle: "Thermal inactivation of vegetative pathogens (first-order kinetics)",
                             logReduction: "5-6 log reduction in pathogens",
                             shelfLife: "14-18 days (with refrigeration)",
-                            advantages: "Gold standard food safety, all pathogens eliminated, minimal nutritional change, taste near-fresh",
-                            disadvantages: "Requires refrigeration post-pasteurization, doesn't inactivate spores, some heat-stable enzymes (plasmin, lipase) remain active",
+                            advantages: "Gold standard for food safety, eliminates all pathogens, minimal nutritional change, taste close to fresh milk",
+                            disadvantages: "Requires post-pasteurization refrigeration, does not inactivate spores, some heat-stable enzymes (plasmin, lipase) remain active",
                             cost: "Medium capital, Low operational"
                         },
                         uht: {
@@ -1399,16 +1399,16 @@ export const milkHandlingPreservationContent = {
                             principle: "Commercial sterilization — destruction of all viable microorganisms",
                             logReduction: "12+ log reduction (theoretical — commercial sterility)",
                             shelfLife: "6-12 months (unopened, room temperature)",
-                            advantages: "No refrigeration needed until opened, maximum microbial safety, ideal for distribution in areas lacking cold chain",
-                            disadvantages: "Cooked/sulphurous off-flavour, slight nutritional losses, age gelation problem (long storage), expensive aseptic packaging, enzymatic spoilage possible (psychrotrophic lipases — heat stable)",
+                            advantages: "No refrigeration needed until opened, maximum microbial safety, ideal for distribution in areas lacking cold chain infrastructure",
+                            disadvantages: "Cooked/sulphurous off-flavour, slight nutritional losses, age gelation problem (long storage), expensive aseptic packaging, enzymatic spoilage possible (heat-stable psychrotrophic lipases)",
                             cost: "High capital, Medium operational"
                         },
                         hpp: {
                             title: "High Pressure Processing (400-600 MPa)",
-                            principle: "Non-thermal cell membrane disruption aur enzyme inactivation",
+                            principle: "Non-thermal cell membrane disruption and enzyme inactivation",
                             logReduction: "5-6 log reduction in vegetative bacteria",
                             shelfLife: "30-40 days (refrigerated)",
-                            advantages: "Fresh-like taste aur nutrition, no chemical additives, novel application",
+                            advantages: "Fresh-like taste and nutrition, no chemical additives, novel application",
                             disadvantages: "Spores not inactivated, very high capital cost, batch process (low throughput), limited commercial dairy applications",
                             cost: "Very High capital, High operational"
                         },
@@ -1416,56 +1416,56 @@ export const milkHandlingPreservationContent = {
                             title: "Chemical Preservation (LP-System, Nisin)",
                             principle: "Enzyme inhibition, cell membrane disruption, reactive species generation",
                             logReduction: "2-4 log (typically bacteriostatic in LP-system)",
-                            shelfLife: "Variable (hours to days extension only — not standalone method)",
+                            shelfLife: "Variable (hours to days extension only — not a standalone method)",
                             advantages: "LP-system: natural, cost-effective for rural areas with no cold chain, extends raw milk collection window by 6-8 hours; Nisin: effective in processed cheese",
-                            disadvantages: "Not sufficient as sole preservation method, regulatory restrictions (varies by country), potential consumer concerns, may affect sensory properties at high concentrations",
+                            disadvantages: "Not sufficient as a sole preservation method, regulatory restrictions (varies by country), potential consumer concerns, may affect sensory properties at high concentrations",
                             cost: "Low (LP-system), Medium (nisin, natamycin)"
                         }
                     },
 
-                    p2: "Modern dairy preservation mein 'hurdle technology' ka implementation: HTST pasteurization + refrigeration + aseptic packaging = multiple overlapping protection systems. UHT + aseptic packaging = ultimate 'double hurdle' for ambient stability. ESL milk = MF + mild heat treatment + refrigeration = optimized compromise. Future trends: HPP + mild heat (thermodynamic synergy), PEF + refrigeration, natural antimicrobials (nisin + lysozyme + lactoferrin) + refrigeration — all represent multi-hurdle approaches achieving safety without compromising quality."
+                    p2: "Modern dairy preservation often involves a combination of methods — an approach known as 'hurdle technology.' HTST pasteurization + refrigeration + aseptic packaging = multiple overlapping protection systems. UHT + aseptic packaging = ultimate 'double hurdle' for ambient stability. ESL milk = MF + mild heat treatment + refrigeration = an optimized compromise. Future trends: HPP + mild heat (thermodynamic synergy), PEF + refrigeration, natural antimicrobials (nisin + lysozyme + lactoferrin) + refrigeration — all representing multi-hurdle approaches achieving safety without compromising quality."
                 }
             },
 
             qualityTesting: {
                 title: "VI. Advanced Quality Testing — Laboratory Methods",
-                p1: "Comprehensive quality testing dairy industry mein product safety, consistency aur regulatory compliance ensure karne ka backbone hai. Modern testing protocols combine rapid screening tests with confirmatory laboratory methods.",
+                p1: "Comprehensive quality testing is the backbone of the dairy industry, ensuring product safety, consistency, and regulatory compliance. Modern testing protocols combine rapid screening tests with confirmatory laboratory methods.",
 
                 microbiologicalTests: {
                     title: "Microbiological Testing Methods",
                     standardPlateCount: {
                         title: "Standard Plate Count (SPC) / Total Plate Count (TPC)",
-                        p1: "Method: Milk serial dilutions (10⁻¹ to 10⁻⁶) ko Plate Count Agar (PCA) par plate kiya jata hai, 32°C par 48 ±2 hours incubate kiya jata hai. Count: 25-250 colonies wali plates count ki jati hain (AOAC method). Result expression: CFU/mL (Colony Forming Units per milliliter). Acceptable limits: Raw milk Grade A <1,00,000 CFU/mL (BIS), Pasteurized milk <30,000 CFU/mL (pre-distribution), <1,00,000 CFU/mL (at consumer level — FSSAI). Advanced variation: Spiral Plate Method (faster, automated) — SPirALL® instrument.",
-                        rapidMethods: "Rapid alternatives: BACTOSCAN™ FC (flow cytometry — individual cells count karta hai fluorescent dye se, 8 min result), BactoSomatic (somatic + bacteria simultaneous), IDF Standard 161C:2009."
+                        p1: "Method: Milk serial dilutions (10⁻¹ to 10⁻⁶) are plated on Plate Count Agar (PCA), incubated at 32°C for 48 ±2 hours. Count: Plates containing 25-250 colonies are counted (AOAC method). Result expression: CFU/mL (Colony Forming Units per milliliter). Acceptable limits: Raw milk Grade A <100,000 CFU/mL (BIS), Pasteurized milk <30,000 CFU/mL (pre-distribution), <100,000 CFU/mL (at consumer level — FSSAI). Advanced variation: Spiral Plate Method (faster, automated) — SPirALL® instrument.",
+                        rapidMethods: "Rapid alternatives: BACTOSCAN™ FC (flow cytometry — counts individual cells with fluorescent dye, 8 min results), BactoSomatic (simultaneous somatic + bacteria count), IDF Standard 161C:2009."
                     },
                     coliformTest: {
                         title: "Coliform Count — Hygiene Indicator",
-                        p1: "Coliforms (E. coli, Klebsiella, Enterobacter) fecal contamination ke indicator organisms hain. Method: Most Probable Number (MPN) — Lauryl Sulfate Tryptose (LST) broth tubes, 35°C/48h; ya Violet Red Bile Agar (VRBA) pour plates, 35°C/24h. FSSAI limits: Pasteurized milk — Nil (coliforms absent in 1 mL), or <1 MPN/mL. Significance: Coliform presence indicates post-pasteurization contamination ya pasteurization failure — critical food safety signal."
+                        p1: "Coliforms (E. coli, Klebsiella, Enterobacter) are indicator organisms for fecal contamination. Method: Most Probable Number (MPN) — Lauryl Sulfate Tryptose (LST) broth tubes, 35°C/48h; or Violet Red Bile Agar (VRBA) pour plates, 35°C/24h. FSSAI limits: Pasteurized milk — Nil (coliforms absent in 1 mL), or <1 MPN/mL. Significance: Coliform presence indicates post-pasteurization contamination or pasteurization failure — a critical food safety signal."
                     },
                     specificPathogen: {
                         title: "Specific Pathogen Testing",
                         items: [
                             "Listeria monocytogenes: ISO 11290-1:2017 method — FDA BAM Method — enrichment + selective plating (PALCAM, ALOA agar) + PCR confirmation; 25 g/mL — zero tolerance in ready-to-eat dairy",
                             "Salmonella spp.: ISO 6579-1:2017 — pre-enrichment (BPW), selective enrichment (RVS, MKTTn), selective plating (XLD, BGA), biochemical + serological confirmation; Zero tolerance in 25 mL",
-                            "Staphylococcus aureus aur Enterotoxins: ISO 6888-1, Baird Parker Agar, coagulase test; Enterotoxin ELISA (RIDASCREEN SET™) — heat-stable toxins important in pasteurized milk",
+                            "Staphylococcus aureus and Enterotoxins: ISO 6888-1, Baird Parker Agar, coagulase test; Enterotoxin ELISA (RIDASCREEN SET™) — heat-stable toxins are important in pasteurized milk",
                             "E. coli O157:H7: Immunomagnetic separation (IMS) + CT-SMAC plating + O157 latex agglutination + PCR for eae/stx genes",
-                            "Mycobacterium tuberculosis: MGIT960 liquid culture system (6 weeks) ya PCR-based methods (IS6110 gene target)"
+                            "Mycobacterium tuberculosis: MGIT960 liquid culture system (6 weeks) or PCR-based methods (IS6110 gene target)"
                         ]
                     },
                     rapidMicrobial: {
                         title: "Rapid Microbiological Methods",
                         items: [
-                            "Real-time PCR (qPCR): Species-specific gene targets amplify karke 2-4 hours mein results — GeneXpert, bioMérieux GENE-UP systems",
-                            "MALDI-TOF MS (Matrix-Assisted Laser Desorption/Ionization — Time of Flight Mass Spectrometry): Bacterial protein fingerprinting se species identification minutes mein (Bruker MALDI Biotyper, bioMérieux VITEK MS)",
-                            "Flow Cytometry (BactoScan): Individual cells ko fluorescent staining ke baad laser se count karta hai — 8-10 min total process",
-                            "Impedance/Conductance Microbiology (Bactometer™): Bacterial metabolism se media mein ionic changes detect karta hai",
+                            "Real-time PCR (qPCR): Species-specific gene targets amplified for results in 2-4 hours — GeneXpert, bioMérieux GENE-UP systems",
+                            "MALDI-TOF MS (Matrix-Assisted Laser Desorption/Ionization — Time of Flight Mass Spectrometry): Species identification by bacterial protein fingerprinting within minutes (Bruker MALDI Biotyper, bioMérieux VITEK MS)",
+                            "Flow Cytometry (BactoScan): Individual cells counted using laser after fluorescent staining — 8-10 min total process",
+                            "Impedance/Conductance Microbiology (Bactometer™): Detects ionic changes in media from bacterial metabolism",
                             "Adenosine Triphosphate (ATP) Bioluminescence: Environmental/equipment hygiene testing — RLU measurement, results in seconds"
                         ]
                     }
                 },
 
                 chemicalTests: {
-                    title: "Chemical aur Compositional Analysis",
+                    title: "Chemical and Compositional Analysis",
                     compositional: {
                         title: "Compositional Analysis",
                         items: [
@@ -1478,11 +1478,11 @@ export const milkHandlingPreservationContent = {
                     },
                     freezingPoint: {
                         title: "Freezing Point Depression (Cryoscopy)",
-                        p1: "Cryoscopy freezing point measurement water addition detect karne ka most reliable method hai. Principle: colligative property — dissolved solutes milk ki freezing point depress karte hain. Normal bovine milk freezing point: -0.530°C to -0.560°C (average -0.540°C). Water addition se freezing point -0.530°C se upar shift hoti hai. 1% water addition = approximately +0.005°C shift. Method: Thermistor cryoscope (IDF Standard 108:2002) — 99.5% accuracy. Electronic advanced systems: Funke-Gerber Cryostar-i™. Important note: mastitis milk mein reduced lactose (dilution effect from blood plasma) se slightly elevated freezing point possible even without water addition."
+                        p1: "Cryoscopy freezing point measurement is the most reliable method for detecting water addition. Principle: colligative property — dissolved solutes depress the freezing point of milk. Normal bovine milk freezing point: -0.530°C to -0.560°C (average -0.540°C). Water addition raises the freezing point above -0.530°C. 1% water addition = approximately +0.005°C shift. Method: Thermistor cryoscope (IDF Standard 108:2002) — 99.5% accuracy. Advanced electronic systems: Funke-Gerber Cryostar-i™. Important note: mastitis milk may show a slightly elevated freezing point even without water addition due to reduced lactose (dilution effect from blood plasma)."
                     },
                     antibioticResidue: {
                         title: "Antibiotic Residue Testing",
-                        p1: "Antibiotic residues in milk ek major public health concern hain — antibiotic resistance development, allergic reactions (especially beta-lactams), disruption of starter cultures in fermented dairy. Major antibiotic classes in Indian dairy: Beta-lactams (penicillin, ampicillin, amoxicillin, cloxacillin — mastitis treatment), Tetracyclines (oxytetracycline, chlortetracycline), Sulfonamides, Aminoglycosides (streptomycin, neomycin).",
+                        p1: "Antibiotic residues in milk are a major public health concern — they contribute to antibiotic resistance development, allergic reactions (especially from beta-lactams), and disruption of starter cultures in fermented dairy products. Major antibiotic classes in Indian dairy: Beta-lactams (penicillin, ampicillin, amoxicillin, cloxacillin — used for mastitis treatment), Tetracyclines (oxytetracycline, chlortetracycline), Sulfonamides, Aminoglycosides (streptomycin, neomycin).",
                         methods: [
                             "Rapid screening: Lateral flow immunoassay strips (Charm ROSA, Idexx SNAP — 3-8 min, qualitative); Delvotest™ SP-NT (microbial inhibition test — 3 hours, broad spectrum); Copan BioRacer (automated strip reader)",
                             "Confirmatory: LC-MS/MS (Liquid Chromatography tandem Mass Spectrometry) — gold standard, quantitative, simultaneous multi-residue detection, ppb sensitivity",
@@ -1492,98 +1492,98 @@ export const milkHandlingPreservationContent = {
                     },
                     somaticCells: {
                         title: "Somatic Cell Count (SCC) — Mastitis Indicator",
-                        p1: "SCC = number of somatic cells (predominantly leukocytes/white blood cells) per mL of milk. High SCC indicates mastitis (udder infection). Scientific basis: infection → immune response → influx of neutrophils into milk → elevated SCC. Normal healthy cow: <1,00,000 cells/mL. Sub-clinical mastitis: 2,00,000-5,00,000 cells/mL. Clinical mastitis: >5,00,000 cells/mL.",
+                        p1: "SCC = number of somatic cells (predominantly leukocytes/white blood cells) per mL of milk. High SCC indicates mastitis (udder infection). Scientific basis: infection → immune response → influx of neutrophils into milk → elevated SCC. Normal healthy cow: <100,000 cells/mL. Sub-clinical mastitis: 200,000-500,000 cells/mL. Clinical mastitis: >500,000 cells/mL.",
                         methods: [
-                            "Direct Microscopic Somatic Cell Count (DMSCC): Newmann-Lampert stain, microscope counting — reference method",
+                            "Direct Microscopic Somatic Cell Count (DMSCC): Newman-Lampert stain, microscope counting — reference method",
                             "Electronic cell counting: Fossomatic™ (flow cytometry + fluorescent dye Ethidium Bromide) — automated, high throughput, IDF standard method",
                             "California Mastitis Test (CMT): Field test — detergent + milk, DNA viscosity gel formation indicates SCC level",
                             "Porta-SCC™: Portable electronic counter for farm use"
                         ],
-                        economicImpact: "High SCC milk economic impact: reduced cheese yield (casein breakdown by plasmin at high SCC), reduced butter quality, shorter shelf life, reduced lactose content, reduced milk protein content. India mein estimated loss due to mastitis: ₹7,000-9,000 crore annually."
+                        economicImpact: "Economic impact of high SCC milk: reduced cheese yield (casein breakdown by plasmin at high SCC), reduced butter quality, shorter shelf life, reduced lactose content, reduced milk protein content. Estimated loss due to mastitis in India: ₹7,000-9,000 crore annually."
                     }
                 },
 
                 sensorTechnology: {
-                    title: "Advanced Sensor Technologies aur Industry 4.0",
-                    p1: "Dairy quality testing mein digital transformation rapid pace par ho raha hai. Inline aur online sensors real-time monitoring enable kar rahe hain jo traditional offline laboratory testing replace kar rahe hain various parameters ke liye.",
+                    title: "Advanced Sensor Technologies and Industry 4.0",
+                    p1: "Digital transformation in dairy quality testing is occurring at a rapid pace. Inline and online sensors are enabling real-time monitoring, replacing traditional offline laboratory testing for various parameters.",
                     technologies: [
-                        "Mid-Infrared (MIR) Spectroscopy (MilkoScan™ FT+, Bentley FTS): 60+ parameters simultaneously measure karta hai (fat, protein, lactose, SCC, urea, fatty acid profile, freezing point prediction) within 60 seconds — lab milk analyzers ka standard",
-                        "Near-Infrared (NIR) Spectroscopy: Inline probes — milk streams mein real-time measurement without sampling, factory automation integration",
-                        "Raman Spectroscopy: Milk composition aur adulteration detection — non-destructive, no sample preparation; water, melanine, starch, urea detect kar sakta hai",
-                        "Electronic Nose (e-Nose): Sensor array jo volatile organic compounds (VOCs) detect karta hai — spoilage early warning (acetic acid, butyric acid, acetaldehyde), milk freshness real-time assessment",
-                        "Biosensors: Electrochemical biosensors jo antibiotics, hormones (rBST), pathogens, mycotoxins detect karte hain with high sensitivity (femtomolar detection possible), point-of-care applications",
-                        "Hyperspectral Imaging: Quality defects, fat distribution, adulteration detect karne ke liye — mainly for solid dairy products (cheese, butter)"
+                        "Mid-Infrared (MIR) Spectroscopy (MilkoScan™ FT+, Bentley FTS): Simultaneously measures 60+ parameters (fat, protein, lactose, SCC, urea, fatty acid profile, freezing point prediction) within 60 seconds — standard for lab milk analyzers",
+                        "Near-Infrared (NIR) Spectroscopy: Inline probes — real-time measurement in milk streams without sampling, integrated with factory automation",
+                        "Raman Spectroscopy: Milk composition and adulteration detection — non-destructive, no sample preparation; can detect water, melamine, starch, urea",
+                        "Electronic Nose (e-Nose): Sensor array detecting volatile organic compounds (VOCs) — early spoilage warning (acetic acid, butyric acid, acetaldehyde), real-time milk freshness assessment",
+                        "Biosensors: Electrochemical biosensors detecting antibiotics, hormones (rBST), pathogens, mycotoxins with high sensitivity (femtomolar detection possible), point-of-care applications",
+                        "Hyperspectral Imaging: For detecting quality defects, fat distribution, adulteration — mainly for solid dairy products (cheese, butter)"
                     ]
                 }
             },
 
             processingMethods: {
                 title: "VII. Milk Processing Technologies",
-                p1: "Raw milk ko processed dairy products mein convert karna involves multiple carefully controlled unit operations. Each processing step product safety, nutrition, taste aur shelf life par significant impact dalta hai.",
+                p1: "Converting raw milk into processed dairy products involves multiple carefully controlled unit operations. Each processing step has a significant impact on product safety, nutrition, taste, and shelf life.",
 
                 homogenization: {
                     title: "Homogenization",
-                    p1: "Homogenization milk mein fat globules ko mechanically size-reduce karta hai — average diameter 3-5 µm se 0.2-1.0 µm tak (HTST processing se pehle typically done). High pressure (150-200 bar) se milk ko narrow valve gaps se force kiya jata hai — cavitation, turbulence aur shear forces fat globules ko break karte hain. Result: cream layer formation nahi hoti, uniform fat distribution, improved digestibility (smaller fat globules easier to digest), whiter appearance, improved flavour stability.",
-                    scientificDetails: "Two-stage homogenization: Stage 1 (150-170 bar) — fat globule size reduction; Stage 2 (30-50 bar) — fat globule cluster disruption. New fat globule membranes form from milk proteins (casein micelle fragments + whey proteins) → more stable. Homogenized milk fat is more susceptible to lipolysis (lipase activity) because new membrane weaker than native MFGM (Milk Fat Globule Membrane).",
+                    p1: "Homogenization mechanically reduces the size of fat globules in milk — from an average diameter of 3-5 µm to 0.2-1.0 µm (typically done before HTST processing). Milk is forced through narrow valve gaps at high pressure (150-200 bar) — cavitation, turbulence, and shear forces break apart fat globules. Result: no cream layer formation, uniform fat distribution, improved digestibility (smaller fat globules are easier to digest), whiter appearance, improved flavour stability.",
+                    scientificDetails: "Two-stage homogenization: Stage 1 (150-170 bar) — fat globule size reduction; Stage 2 (30-50 bar) — fat globule cluster disruption. New fat globule membranes form from milk proteins (casein micelle fragments + whey proteins) → more stable. Homogenized milk fat is more susceptible to lipolysis (lipase activity) because the new membrane is weaker than the native MFGM (Milk Fat Globule Membrane).",
                     types: [
-                        "Upstream homogenization: Raw milk homogenized pehle, phir pasteurized — reduces microbial load slightly (physical disruption)",
+                        "Upstream homogenization: Raw milk homogenized first, then pasteurized — slightly reduces microbial load (physical disruption)",
                         "Downstream homogenization: After pasteurization (most common) — better microbial safety",
-                        "Partial homogenization: Only cream portion homogenized (energy efficient)",
+                        "Partial homogenization: Only the cream portion is homogenized (energy efficient)",
                         "Micro-homogenization (Microfluidization): Very high pressure (500-1000 bar) — submicron fat globules, different texture/mouthfeel"
                     ]
                 },
 
                 standardization: {
-                    title: "Standardization aur Fortification",
-                    p1: "Standardization: Fat aur SNF (Solids-Not-Fat) content ko required levels tak adjust karna — cream addition ya removal through centrifugal separator. FSSAI requirements: Toned Milk — 3.0% fat, 8.5% SNF; Double Toned Milk — 1.5% fat, 9.0% SNF; Standardized Milk — 4.5% fat, 8.5% SNF; Full Cream Milk — ≥6.0% fat, 9.0% SNF; Cow Milk — 3.5% fat, 8.5% SNF.",
+                    title: "Standardization and Fortification",
+                    p1: "Standardization: Adjusting fat and SNF (Solids-Not-Fat) content to required levels — through cream addition or removal using a centrifugal separator. FSSAI requirements: Toned Milk — 3.0% fat, 8.5% SNF; Double Toned Milk — 1.5% fat, 9.0% SNF; Standardized Milk — 4.5% fat, 8.5% SNF; Full Cream Milk — ≥6.0% fat, 9.0% SNF; Cow Milk — 3.5% fat, 8.5% SNF.",
                     fortification: {
                         title: "Milk Fortification",
-                        p1: "Nutritional fortification India mein public health initiative hai — FSSAI aur NDDB ka 'POSHAN' program. Mandatory fortification of packaged milk: Vitamin A (770 IU/250 mL) aur Vitamin D (400 IU/250 mL). Optional: Vitamin B12, Folic acid, Iron, Zinc.",
-                        challenges: "Technical challenges: Vitamin A (fat-soluble — oil premix required, pro-vitamin A — β-carotene alternative), Vitamin D stability issues (UV light degradation — opaque packaging required), Iron fortification affects colour aur taste, overcoming bioavailability challenges, ensuring homogeneous distribution."
+                        p1: "Nutritional fortification is a public health initiative in India — under FSSAI and NDDB's 'POSHAN' program. Mandatory fortification of packaged milk: Vitamin A (770 IU/250 mL) and Vitamin D (400 IU/250 mL). Optional: Vitamin B12, Folic acid, Iron, Zinc.",
+                        challenges: "Technical challenges: Vitamin A (fat-soluble — requires oil premix, pro-vitamin A — β-carotene as alternative), Vitamin D stability issues (UV light degradation — requires opaque packaging), Iron fortification affects colour and taste, overcoming bioavailability challenges, ensuring homogeneous distribution."
                     }
                 },
 
                 separation: {
-                    title: "Cream Separation aur Centrifugation",
-                    p1: "Cream separators: disc-stack centrifuges operating at 6,000-10,000 RPM. Stokes' Law governs separation: velocity = 2r²(ρ_milk - ρ_fat)g/9η, jahan r = fat globule radius, ρ = density, g = gravitational force, η = viscosity. Temperature 40-55°C par separation most efficient (lower viscosity). Bactofugation: high-speed centrifugation (15,000-20,000 RPM) — 90-95% bacteria aur spores remove karta hai (heavier than milk serum) — alternative ya supplement to pasteurization.",
+                    title: "Cream Separation and Centrifugation",
+                    p1: "Cream separators: disc-stack centrifuges operating at 6,000-10,000 RPM. Stokes' Law governs separation: velocity = 2r²(ρ_milk - ρ_fat)g/9η, where r = fat globule radius, ρ = density, g = gravitational force, η = viscosity. Separation is most efficient at 40-55°C (lower viscosity). Bactofugation: high-speed centrifugation (15,000-20,000 RPM) — removes 90-95% of bacteria and spores (heavier than milk serum) — an alternative or supplement to pasteurization."
                 }
             },
 
             packagingLabeling: {
-                title: "VIII. Dairy Packaging aur Labeling",
-                p1: "Packaging dairy products ki shelf life, safety aur consumer appeal directly determine karta hai. 'Package is the silent salesman' concept dairy mein particularly relevant hai.",
+                title: "VIII. Dairy Packaging and Labeling",
+                p1: "Packaging directly determines the shelf life, safety, and consumer appeal of dairy products. The concept that 'the package is the silent salesman' is particularly relevant in the dairy industry.",
 
                 packagingMaterials: {
-                    title: "Packaging Materials — Science aur Selection",
+                    title: "Packaging Materials — Science and Selection",
                     plasticBottles: {
                         title: "HDPE (High-Density Polyethylene) Bottles",
-                        p1: "Most common for pasteurized milk in India. Properties: good moisture barrier, chemical resistance, food-safe, recyclable (#2 HDPE). Limitation: poor oxygen barrier (O₂ transmission rate 500-600 cc·mm/m²·day·atm) — photooxidation possible. Opaque HDPE (white, contains TiO₂) blocks light — vitamin destruction prevent karta hai. Hermetic seal — tamper-evident. Shelf life: 14-18 days at 4°C."
+                        p1: "Most common for pasteurized milk in India. Properties: good moisture barrier, chemical resistance, food-safe, recyclable (#2 HDPE). Limitation: poor oxygen barrier (O₂ transmission rate 500-600 cc·mm/m²·day·atm) — photooxidation possible. Opaque HDPE (white, contains TiO₂) blocks light — prevents vitamin destruction. Hermetic seal — tamper-evident. Shelf life: 14-18 days at 4°C."
                     },
                     multilayerCartons: {
                         title: "Multilayer Paperboard Cartons (Tetra Pak, SIG)",
-                        p1: "ESL aur UHT milk ke liye standard. Structure (6 layers): Polyethylene (outer, moisture protection) / Paperboard (structural strength) / Polyethylene (adhesion) / Aluminum foil (oxygen + light barrier, O₂ TR ≈ 0 cc/day) / Polyethylene / Polyethylene (inner, food contact). Aseptic filling: H2O2 sterilization + UV + aseptic environment. Advantage: excellent shelf life, lightweight, recyclable (paper + Al + PE separation required). India mein Tetra Pak dominant (60%+ market share in UHT segment)."
+                        p1: "Standard for ESL and UHT milk. Structure (6 layers): Polyethylene (outer, moisture protection) / Paperboard (structural strength) / Polyethylene (adhesion) / Aluminum foil (oxygen + light barrier, O₂ TR ≈ 0 cc/day) / Polyethylene / Polyethylene (inner, food contact). Aseptic filling: H₂O₂ sterilization + UV + aseptic environment. Advantage: excellent shelf life, lightweight, recyclable (paper + Al + PE separation required). Tetra Pak is dominant in India (60%+ market share in UHT segment)."
                     },
                     glassbottles: {
-                        title: "Glass Bottles — Traditional aur Premium",
-                        p1: "Superior barrier properties (zero gas transmission), chemically inert, no plastic taste migration, infinitely recyclable, premium perception. Disadvantages: heavy (10x heavier than equivalent plastic), fragile, high transport cost, high production energy. Return/refill systems economically viable in some contexts. Increasingly popular in premium dairy segment (craft dairies, organic milk)."
+                        title: "Glass Bottles — Traditional and Premium",
+                        p1: "Superior barrier properties (zero gas transmission), chemically inert, no plastic taste migration, infinitely recyclable, premium perception. Disadvantages: heavy (10x heavier than equivalent plastic), fragile, high transport cost, high production energy. Return/refill systems are economically viable in some contexts. Increasingly popular in the premium dairy segment (craft dairies, organic milk)."
                     },
                     flexiblePackaging: {
                         title: "Flexible Packaging — Pouches",
-                        p1: "Polythene pouches: Cheapest packaging (lowest per-unit cost), widely used in India for pasteurized milk in loose retail. Multi-layer: PE/PA/PE or EVOH-based (better oxygen barrier). Disadvantage: inferior oxygen barrier compared to rigid containers, shorter shelf life for sensitive products. Pre-formed pouches (form-fill-seal machines — FFS): Automated, hygienic, cost-effective for high volumes."
+                        p1: "Polyethylene pouches: Cheapest packaging (lowest per-unit cost), widely used in India for pasteurized milk in loose retail. Multi-layer: PE/PA/PE or EVOH-based (better oxygen barrier). Disadvantage: inferior oxygen barrier compared to rigid containers, shorter shelf life for sensitive products. Pre-formed pouches (form-fill-seal machines — FFS): Automated, hygienic, cost-effective for high volumes."
                     },
                     activeIntelligentPackaging: {
-                        title: "Active aur Intelligent Packaging — Future Technologies",
+                        title: "Active and Intelligent Packaging — Future Technologies",
                         items: [
-                            "Active packaging: Oxygen scavengers (iron-based sachets — FeO oxidation absorbs O₂), CO₂ emitters (freshness enhance karte hain), antimicrobial packaging (silver nanoparticles, essential oil vapours, nisin-coated films incorporated)",
-                            "Intelligent packaging: Time-Temperature Indicators (TTIs — color change karte hain based on temperature history, e.g., 3M Monitormark™), Freshness indicators (pH-sensitive dyes jo spoilage acids detect karte hain, colorimetric CO₂ indicators), RFID tags (inventory tracking, anti-counterfeiting)",
-                            "Biodegradable/Biobased packaging: PLA (Polylactic Acid) from corn starch, PHA (Polyhydroxyalkanoates), seaweed-based films — sustainability push",
+                            "Active packaging: Oxygen scavengers (iron-based sachets — FeO oxidation absorbs O₂), CO₂ emitters (enhance freshness), antimicrobial packaging (silver nanoparticles, essential oil vapors, nisin-coated films incorporated into packaging)",
+                            "Intelligent packaging: Time-Temperature Indicators (TTIs — change color based on temperature history, e.g., 3M Monitormark™), Freshness indicators (pH-sensitive dyes detecting spoilage acids, colorimetric CO₂ indicators), RFID tags (inventory tracking, anti-counterfeiting)",
+                            "Biodegradable/Biobased packaging: PLA (Polylactic Acid) from corn starch, PHA (Polyhydroxyalkanoates), seaweed-based films — driven by sustainability push",
                             "Smart Labels: QR codes linking to supply chain information, allergen information, recipe suggestions"
                         ]
                     }
                 },
 
                 labelingRequirements: {
-                    title: "Labeling Regulatory Requirements",
+                    title: "Regulatory Labeling Requirements",
                     fssai: {
                         title: "FSSAI Labeling Requirements (FSS Act 2006 + FSS Labeling & Display Regulations 2020)",
                         mandatory: [
@@ -1592,7 +1592,7 @@ export const milkHandlingPreservationContent = {
                             "Best Before / Use By date (format DD/MM/YYYY or DD-MM-YYYY)",
                             "Storage conditions ('Keep refrigerated below 4°C')",
                             "FSSAI license number (14-digit)",
-                            "Manufacturer/packer name aur complete address",
+                            "Manufacturer/packer name and complete address",
                             "Country of origin",
                             "Ingredients list (if anything added — vitamin premix, stabilizers)",
                             "Nutritional information (per 100 mL serving): Energy (kcal), Protein, Total Fat, Carbohydrates, Sugars, Sodium",
@@ -1606,11 +1606,11 @@ export const milkHandlingPreservationContent = {
             },
 
             wastageManagement: {
-                title: "IX. Milk Wastage Management aur Sustainability",
-                p1: "Global food wastage ek critical sustainability issue hai — FAO estimate karta hai ki ~1.3 billion tonnes food annually wasted hota hai. Dairy sector mein, milk losses farm se consumer tak poori value chain mein occur hoti hain. India mein estimated post-harvest milk losses: 6-8% (approximately 10-13 million tonnes annually — WHO-FAO data).",
+                title: "IX. Milk Wastage Management and Sustainability",
+                p1: "Global food wastage is a critical sustainability issue — FAO estimates that approximately 1.3 billion tonnes of food is wasted annually. In the dairy sector, milk losses occur throughout the entire value chain from farm to consumer. Estimated post-harvest milk losses in India: 6-8% (approximately 10-13 million tonnes annually — WHO-FAO data).",
 
                 lossPoints: {
-                    title: "Milk Loss — Points aur Causes",
+                    title: "Milk Loss — Points and Causes",
                     items: [
                         "Farm level (30-40% of total losses): Mastitis-affected milk discard, antibiotic withdrawal period discard, colostrum wastage, spillage during milking/handling, poor hygiene leading to early rejection",
                         "Collection/transport (15-20%): Temperature abuse during transport, long transit times (>6 hours without adequate cooling), road quality issues causing mechanical damage, tanker cleaning failures leading to entire tanker rejection",
@@ -1623,13 +1623,13 @@ export const milkHandlingPreservationContent = {
                 reductionStrategies: {
                     title: "Milk Loss Reduction Strategies",
                     technical: [
-                        "Real-time milk quality monitoring aur predictive analytics (AI-based spoilage prediction)",
-                        "Dynamic routing aur scheduling (shorter farm-to-plant times)",
+                        "Real-time milk quality monitoring and predictive analytics (AI-based spoilage prediction)",
+                        "Dynamic routing and scheduling (shorter farm-to-plant times)",
                         "Cold chain optimization (solar-powered BMCs in remote areas, PCM-Phase Change Material cooling for transport without electricity)",
                         "Rapid platform testing (reduce rejection rates through better farm education)",
                         "Diversification into value-added products (near-expiry milk → khoa, cheese, milk powder) — reduces loss by converting to longer-shelf-life products",
-                        "Modified atmosphere packaging (MAP) aur active packaging adoption",
-                        "Demand forecasting AI tools (reduce over-production)"
+                        "Adoption of Modified Atmosphere Packaging (MAP) and active packaging",
+                        "AI-powered demand forecasting tools (reduce over-production)"
                     ],
                     byproducts: {
                         title: "Milk Byproduct Utilization — Circular Economy",
@@ -1638,42 +1638,42 @@ export const milkHandlingPreservationContent = {
                             "Buttermilk (byproduct of butter making): Fermented beverages (chaas), food ingredient (bakery, confectionery), animal feed",
                             "Cream (standardization byproduct): Butter, ghee, cream products, ice cream",
                             "Rejected milk (low acidity, minor quality issues): Biogas production (anaerobic digestion — 1L milk ≈ 0.5 m³ biogas), composting (after heat treatment), approved animal feed",
-                            "Skim milk permeate (from UF/MF): Lactose recovery, fermentation substrate (ethanol, lactic acid, vitamins production)"
+                            "Skim milk permeate (from UF/MF): Lactose recovery, fermentation substrate (ethanol, lactic acid, vitamin production)"
                         ]
                     }
                 },
 
                 environmentalImpact: {
-                    title: "Dairy Industry ka Environmental Footprint",
+                    title: "Environmental Footprint of the Dairy Industry",
                     items: [
-                        "Carbon footprint: Global dairy contributes ~4% of total greenhouse gas emissions (GHG). 1 liter milk production: 1.0-3.5 kg CO₂ equivalent (range depends on production system, feed, geography)",
-                        "Water footprint: 1 liter milk production requires approximately 1,000 liters water (virtual water — including feed crops irrigation)",
-                        "Wastewater: Dairy plants generate 1-3 liters wastewater per liter milk processed (high BOD — 1,000-5,000 mg/L, COD 2,000-10,000 mg/L). Treatment: UASB reactors, activated sludge, constructed wetlands",
+                        "Carbon footprint: Global dairy contributes ~4% of total greenhouse gas (GHG) emissions. 1 liter milk production: 1.0-3.5 kg CO₂ equivalent (range depends on production system, feed, geography)",
+                        "Water footprint: 1 liter milk production requires approximately 1,000 liters of water (virtual water — including feed crop irrigation)",
+                        "Wastewater: Dairy plants generate 1-3 liters of wastewater per liter of milk processed (high BOD — 1,000-5,000 mg/L, COD 2,000-10,000 mg/L). Treatment: UASB reactors, activated sludge, constructed wetlands",
                         "Energy consumption: Pasteurization + refrigeration: 0.3-0.5 kWh/liter; UHT processing: 0.4-0.7 kWh/liter. Renewable energy integration: solar thermal (milk pre-heating), solar PV (cooling systems), biogas from wastewater",
-                        "Packaging waste: Single-use plastic reduction — India's plastic waste management rules impact; Extended Producer Responsibility (EPR) mandatory for dairy companies"
+                        "Packaging waste: Single-use plastic reduction — India's plastic waste management rules impact dairy industry; Extended Producer Responsibility (EPR) mandatory for dairy companies"
                     ]
                 }
             },
 
             conclusions: {
-                title: "X. Conclusions aur Future Outlook",
-                p1: "Reception se preservation tak doodh ka comprehensive management dairy industry ke bhitar product safety aur economic viability dono ensure karne ke liye paramount hai. Scientific advancements — from molecular biology-based rapid testing methods to IoT-enabled cold chain monitoring aur non-thermal preservation technologies — continuously this field ko transform kar rahe hain.",
+                title: "X. Conclusions and Future Outlook",
+                p1: "The comprehensive management of milk from reception to preservation is paramount for ensuring both product safety and economic viability within the dairy industry. Scientific advancements — from molecular biology-based rapid testing methods to IoT-enabled cold chain monitoring and non-thermal preservation technologies — are continuously transforming this field.",
 
-                p2: "Effective milk management farm mein rigorous hygiene aur rapid cooling ke saath start hota hai — jo processing plant mein arriving doodh ki quality ko directly impact karta hai. 'Farm to Fork' approach: every link in this chain must function optimally. Weak link theory apply hoti hai — kisi bhi point par failure quality ko compromise kar sakti hai.",
+                p2: "Effective milk management begins with rigorous hygiene and rapid cooling at the farm — which directly impacts the quality of milk arriving at the processing plant. The 'Farm to Fork' approach requires every link in this chain to function optimally. The weak link theory applies — failure at any point can compromise quality.",
 
-                p3: "Milk transportation ek specialized operation hai jo advanced tanker design, IoT-based monitoring, blockchain traceability, aur smart logistics par rely karta hai. Cold chain integrity — ek seamless, interconnected temperature management system ke roop mein — isolated cooling events se fundamentally different approach hai.",
+                p3: "Milk transportation is a specialized operation that relies on advanced tanker design, IoT-based monitoring, blockchain traceability, and smart logistics. Cold chain integrity — as a seamless, interconnected temperature management system — is a fundamentally different approach from a series of isolated cooling events.",
 
-                p4: "Storage techniques, chahe large raw milk silos mein ho ya UHT milk ke aseptic packaging mein, continuously evolve ho rahe hain — Phase Change Materials (PCMs), active packaging, vacuum insulated panels jaise innovations shelf life extend karte hue environmental impact reduce kar rahe hain.",
+                p4: "Storage techniques, whether in large raw milk silos or aseptic packaging for UHT milk, are continuously evolving — innovations such as Phase Change Materials (PCMs), active packaging, and vacuum insulated panels extend shelf life while reducing environmental impact.",
 
-                p5: "Quality testing infrastructure real-time mein evolve ho rahi hai — traditional 48-hour plate count se 8-minute BACTOSCAN flow cytometry tak, ya agle 5 saalon mein inline NIR/Raman sensors jo processing lines mein directly integrated honge. Artificial intelligence aur machine learning quality prediction, process optimization aur waste reduction mein transformative role play kar rahe hain.",
+                p5: "Quality testing infrastructure is evolving in real time — from traditional 48-hour plate counts to 8-minute BACTOSCAN flow cytometry, and within the next 5 years, inline NIR/Raman sensors directly integrated into processing lines. Artificial intelligence and machine learning are playing a transformative role in quality prediction, process optimization, and waste reduction.",
 
-                p6: "Preservation science ka future 'clean label' movement dwara shaped ho raha hai — consumers chemical preservatives se natural alternatives ki taraf shift kar rahe hain. Hurdle technology combinations, biological preservation (bacteriocins, bacteriophages), aur advanced physical methods (HPP, PEF, UV) ek future present karte hain jahan safety aur quality minimal intervention ke saath achieve hoti hai.",
+                p6: "The future of preservation science is being shaped by the 'clean label' movement — consumers are shifting away from chemical preservatives toward natural alternatives. Hurdle technology combinations, biological preservation (bacteriocins, bacteriophages), and advanced physical methods (HPP, PEF, UV) present a future where safety and quality are achieved with minimal intervention.",
 
                 keyTakeaways: {
                     title: "Key Scientific Takeaways",
                     items: [
-                        "Temperature is the most critical single factor in milk quality preservation — every 6°C temperature increase doubles spoilage rate (Q10 ≈ 2)",
-                        "Milk quality cannot be improved — only maintained. Sub-standard input = sub-standard output. Prevention (farm hygiene, rapid cooling) >> Correction (impossible in most cases)",
+                        "Temperature is the most critical single factor in milk quality preservation — every 6°C temperature increase doubles the spoilage rate (Q10 ≈ 2)",
+                        "Milk quality cannot be improved — only maintained. Sub-standard input = sub-standard output. Prevention (farm hygiene, rapid cooling) is far more effective than correction (which is impossible in most cases)",
                         "Pasteurization (72°C/15s) achieves 5-6 log pathogen reduction — sufficient for public health protection with proper refrigeration",
                         "UHT (135-155°C/2-8s) + aseptic packaging = commercial sterility — revolutionary for areas without cold chain infrastructure",
                         "Hurdle technology (multiple simultaneous barriers) is the future of dairy preservation — effective, clean-label, minimal processing",
@@ -1682,14 +1682,14 @@ export const milkHandlingPreservationContent = {
                 },
 
                 futureTrends: {
-                    title: "Future Trends in Milk Handling aur Preservation",
+                    title: "Future Trends in Milk Handling and Preservation",
                     items: [
-                        "Precision Fermentation aur Cell-Cultured Dairy: Lab-grown dairy proteins (Perfect Day — whey proteins via fermentation) aur cell-cultured milk — potential disruption to traditional dairy",
+                        "Precision Fermentation and Cell-Cultured Dairy: Lab-grown dairy proteins (Perfect Day — whey proteins via fermentation) and cell-cultured milk — potential disruption to traditional dairy",
                         "AI-powered Quality Management: Predictive spoilage models, automated quality sorting, computer vision-based defect detection",
-                        "Blockchain-based Complete Traceability: Farm-to-consumer real-time tracking — immutable quality records, rapid targeted recalls",
+                        "Blockchain-based Complete Traceability: Real-time farm-to-consumer tracking — immutable quality records, rapid targeted recalls",
                         "Carbon-neutral Dairy Processing: Net-zero targets by 2050 — renewable energy integration, carbon capture, circular economy principles",
                         "Personalized Nutrition: A2 milk, lactose-free, fortified milk targeted at specific health conditions — growing market segment",
-                        "Novel Preservation Technologies: Cold plasma treatment, ultrasonication, dense phase CO₂ — research to commercial transition expected in next 5-10 years",
+                        "Novel Preservation Technologies: Cold plasma treatment, ultrasonication, dense phase CO₂ — research-to-commercial transition expected in the next 5-10 years",
                         "Smart Packaging: Time-temperature indicators becoming standard, freshness sensors embedded in packaging, augmented reality labels for consumer information"
                     ]
                 }
