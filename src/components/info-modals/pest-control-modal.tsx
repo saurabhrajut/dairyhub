@@ -313,6 +313,7 @@ export function PestControlModal({
         sm:w-[95vw] sm:h-[95dvh] sm:max-w-4xl sm:max-h-[95dvh] sm:rounded-2xl
         lg:max-w-6xl
         flex flex-col p-0 gap-0 overflow-hidden shadow-2xl box-border
+        [&>button]:!text-white
       ">
         {/* ── Top Header Bar ─────────────────────── */}
         <div className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-800 px-3 sm:px-6 py-2 sm:py-4 shrink-0 border-b border-white/10">
@@ -391,7 +392,7 @@ export function PestControlModal({
                         </h3>
                       </div>
                       <div className="flex-1 h-px bg-gradient-to-r from-emerald-200 to-transparent" />
-                      <span className="text-[10px] text-emerald-600 font-medium tabular-nums bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                      <span className="text-[10px] text-emerald-600 font-medium tabular-nums bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
                         {lbl.topicsCount(group.topics.length)}
                       </span>
                     </div>
