@@ -37,6 +37,11 @@ import {
   ClipboardList,
   Target,
   Lightbulb,
+  Cpu,
+  Microscope,
+  FlaskConical,
+  Thermometer,
+  Truck,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────
@@ -304,6 +309,76 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string; 
       <RawHTML html={content.sections.recommendations.content} />
     </Section>
   ),
+  technology: ({ content, accent }) => (
+    <Section title={content.sections.technology_section.title} icon={Cpu} accentColor={accent}>
+      <RawHTML html={content.sections.technology_section.content} />
+      <SubSection title={content.sections.technology_section.subsections.rapid_testing.title}>
+        <RawHTML html={content.sections.technology_section.subsections.rapid_testing.content} />
+      </SubSection>
+      <SubSection title={content.sections.technology_section.subsections.digital_audit.title}>
+        <RawHTML html={content.sections.technology_section.subsections.digital_audit.content} />
+      </SubSection>
+      <SubSection title={content.sections.technology_section.subsections.predictive_analytics.title}>
+        <RawHTML html={content.sections.technology_section.subsections.predictive_analytics.content} />
+      </SubSection>
+      <SubSection title={content.sections.technology_section.subsections.laboratory_systems.title}>
+        <RawHTML html={content.sections.technology_section.subsections.laboratory_systems.content} />
+      </SubSection>
+    </Section>
+  ),
+  microbiology: ({ content, accent }) => (
+    <Section title={content.sections.microbiology_section.title} icon={Microscope} accentColor={accent}>
+      <RawHTML html={content.sections.microbiology_section.content} />
+      <SubSection title={content.sections.microbiology_section.subsections.pathogens.title}>
+        <RawHTML html={content.sections.microbiology_section.subsections.pathogens.content} />
+      </SubSection>
+      <SubSection title={content.sections.microbiology_section.subsections.indicators.title}>
+        <RawHTML html={content.sections.microbiology_section.subsections.indicators.content} />
+      </SubSection>
+      <SubSection title={content.sections.microbiology_section.subsections.fermentation.title}>
+        <RawHTML html={content.sections.microbiology_section.subsections.fermentation.content} />
+      </SubSection>
+    </Section>
+  ),
+  chemical_testing: ({ content, accent }) => (
+    <Section title={content.sections.chemical_testing_section.title} icon={FlaskConical} accentColor={accent}>
+      <RawHTML html={content.sections.chemical_testing_section.content} />
+      <SubSection title={content.sections.chemical_testing_section.subsections.antibiotic_residues.title}>
+        <RawHTML html={content.sections.chemical_testing_section.subsections.antibiotic_residues.content} />
+      </SubSection>
+      <SubSection title={content.sections.chemical_testing_section.subsections.heavy_metals.title}>
+        <RawHTML html={content.sections.chemical_testing_section.subsections.heavy_metals.content} />
+      </SubSection>
+      <SubSection title={content.sections.chemical_testing_section.subsections.adulteration.title}>
+        <RawHTML html={content.sections.chemical_testing_section.subsections.adulteration.content} />
+      </SubSection>
+    </Section>
+  ),
+  environmental: ({ content, accent }) => (
+    <Section title={content.sections.environmental_monitoring_section.title} icon={Thermometer} accentColor={accent}>
+      <RawHTML html={content.sections.environmental_monitoring_section.content} />
+      <SubSection title={content.sections.environmental_monitoring_section.subsections.emp_design.title}>
+        <RawHTML html={content.sections.environmental_monitoring_section.subsections.emp_design.content} />
+      </SubSection>
+      <SubSection title={content.sections.environmental_monitoring_section.subsections.listeria_control.title}>
+        <RawHTML html={content.sections.environmental_monitoring_section.subsections.listeria_control.content} />
+      </SubSection>
+      <SubSection title={content.sections.environmental_monitoring_section.subsections.cleaning_validation.title}>
+        <RawHTML html={content.sections.environmental_monitoring_section.subsections.cleaning_validation.content} />
+      </SubSection>
+    </Section>
+  ),
+  supplier: ({ content, accent }) => (
+    <Section title={content.sections.supplier_management_section.title} icon={Truck} accentColor={accent}>
+      <RawHTML html={content.sections.supplier_management_section.content} />
+      <SubSection title={content.sections.supplier_management_section.subsections.supplier_qualification.title}>
+        <RawHTML html={content.sections.supplier_management_section.subsections.supplier_qualification.content} />
+      </SubSection>
+      <SubSection title={content.sections.supplier_management_section.subsections.raw_material_specification.title}>
+        <RawHTML html={content.sections.supplier_management_section.subsections.raw_material_specification.content} />
+      </SubSection>
+    </Section>
+  ),
 };
 
 // ─────────────────────────────────────────────
@@ -320,27 +395,38 @@ const getTopicGroups = (c: any, lang: "hi" | "en") => {
       ],
     },
     {
-      groupLabel: lang === "hi" ? "ऑडिट के प्रकार (Types of Audits)" : "Types of Audits",
+      groupLabel: lang === "hi" ? "ऑडिट के प्रकार और निष्पादन (Audit Types & Execution)" : "Audit Types & Execution",
       groupIcon: Search,
       topics: [
-        { value: "internal", title: c.tabs.internal, subtitle: "Self-assessment & continuous monitoring", icon: Search, accent: "amber", badge: "Internal", badgeVariant: "secondary" as const, colorClass: "text-amber-600", bgClass: "bg-amber-50 hover:bg-amber-100", borderClass: "border-amber-200 hover:border-amber-400" },
+        { value: "internal", title: c.tabs.internal, subtitle: "Self-assessment & monitoring", icon: Search, accent: "amber", badge: "Internal", badgeVariant: "secondary" as const, colorClass: "text-amber-600", bgClass: "bg-amber-50 hover:bg-amber-100", borderClass: "border-amber-200 hover:border-amber-400" },
         { value: "external", title: c.tabs.external, subtitle: "Third-party & regulatory inspections", icon: Building, accent: "indigo", badge: "External", badgeVariant: "secondary" as const, colorClass: "text-indigo-600", bgClass: "bg-indigo-50 hover:bg-indigo-100", borderClass: "border-indigo-200 hover:border-indigo-400" },
-      ],
-    },
-    {
-      groupLabel: lang === "hi" ? "निष्पादन और रणनीति (Execution & Strategy)" : "Execution & Strategy",
-      groupIcon: Target,
-      topics: [
         { value: "focus_areas", title: c.tabs.focus_areas, subtitle: "Key hygiene & sanitation checkpoints", icon: Target, accent: "teal", badge: "Checklist", badgeVariant: "secondary" as const, colorClass: "text-teal-600", bgClass: "bg-teal-50 hover:bg-teal-100", borderClass: "border-teal-200 hover:border-teal-400" },
-        { value: "challenges", title: c.tabs.challenges, subtitle: "Common pitfalls & best practices", icon: AlertTriangle, accent: "red", badge: "Strategy", badgeVariant: "destructive" as const, colorClass: "text-red-600", bgClass: "bg-red-50 hover:bg-red-100", borderClass: "border-red-200 hover:border-red-400" },
       ],
     },
     {
-      groupLabel: lang === "hi" ? "निष्कर्ष और सुझाव (Outcomes & Path Forward)" : "Outcomes & Path Forward",
+      groupLabel: lang === "hi" ? "परीक्षण और सूक्ष्म जीव विज्ञान (Testing & Microbiology)" : "Testing & Microbiology",
+      groupIcon: Microscope,
+      topics: [
+        { value: "microbiology", title: c.tabs.microbiology, subtitle: "Pathogens, indicators & fermentation", icon: Microscope, accent: "rose", badge: "Microbiology", badgeVariant: "secondary" as const, colorClass: "text-rose-600", bgClass: "bg-rose-50 hover:bg-rose-100", borderClass: "border-rose-200 hover:border-rose-400" },
+        { value: "chemical_testing", title: c.tabs.chemical_testing, subtitle: "Antibiotics, heavy metals, adulteration", icon: FlaskConical, accent: "emerald", badge: "Chemical", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400" },
+        { value: "environmental", title: c.tabs.environmental, subtitle: "EMP design, Listeria control, cleaning validation", icon: Thermometer, accent: "cyan", badge: "EMP", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400" },
+      ],
+    },
+    {
+      groupLabel: lang === "hi" ? "आपूर्ति श्रृंखला और प्रौद्योगिकी (Supply Chain & Technology)" : "Supply Chain & Technology",
+      groupIcon: Cpu,
+      topics: [
+        { value: "supplier", title: c.tabs.supplier, subtitle: "Qualification & specifications", icon: Truck, accent: "indigo", badge: "Supplier", badgeVariant: "secondary" as const, colorClass: "text-indigo-600", bgClass: "bg-indigo-50 hover:bg-indigo-100", borderClass: "border-indigo-200 hover:border-indigo-400" },
+        { value: "technology", title: c.tabs.technology, subtitle: "Rapid testing, digital audits & AI", icon: Cpu, accent: "orange", badge: "Technology", badgeVariant: "secondary" as const, colorClass: "text-orange-600", bgClass: "bg-orange-50 hover:bg-orange-100", borderClass: "border-orange-200 hover:border-orange-400" },
+      ],
+    },
+    {
+      groupLabel: lang === "hi" ? "संस्कृति और निष्कर्ष (Culture & Summary)" : "Culture & Summary",
       groupIcon: Award,
       topics: [
-        { value: "recommendations", title: c.tabs.recommendations, subtitle: "Actionable steps for compliance", icon: Award, accent: "cyan", badge: "Action", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400" },
-        { value: "conclusion", title: c.tabs.conclusion, subtitle: "Final wrap-up on audit importance", icon: CheckCircle, accent: "emerald", badge: "Summary", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400" },
+        { value: "challenges", title: c.tabs.challenges, subtitle: "Common pitfalls, best practices & food safety culture", icon: AlertTriangle, accent: "red", badge: "Strategy", badgeVariant: "destructive" as const, colorClass: "text-red-600", bgClass: "bg-red-50 hover:bg-red-100", borderClass: "border-red-200 hover:border-red-400" },
+        { value: "recommendations", title: c.tabs.recommendations, subtitle: "Actionable roadmap for compliance", icon: Award, accent: "cyan", badge: "Action", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400" },
+        { value: "conclusion", title: c.tabs.conclusion, subtitle: "Final wrap-up on audit importance", icon: CheckCircle, accent: "emerald", badge: "Summary", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400", wide: true },
       ],
     },
   ];
