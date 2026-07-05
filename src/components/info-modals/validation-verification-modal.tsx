@@ -203,6 +203,10 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string }
         <RawHTML html={content.sections.introduction.subsections.defining.content} />
       </SubSection>
 
+      <SubSection title={content.sections.introduction.subsections.key_differences.title} accent="border-blue-200">
+        <RawHTML html={content.sections.introduction.subsections.key_differences.content} />
+      </SubSection>
+
       <SubSection title={content.sections.introduction.subsections.indispensable_role.title} accent="border-blue-200">
         <div className="bg-blue-50/50 p-4 sm:p-5 rounded-xl border border-blue-100 my-2">
           <RawHTML html={content.sections.introduction.subsections.indispensable_role.content} />
@@ -271,6 +275,9 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string }
         <SubSection title={content.sections.raw_milk_handling.subsections.tanker_cleaning.title} accent="border-emerald-200">
           <RawHTML html={content.sections.raw_milk_handling.subsections.tanker_cleaning.content} />
         </SubSection>
+        <SubSection title={content.sections.raw_milk_handling.subsections.farm_level.title} accent="border-emerald-200">
+          <RawHTML html={content.sections.raw_milk_handling.subsections.farm_level.content} />
+        </SubSection>
       </div>
     </Section>
   ),
@@ -289,8 +296,14 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string }
       <SubSection title={content.sections.processing.subsections.homogenization.title} accent="border-orange-200">
         <RawHTML html={content.sections.processing.subsections.homogenization.content} />
       </SubSection>
+      <SubSection title={content.sections.processing.subsections.fermentation.title} accent="border-orange-200">
+        <RawHTML html={content.sections.processing.subsections.fermentation.content} />
+      </SubSection>
       <SubSection title={content.sections.processing.subsections.cip_cop.title} accent="border-orange-200">
         <RawHTML html={content.sections.processing.subsections.cip_cop.content} />
+      </SubSection>
+      <SubSection title={content.sections.processing.subsections.packaging.title} accent="border-orange-200">
+        <RawHTML html={content.sections.processing.subsections.packaging.content} />
       </SubSection>
     </Section>
   ),
@@ -317,17 +330,67 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string }
       <SubSection title={content.sections.storage.subsections.shelf_life.title} accent="border-cyan-200">
         <RawHTML html={content.sections.storage.subsections.shelf_life.content} />
       </SubSection>
-      <SubSection title={content.sections.storage.subsections.documentation.title} accent="border-cyan-200">
-        <RawHTML html={content.sections.storage.subsections.documentation.content} />
+    </Section>
+  ),
+
+  haccp: ({ content, accent }) => (
+    <Section title={content.sections.haccp.title} icon={ShieldCheck} accentColor={accent}>
+      <RawHTML html={content.sections.haccp.content} />
+      <SubSection title={content.sections.haccp.subsections.seven_principles.title} accent="border-red-200">
+        <RawHTML html={content.sections.haccp.subsections.seven_principles.content} />
+      </SubSection>
+      <SubSection title={content.sections.haccp.subsections.dairy_ccps.title} accent="border-red-200">
+        <div className="bg-red-50/50 p-4 sm:p-5 rounded-xl border border-red-100 w-full min-w-0 max-w-full overflow-hidden">
+          <RawHTML html={content.sections.haccp.subsections.dairy_ccps.content} />
+        </div>
+      </SubSection>
+      <SubSection title={content.sections.haccp.subsections.prerequisite_programs.title} accent="border-red-200">
+        <RawHTML html={content.sections.haccp.subsections.prerequisite_programs.content} />
+      </SubSection>
+    </Section>
+  ),
+
+  analytical: ({ content, accent }) => (
+    <Section title={content.sections.analytical.title} icon={Activity} accentColor={accent}>
+      <RawHTML html={content.sections.analytical.content} />
+      <SubSection title={content.sections.analytical.subsections.method_validation.title} accent="border-teal-200">
+        <RawHTML html={content.sections.analytical.subsections.method_validation.content} />
+      </SubSection>
+      <SubSection title={content.sections.analytical.subsections.rapid_methods.title} accent="border-teal-200">
+        <RawHTML html={content.sections.analytical.subsections.rapid_methods.content} />
+      </SubSection>
+      <SubSection title={content.sections.analytical.subsections.proficiency_testing.title} accent="border-teal-200">
+        <RawHTML html={content.sections.analytical.subsections.proficiency_testing.content} />
+      </SubSection>
+    </Section>
+  ),
+
+  documentation: ({ content, accent }) => (
+    <Section title={content.sections.documentation.title} icon={FolderClock} accentColor={accent}>
+      <RawHTML html={content.sections.documentation.content} />
+      <SubSection title={content.sections.documentation.subsections.validation_records.title} accent="border-amber-200">
+        <RawHTML html={content.sections.documentation.subsections.validation_records.content} />
+      </SubSection>
+      <SubSection title={content.sections.documentation.subsections.verification_records.title} accent="border-amber-200">
+        <RawHTML html={content.sections.documentation.subsections.verification_records.content} />
+      </SubSection>
+      <SubSection title={content.sections.documentation.subsections.traceability.title} accent="border-amber-200">
+        <RawHTML html={content.sections.documentation.subsections.traceability.content} />
       </SubSection>
     </Section>
   ),
 
   conclusion: ({ content, accent }) => (
     <Section title={content.sections.conclusion.title} icon={CheckCircle} accentColor={accent}>
-      <div className="bg-purple-50/80 p-5 sm:p-6 rounded-xl border border-purple-100 text-purple-950 font-medium">
+      <div className="bg-purple-50/80 p-5 sm:p-6 rounded-xl border border-purple-100 text-purple-950 font-medium mb-6">
         <RawHTML html={content.sections.conclusion.content} />
       </div>
+      <SubSection title={content.sections.conclusion.subsections.recommendations.title} accent="border-purple-200">
+        <RawHTML html={content.sections.conclusion.subsections.recommendations.content} />
+      </SubSection>
+      <SubSection title={content.sections.conclusion.subsections.future_trends.title} accent="border-purple-200">
+        <RawHTML html={content.sections.conclusion.subsections.future_trends.content} />
+      </SubSection>
     </Section>
   ),
 };
@@ -348,15 +411,24 @@ const getTopicGroups = (c: any, lang: "hi" | "en") => {
       groupLabel: lang === "hi" ? "प्रसंस्करण और संचालन (Processing & Operations)" : "Processing & Operations",
       groupIcon: Settings,
       topics: [
-        { value: "raw_milk", title: c.tabs.raw_milk, subtitle: "Raw milk checks", icon: Droplet, accent: "emerald", badge: "Handling", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400" },
+        { value: "raw_milk", title: c.tabs.raw_milk, subtitle: "Raw milk platform tests", icon: Droplet, accent: "emerald", badge: "Handling", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400" },
         { value: "processing", title: c.tabs.processing, subtitle: "Thermal & non-thermal", icon: Settings, accent: "orange", badge: "Process", badgeVariant: "secondary" as const, colorClass: "text-orange-600", bgClass: "bg-orange-50 hover:bg-orange-100", borderClass: "border-orange-200 hover:border-orange-400" },
       ],
     },
     {
-      groupLabel: lang === "hi" ? "भंडारण और नियंत्रण (Storage & Control)" : "Storage & Control",
+      groupLabel: lang === "hi" ? "गुणवत्ता और एचएसीसीपी (Quality & HACCP)" : "Quality & HACCP",
       groupIcon: ShieldCheck,
       topics: [
-        { value: "storage", title: c.tabs.storage, subtitle: "Cold chain & Shelf life", icon: FolderClock, accent: "cyan", badge: "Control", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400" },
+        { value: "haccp", title: c.tabs.haccp, subtitle: "7 HACCP principles & CCPs", icon: ShieldCheck, accent: "red", badge: "HACCP", badgeVariant: "secondary" as const, colorClass: "text-red-600", bgClass: "bg-red-50 hover:bg-red-100", borderClass: "border-red-200 hover:border-red-400" },
+        { value: "analytical", title: c.tabs.analytical, subtitle: "Lab validation & PT", icon: Activity, accent: "teal", badge: "Lab", badgeVariant: "secondary" as const, colorClass: "text-teal-600", bgClass: "bg-teal-50 hover:bg-teal-100", borderClass: "border-teal-200 hover:border-teal-400" },
+      ],
+    },
+    {
+      groupLabel: lang === "hi" ? "भंडारण और दस्तावेज़ीकरण (Storage & Documentation)" : "Storage & Documentation",
+      groupIcon: FolderClock,
+      topics: [
+        { value: "storage", title: c.tabs.storage, subtitle: "Cold chain & Shelf life", icon: FolderClock, accent: "cyan", badge: "Storage", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400" },
+        { value: "documentation", title: c.tabs.documentation, subtitle: "Records & Traceability", icon: FolderClock, accent: "amber", badge: "Records", badgeVariant: "secondary" as const, colorClass: "text-amber-600", bgClass: "bg-amber-50 hover:bg-amber-100", borderClass: "border-amber-200 hover:border-amber-400" },
       ],
     },
     {
