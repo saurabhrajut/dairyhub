@@ -421,8 +421,9 @@ export function SarathiChatWidget() {
       </div>
 
       {/* Chat Container */}
+      {/* FIX APPLIED: Changed `w-[92vw] right-4` to `left-4 right-4 w-auto` on mobile for perfect centering */}
       <div className={cn(
-        "fixed bottom-4 right-4 z-50 w-[92vw] sm:w-[400px] h-[85vh] sm:h-[70vh] max-h-[85vh] bg-slate-50 border border-slate-200/50 rounded-3xl shadow-2xl flex flex-col transition-all duration-500 origin-bottom-right overflow-hidden strict-html-wrap",
+        "fixed bottom-4 left-4 right-4 sm:left-auto z-50 w-auto sm:w-[400px] h-[85vh] sm:h-[70vh] max-h-[85vh] bg-slate-50 border border-slate-200/50 rounded-3xl shadow-2xl flex flex-col transition-all duration-500 origin-bottom-right overflow-hidden strict-html-wrap",
         isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-12 pointer-events-none'
       )}>
         <style dangerouslySetInnerHTML={{ __html: CONTENT_STYLES }} />
