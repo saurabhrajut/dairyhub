@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Bot, 
   Loader2, 
@@ -18,7 +17,8 @@ import {
   Sparkles,
   GraduationCap,
   FileText,
-  Settings
+  Settings,
+  ChevronRight
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -45,6 +45,21 @@ type ChatMode = 'sarathi' | 'gyan-ai';
 type GyanAITopic = 
   | 'Career Guidance in Food Industry' 
   | 'Interview Preparation';
+
+// --- STYLES ---
+const CONTENT_STYLES = `
+  .strict-html-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .strict-html-wrap * {
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    box-sizing: border-box !important;
+  }
+`;
 
 // --- Offline AI Helper Functions ---
 
@@ -407,9 +422,10 @@ export function SarathiChatWidget() {
 
       {/* Chat Container */}
       <div className={cn(
-        "fixed bottom-4 right-4 z-50 w-[92vw] sm:w-[400px] h-[85vh] sm:h-[70vh] max-h-[85vh] bg-white border border-slate-200/50 rounded-3xl shadow-2xl flex flex-col transition-all duration-500 origin-bottom-right overflow-hidden",
+        "fixed bottom-4 right-4 z-50 w-[92vw] sm:w-[400px] h-[85vh] sm:h-[70vh] max-h-[85vh] bg-slate-50 border border-slate-200/50 rounded-3xl shadow-2xl flex flex-col transition-all duration-500 origin-bottom-right overflow-hidden strict-html-wrap",
         isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-12 pointer-events-none'
       )}>
+        <style dangerouslySetInnerHTML={{ __html: CONTENT_STYLES }} />
         <ChatInterface 
             isOpen={isOpen}
             onClose={() => setIsOpen(false)} 
@@ -939,7 +955,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
   const isInterviewSetup = activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation' && messages.length === 0;
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-white to-indigo-50 relative">
+    <div className="flex flex-col h-full bg-slate-50 relative rounded-3xl overflow-hidden shadow-2xl">
         {/* Settings Overlay */}
         {showSettings && (
             <div className="absolute inset-0 bg-white z-30 flex flex-col p-6 transition-all duration-300">
@@ -973,11 +989,11 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             placeholder="AIzaSy..."
                             value={settingsApiKey}
                             onChange={(e) => setSettingsApiKey(e.target.value)}
-                            className="h-12 border-slate-200 focus-visible:ring-indigo-500"
+                            className="h-12 border-slate-200 focus-visible:ring-indigo-500 rounded-xl"
                         />
                     </div>
                     
-                    <div className="text-xs text-slate-500 bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-1">
+                    <div className="text-xs text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-1">
                         <span className="font-semibold block text-slate-700">How to get a key?</span>
                         <a 
                             href="https://aistudio.google.com/" 
@@ -1004,7 +1020,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 });
                             }
                         }}
-                        className="flex-1 h-12 rounded-2xl"
+                        className="flex-1 h-12 rounded-xl"
                     >
                         Clear Key
                     </Button>
@@ -1021,7 +1037,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 setShowSettings(false);
                             }
                         }}
-                        className="flex-1 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-lg shadow-indigo-600/20"
+                        className="flex-1 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-600/20"
                     >
                         Save Settings
                     </Button>
@@ -1029,11 +1045,8 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             </div>
         )}
 
-        {/* Header */}
-        <div className={cn(
-            "px-5 py-4 flex items-center justify-between shrink-0 shadow-lg transition-all duration-500 border-b border-slate-200/50",
-            activeMode === 'sarathi' ? "bg-white" : "bg-gradient-to-r from-indigo-600 to-purple-600 text-white"
-        )}>
+        {/* Header - Premium Dark Pattern */}
+        <div className="px-4 py-3 flex items-center justify-between shrink-0 shadow-md transition-all duration-500 border-b border-white/10 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 text-white z-20">
             <div className="flex items-center gap-3 flex-1">
                 {activeMode === 'gyan-ai' && (
                     <Button 
@@ -1043,14 +1056,14 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             setSelectedTopic(null);
                             setActiveMode('sarathi');
                         }} 
-                        className="h-9 w-9 -ml-1 hover:bg-white/20 transition-all"
+                        className="h-9 w-9 -ml-1 hover:bg-white/20 text-white transition-all rounded-full"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </Button>
                 )}
                 
                 <div className="relative flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-2xl border-2 border-white/80 shadow-md flex-shrink-0 overflow-hidden bg-white/20">
+                    <div className="w-10 h-10 rounded-xl border border-white/30 shadow-md flex-shrink-0 overflow-hidden bg-white/20">
                         <img 
                             src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
                             alt="Sarathi Avatar"
@@ -1058,20 +1071,18 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         />
                     </div>
                     <div className="min-w-0">
-                        <h3 className="font-bold text-base leading-tight truncate">
+                        <h3 className="font-bold text-[15px] sm:text-base leading-tight truncate font-headline tracking-tight">
                             {activeMode === 'sarathi' ? '💬 Sarathi Chat Bot' : (selectedTopic || 'DairyHub Expert Bot')}
                         </h3>
-                        <p className={cn("text-xs font-medium opacity-90 leading-tight", 
-                            activeMode === 'sarathi' ? "text-slate-600" : "text-indigo-100"
-                        )}>
+                        <p className="text-[10px] sm:text-xs font-medium opacity-80 leading-tight text-indigo-200/90">
                             {activeMode === 'sarathi' ? 'Friendly Companion' : 'Domain Expert'}
                         </p>
                     </div>
-                    <div className="w-2 h-2 bg-emerald-400 border-2 border-white rounded-full animate-pulse ml-auto"></div>
+                    <div className="w-2 h-2 bg-emerald-400 border border-white/50 rounded-full animate-pulse ml-auto shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
                 </div>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
                  {activeMode === 'sarathi' && (
                     <Button 
                         size="sm" 
@@ -1080,9 +1091,9 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             setActiveMode('gyan-ai');
                             setSelectedTopic('Interview Preparation');
                         }}
-                        className="h-9 bg-white/20 hover:bg-white/30 text-white border-white/20 text-xs px-3 rounded-2xl shadow-lg font-semibold transition-all"
+                        className="h-8 bg-white/10 hover:bg-white/20 text-white border border-white/20 text-[10px] sm:text-xs px-2 sm:px-3 rounded-lg shadow-sm font-semibold transition-all"
                     >
-                        <Sparkles className="w-4 h-4 mr-1" />
+                        <Sparkles className="w-3.5 h-3.5 mr-1 text-yellow-300" />
                         Experts
                     </Button>
                  )}
@@ -1090,21 +1101,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                     variant="ghost" 
                     size="icon" 
                     onClick={() => setShowSettings(!showSettings)} 
-                    className={cn(
-                        "h-10 w-10 rounded-2xl shadow-lg transition-all",
-                        activeMode === 'gyan-ai' ? "hover:bg-white/30 text-white" : "hover:bg-slate-100 text-slate-600"
-                    )}
+                    className="h-9 w-9 rounded-xl hover:bg-white/20 text-white transition-all"
                 >
-                    <Settings className="w-5 h-5" />
+                    <Settings className="w-4 h-4" />
                 </Button>
                 <Button 
                     variant="ghost" 
                     size="icon" 
                     onClick={onClose} 
-                    className={cn(
-                        "h-10 w-10 rounded-2xl shadow-lg transition-all",
-                        activeMode === 'gyan-ai' ? "hover:bg-white/30 text-white" : "hover:bg-slate-100 text-slate-600"
-                    )}
+                    className="h-9 w-9 rounded-xl hover:bg-white/20 hover:text-red-400 text-white transition-all"
                 >
                     <X className="w-5 h-5" />
                 </Button>
@@ -1112,105 +1117,128 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
         </div>
 
         {/* Body Content */}
-        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative">
             
             {/* Gyan AI Topic Selection */}
             {isGyanHome && (
-                <ScrollArea className="flex-1">
-                    <div className="p-6 space-y-6 text-center">
-                        <div className="space-y-2">
-                            <h2 className="text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <ScrollArea className="flex-1 bg-slate-50/50">
+                    <div className="p-4 sm:p-6 space-y-6 text-center max-w-md mx-auto">
+                        <div className="space-y-2 mt-4">
+                            <h2 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-headline">
                                 Choose Your Expert
                             </h2>
-                            <p className="text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
+                            <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
                                 DairyHub specialized knowledge for your career journey
                             </p>
                         </div>
-                        <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-6">
                             {[
-                                { id: 'Career Guidance in Food Industry', icon: GraduationCap, color: 'text-emerald-500', bg: 'bg-emerald-50', gradient: 'from-emerald-500 to-teal-600' },
+                                { id: 'Career Guidance in Food Industry', icon: GraduationCap, color: 'from-emerald-400 to-teal-500', bgLight: 'bg-emerald-50 hover:bg-emerald-100', border: 'border-emerald-200' },
                             ].map((topic) => (
                                 <button
                                     key={topic.id}
                                     onClick={() => startTopicChat(topic.id as GyanAITopic)}
-                                    className="group relative h-28 bg-white border-2 border-slate-200 rounded-3xl shadow-xl hover:shadow-2xl hover:border-emerald-400 hover:scale-[1.02] transition-all duration-300 overflow-hidden"
+                                    className={cn(
+                                      "group relative flex flex-col items-center justify-center p-4 sm:p-5 bg-white hover:shadow-lg rounded-2xl border border-gray-100 hover:border-transparent text-center aspect-square transition-all duration-300 transform hover:scale-[1.03] active:scale-95 hover:ring-2 hover:ring-offset-1 hover:ring-indigo-200 box-border w-full col-span-2 sm:col-span-1"
+                                    )}
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity" 
-                                         style={{background: `linear-gradient(135deg, ${topic.gradient})`}} />
-                                    <div className="relative flex flex-col items-center justify-center h-full p-6 gap-3">
-                                        <div className={cn("p-4 rounded-3xl shadow-2xl border", topic.bg)}>
-                                            <topic.icon className={cn("w-8 h-8", topic.color)} />
-                                        </div>
-                                        <div>
-                                            <span className="block text-lg font-bold text-slate-800 leading-tight">{topic.id.split(' in ')[0]}</span>
-                                            <span className="text-xs text-emerald-600 font-semibold bg-emerald-100 px-2 py-0.5 rounded-full mt-1">DairyHub Expert</span>
-                                        </div>
+                                    <div className={cn("absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity", topic.bgLight)} />
+                                    
+                                    <span className="absolute top-2 right-2 z-20">
+                                      <Badge variant="secondary" className="text-[9px] px-1.5 py-0 font-bold leading-4 border bg-blue-100 text-blue-700 border-blue-200">
+                                        DairyHub Expert
+                                      </Badge>
+                                    </span>
+
+                                    <div className="relative z-10">
+                                      <div className={cn("p-3 rounded-xl bg-gradient-to-br text-white mb-3 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md", topic.color)}>
+                                        <topic.icon className="w-6 h-6" />
+                                      </div>
                                     </div>
+                                    <span className="relative z-10 font-bold text-xs sm:text-sm font-headline text-slate-700 group-hover:text-slate-900 transition-colors leading-tight line-clamp-2 px-1">
+                                      {topic.id.split(' in ')[0]}
+                                    </span>
+                                    <ChevronRight className="absolute bottom-1 right-1 h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <Sparkles className="absolute top-1 right-1 h-2.5 w-2.5 text-yellow-400 opacity-0 group-hover:opacity-100 transition-all group-hover:rotate-12" />
                                 </button>
                             ))}
+
+                            <button
+                                onClick={() => setSelectedTopic('Interview Preparation')}
+                                className={cn(
+                                  "group relative flex flex-col items-center justify-center p-4 sm:p-5 bg-white hover:shadow-lg rounded-2xl border border-gray-100 hover:border-transparent text-center aspect-square transition-all duration-300 transform hover:scale-[1.03] active:scale-95 hover:ring-2 hover:ring-offset-1 hover:ring-indigo-200 box-border w-full col-span-2 sm:col-span-1"
+                                )}
+                            >
+                                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity bg-indigo-50 hover:bg-indigo-100" />
+                                
+                                <span className="absolute top-2 right-2 z-20">
+                                  <Badge variant="secondary" className="text-[9px] px-1.5 py-0 font-bold leading-4 border bg-purple-100 text-purple-700 border-purple-200">
+                                    Mock Test
+                                  </Badge>
+                                </span>
+
+                                <div className="relative z-10">
+                                  <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white mb-3 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md">
+                                    <FileText className="w-6 h-6" />
+                                  </div>
+                                </div>
+                                <span className="relative z-10 font-bold text-xs sm:text-sm font-headline text-slate-700 group-hover:text-slate-900 transition-colors leading-tight line-clamp-2 px-1">
+                                  Mock Interview
+                                </span>
+                                <span className="relative z-10 text-[10px] text-slate-400 mt-1 line-clamp-1 group-hover:text-slate-500">
+                                  Upload & Practice
+                                </span>
+                                <ChevronRight className="absolute bottom-1 right-1 h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <Sparkles className="absolute top-1 right-1 h-2.5 w-2.5 text-yellow-400 opacity-0 group-hover:opacity-100 transition-all group-hover:rotate-12" />
+                            </button>
                         </div>
-                        {/* Interview Prep */}
-                        <button
-                            onClick={() => setSelectedTopic('Interview Preparation')}
-                            className="w-full group relative overflow-hidden bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 rounded-3xl shadow-2xl hover:shadow-3xl hover:scale-[1.02] transition-all duration-300 h-24"
-                        >
-                            <div className="absolute inset-0 bg-white/10" />
-                            <div className="relative flex items-center h-full px-6 gap-4">
-                                <div className="p-4 bg-white/20 rounded-3xl shadow-2xl">
-                                    <FileText className="w-8 h-8 text-white drop-shadow-lg" />
-                                </div>
-                                <div className="flex-1 text-left text-white">
-                                    <h3 className="text-xl font-black leading-tight">DairyHub Mock Interview</h3>
-                                    <p className="text-sm opacity-90 leading-tight">Upload resume → Interview practice</p>
-                                </div>
-                                <ArrowLeft className="w-6 h-6 text-white drop-shadow-lg group-hover:translate-x-2 transition-transform duration-300 rotate-[-20deg]" />
-                            </div>
-                        </button>
                     </div>
                 </ScrollArea>
             )}
 
             {/* Interview Setup */}
             {isInterviewSetup && (
-                <div className="flex-1 flex flex-col p-8 bg-gradient-to-br from-indigo-50 via-white to-purple-50 items-center justify-center text-center space-y-8 overflow-hidden">
-                    <div className="space-y-3 flex-shrink-0">
-                        <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl mx-auto">
-                            <FileText className="w-10 h-10 text-white drop-shadow-lg" />
+                <div className="flex-1 flex flex-col p-4 sm:p-8 bg-slate-50 items-center justify-center text-center space-y-6 overflow-hidden relative">
+                    <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-indigo-50/50 to-transparent pointer-events-none" />
+                    
+                    <div className="space-y-3 flex-shrink-0 relative z-10 mt-2">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
+                            <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-white drop-shadow-sm" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-slate-800 mb-1">🎯 DairyHub Interview Prep</h2>
-                            <p className="text-lg text-slate-600 max-w-md mx-auto leading-relaxed">
+                            <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-1 font-headline">🎯 DairyHub Interview Prep</h2>
+                            <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
                                 Analyze your PDF/DOC resume and simulate real mock interviews
                             </p>
                         </div>
                     </div>
 
-                    <div className="w-full max-w-md space-y-5 flex-1 flex flex-col justify-center">
-                         <div className="grid grid-cols-2 gap-4">
+                    <div className="w-full max-w-sm space-y-4 flex-1 flex flex-col justify-center relative z-10">
+                         <div className="grid grid-cols-2 gap-3">
                              {/* Experience Level */}
-                             <div className="space-y-2 text-left">
-                                 <label className="text-sm font-bold text-slate-700 block mb-1">Experience Level</label>
+                             <div className="space-y-1.5 text-left">
+                                 <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block px-1">Exp Level</label>
                                  <Select value={experienceLevel} onValueChange={(v: any) => setExperienceLevel(v)}>
-                                     <SelectTrigger className="w-full h-12 bg-white border-slate-200 shadow-lg hover:shadow-xl">
+                                     <SelectTrigger className="w-full h-11 bg-white border-slate-200 shadow-sm rounded-xl text-xs font-medium focus:ring-indigo-400">
                                          <SelectValue />
                                      </SelectTrigger>
-                                     <SelectContent className="bg-white border-slate-200 shadow-2xl">
-                                         <SelectItem value="Fresher Student">🎓 Fresher</SelectItem>
-                                         <SelectItem value="Experienced Person">💼 Experienced</SelectItem>
+                                     <SelectContent className="bg-white border-slate-200 shadow-xl rounded-xl">
+                                         <SelectItem value="Fresher Student" className="text-xs">🎓 Fresher</SelectItem>
+                                         <SelectItem value="Experienced Person" className="text-xs">💼 Experienced</SelectItem>
                                      </SelectContent>
                                  </Select>
                              </div>
                              
                              {/* Interview Mode */}
-                             <div className="space-y-2 text-left">
-                                 <label className="text-sm font-bold text-slate-700 block mb-1">Interview Mode</label>
+                             <div className="space-y-1.5 text-left">
+                                 <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block px-1">Mode</label>
                                  <Select value={interviewMode} onValueChange={(v: any) => setInterviewMode(v)}>
-                                     <SelectTrigger className="w-full h-12 bg-white border-slate-200 shadow-lg hover:shadow-xl">
+                                     <SelectTrigger className="w-full h-11 bg-white border-slate-200 shadow-sm rounded-xl text-xs font-medium focus:ring-indigo-400">
                                          <SelectValue />
                                      </SelectTrigger>
-                                     <SelectContent className="bg-white border-slate-200 shadow-2xl">
-                                         <SelectItem value="offline">📴 Offline (Local)</SelectItem>
-                                         <SelectItem value="online">🌐 Online (AI)</SelectItem>
+                                     <SelectContent className="bg-white border-slate-200 shadow-xl rounded-xl">
+                                         <SelectItem value="offline" className="text-xs">📴 Offline (Local)</SelectItem>
+                                         <SelectItem value="online" className="text-xs">🌐 Online (AI)</SelectItem>
                                      </SelectContent>
                                  </Select>
                              </div>
@@ -1220,10 +1248,10 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         <div 
                             onClick={() => fileInputRef.current?.click()}
                             className={cn(
-                                "group relative border-3 border-dashed rounded-3xl p-8 h-32 transition-all cursor-pointer overflow-hidden shadow-xl hover:shadow-2xl flex-shrink-0",
+                                "group relative border-2 border-dashed rounded-2xl p-6 h-28 transition-all cursor-pointer overflow-hidden flex-shrink-0 flex items-center justify-center",
                                 fileName 
-                                  ? "border-emerald-400 bg-emerald-50" 
-                                  : "border-slate-200/50 hover:border-indigo-400 bg-white hover:bg-indigo-50/50"
+                                  ? "border-emerald-400 bg-emerald-50/50 shadow-sm" 
+                                  : "border-slate-300 hover:border-indigo-400 bg-white hover:bg-indigo-50/30 shadow-sm"
                             )}
                         >
                             <input 
@@ -1234,26 +1262,25 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 onChange={handleFileSelect}
                             />
                             
-                            <div className="flex flex-col items-center justify-center h-full gap-3 relative z-10">
+                            <div className="flex flex-col items-center justify-center gap-2 relative z-10 w-full">
                                 {fileName ? (
                                     <>
-                                        <div className="w-16 h-16 bg-emerald-100/80 p-4 rounded-3xl shadow-2xl animate-bounce">
-                                            <FileCheck className="w-8 h-8 text-emerald-600 drop-shadow-sm" />
+                                        <div className="w-10 h-10 bg-emerald-100 p-2.5 rounded-full shadow-sm animate-bounce text-emerald-600">
+                                            <FileCheck className="w-full h-full" />
                                         </div>
-                                        <div className="space-y-1">
-                                            <span className="text-lg font-black text-emerald-800 truncate max-w-[200px] block px-2">{fileName}</span>
-                                            <span className="text-sm text-emerald-600 font-semibold bg-emerald-100 px-3 py-1 rounded-full shadow-sm">✅ Ready</span>
+                                        <div className="text-center w-full px-2">
+                                            <span className="text-sm font-bold text-emerald-800 truncate block w-full">{fileName}</span>
+                                            <span className="text-[10px] text-emerald-600 font-medium">Click to change</span>
                                         </div>
-                                        <span className="text-xs text-emerald-500">Click to change</span>
                                     </>
                                 ) : (
                                     <>
-                                        <div className="w-16 h-16 bg-white/50 p-4 rounded-3xl group-hover:bg-indigo-100/80 shadow-xl transition-all border-2 border-white/50">
-                                            <Upload className="w-8 h-8 text-slate-400 group-hover:text-indigo-500 transition-colors drop-shadow-sm" />
+                                        <div className="w-10 h-10 bg-slate-50 p-2.5 rounded-full group-hover:bg-indigo-100 transition-colors border border-slate-100 text-slate-400 group-hover:text-indigo-500">
+                                            <Upload className="w-full h-full" />
                                         </div>
-                                        <div className="space-y-1">
-                                            <span className="text-lg font-bold text-slate-700">📄 Drop Resume</span>
-                                            <span className="text-sm text-slate-500">PDF, DOC, DOCX • Max 5MB</span>
+                                        <div className="text-center">
+                                            <span className="text-sm font-bold text-slate-700 block">Drop Resume</span>
+                                            <span className="text-[10px] text-slate-400">PDF, DOC, DOCX • Max 5MB</span>
                                         </div>
                                     </>
                                 )}
@@ -1263,23 +1290,23 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                         {/* Start Button */}
                         <Button 
                             className={cn(
-                                "w-full h-14 text-lg font-bold shadow-2xl transition-all duration-300 rounded-3xl flex-shrink-0",
+                                "w-full h-12 text-sm font-bold transition-all duration-300 rounded-xl flex-shrink-0",
                                 resumeFile 
-                                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-emerald-500/50 hover:shadow-emerald-500/75 hover:scale-[1.02]" 
-                                  : "bg-slate-200/70 text-slate-400 cursor-not-allowed shadow-none"
+                                  ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/20 hover:scale-[1.02]" 
+                                  : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
                             )}
                             disabled={!resumeFile || isProcessingResume}
                             onClick={startInterview}
                         >
                             {isProcessingResume ? (
                                 <>
-                                    <Loader2 className="animate-spin mr-3 w-6 h-6" />
-                                    Analyzing Resume...
+                                    <Loader2 className="animate-spin mr-2 w-4 h-4" />
+                                    Analyzing...
                                 </>
                             ) : (
                                 <>
-                                    <Sparkles className="mr-3 w-6 h-6" />
-                                    🚀 Start Interview
+                                    <Sparkles className="mr-2 w-4 h-4" />
+                                    Start Interview
                                 </>
                             )}
                         </Button>
@@ -1289,27 +1316,29 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
             {/* Main Chat View */}
             {!isGyanHome && !isInterviewSetup && (
-                <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+                <div className="flex flex-col flex-1 min-h-0 overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-slate-50/80">
+                    
                     {/* Reset Button for Active Interview */}
                     {activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation' && messages.length > 0 && (
-                        <div className="px-5 pt-3 pb-2 border-b border-slate-200/50 bg-gradient-to-r from-slate-50 to-indigo-50/30 shrink-0">
+                        <div className="px-4 py-2 border-b border-slate-200/50 bg-white/80 backdrop-blur-sm shrink-0 z-10 shadow-sm flex items-center justify-between">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Interview Mode</span>
                             <Button 
                                 variant="outline" 
                                 size="sm"
                                 onClick={resetInterview}
-                                className="w-full h-10 bg-white hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-all rounded-2xl shadow-lg font-semibold text-slate-600 border-slate-200"
+                                className="h-7 text-[10px] bg-white hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all rounded-lg font-semibold text-slate-600 border-slate-200 px-2.5"
                             >
-                                <X className="w-4 h-4 mr-2" />
-                                🔄 Reset Interview
+                                <X className="w-3 h-3 mr-1" />
+                                Reset
                             </Button>
                         </div>
                     )}
                     
-                    <ScrollArea className="flex-1 px-6 pb-3 pt-2" viewportRef={scrollRef}>
-                        <div className="flex flex-col gap-4 pb-1">
+                    <ScrollArea className="flex-1 px-4 sm:px-6 pb-3 pt-4" viewportRef={scrollRef}>
+                        <div className="flex flex-col gap-4 pb-2">
                             {messages.length === 0 && (
-                                <div className="flex flex-col items-center justify-center h-52 text-center text-slate-400 space-y-3">
-                                    <div className="w-20 h-20 rounded-3xl border-4 border-white shadow-xl overflow-hidden bg-indigo-50 mx-auto">
+                                <div className="flex flex-col items-center justify-center h-48 text-center text-slate-400 space-y-3 mt-4">
+                                    <div className="w-16 h-16 rounded-2xl border-2 border-white shadow-md overflow-hidden bg-indigo-50 mx-auto">
                                         <img 
                                             src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
                                             alt="Sarathi Avatar"
@@ -1317,36 +1346,36 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                         />
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-lg font-bold text-slate-700">Ready to chat with Sarathi!</p>
-                                        <p className="text-sm text-slate-500">Let's chat like a friend about dairy tech, jokes, and more!</p>
+                                        <p className="text-sm font-bold text-slate-700">Ready to chat with Sarathi!</p>
+                                        <p className="text-xs text-slate-500 max-w-[200px] mx-auto">Let's chat like a friend about dairy tech, jobs, or just chill!</p>
                                     </div>
                                 </div>
                             )}
+                            
                             {messages.map((msg) => {
                                 if (msg.isQuestionAnswer) {
                                     return (
-                                        <div key={msg.id} className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-3xl border-2 border-indigo-200/50 shadow-xl ml-4 max-w-[95%]">
-                                            <div className="flex gap-3 items-start mb-4">
-                                                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-2xl shadow-2xl flex-shrink-0 mt-0.5">
-                                                    <BrainCircuit className="w-5 h-5 text-white" />
+                                        <div key={msg.id} className="bg-white p-4 sm:p-5 rounded-2xl border border-indigo-100 shadow-sm ml-2 sm:ml-4 max-w-[95%]">
+                                            <div className="flex gap-2.5 items-start mb-3">
+                                                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-xl shadow-sm flex-shrink-0 mt-0.5">
+                                                    <BrainCircuit className="w-4 h-4 text-white" />
                                                 </div>
-                                                <div className="flex-1">
-                                                    <div className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm">
-                                                        📋 INTERVIEW QUESTION
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="inline-block bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full mb-1.5 uppercase tracking-wide">
+                                                        Interview Question
                                                     </div>
-                                                    <p className="font-bold text-lg text-slate-800 leading-relaxed mb-1">{msg.question}</p>
-                                                    <div className="h-px bg-gradient-to-r from-indigo-200 to-transparent w-20 -mt-1 mb-3" />
+                                                    <p className="font-bold text-sm sm:text-base text-slate-800 leading-snug mb-1">{msg.question}</p>
                                                 </div>
                                             </div>
-                                            <div className="pl-12 space-y-3">
-                                                <div className="inline-block bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                                                    ✅ PROFESSIONAL ANSWER
+                                            <div className="pl-10 space-y-2.5">
+                                                <div className="inline-block bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
+                                                    Professional Answer
                                                 </div>
-                                                <div className="text-slate-700 leading-relaxed bg-white/60 p-4 rounded-2xl border border-indigo-100">
-                                                    <p className="text-base" dangerouslySetInnerHTML={{ __html: msg.answer?.replace(/\n/g, '<br />') || "" }} />
+                                                <div className="text-slate-700 leading-relaxed bg-slate-50/50 p-3 sm:p-4 rounded-xl border border-slate-100">
+                                                    <p className="text-xs sm:text-sm" dangerouslySetInnerHTML={{ __html: msg.answer?.replace(/\n/g, '<br />') || "" }} />
                                                 </div>
-                                                <div className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-3 py-2 rounded-xl border border-indigo-100">
-                                                    💡 <strong>Tip:</strong> Practice this in your own words
+                                                <div className="text-[11px] text-indigo-600 font-semibold bg-indigo-50/50 px-3 py-2 rounded-lg border border-indigo-100/50 flex items-center gap-1.5">
+                                                    <Sparkles className="w-3.5 h-3.5" /> Practice this in your own words
                                                 </div>
                                             </div>
                                         </div>
@@ -1354,15 +1383,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 }
                                 return (
                                     <div key={msg.id} className={cn(
-                                        "flex gap-3 max-w-[90%]", 
+                                        "flex gap-2 sm:gap-3 max-w-[90%]", 
                                         msg.role === 'user' ? "self-end flex-row-reverse" : "self-start"
                                     )}>
                                         {msg.role === 'user' ? (
-                                            <div className="w-11 h-11 rounded-2xl border-2 border-white shadow-md mt-1 flex-shrink-0 overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                                                <span className="text-white text-xs font-bold shadow-inner">YOU</span>
+                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border-2 border-white shadow-sm flex-shrink-0 overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mt-1">
+                                                <span className="text-white text-[10px] sm:text-xs font-bold shadow-inner">YOU</span>
                                             </div>
                                         ) : (
-                                            <div className="w-11 h-11 rounded-2xl border-2 border-white shadow-md mt-1 flex-shrink-0 overflow-hidden bg-indigo-50">
+                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border-2 border-white shadow-sm flex-shrink-0 overflow-hidden bg-indigo-50 mt-1">
                                                 <img 
                                                     src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
                                                     alt="Sarathi Avatar"
@@ -1371,15 +1400,15 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                             </div>
                                         )}
                                         <div className={cn(
-                                            "py-4 px-6 rounded-3xl shadow-xl relative group max-w-[85%]",
+                                            "py-2.5 px-3.5 sm:py-3 sm:px-4 rounded-2xl shadow-sm relative group text-sm leading-relaxed break-words",
                                             msg.role === 'user' 
-                                                ? "bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white rounded-br-none shadow-blue-500/30" 
-                                                : "bg-white border border-slate-100/50 text-slate-800 rounded-bl-none shadow-slate-100/50"
+                                                ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-tr-sm" 
+                                                : "bg-white border border-slate-100 text-slate-800 rounded-tl-sm"
                                         )}>
-                                            <p className="text-base leading-relaxed" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }} />
+                                            <p dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }} className="strict-html-wrap" />
                                             <span className={cn(
-                                                "text-xs font-mono absolute -bottom-3 -right-3 bg-white/90 px-2 py-0.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap",
-                                                msg.role === 'user' ? "text-blue-100 bg-blue-500/90 shadow-blue-500/30" : "text-slate-400 bg-slate-50 shadow-slate-200/50"
+                                                "text-[9px] sm:text-[10px] font-mono absolute -bottom-5 right-0 bg-transparent px-1 opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap",
+                                                msg.role === 'user' ? "text-slate-400" : "text-slate-400 left-0 right-auto"
                                             )}>{msg.timestamp}</span>
                                         </div>
                                     </div>
@@ -1387,12 +1416,11 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                             })}
                             
                             {isLoading && (
-                                <div className="self-start flex gap-2 ml-14">
-                                    <div className="bg-white border p-4 rounded-3xl rounded-bl-none shadow-xl flex gap-1.5 items-center pr-8 relative overflow-hidden">
-                                        <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300 animate-pulse opacity-30 rounded-3xl" />
-                                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0s]"></span>
-                                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
-                                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]"></span>
+                                <div className="self-start flex gap-2 ml-10 sm:ml-12 mt-1 mb-2">
+                                    <div className="bg-white border border-slate-100 py-2.5 px-4 rounded-2xl rounded-tl-sm shadow-sm flex gap-1.5 items-center">
+                                        <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0s]"></span>
+                                        <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
+                                        <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]"></span>
                                     </div>
                                 </div>
                             )}
@@ -1400,54 +1428,55 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                     </ScrollArea>
 
                     {/* Input Area */}
-                    <div className="px-5 pt-3 pb-2 bg-gradient-to-r from-white via-slate-50 to-indigo-50 border-t border-slate-200/50 shadow-inner shrink-0">
-                        <div className="flex items-center justify-between mb-2 px-1">
+                    <div className="px-3 sm:px-4 pt-3 pb-3 sm:pb-4 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.02)] shrink-0 z-10">
+                        <div className="flex items-center gap-2 mb-2 px-1">
                             <Select value={language} onValueChange={setLanguage}>
-                                <SelectTrigger className="h-8 text-xs bg-white border-slate-200 shadow-sm hover:shadow-md rounded-2xl px-2 w-28">
+                                <SelectTrigger className="h-7 text-[10px] bg-slate-50 border-slate-200 rounded-lg px-2.5 w-[90px] focus:ring-0 focus:ring-offset-0">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-white border-slate-200 shadow-2xl">
-                                    <SelectItem value="English">🇬🇧 English</SelectItem>
-                                    <SelectItem value="Hinglish">🇮🇳 Hinglish</SelectItem>
+                                <SelectContent className="bg-white border-slate-200 shadow-lg rounded-xl min-w-[100px]">
+                                    <SelectItem value="English" className="text-xs">🇬🇧 EN</SelectItem>
+                                    <SelectItem value="Hinglish" className="text-xs">🇮🇳 HING</SelectItem>
                                 </SelectContent>
                             </Select>
 
                             {activeMode === 'sarathi' && (
                                 <Select value={sarathiMode} onValueChange={(v: any) => setSarathiMode(v)}>
-                                    <SelectTrigger className="h-8 text-xs bg-white border-slate-200 shadow-sm hover:shadow-md rounded-2xl px-2 w-32">
+                                    <SelectTrigger className="h-7 text-[10px] bg-slate-50 border-slate-200 rounded-lg px-2.5 w-[100px] focus:ring-0 focus:ring-offset-0">
                                         <SelectValue />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-white border-slate-200 shadow-2xl">
-                                        <SelectItem value="offline">📴 Offline (Local)</SelectItem>
-                                        <SelectItem value="online">🌐 Online (AI)</SelectItem>
+                                    <SelectContent className="bg-white border-slate-200 shadow-lg rounded-xl min-w-[120px]">
+                                        <SelectItem value="offline" className="text-xs">📴 Offline</SelectItem>
+                                        <SelectItem value="online" className="text-xs">🌐 Online</SelectItem>
                                     </SelectContent>
                                 </Select>
                             )}
                         </div>
+
                         <form 
                             onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
-                            className="flex items-stretch gap-2 bg-white p-2 rounded-3xl border-2 border-slate-200/50 shadow-xl hover:shadow-2xl focus-within:shadow-3xl focus-within:border-blue-400/70 hover:border-slate-300/70 transition-all duration-300 group"
+                            className="flex items-stretch gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 focus-within:border-indigo-300 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-50 transition-all duration-200"
                         >
                             <Input 
                                 ref={inputRef}
                                 value={input} 
                                 onChange={(e) => setInput(e.target.value)} 
-                                placeholder={activeMode === 'sarathi' ? "💬 Chat with Sarathi..." : "🧠 Ask expert..."}
-                                className="flex-1 border-none bg-transparent shadow-none focus-visible:ring-0 min-h-[44px] text-base px-4 placeholder-slate-400 group-focus-within:placeholder-slate-500"
+                                placeholder={activeMode === 'sarathi' ? "Message Sarathi..." : "Ask your question..."}
+                                className="flex-1 border-none bg-transparent shadow-none focus-visible:ring-0 min-h-[40px] text-sm px-3 placeholder-slate-400"
                                 disabled={isLoading}
                             />
                             <Button 
                                 type="submit" 
                                 size="icon" 
                                 className={cn(
-                                    "h-12 w-12 rounded-3xl shrink-0 transition-all duration-300 shadow-2xl group-hover:shadow-3xl",
+                                    "h-10 w-10 rounded-xl shrink-0 transition-all duration-200",
                                     !input.trim() || isLoading 
-                                      ? "bg-slate-200/70 text-slate-400 shadow-md cursor-not-allowed" 
-                                      : "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-blue-500/40 hover:shadow-blue-500/60 hover:scale-105 active:scale-95"
+                                      ? "bg-slate-200 text-slate-400 shadow-none cursor-not-allowed" 
+                                      : "bg-indigo-600 text-white shadow-md hover:bg-indigo-700 hover:scale-105 active:scale-95"
                                 )}
                                 disabled={isLoading || !input.trim()}
                             >
-                                <Send className={cn("w-5 h-5 transition-transform group-hover:translate-x-1", input.trim() ? "ml-1" : "ml-0.5")} />
+                                <Send className={cn("w-4 h-4", input.trim() ? "ml-0.5" : "")} />
                             </Button>
                         </form>
                     </div>
