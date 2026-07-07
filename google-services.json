@@ -21,6 +21,49 @@
       "api_key": [
         {
           "current_key": "AIzaSyAthfWIq2RSTYGVS2rcmO4e6b-0IQJ4qNc"
+        },
+        {
+          "current_key": "AIzaSyBzdBwo6WILG8H8Rrb4_dLwDGxhRwlaydA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103418941595-j30eokkqdmmj2i74f9c52752r0p495rd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103418941595:android:dd51895f65d2abd327763e",
+        "android_client_info": {
+          "package_name": "in.co.dairyhub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103418941595-j7faa13f2tduq5bk2rnn7r9lv83hj44s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.co.dairyhub",
+            "certificate_hash": "51614d911a06a808857332b79c232a8573dca006"
+          }
+        },
+        {
+          "client_id": "103418941595-j30eokkqdmmj2i74f9c52752r0p495rd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAthfWIq2RSTYGVS2rcmO4e6b-0IQJ4qNc"
+        },
+        {
+          "current_key": "AIzaSyBzdBwo6WILG8H8Rrb4_dLwDGxhRwlaydA"
         }
       ],
       "services": {
