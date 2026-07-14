@@ -5,9 +5,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // eslint wala block yahan se hata diya gaya hai
   images: {
     remotePatterns: [
       {
