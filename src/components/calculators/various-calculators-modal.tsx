@@ -79,7 +79,7 @@ const productSampleWeights: Record<string, string> = {
     other: "10.0"
 };
 
-const LabFormatsCalc = dynamic(() => import("./lab-formats-calc").then(m => m.default), { 
+const LabFormatsCalc = dynamic(() => import("./lab-formats-calc").then(m => ({ default: m.LabFormatsCalc })), { 
   ssr: false, 
   loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
 });
