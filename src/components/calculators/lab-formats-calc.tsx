@@ -375,7 +375,7 @@ export function LabFormatsCalc() {
             
             <div className="flex gap-2">
               <Button size="sm" onClick={addRow} className="bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex gap-1">
-                <Plus className="w-3.5 h-3.5" /> Add Row (जोड़ें)
+                <Plus className="w-3.5 h-3.5" /> Add Row (जोड़ें)
               </Button>
               <Button size="sm" onClick={handlePrint} className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex gap-1">
                 <Printer className="w-4 h-4" /> Print (प्रिंट)
@@ -1109,7 +1109,8 @@ export function LabFormatsCalc() {
       </div>
 
       {/* Global CSS overrides for A4 Printing layout */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @media print {
           body * {
             visibility: hidden;
@@ -1136,7 +1137,8 @@ export function LabFormatsCalc() {
             display: none !important;
           }
         }
-      `}</style>
+        `
+      }} />
     </div>
   );
 }
