@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, memo, useCallback, useEffect, useMemo } from "react"
+import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +31,7 @@ import {
     Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, 
     DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, 
     Wind, Factory, Info, TrendingDown, TrendingUp, FlaskRound as Flask, AlertCircle, Sparkles,
-    ChevronDown,
+    ChevronDown, FileText,
     // ✅ NEW UNIQUE ICONS
     CircleDollarSign, // Pricing ke liye better
     TestTube2,        // Chemical tests (RM/PV)
@@ -77,6 +78,11 @@ const productSampleWeights: Record<string, string> = {
     butter: "5.0",
     other: "10.0"
 };
+
+const LabFormatsCalc = dynamic(() => import("./lab-formats-calc").then(m => ({ default: m.LabFormatsCalc })), { 
+  ssr: false, 
+  loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
+});
 
 type CalculatorType = keyof typeof calculatorsInfo;
 
@@ -159,6 +165,12 @@ const calculatorsInfo = {
         icon: FunctionSquare, // ➗ Mathematical Function symbol
         component: FormulasTab,
         color: "from-blue-600 to-indigo-700" 
+    },
+    'lab-formats': { 
+        title: "Lab Formats & Log Sheets", 
+        icon: FileText,
+        component: LabFormatsCalc,
+        color: "from-teal-500 to-emerald-600" 
     },
 };
 export function VariousCalculatorsModal({
@@ -1133,10 +1145,10 @@ function PeroxideValueCalc() {
         const B = parseFloat(inputs.blankTitre);
         const N = parseFloat(inputs.normality);
         
-        if (isNaN(W) || isNaN(S) || isNaN(B) || isNaN(N) || W <= 0) {
+        if (isNaN(W) || isNaN(S) || isNaN(B) || isNaN(N) || W <= 0 || S < B) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid positive numbers for all fields.",
+                description: "Please enter valid positive numbers and ensure Sample Titre >= Blank Titre.",
                 variant: "destructive"
             });
             return;
@@ -2393,10 +2405,10 @@ function RMCalcByVolume() {
         const r = parseFloat(inputs.reading);
         const b = parseFloat(inputs.blank);
         
-        if (isNaN(r) || isNaN(b)) {
+        if (isNaN(r) || isNaN(b) || r < b) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid numbers for reading and blank.",
+                description: "Please enter valid numbers and ensure Reading >= Blank.",
                 variant: "destructive"
             });
             return;
@@ -2637,10 +2649,10 @@ function RMCalcByWeight() {
         const b = parseFloat(inputs.blank);
         const w = parseFloat(inputs.weight);
         
-        if (isNaN(r) || isNaN(b) || isNaN(w) || w <= 0) {
+        if (isNaN(r) || isNaN(b) || isNaN(w) || w <= 0 || r < b) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid numbers for all fields.",
+                description: "Please enter valid numbers and ensure Reading >= Blank.",
                 variant: "destructive"
             });
             return;
@@ -2889,10 +2901,10 @@ function PVCalc() {
         const r = parseFloat(inputs.reading);
         const b = parseFloat(inputs.blank);
         
-        if (isNaN(r) || isNaN(b)) {
+        if (isNaN(r) || isNaN(b) || r < b) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid numbers for reading and blank.",
+                description: "Please enter valid numbers and ensure Reading >= Blank.",
                 variant: "destructive"
             });
             return;
@@ -4798,7 +4810,7 @@ function MineralAnalysisCalc() {
                     qualityColor = 'text-yellow-600';
                     qualityIcon = <AlertCircle className="inline mr-2" size={20} />;
                 } else if (finalPrecise > 650) {
-                    quality = 'Exceeds FSSAI Limit (>650mg/100g)';
+                    quality = 'Exceeds FSSAI Limit (>650mg/100g of SNF)';
                     qualityColor = 'text-red-600';
                     qualityIcon = <XCircle className="inline mr-2" size={20} />;
                 } else {
@@ -5335,10 +5347,10 @@ function KjeldahlProteinCalc() {
         const Vb = parseFloat(inputs.blankTitre);
         const N = parseFloat(inputs.acidNormality);
         
-        if (isNaN(W) || isNaN(Vs) || isNaN(Vb) || isNaN(N) || W <= 0) {
+        if (isNaN(W) || isNaN(Vs) || isNaN(Vb) || isNaN(N) || W <= 0 || Vs < Vb) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid positive numbers for all fields.",
+                description: "Please enter valid positive numbers and ensure Sample Titre >= Blank Titre.",
                 variant: "destructive"
             });
             return;
@@ -5578,10 +5590,10 @@ function KjeldahlProteinCalc() {
                                             <strong>Step 2: Calculate Nitrogen %</strong>
                                         </div>
                                         <div className="text-xs text-gray-500 mb-2">
-                                            Formula: %N = (ΔV × N × 14.007) / W
+                                            Formula: %N = (ΔV × N × 1.4007) / W
                                         </div>
                                         <div className="text-xs text-gray-500">
-                                            Where 14.007 = Atomic weight of Nitrogen (mg/mmol)
+                                            Where 1.4007 = Milliequivalent weight of Nitrogen (0.014007) × 100
                                         </div>
                                         <div className="mt-2">
                                             %N = ({result.steps.titreDiff} × {result.inputs.N} × 1.4007) / {result.inputs.W}
@@ -5675,10 +5687,10 @@ function FormolTitrationCalc() {
         const v2 = parseFloat(inputs.finalTitre);
         const f = parseFloat(inputs.factor);
         
-        if (isNaN(v1) || isNaN(v2) || isNaN(f)) {
+        if (isNaN(v1) || isNaN(v2) || isNaN(f) || v2 < v1) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid numbers for all fields.",
+                description: "Please enter valid numbers and ensure Final Titre >= Initial Titre.",
                 variant: "destructive"
             });
             return;
@@ -5942,10 +5954,10 @@ function CaseinTitrationCalc() {
         const Vb = parseFloat(inputs.blankTitre);
         const N = parseFloat(inputs.acidNormality);
         
-        if (isNaN(W) || isNaN(Vs) || isNaN(Vb) || isNaN(N) || W <= 0) {
+        if (isNaN(W) || isNaN(Vs) || isNaN(Vb) || isNaN(N) || W <= 0 || Vs < Vb) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid positive numbers for all fields.",
+                description: "Please enter valid positive numbers and ensure Sample Titre >= Blank Titre.",
                 variant: "destructive"
             });
             return;
@@ -6161,7 +6173,7 @@ function CaseinTitrationCalc() {
                                             <strong>Step 1: Calculate Nitrogen in Precipitate</strong>
                                         </div>
                                         <div className="text-xs text-gray-500 mb-2">
-                                            Formula: %N = ((Vs - Vb) × N × 14.007) / W
+                                            Formula: %N = ((Vs - Vb) × N × 1.4007) / W
                                         </div>
                                         <div>
                                             ΔV = {result.inputs.Vs} - {result.inputs.Vb} = <span className="text-blue-600 font-bold">{result.steps.titreDiff} ml</span>
@@ -6819,10 +6831,10 @@ function MoistureTsCalc() {
         const numW2 = parseFloat(inputs.w2);
         const numW3 = parseFloat(inputs.w3);
         
-        if ([numW1, numW2, numW3].some(isNaN) || numW2 <= numW1 || numW3 < numW1) {
+        if ([numW1, numW2, numW3].some(isNaN) || numW2 <= numW1 || numW3 < numW1 || numW3 > numW2) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid weights. W2 > W1 and W3 ≥ W1",
+                description: "Please enter valid weights. Ensure W2 >= W3 >= W1",
                 variant: "destructive"
             });
             return;
@@ -7161,10 +7173,10 @@ function AshCalc() {
         const numW2 = parseFloat(inputs.w2);
         const numW3 = parseFloat(inputs.w3);
         
-        if ([numW1, numW2, numW3].some(isNaN) || numW2 <= numW1 || numW3 < numW1) {
+        if ([numW1, numW2, numW3].some(isNaN) || numW2 <= numW1 || numW3 < numW1 || numW3 > numW2) {
             toast({
                 title: "❌ Invalid Input",
-                description: "Please enter valid weights. W2 > W1 and W3 ≥ W1",
+                description: "Please enter valid weights. Ensure W2 >= W3 >= W1",
                 variant: "destructive"
             });
             return;
