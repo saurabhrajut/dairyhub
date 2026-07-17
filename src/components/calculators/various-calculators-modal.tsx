@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, memo, useCallback, useEffect, useMemo } from "react"
-import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +30,7 @@ import {
     Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, 
     DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, 
     Wind, Factory, Info, TrendingDown, TrendingUp, FlaskRound as Flask, AlertCircle, Sparkles,
-    ChevronDown, FileText,
+    ChevronDown,
     // ✅ NEW UNIQUE ICONS
     CircleDollarSign, // Pricing ke liye better
     TestTube2,        // Chemical tests (RM/PV)
@@ -78,11 +77,6 @@ const productSampleWeights: Record<string, string> = {
     butter: "5.0",
     other: "10.0"
 };
-
-const LabFormatsCalc = dynamic(() => import("./lab-formats-calc").then(m => ({ default: m.LabFormatsCalc })), { 
-  ssr: false, 
-  loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
-});
 
 type CalculatorType = keyof typeof calculatorsInfo;
 
@@ -165,12 +159,6 @@ const calculatorsInfo = {
         icon: FunctionSquare, // ➗ Mathematical Function symbol
         component: FormulasTab,
         color: "from-blue-600 to-indigo-700" 
-    },
-    'lab-formats': { 
-        title: "Lab Formats & Log Sheets", 
-        icon: FileText,
-        component: LabFormatsCalc,
-        color: "from-teal-500 to-emerald-600" 
     },
 };
 export function VariousCalculatorsModal({
