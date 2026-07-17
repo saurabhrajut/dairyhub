@@ -937,7 +937,8 @@ export default function PlantFormatsCalc() {
       </div>
 
       {/* Global CSS overrides for A4 Printing layout */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @media print {
           body * {
             visibility: hidden;
@@ -964,7 +965,8 @@ export default function PlantFormatsCalc() {
             display: none !important;
           }
         }
-      `}</style>
+        `
+      }} />
     </div>
   );
 }
