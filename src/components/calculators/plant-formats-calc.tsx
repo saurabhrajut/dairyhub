@@ -5,7 +5,8 @@ import {
   Printer, Download, FileText, Building2, MapPin, Calendar,
   Plus, Trash2, Loader2,
   ShieldCheck, ClipboardList, Package, Wrench, BarChart3, Truck, Factory,
-  Settings, BookOpen, Archive, Zap, Droplets, ClipboardCheck
+  Settings, BookOpen, Archive, Zap, Droplets, ClipboardCheck,
+  Columns, RotateCw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -186,21 +187,117 @@ export default function PlantFormatsCalc() {
 
   const selectedFormat = useMemo(() => FORMATS_CATALOG.find(f => f.id === selectedFormatId)!, [selectedFormatId]);
 
+  // Dynamic custom columns & orientation state
+  const [customColumnsMap, setCustomColumnsMap] = useState<Record<string, string[]>>({});
+  const [customCellValues, setCustomCellValues] = useState<Record<string, Record<string | number, Record<string, string>>>>({});
+  const [orientationMap, setOrientationMap] = useState<Record<string, "portrait" | "landscape">>({});
+
+  const currentOrientation = orientationMap[selectedFormatId] || selectedFormat?.orientation || "portrait";
+
+  const toggleOrientation = () => {
+    const next = currentOrientation === "landscape" ? "portrait" : "landscape";
+    setOrientationMap(prev => ({ ...prev, [selectedFormatId]: next }));
+    toast({
+      title: "Page Orientation Changed",
+      description: `Layout set to ${next.toUpperCase()} A4 mode.`,
+    });
+  };
+
+  const addColumn = () => {
+    const existing = customColumnsMap[selectedFormatId] || [];
+    const defaultName = `Custom Col ${existing.length + 1}`;
+    const inputName = window.prompt("Enter new Column Header Name:", defaultName);
+    if (inputName !== null && inputName.trim() !== "") {
+      const colName = inputName.trim();
+      setCustomColumnsMap(prev => ({
+        ...prev,
+        [selectedFormatId]: [...(prev[selectedFormatId] || []), colName]
+      }));
+      toast({
+        title: "Custom Column Added",
+        description: `Added column "${colName}".`,
+      });
+    }
+  };
+
+  const removeColumn = (colName: string) => {
+    setCustomColumnsMap(prev => ({
+      ...prev,
+      [selectedFormatId]: (prev[selectedFormatId] || []).filter(c => c !== colName)
+    }));
+  };
+
+  const updateCustomCell = (rowId: string | number, colName: string, value: string) => {
+    setCustomCellValues(prev => ({
+      ...prev,
+      [selectedFormatId]: {
+        ...(prev[selectedFormatId] || {}),
+        [rowId]: {
+          ...((prev[selectedFormatId] || {})[rowId] || {}),
+          [colName]: value
+        }
+      }
+    }));
+  };
+
+  const getCustomCell = (rowId: string | number, colName: string) => {
+    return customCellValues[selectedFormatId]?.[rowId]?.[colName] || "";
+  };
+
+  const renderCustomHeaderCols = () => {
+    const cols = customColumnsMap[selectedFormatId] || [];
+    return cols.map((colName, cIdx) => (
+      <th key={`custom-col-head-${cIdx}`} className="border border-black px-1.5 py-1 text-center font-bold min-w-[80px]">
+        <div className="flex items-center justify-between gap-1">
+          <span className="truncate">{colName}</span>
+          <button
+            type="button"
+            onClick={() => removeColumn(colName)}
+            className="text-red-500 hover:text-red-700 font-extrabold print:hidden text-[9px] px-1"
+            title="Remove Column"
+          >
+            ×
+          </button>
+        </div>
+      </th>
+    ));
+  };
+
+  const renderCustomBodyCells = (rowId: number | string) => {
+    const cols = customColumnsMap[selectedFormatId] || [];
+    return cols.map((colName, cIdx) => (
+      <td key={`custom-col-cell-${cIdx}`} className="border border-black p-0.5 text-center min-w-[80px]">
+        <input
+          type="text"
+          value={getCustomCell(rowId, colName)}
+          onChange={(e) => updateCustomCell(rowId, colName, e.target.value)}
+          className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 focus:outline-none"
+          placeholder="-"
+        />
+      </td>
+    ));
+  };
+
   const handlePrint = () => window.print();
 
   const handleDownloadPdf = async () => {
     if (!printAreaRef.current) return;
     setIsDownloading(true);
     try {
+      printAreaRef.current.classList.add("is-exporting-pdf");
       const canvas = await html2canvas(printAreaRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      printAreaRef.current.classList.remove("is-exporting-pdf");
       const imgData = canvas.toDataURL("image/png");
-      const isLandscape = selectedFormat.orientation === "landscape";
+      const isLandscape = currentOrientation === "landscape";
       const pdf = new jsPDF({ orientation: isLandscape ? "l" : "p", unit: "mm", format: "a4" });
       const pdfWidth = pdf.internal.pageSize.getWidth();
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, (canvas.height * pdfWidth) / canvas.width);
       pdf.save(`plant_${selectedFormat.id}_${currentDate}.pdf`);
       toast({ title: "PDF Generated", description: "Your printable PDF log sheet is ready." });
     } catch (e) {
+      if (printAreaRef.current) {
+        printAreaRef.current.classList.remove("is-exporting-pdf");
+      }
       toast({ title: "Export Failed", description: "Failed to generate PDF.", variant: "destructive" });
     }
     setIsDownloading(false);
@@ -366,6 +463,12 @@ export default function PlantFormatsCalc() {
               <Button onClick={addRow} variant="outline" size="sm" className="w-full text-xs border-emerald-600 text-emerald-700 hover:bg-emerald-50 font-bold">
                 <Plus className="w-3.5 h-3.5 mr-2" /> Add Row
               </Button>
+              <Button onClick={addColumn} variant="outline" size="sm" className="w-full text-xs border-blue-600 text-blue-700 hover:bg-blue-50 font-bold">
+                <Columns className="w-3.5 h-3.5 mr-2" /> Add Column
+              </Button>
+              <Button onClick={toggleOrientation} variant="outline" size="sm" className="w-full text-xs border-slate-300 text-slate-700 hover:bg-slate-50 font-bold">
+                <RotateCw className="w-3.5 h-3.5 mr-2" /> {currentOrientation === "landscape" ? "A4 Landscape" : "A4 Portrait"}
+              </Button>
               <Button onClick={handlePrint} variant="outline" size="sm" className="w-full text-xs border-slate-300 font-semibold">
                 <Printer className="w-3.5 h-3.5 mr-2" /> Print
               </Button>
@@ -378,13 +481,39 @@ export default function PlantFormatsCalc() {
         </div>
 
         {/* ── Preview Column ── */}
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-3 space-y-4">
+
+          {/* Print Controls Top Bar */}
+          <div className="flex flex-wrap justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200 gap-2 print:hidden">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-700 uppercase">Layout: {currentOrientation} A4</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" onClick={addRow} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex gap-1">
+                <Plus className="w-3.5 h-3.5" /> Add Row
+              </Button>
+              <Button size="sm" onClick={addColumn} variant="outline" className="border-blue-600 text-blue-700 hover:bg-blue-50 font-bold text-xs flex gap-1">
+                <Columns className="w-3.5 h-3.5" /> Add Column
+              </Button>
+              <Button size="sm" onClick={toggleOrientation} variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs flex gap-1">
+                <RotateCw className="w-3.5 h-3.5" /> {currentOrientation === "landscape" ? "A4 Landscape" : "A4 Portrait"}
+              </Button>
+              <Button size="sm" onClick={handlePrint} className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex gap-1">
+                <Printer className="w-4 h-4" /> Print
+              </Button>
+              <Button size="sm" onClick={handleDownloadPdf} disabled={isDownloading} className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex gap-1">
+                {isDownloading ? <Loader2 className="w-4 h-4 animate-spin"/> : <Download className="w-4 h-4"/>} 
+                Download PDF
+              </Button>
+            </div>
+          </div>
+
           <div
             id="print-area-formats"
             ref={printAreaRef}
             className={cn(
               "bg-white border border-slate-200 shadow-lg rounded-lg p-6 mx-auto",
-              selectedFormat?.orientation === "landscape" ? "w-full max-w-[297mm]" : "w-full max-w-[210mm]"
+              currentOrientation === "landscape" ? "w-full max-w-[297mm]" : "w-full max-w-[210mm]"
             )}
           >
             {/* Document Header */}
@@ -985,13 +1114,17 @@ export default function PlantFormatsCalc() {
 
       <style dangerouslySetInnerHTML={{
         __html: `
+        .is-exporting-pdf .print\\:hidden,
+        .is-exporting-pdf .no-pdf {
+          display: none !important;
+        }
         @media print {
           body * { visibility: hidden; }
           #print-area-formats, #print-area-formats * { visibility: visible; }
           #print-area-formats {
             position: absolute; left: 0; top: 0;
-            width: ${selectedFormat.orientation === 'landscape' ? '297mm' : '210mm'} !important;
-            height: ${selectedFormat.orientation === 'landscape' ? '210mm' : '297mm'} !important;
+            width: ${currentOrientation === 'landscape' ? '297mm' : '210mm'} !important;
+            height: ${currentOrientation === 'landscape' ? '210mm' : '297mm'} !important;
             padding: 10mm !important; margin: 0 !important;
             border: none !important; box-shadow: none !important;
             background-color: white !important;
