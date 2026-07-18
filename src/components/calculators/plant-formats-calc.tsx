@@ -360,9 +360,6 @@ export default function PlantFormatsCalc() {
     }
   };
 
-  // ════════════════════════════════════════════════════
-  //  RENDER
-  // ════════════════════════════════════════════════════
   const inp = "w-full bg-transparent border-none focus:ring-0";
 
   return (
@@ -508,14 +505,19 @@ export default function PlantFormatsCalc() {
             </div>
           </div>
 
-          <div
-            id="print-area-formats"
-            ref={printAreaRef}
-            className={cn(
-              "bg-white border border-slate-200 shadow-lg rounded-lg p-6 mx-auto",
-              currentOrientation === "landscape" ? "w-full max-w-[297mm]" : "w-full max-w-[210mm]"
-            )}
-          >
+          {/* Document Sheet Area with Touch Horizontal Scroll for Mobile */}
+          <div className="overflow-x-auto print:overflow-visible touch-pan-x pb-4">
+            <div
+              id="print-area-formats"
+              ref={printAreaRef}
+              className={cn(
+                "bg-white border border-slate-200 shadow-md font-sans text-black mx-auto overflow-hidden print:border-none print:shadow-none print:p-0 print:m-0",
+                currentOrientation === "landscape" 
+                  ? "w-[297mm] min-h-[210mm] p-[15mm] print:w-[297mm] print:h-[210mm]" 
+                  : "w-[210mm] min-h-[297mm] p-[15mm] print:w-[210mm] print:h-[297mm]"
+              )}
+              style={{ boxSizing: "border-box" }}
+            >
             {/* Document Header */}
             <div className="border-b-2 border-black pb-3 mb-4">
               <div className="flex justify-between items-start">
@@ -539,7 +541,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 1. Raw Milk Reception & Storage Log ═══ */}
               {selectedFormatId === "rm-reception" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[9px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1.5 py-1 w-20">Tanker No.</th>
@@ -554,6 +556,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 w-14">Status</th>
                       <th className="border border-black px-1.5 py-1 w-14">Silo</th>
                       <th className="border border-black px-1.5 py-1 w-14">Operator</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -571,6 +574,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateRmReceptionRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase().includes("reject")?"text-red-700":"text-green-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.siloAllotted} onChange={e=>updateRmReceptionRow(r.id,"siloAllotted",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
                           <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateRmReceptionRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -586,7 +590,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 2. Batch Manufacturing Record (BMR) ═══ */}
               {selectedFormatId === "bmr" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[9px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1.5 py-1 w-10">Step</th>
@@ -598,6 +602,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 text-left">Remarks / CCP</th>
                       <th className="border border-black px-1.5 py-1 w-16">Done By</th>
                       <th className="border border-black px-1.5 py-1 w-18">Verified By</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -612,6 +617,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateBmrRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updateBmrRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
                           <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updateBmrRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -622,7 +628,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 3. Process Monitoring Log ═══ */}
               {selectedFormatId === "process-monitoring" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[9px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1.5 py-1 w-12">Time</th>
@@ -634,6 +640,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 w-16">Flow (L/hr)</th>
                       <th className="border border-black px-1.5 py-1 w-14">PHP Status</th>
                       <th className="border border-black px-1.5 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -648,6 +655,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.flowRate} onChange={e=>updateProcessRow(r.id,"flowRate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
                           <td className="border border-black p-0.5"><input value={r.phpStatus} onChange={e=>updateProcessRow(r.id,"phpStatus",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.phpStatus.toLowerCase()==="alert"||r.phpStatus.toLowerCase()==="fail"?"text-red-700":"text-green-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateProcessRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -658,7 +666,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 4. Packing & Dispatch Log ═══ */}
               {selectedFormatId === "packing-dispatch" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[9px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1.5 py-1 w-16">Batch No.</th>
@@ -671,6 +679,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 w-12">Temp</th>
                       <th className="border border-black px-1.5 py-1 w-14">Status</th>
                       <th className="border border-black px-1.5 py-1 w-14">Operator</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -686,6 +695,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.tempAtDispatch} onChange={e=>updatePackingRow(r.id,"tempAtDispatch",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
                           <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updatePackingRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase()==="dispatched"?"text-green-700":"text-orange-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updatePackingRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -696,7 +706,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 5. CIP & Cleaning Log ═══ */}
               {selectedFormatId === "cip-cleaning" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[9px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1.5 py-1 text-left">Equipment</th>
@@ -709,6 +719,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 w-14">Duration</th>
                       <th className="border border-black px-1.5 py-1 w-14">Operator</th>
                       <th className="border border-black px-1.5 py-1 w-12">QA</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -724,6 +735,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.duration} onChange={e=>updateCipRow(r.id,"duration",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
                           <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCipRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
                           <td className="border border-black p-0.5"><input value={r.qaStatus} onChange={e=>updateCipRow(r.id,"qaStatus",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.qaStatus.toLowerCase()!=="ok"?"text-red-700":"text-green-700")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -762,6 +774,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.spareUsed} onChange={e=>updateBreakdownMaintRow(r.id,"spareUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.engineer} onChange={e=>updateBreakdownMaintRow(r.id,"engineer",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateBreakdownMaintRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="resolved"?"text-green-700":"text-red-700")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -772,7 +785,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 7. Production Yield & Shift Handover Report ═══ */}
               {selectedFormatId === "yield-handover" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[9px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1.5 py-1 text-left">Shift / Timing</th>
@@ -783,6 +796,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 w-16">Rejections</th>
                       <th className="border border-black px-1.5 py-1 w-18">Pending Batches</th>
                       <th className="border border-black px-1.5 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -796,6 +810,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.rejections} onChange={e=>updateYieldRow(r.id,"rejections",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center",r.rejections==="0"||r.rejections.toLowerCase()==="nil"?"text-green-700":"text-red-700 font-bold")} /></td>
                           <td className="border border-black p-0.5"><input value={r.pendingBatches} onChange={e=>updateYieldRow(r.id,"pendingBatches",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center text-slate-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateYieldRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -813,7 +828,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 8. Preventive Maintenance (PM) Log ═══ */}
               {selectedFormatId === "pm-log" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[9px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1.5 py-1 w-8">Sr.</th>
@@ -826,6 +841,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 w-14">Status</th>
                       <th className="border border-black px-1.5 py-1 w-14">Done By</th>
                       <th className="border border-black px-1.5 py-1 w-16">Verified By</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -841,6 +857,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updatePmLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase()==="done"?"text-green-700":r.status.toLowerCase()==="pending"?"text-orange-600":"text-red-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updatePmLogRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
                           <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updatePmLogRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -851,7 +868,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 9. Breakdown Maintenance Log ═══ */}
               {selectedFormatId === "breakdown-log" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[8.5px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1 py-1 w-16">Report No.</th>
@@ -883,6 +900,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.spareUsed} onChange={e=>updateBreakdownLogRow(r.id,"spareUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
                           <td className="border border-black p-0.5"><input value={r.engineer} onChange={e=>updateBreakdownLogRow(r.id,"engineer",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateBreakdownLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-red-700")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -905,6 +923,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 w-14">Cost</th>
                       <th className="border border-black px-1.5 py-1 w-18">Next Due</th>
                       <th className="border border-black px-1.5 py-1 text-left">Remarks</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -919,6 +938,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.cost} onChange={e=>updateEquipHistoryRow(r.id,"cost",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
                           <td className="border border-black p-0.5"><input type="date" value={r.nextDueDate} onChange={e=>updateEquipHistoryRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
                           <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateEquipHistoryRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-600")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -929,7 +949,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 11. Spare Parts Inventory Register ═══ */}
               {selectedFormatId === "spare-parts" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[8.5px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1 py-1 w-16">Part Code</th>
@@ -961,6 +981,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.reorderQty} onChange={e=>updateSparePartsRow(r.id,"reorderQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
                           <td className="border border-black p-0.5"><input value={r.supplier} onChange={e=>updateSparePartsRow(r.id,"supplier",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
                           <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateSparePartsRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-600")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -972,7 +993,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 12. Utility Log Sheet ═══ */}
               {selectedFormatId === "utility-log" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[8.5px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1 py-1 w-24">Date & Time</th>
@@ -1004,6 +1025,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.param4} onChange={e=>updateUtilityLogRow(r.id,"param4",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
                           <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateUtilityLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="normal"?"text-green-700":"text-red-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateUtilityLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -1028,6 +1050,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1.5 py-1 w-14">Done By</th>
                       <th className="border border-black px-1.5 py-1 w-14">Verified</th>
                       <th className="border border-black px-1.5 py-1 text-left">Remarks</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -1044,6 +1067,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updateLubricationRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
                           <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updateLubricationRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
                           <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateLubricationRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-600")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -1054,7 +1078,7 @@ export default function PlantFormatsCalc() {
 
               {/* ═══ 14. Daily Maintenance / Work Permit Register ═══ */}
               {selectedFormatId === "work-permit" && (
-                <div className="w-full overflow-x-visible">
+                <div className="w-full overflow-x-auto">
                   <table className="w-full text-[8.5px] border-collapse border border-black text-black">
                     <thead><tr className="bg-slate-100 text-center font-bold">
                       <th className="border border-black px-1 py-1 w-16">Permit No.</th>
@@ -1069,6 +1093,7 @@ export default function PlantFormatsCalc() {
                       <th className="border border-black px-1 py-1 w-12">End</th>
                       <th className="border border-black px-1 py-1 w-12">Status</th>
                       <th className="border border-black px-1 py-1 w-14">Closed By</th>
+                      {renderCustomHeaderCols()}
                       <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
                     </tr></thead>
                     <tbody>
@@ -1086,6 +1111,7 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.endTime} onChange={e=>updateWorkPermitRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
                           <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateWorkPermitRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-orange-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.closedBy} onChange={e=>updateWorkPermitRow(r.id,"closedBy",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
@@ -1111,6 +1137,7 @@ export default function PlantFormatsCalc() {
           </div>
         </div>
       </div>
+    </div>
 
       <style dangerouslySetInnerHTML={{
         __html: `
