@@ -1288,7 +1288,8 @@ export function LabFormatsCalc() {
       </div>
 
       {/* Global CSS overrides for A4 Printing layout */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @media print {
           body * {
             visibility: hidden;
@@ -1315,7 +1316,8 @@ export function LabFormatsCalc() {
             display: none !important;
           }
         }
-      `}</style>
+        `
+      }} />
     </div>
   );
 }
