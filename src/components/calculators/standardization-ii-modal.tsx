@@ -55,11 +55,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 
 
-type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'milk-blending' | 'clr-increase' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'two-component-standardization' | 'fat-snf-adjustment';
+import dynamic from "next/dynamic";
+
+const AdvancedStandardizationCalc = dynamic(() => import("./advanced-standardization-calc").then(m => ({ default: m.AdvancedStandardizationCalc })), { 
+  ssr: false, 
+  loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
+});
+
+type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'milk-blending' | 'clr-increase' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'two-component-standardization' | 'fat-snf-adjustment' | 'advanced-standardization';
 
 
 // 1️⃣ FIX: calculatorsInfo mein 'color' property add karein
 const calculatorsInfo = {
+    'advanced-standardization': { 
+        title: "Multi-Solids Batch (Sweet Curd/Lassi)", 
+        icon: Beaker, 
+        component: AdvancedStandardizationCalc,
+        color: "from-purple-600 to-indigo-700" 
+    },
     'fat-snf-clr-ts': { 
         title: "Fat, SNF, CLR & TS", 
         icon: Calculator, 
