@@ -43,7 +43,8 @@ import {
     Layers,           // Cream (Separation layer)
     Scale,            // Gravimetric (Balance scale)
     Waves,            // CIP (Liquid flow)
-    FunctionSquare    // Formulas (Math function)
+    FunctionSquare,   // Formulas (Math function)
+    UserCheck         // Resume Maker icon
 } from "lucide-react";  
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -80,6 +81,11 @@ const productSampleWeights: Record<string, string> = {
 };
 
 const LabFormatsCalc = dynamic(() => import("./lab-formats-calc").then(m => ({ default: m.LabFormatsCalc })), { 
+  ssr: false, 
+  loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
+});
+
+const ResumeMakerCalc = dynamic(() => import("./resume-maker-calc").then(m => ({ default: m.ResumeMakerCalc })), { 
   ssr: false, 
   loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
 });
@@ -171,6 +177,12 @@ const calculatorsInfo = {
         icon: FileText,
         component: LabFormatsCalc,
         color: "from-teal-500 to-emerald-600" 
+    },
+    'resume-maker': { 
+        title: "Resume Maker & CV Builder", 
+        icon: UserCheck,
+        component: ResumeMakerCalc,
+        color: "from-blue-600 to-indigo-600" 
     },
 };
 export function VariousCalculatorsModal({
