@@ -33,7 +33,6 @@ type FormatType =
 interface FormatInfo {
   id: FormatType;
   title: string;
-  titleHi: string;
   description: string;
   orientation: "portrait" | "landscape";
   icon: any;
@@ -43,7 +42,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "raw-milk-tanker",
     title: "Raw Milk Reception Log Sheet (Tankers)",
-    titleHi: "कच्चा दूध आवक लॉग शीट (टैंकर)",
     description: "Quality control tracker for milk tankers receiving at dock.",
     orientation: "landscape",
     icon: TestTube
@@ -51,7 +49,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "raw-milk-can",
     title: "Raw Milk Reception Log Sheet (Cans)",
-    titleHi: "कच्चा दूध आवक लॉग शीट (कैन)",
     description: "Quality control tracker for milk cans/routes receiving at dock.",
     orientation: "landscape",
     icon: TestTube
@@ -59,7 +56,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "raw-milk-silo",
     title: "Raw Milk Silo Storage Log Sheet",
-    titleHi: "दूध साइलो स्टोरेज लॉग शीट",
     description: "Quality control and temperature tracker for raw milk storage silos.",
     orientation: "landscape",
     icon: TestTube
@@ -67,7 +63,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "finished-products",
     title: "Finished Product Analysis Report",
-    titleHi: "तैयार उत्पाद रासायनिक विश्लेषण",
     description: "Daily chemical & physical standards verification sheet for finished dairy products.",
     orientation: "landscape",
     icon: ShieldCheck
@@ -75,7 +70,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "lab-calibration",
     title: "Laboratory Calibration & Equipment Log",
-    titleHi: "प्रयोगशाला अंशांकन एवं उपकरण लॉग",
     description: "Accuracy check record for digital instruments, balances, and glassware.",
     orientation: "portrait",
     icon: Scale
@@ -83,7 +77,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "chemical-reagent",
     title: "Chemical & Reagent Prep & Stock Log",
-    titleHi: "रसायन एवं अभिकर्मक लॉग",
     description: "Log for chemical preparation, stock verification, standardization factor, and expiry.",
     orientation: "portrait",
     icon: Beaker
@@ -91,7 +84,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "media-log",
     title: "Microbiology Culture Media Log Sheet",
-    titleHi: "सूक्ष्मजीवविज्ञान मीडिया तैयारी लॉग",
     description: "Autoclave sterilization and prep log for microbiology agar and broth media.",
     orientation: "portrait",
     icon: FlaskConical
@@ -99,7 +91,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "sample-register-coa",
     title: "Sample Register & COA Log",
-    titleHi: "नमूना रजिस्टर एवं विश्लेषण प्रमाणपत्र",
     description: "Daily register of analysis results and Certificate of Analysis (COA) compliance checks.",
     orientation: "landscape",
     icon: ClipboardList
@@ -107,7 +98,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "product-release",
     title: "Product Release Register",
-    titleHi: "तैयार उत्पाद रिलीज रजिस्टर",
     description: "Finished product batch release tracking sheet including chemical, micro, and sensory clearances.",
     orientation: "landscape",
     icon: CheckCircle
@@ -115,7 +105,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "water-testing",
     title: "Water Quality Analysis Log Sheet",
-    titleHi: "पानी की गुणवत्ता का विश्लेषण लॉग",
     description: "Daily checks for pH, hardness, TDS, alkalinity, and residual chlorine in plant water systems.",
     orientation: "portrait",
     icon: Droplet
@@ -123,7 +112,6 @@ const FORMATS_CATALOG: FormatInfo[] = [
   {
     id: "micro-swabs",
     title: "Microbiology Swab Testing Record",
-    titleHi: "सूक्ष्मजीवविज्ञानी स्वैब परीक्षण रिकॉर्ड",
     description: "Swab and environmental testing log for SPC, Coliform, Yeast & Mold in silos, packaging lines, and hands.",
     orientation: "landscape",
     icon: FlaskConical
@@ -385,7 +373,7 @@ export function LabFormatsCalc() {
             <div>
               <CardTitle className="flex items-center gap-2 text-2xl font-bold font-headline">
                 <FileText className="h-7 w-7 text-teal-400" />
-                Dairy Laboratory Formats & Log Sheets (प्रयोगशाला प्रारूप)
+                Dairy Laboratory Formats & Log Sheets
               </CardTitle>
               <CardDescription className="text-teal-200 mt-1 text-xs md:text-sm">
                 Ready-to-print laboratory log sheets. Enter your company name, edit standard entries, and download as clean A4 templates.
@@ -404,7 +392,7 @@ export function LabFormatsCalc() {
           <Card className="border border-slate-200 shadow-sm">
             <CardHeader className="bg-slate-100 p-4 border-b">
               <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                1. Lab Info (प्रयोगशाला विवरण)
+                1. Lab Info & Configuration
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
@@ -450,7 +438,7 @@ export function LabFormatsCalc() {
           <Card className="border border-slate-200 shadow-sm">
             <CardHeader className="bg-slate-100 p-4 border-b">
               <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                2. Choose Lab Format (प्रारूप चुनें)
+                2. Choose Lab Format
               </CardTitle>
             </CardHeader>
             <CardContent className="p-2 space-y-1">
@@ -470,7 +458,6 @@ export function LabFormatsCalc() {
                     <Icon className="w-4 h-4 shrink-0 mt-0.5" />
                     <div>
                       <div className="font-bold">{f.title}</div>
-                      <div className="text-[10px] text-slate-400 font-normal mt-0.5">{f.titleHi}</div>
                     </div>
                   </button>
                 );
@@ -503,10 +490,10 @@ export function LabFormatsCalc() {
             
             <div className="flex gap-2">
               <Button size="sm" onClick={addRow} className="bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex gap-1">
-                <Plus className="w-3.5 h-3.5" /> Add Row (जोड़ें)
+                <Plus className="w-3.5 h-3.5" /> Add Row
               </Button>
               <Button size="sm" onClick={handlePrint} className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex gap-1">
-                <Printer className="w-4 h-4" /> Print (प्रिंट)
+                <Printer className="w-4 h-4" /> Print
               </Button>
               <Button size="sm" onClick={handleDownloadPdf} disabled={isDownloading} className="bg-teal-850 hover:bg-teal-900 text-white font-bold text-xs flex gap-1">
                 {isDownloading ? <Loader2 className="w-4 h-4 animate-spin"/> : <FileDown className="w-4 h-4"/>} 
@@ -545,13 +532,12 @@ export function LabFormatsCalc() {
                     <div className="border-t border-black my-2" />
                     <h2 className="text-sm font-black tracking-widest text-black uppercase leading-none flex justify-center items-center gap-1.5">
                       {selectedFormat.title.toUpperCase()}
-                      <span className="text-xs font-normal">({selectedFormat.titleHi})</span>
                     </h2>
                   </div>
 
                   {/* Meta Details Row */}
                   <div className="grid grid-cols-3 border border-black p-2 bg-slate-50 text-[10px] font-bold gap-4">
-                    <div>DATE (दिनांक): <span className="font-normal border-b border-black border-dotted ml-1">{currentDate}</span></div>
+                    <div>DATE: <span className="font-normal border-b border-black border-dotted ml-1">{currentDate}</span></div>
                     <div>LAB IN-CHARGE: <span className="font-normal border-b border-black border-dotted ml-1">_________________</span></div>
                     <div>DOC REF NO: <span className="font-normal border-b border-black border-dotted ml-1">QA-LAB-{selectedFormat.id.toUpperCase()}-2026</span></div>
                   </div>
@@ -723,7 +709,7 @@ export function LabFormatsCalc() {
                         <thead>
                           <tr className="bg-slate-100 text-center font-bold">
                             <th className="border border-black px-1.5 py-1 w-16">Silo No.</th>
-                            <th className="border border-black px-1.5 py-1">Silo Position (साइलो स्थान)</th>
+                            <th className="border border-black px-1.5 py-1">Silo Position</th>
                             <th className="border border-black px-1.5 py-1 w-18">Opening Bal. (L)</th>
                             <th className="border border-black px-1.5 py-1 w-18">Received Qty (L)</th>
                             <th className="border border-black px-1.5 py-1 text-left">Source / Tanker Ref</th>
@@ -1266,10 +1252,10 @@ export function LabFormatsCalc() {
                   {/* Standard Sign block */}
                   <div className="flex justify-between items-center text-[8.5px] font-bold uppercase tracking-wider px-4">
                     <div className="text-center w-32 border-t border-black pt-1">
-                      ANALYST SIGN (परीक्षक हस्ताक्षर)
+                      ANALYST SIGN
                     </div>
                     <div className="text-center w-32 border-t border-black pt-1">
-                      VERIFIED BY (सत्यापितकर्ता)
+                      VERIFIED BY
                     </div>
                     <div className="text-center w-32 border-t border-black pt-1">
                       QA MANAGER AUTHORIZED SIGN
@@ -1278,7 +1264,7 @@ export function LabFormatsCalc() {
 
                   {/* Brand Footer */}
                   <div className="border-t border-slate-300 pt-2 text-center text-[7.5px] text-slate-400 font-bold tracking-widest uppercase">
-                    POWERED BY DAIRY HUB QUALITY SYSTEM
+                    POWERED BY DAIRY HUB ERP SYSTEM
                   </div>
 
                 </div>
@@ -1320,8 +1306,7 @@ export function LabFormatsCalc() {
             display: none !important;
           }
         }
-        `
-      }} />
+      `}} />
     </div>
   );
 }
