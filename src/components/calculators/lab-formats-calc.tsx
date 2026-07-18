@@ -4,7 +4,8 @@ import React, { useState, useRef, useMemo } from "react";
 import { 
   Printer, Download, FileText, Building2, MapPin, Calendar, 
   Plus, Trash2, CheckCircle, Info, Loader2, FileDown,
-  ShieldCheck, ClipboardList, Beaker, FlaskConical, Droplet, TestTube, Scale
+  ShieldCheck, ClipboardList, Beaker, FlaskConical, Droplet, TestTube, Scale,
+  Columns, RotateCw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -201,6 +202,97 @@ export function LabFormatsCalc() {
     return FORMATS_CATALOG.find(f => f.id === selectedFormatId)!;
   }, [selectedFormatId]);
 
+  // Dynamic custom columns & orientation state
+  const [customColumnsMap, setCustomColumnsMap] = useState<Record<string, string[]>>({});
+  const [customCellValues, setCustomCellValues] = useState<Record<string, Record<string | number, Record<string, string>>>>({});
+  const [orientationMap, setOrientationMap] = useState<Record<string, "portrait" | "landscape">>({});
+
+  const currentOrientation = orientationMap[selectedFormatId] || selectedFormat?.orientation || "portrait";
+
+  const toggleOrientation = () => {
+    const next = currentOrientation === "landscape" ? "portrait" : "landscape";
+    setOrientationMap(prev => ({ ...prev, [selectedFormatId]: next }));
+    toast({
+      title: "Page Orientation Changed",
+      description: `Layout set to ${next.toUpperCase()} A4 mode.`,
+    });
+  };
+
+  const addColumn = () => {
+    const existing = customColumnsMap[selectedFormatId] || [];
+    const defaultName = `Custom Col ${existing.length + 1}`;
+    const inputName = window.prompt("Enter new Column Header Name:", defaultName);
+    if (inputName !== null && inputName.trim() !== "") {
+      const colName = inputName.trim();
+      setCustomColumnsMap(prev => ({
+        ...prev,
+        [selectedFormatId]: [...(prev[selectedFormatId] || []), colName]
+      }));
+      toast({
+        title: "Custom Column Added",
+        description: `Added column "${colName}".`,
+      });
+    }
+  };
+
+  const removeColumn = (colName: string) => {
+    setCustomColumnsMap(prev => ({
+      ...prev,
+      [selectedFormatId]: (prev[selectedFormatId] || []).filter(c => c !== colName)
+    }));
+  };
+
+  const updateCustomCell = (rowId: string | number, colName: string, value: string) => {
+    setCustomCellValues(prev => ({
+      ...prev,
+      [selectedFormatId]: {
+        ...(prev[selectedFormatId] || {}),
+        [rowId]: {
+          ...((prev[selectedFormatId] || {})[rowId] || {}),
+          [colName]: value
+        }
+      }
+    }));
+  };
+
+  const getCustomCell = (rowId: string | number, colName: string) => {
+    return customCellValues[selectedFormatId]?.[rowId]?.[colName] || "";
+  };
+
+  const renderCustomHeaderCols = () => {
+    const cols = customColumnsMap[selectedFormatId] || [];
+    return cols.map((colName, cIdx) => (
+      <th key={`custom-col-head-${cIdx}`} className="border border-black px-1.5 py-1 text-center font-bold min-w-[80px]">
+        <div className="flex items-center justify-between gap-1">
+          <span className="truncate">{colName}</span>
+          <button
+            type="button"
+            onClick={() => removeColumn(colName)}
+            className="text-red-500 hover:text-red-700 font-extrabold print:hidden text-[9px] px-1"
+            title="Remove Column"
+          >
+            ×
+          </button>
+        </div>
+      </th>
+    ));
+  };
+
+  const renderCustomBodyCells = (rowId: number | string) => {
+    const cols = customColumnsMap[selectedFormatId] || [];
+    return cols.map((colName, cIdx) => (
+      <td key={`custom-col-cell-${cIdx}`} className="border border-black p-0.5 text-center min-w-[80px]">
+        <input
+          type="text"
+          value={getCustomCell(rowId, colName)}
+          onChange={(e) => updateCustomCell(rowId, colName, e.target.value)}
+          className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 focus:outline-none"
+          placeholder="-"
+        />
+      </td>
+    ));
+  };
+
   // Actions
   const handlePrint = () => {
     window.print();
@@ -210,10 +302,12 @@ export function LabFormatsCalc() {
     if (!printAreaRef.current) return;
     setIsDownloading(true);
     try {
+      printAreaRef.current.classList.add("is-exporting-pdf");
       const canvas = await html2canvas(printAreaRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      printAreaRef.current.classList.remove("is-exporting-pdf");
       const imgData = canvas.toDataURL("image/png");
       
-      const isLandscape = selectedFormat.orientation === "landscape";
+      const isLandscape = currentOrientation === "landscape";
       const pdf = new jsPDF({ 
         orientation: isLandscape ? "l" : "p", 
         unit: "mm", 
@@ -231,6 +325,9 @@ export function LabFormatsCalc() {
         description: "Your printable PDF lab sheet is ready.",
       });
     } catch (e) {
+      if (printAreaRef.current) {
+        printAreaRef.current.classList.remove("is-exporting-pdf");
+      }
       console.error(e);
       toast({
         title: "Export Failed",
@@ -480,17 +577,23 @@ export function LabFormatsCalc() {
         <div className="lg:col-span-3 space-y-4">
           
           {/* Print Controls Header */}
-          <div className="flex justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200 print:hidden">
+          <div className="flex flex-wrap justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200 gap-2 print:hidden">
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="bg-teal-100 text-teal-850 font-bold text-[10px] uppercase">
-                {selectedFormat.orientation} A4
+                {currentOrientation} A4
               </Badge>
               <span className="hidden sm:inline text-[11px] text-slate-500 font-semibold italic">Edit values directly in the tables below!</span>
             </div>
             
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Button size="sm" onClick={addRow} className="bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex gap-1">
                 <Plus className="w-3.5 h-3.5" /> Add Row
+              </Button>
+              <Button size="sm" onClick={addColumn} variant="outline" className="border-teal-600 text-teal-700 hover:bg-teal-50 font-bold text-xs flex gap-1">
+                <Columns className="w-3.5 h-3.5" /> Add Column
+              </Button>
+              <Button size="sm" onClick={toggleOrientation} variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs flex gap-1">
+                <RotateCw className="w-3.5 h-3.5" /> {currentOrientation === "landscape" ? "A4 Landscape" : "A4 Portrait"}
               </Button>
               <Button size="sm" onClick={handlePrint} className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex gap-1">
                 <Printer className="w-4 h-4" /> Print
@@ -509,7 +612,7 @@ export function LabFormatsCalc() {
               id="print-area-formats"
               className={cn(
                 "bg-white border shadow-md font-sans text-black mx-auto overflow-hidden print:border-none print:shadow-none print:p-0 print:m-0",
-                selectedFormat.orientation === "landscape" 
+                currentOrientation === "landscape" 
                   ? "w-[297mm] min-h-[210mm] p-[15mm] print:w-[297mm] print:h-[210mm]" 
                   : "w-[210mm] min-h-[297mm] p-[15mm] print:w-[210mm] print:h-[297mm]"
               )}
@@ -564,6 +667,7 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-20">Adulteration</th>
                             <th className="border border-black px-1.5 py-1 w-16">Status</th>
                             <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
+                            {renderCustomHeaderCols()}
                             <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
@@ -606,6 +710,7 @@ export function LabFormatsCalc() {
                               <td className="border border-black p-0.5 text-center">
                                 <input value={row.analyst} onChange={(e) => updateRawMilkTankerRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
+                              {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
                               </td>
@@ -643,6 +748,7 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-20">Adulteration</th>
                             <th className="border border-black px-1.5 py-1 w-16">Status</th>
                             <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
+                            {renderCustomHeaderCols()}
                             <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
@@ -685,6 +791,7 @@ export function LabFormatsCalc() {
                               <td className="border border-black p-0.5 text-center">
                                 <input value={row.analyst} onChange={(e) => updateRawMilkCanRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
+                              {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
                               </td>
@@ -1280,6 +1387,10 @@ export function LabFormatsCalc() {
       {/* Global CSS overrides for A4 Printing layout */}
       <style dangerouslySetInnerHTML={{
         __html: `
+        .is-exporting-pdf .print\\:hidden,
+        .is-exporting-pdf .no-pdf {
+          display: none !important;
+        }
         @media print {
           body * {
             visibility: hidden;
@@ -1291,8 +1402,8 @@ export function LabFormatsCalc() {
             position: absolute;
             left: 0;
             top: 0;
-            width: ${selectedFormat.orientation === 'landscape' ? '297mm' : '210mm'} !important;
-            height: ${selectedFormat.orientation === 'landscape' ? '210mm' : '297mm'} !important;
+            width: ${currentOrientation === 'landscape' ? '297mm' : '210mm'} !important;
+            height: ${currentOrientation === 'landscape' ? '210mm' : '297mm'} !important;
             padding: 10mm !important;
             margin: 0 !important;
             border: none !important;
