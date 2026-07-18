@@ -158,9 +158,9 @@ export function LabFormatsCalc() {
   ]);
 
   const [rawMilkSiloRows, setRawMilkSiloRows] = useState([
-    { id: 1, siloNo: "SILO-01", openingBal: "12000", receivedQty: "15000", source: "Tanker GP-12", temp: "4.0", acidity: "0.135", fat: "4.15", snf: "8.48", closingBal: "27000", remarks: "Rec. from Banas Tanker" },
-    { id: 2, siloNo: "SILO-02", openingBal: "45000", receivedQty: "0", source: "-", temp: "4.2", acidity: "0.140", fat: "4.25", snf: "8.52", closingBal: "35000", remarks: "10000L sent to pasteurizer" },
-    { id: 3, siloNo: "SILO-03", openingBal: "0", receivedQty: "12000", source: "Tanker GP-14", temp: "3.8", acidity: "0.130", fat: "4.40", snf: "8.60", closingBal: "12000", remarks: "CIP done, fresh fill" }
+    { id: 1, siloNo: "SILO-01", siloPosition: "Zone A - North", openingBal: "12000", receivedQty: "15000", source: "Tanker GP-12", temp: "4.0", acidity: "0.135", fat: "4.15", snf: "8.48", closingBal: "27000", remarks: "Rec. from Banas Tanker" },
+    { id: 2, siloNo: "SILO-02", siloPosition: "Zone A - South", openingBal: "45000", receivedQty: "0", source: "-", temp: "4.2", acidity: "0.140", fat: "4.25", snf: "8.52", closingBal: "35000", remarks: "10000L sent to pasteurizer" },
+    { id: 3, siloNo: "SILO-03", siloPosition: "Zone B - East", openingBal: "0", receivedQty: "12000", source: "Tanker GP-14", temp: "3.8", acidity: "0.130", fat: "4.40", snf: "8.60", closingBal: "12000", remarks: "CIP done, fresh fill" }
   ]);
 
   const [productRows, setProductRows] = useState([
@@ -308,7 +308,7 @@ export function LabFormatsCalc() {
         setRawMilkCanRows(prev => [...prev, { id: Date.now(), route: "", totalCans: "", acceptedCans: "", rejectedCans: "", temp: "", acidity: "", fat: "", snf: "", cob: "Negative", adulteration: "Nil", status: "Accepted", analyst: "" }]);
         break;
       case "raw-milk-silo":
-        setRawMilkSiloRows(prev => [...prev, { id: Date.now(), siloNo: "", openingBal: "", receivedQty: "", source: "", temp: "", acidity: "", fat: "", snf: "", closingBal: "", remarks: "" }]);
+        setRawMilkSiloRows(prev => [...prev, { id: Date.now(), siloNo: "", siloPosition: "", openingBal: "", receivedQty: "", source: "", temp: "", acidity: "", fat: "", snf: "", closingBal: "", remarks: "" }]);
         break;
       case "finished-products":
         setProductRows(prev => [...prev, { id: Date.now(), batchNo: "", productName: "", packSize: "", fat: "", snf: "", moisture: "", acidity: "", phosphatase: "", coliform: "", organoleptic: "", analyst: "" }]);
@@ -723,6 +723,7 @@ export function LabFormatsCalc() {
                         <thead>
                           <tr className="bg-slate-100 text-center font-bold">
                             <th className="border border-black px-1.5 py-1 w-16">Silo No.</th>
+                            <th className="border border-black px-1.5 py-1">Silo Position (साइलो स्थान)</th>
                             <th className="border border-black px-1.5 py-1 w-18">Opening Bal. (L)</th>
                             <th className="border border-black px-1.5 py-1 w-18">Received Qty (L)</th>
                             <th className="border border-black px-1.5 py-1 text-left">Source / Tanker Ref</th>
@@ -740,6 +741,9 @@ export function LabFormatsCalc() {
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
                                 <input value={row.siloNo} onChange={(e) => updateRawMilkSiloRow(row.id, "siloNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center text-slate-700">
+                                <input value={row.siloPosition ?? ""} onChange={(e) => updateRawMilkSiloRow(row.id, "siloPosition", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-right font-mono">
                                 <input value={row.openingBal} onChange={(e) => updateRawMilkSiloRow(row.id, "openingBal", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
