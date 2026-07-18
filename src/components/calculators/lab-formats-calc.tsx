@@ -668,7 +668,7 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-16">Status</th>
                             <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
                             {renderCustomHeaderCols()}
-                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -749,7 +749,7 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-16">Status</th>
                             <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
                             {renderCustomHeaderCols()}
-                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -826,7 +826,8 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-12">SNF (%)</th>
                             <th className="border border-black px-1.5 py-1 w-20">Closing Bal. (L)</th>
                             <th className="border border-black px-1.5 py-1 text-left">Remarks</th>
-                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -892,7 +893,8 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-16">Coliform / ml</th>
                             <th className="border border-black px-1.5 py-1 w-20">Organoleptic</th>
                             <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
-                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1138,7 +1140,8 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-14">Status</th>
                             <th className="border border-black px-1.5 py-1 w-18">COA Ref No.</th>
                             <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
-                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1197,7 +1200,8 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-16">Pkg. OK</th>
                             <th className="border border-black px-1.5 py-1 w-20">Release Status</th>
                             <th className="border border-black px-1.5 py-1 w-18">Released By</th>
-                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1311,7 +1315,8 @@ export function LabFormatsCalc() {
                             <th className="border border-black px-1.5 py-1 w-24 text-center">Yeast & Mold</th>
                             <th className="border border-black px-1.5 py-1 w-20 text-center">Status</th>
                             <th className="border border-black px-1.5 py-1 w-20">Analyst</th>
-                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
                           </tr>
                         </thead>
                         <tbody>
