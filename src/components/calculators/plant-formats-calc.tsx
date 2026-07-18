@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useMemo } from "react";
-import { 
-  Printer, Download, FileText, Building2, MapPin, Calendar, 
+import {
+  Printer, Download, FileText, Building2, MapPin, Calendar,
   Plus, Trash2, Loader2,
   ShieldCheck, ClipboardList, Package, Wrench, BarChart3, Truck, Factory,
   Settings, BookOpen, Archive, Zap, Droplets, ClipboardCheck
@@ -37,7 +37,6 @@ type FormatType =
 interface FormatInfo {
   id: FormatType;
   title: string;
-  titleHi: string;
   description: string;
   orientation: "portrait" | "landscape";
   icon: any;
@@ -46,21 +45,21 @@ interface FormatInfo {
 
 const FORMATS_CATALOG: FormatInfo[] = [
   // ── PLANT OPERATIONS GROUP ──
-  { id: "rm-reception",      title: "Raw Milk Reception & Storage Log",         titleHi: "कच्चा दूध आवक एवं भंडारण लॉग",        description: "Dock-to-silo reception record for tankers.",                                orientation: "landscape", icon: Truck,          group: "Plant Operations" },
-  { id: "bmr",               title: "Batch Manufacturing Record (BMR)",         titleHi: "बैच निर्माण अभिलेख (BMR)",             description: "Step-by-step batch record with CCP sign-off.",                              orientation: "landscape", icon: ClipboardList,  group: "Plant Operations" },
-  { id: "process-monitoring",title: "Process Monitoring Log",                   titleHi: "प्रोसेस निगरानी लॉग",                  description: "Hourly pasteurizer temp, pressure & flow log.",                             orientation: "landscape", icon: Factory,        group: "Plant Operations" },
-  { id: "packing-dispatch",  title: "Packing & Dispatch Log",                   titleHi: "पैकिंग एवं डिस्पैच लॉग",              description: "Packed qty, vehicle loading & dispatch clearance.",                         orientation: "landscape", icon: Package,        group: "Plant Operations" },
-  { id: "cip-cleaning",      title: "CIP & Cleaning Log",                       titleHi: "CIP एवं सफाई लॉग",                   description: "Chemical CIP log: temp, concentration, duration, QA.",                      orientation: "landscape", icon: ShieldCheck,    group: "Plant Operations" },
-  { id: "machine-breakdown", title: "Machine Breakdown & Maintenance Log",        titleHi: "मशीन खराबी एवं मेंटेनेंस लॉग",        description: "Downtime tracker for failures, corrective actions.",                        orientation: "portrait",  icon: Wrench,         group: "Plant Operations" },
-  { id: "yield-handover",    title: "Production Yield & Shift Handover Report",   titleHi: "उत्पादन उपज एवं शिफ्ट हैंडओवर रिपोर्ट", description: "Shift summary: milk input, output, yield%, pending.", orientation: "landscape", icon: BarChart3,      group: "Plant Operations" },
+  { id: "rm-reception",      title: "Raw Milk Reception & Storage Log",          description: "Dock-to-silo reception record for tankers.",                               orientation: "landscape", icon: Truck,          group: "Plant Operations" },
+  { id: "bmr",               title: "Batch Manufacturing Record (BMR)",           description: "Step-by-step batch record with CCP sign-off.",                             orientation: "landscape", icon: ClipboardList,  group: "Plant Operations" },
+  { id: "process-monitoring",title: "Process Monitoring Log",                     description: "Hourly pasteurizer temp, pressure & flow log.",                            orientation: "landscape", icon: Factory,        group: "Plant Operations" },
+  { id: "packing-dispatch",  title: "Packing & Dispatch Log",                    description: "Packed qty, vehicle loading & dispatch clearance.",                        orientation: "landscape", icon: Package,        group: "Plant Operations" },
+  { id: "cip-cleaning",      title: "CIP & Cleaning Log",                        description: "Chemical CIP log: temp, concentration, duration, QA.",                    orientation: "landscape", icon: ShieldCheck,    group: "Plant Operations" },
+  { id: "machine-breakdown", title: "Machine Breakdown & Maintenance Log",        description: "Downtime tracker for failures, corrective actions.",                       orientation: "portrait",  icon: Wrench,         group: "Plant Operations" },
+  { id: "yield-handover",    title: "Production Yield & Shift Handover Report",   description: "Shift summary: milk input, output, yield%, pending.", orientation: "landscape", icon: BarChart3,      group: "Plant Operations" },
   // ── MAINTENANCE GROUP ──
-  { id: "pm-log",            title: "Preventive Maintenance (PM) Log",             titleHi: "निवारक रखरखाव (PM) लॉग",              description: "Scheduled PM tasks, frequency, status & sign-off.",                        orientation: "landscape", icon: Settings,       group: "Maintenance" },
-  { id: "breakdown-log",     title: "Breakdown Maintenance Log",                  titleHi: "ब्रेकडाउन रखरखाव लॉग",               description: "Detailed breakdown root cause, CAPA & downtime log.",                      orientation: "landscape", icon: Wrench,         group: "Maintenance" },
-  { id: "equipment-history", title: "Equipment History Card",                     titleHi: "उपकरण इतिहास कार्ड",                  description: "Full lifecycle record: PM, breakdown, calibration events.",                 orientation: "portrait",  icon: BookOpen,       group: "Maintenance" },
-  { id: "spare-parts",       title: "Spare Parts Inventory Register",             titleHi: "स्पेयर पार्ट्स स्टॉक रजिस्टर",        description: "Stock in/out register for maintenance spare parts.",                        orientation: "landscape", icon: Archive,        group: "Maintenance" },
-  { id: "utility-log",       title: "Utility Log Sheet",                          titleHi: "उपयोगिता (Utility) लॉग शीट",          description: "Boiler, chiller, compressor & RO daily readings log.",                      orientation: "landscape", icon: Zap,            group: "Maintenance" },
-  { id: "lubrication-log",   title: "Lubrication Log Sheet",                      titleHi: "स्नेहन (Lubrication) लॉग शीट",        description: "Scheduled lubrication points, lubricant grade & quantity.",                 orientation: "portrait",  icon: Droplets,       group: "Maintenance" },
-  { id: "work-permit",       title: "Daily Maintenance / Work Permit Register",   titleHi: "कार्य अनुमति पंजिका",                  description: "Hot/cold work permits, hazard control & closure record.",                   orientation: "landscape", icon: ClipboardCheck, group: "Maintenance" },
+  { id: "pm-log",            title: "Preventive Maintenance (PM) Log",            description: "Scheduled PM tasks, frequency, status & sign-off.",                       orientation: "landscape", icon: Settings,       group: "Maintenance" },
+  { id: "breakdown-log",     title: "Breakdown Maintenance Log",                  description: "Detailed breakdown root cause, CAPA & downtime log.",                     orientation: "landscape", icon: Wrench,         group: "Maintenance" },
+  { id: "equipment-history", title: "Equipment History Card",                     description: "Full lifecycle record: PM, breakdown, calibration events.",                orientation: "portrait",  icon: BookOpen,       group: "Maintenance" },
+  { id: "spare-parts",       title: "Spare Parts Inventory Register",             description: "Stock in/out register for maintenance spare parts.",                       orientation: "landscape", icon: Archive,        group: "Maintenance" },
+  { id: "utility-log",       title: "Utility Log Sheet",                          description: "Boiler, chiller, compressor & RO daily readings log.",                    orientation: "landscape", icon: Zap,            group: "Maintenance" },
+  { id: "lubrication-log",   title: "Lubrication Log Sheet",                      description: "Scheduled lubrication points, lubricant grade & quantity.",                orientation: "portrait",  icon: Droplets,       group: "Maintenance" },
+  { id: "work-permit",       title: "Daily Maintenance / Work Permit Register",   description: "Hot/cold work permits, hazard control & closure record.",                  orientation: "landscape", icon: ClipboardCheck, group: "Maintenance" },
 ];
 
 const GROUPS = ["Plant Operations", "Maintenance"];
@@ -86,10 +85,10 @@ export default function PlantFormatsCalc() {
   ]);
 
   const [bmrRows, setBmrRows] = useState([
-    { id: 1, step: "01", operation: "Raw Milk Intake from SILO-01",          startTime: "06:30", endTime: "07:00", milkQty: "10000", temp: "4.2",  remarks: "Chilled, COB Clear",         doneBy: "Amit K.",    verified: "Mgr. Rao"  },
-    { id: 2, step: "02", operation: "Pre-heating & Clarification",           startTime: "07:05", endTime: "07:20", milkQty: "10000", temp: "40.0", remarks: "Clarifier running OK",         doneBy: "Suresh V.",  verified: "Mgr. Rao"  },
+    { id: 1, step: "01", operation: "Raw Milk Intake from SILO-01",          startTime: "06:30", endTime: "07:00", milkQty: "10000", temp: "4.2",  remarks: "Chilled, COB Clear",          doneBy: "Amit K.",    verified: "Mgr. Rao"  },
+    { id: 2, step: "02", operation: "Pre-heating & Clarification",            startTime: "07:05", endTime: "07:20", milkQty: "10000", temp: "40.0", remarks: "Clarifier running OK",         doneBy: "Suresh V.",  verified: "Mgr. Rao"  },
     { id: 3, step: "03", operation: "Pasteurization (HTST 72°C/15s)",         startTime: "07:20", endTime: "08:30", milkQty: "10000", temp: "72.5", remarks: "FDV open, no flow divert",     doneBy: "Suresh V.",  verified: "Dr. Verma" },
-    { id: 4, step: "04", operation: "Homogenization (200/50 bar)",            startTime: "07:20", endTime: "08:30", milkQty: "10000", temp: "68.0", remarks: "Pressure stable",             doneBy: "Ritu S.",    verified: "Dr. Verma" },
+    { id: 4, step: "04", operation: "Homogenization (200/50 bar)",            startTime: "07:20", endTime: "08:30", milkQty: "10000", temp: "68.0", remarks: "Pressure stable",              doneBy: "Ritu S.",    verified: "Dr. Verma" },
     { id: 5, step: "05", operation: "Chilling & Transfer to PMST-1",          startTime: "08:30", endTime: "09:00", milkQty: "9980",  temp: "4.5",  remarks: "0.2% process loss OK",        doneBy: "Ritu S.",    verified: "Mgr. Rao"  },
   ]);
 
@@ -107,16 +106,16 @@ export default function PlantFormatsCalc() {
   ]);
 
   const [cipRows, setCipRows] = useState([
-    { id: 1, equipment: "Pasteurizer-01",   cipType: "Pre-Rinse (Water)",          startTime: "05:30", endTime: "05:45", temp: "60", causticConc: "-",   acidConc: "-",   duration: "15 min", operator: "Vijay K.", qaStatus: "OK" },
-    { id: 2, equipment: "Pasteurizer-01",   cipType: "Caustic Wash (NaOH 2%)",     startTime: "05:45", endTime: "06:15", temp: "80", causticConc: "2.0", acidConc: "-",   duration: "30 min", operator: "Vijay K.", qaStatus: "OK" },
-    { id: 3, equipment: "Pasteurizer-01",   cipType: "Acid Wash (HNO₃ 1.5%)",      startTime: "06:25", endTime: "06:55", temp: "70", causticConc: "-",   acidConc: "1.5", duration: "30 min", operator: "Vijay K.", qaStatus: "OK" },
-    { id: 4, equipment: "Milk Silo RMST-1", cipType: "Full CIP Cycle",             startTime: "10:00", endTime: "11:30", temp: "85", causticConc: "2.5", acidConc: "1.5", duration: "90 min", operator: "Rakesh M.", qaStatus: "OK" },
+    { id: 1, equipment: "Pasteurizer-01",    cipType: "Pre-Rinse (Water)",          startTime: "05:30", endTime: "05:45", temp: "60", causticConc: "-",   acidConc: "-",   duration: "15 min", operator: "Vijay K.", qaStatus: "OK" },
+    { id: 2, equipment: "Pasteurizer-01",    cipType: "Caustic Wash (NaOH 2%)",    startTime: "05:45", endTime: "06:15", temp: "80", causticConc: "2.0", acidConc: "-",   duration: "30 min", operator: "Vijay K.", qaStatus: "OK" },
+    { id: 3, equipment: "Pasteurizer-01",    cipType: "Acid Wash (HNO₃ 1.5%)",     startTime: "06:25", endTime: "06:55", temp: "70", causticConc: "-",   acidConc: "1.5", duration: "30 min", operator: "Vijay K.", qaStatus: "OK" },
+    { id: 4, equipment: "Milk Silo RMST-1",  cipType: "Full CIP Cycle",            startTime: "10:00", endTime: "11:30", temp: "85", causticConc: "2.5", acidConc: "1.5", duration: "90 min", operator: "Rakesh M.", qaStatus: "OK" },
   ]);
 
   const [breakdownMaintRows, setBreakdownMaintRows] = useState([
-    { id: 1, date: "2026-07-14", machine: "Pouch Filling Machine - FL1",     breakdownTime: "09:15", rootCause: "Film roll jam in sealing jaw",        action: "Replaced sealing jaw silicon pad",   resumedTime: "09:55", downtime: "40 min",  spareUsed: "Silicon Pad (2 pcs)",  engineer: "Manoj P.",  status: "Resolved" },
-    { id: 2, date: "2026-07-15", machine: "Pasteurizer-01 Pump",             breakdownTime: "14:30", rootCause: "Vibration - bearing noise",           action: "Bearing replaced & pump re-aligned", resumedTime: "16:00", downtime: "90 min",  spareUsed: "SKF Bearing 6204",     engineer: "Manoj P.",  status: "Resolved" },
-    { id: 3, date: "2026-07-16", machine: "Refrigeration Compressor-2",      breakdownTime: "22:00", rootCause: "High pressure trip",                  action: "Gas leak found, topped up & sealed", resumedTime: "23:30", downtime: "90 min",  spareUsed: "R-404A 2 kg",          engineer: "Rajiv S.",  status: "Resolved" },
+    { id: 1, date: "2026-07-14", machine: "Pouch Filling Machine - FL1",     breakdownTime: "09:15", rootCause: "Film roll jam in sealing jaw",        action: "Replaced sealing jaw silicon pad",    resumedTime: "09:55", downtime: "40 min",  spareUsed: "Silicon Pad (2 pcs)",  engineer: "Manoj P.",  status: "Resolved" },
+    { id: 2, date: "2026-07-15", machine: "Pasteurizer-01 Pump",             breakdownTime: "14:30", rootCause: "Vibration - bearing noise",           action: "Bearing replaced & pump re-aligned",  resumedTime: "16:00", downtime: "90 min",  spareUsed: "SKF Bearing 6204",     engineer: "Manoj P.",  status: "Resolved" },
+    { id: 3, date: "2026-07-16", machine: "Refrigeration Compressor-2",      breakdownTime: "22:00", rootCause: "High pressure trip",                  action: "Gas leak found, topped up & sealed",  resumedTime: "23:30", downtime: "90 min",  spareUsed: "R-404A 2 kg",          engineer: "Rajiv S.",  status: "Resolved" },
   ]);
 
   const [yieldRows, setYieldRows] = useState([
@@ -131,7 +130,7 @@ export default function PlantFormatsCalc() {
   // ════════════════════════════════════════════════════
 
   const [pmLogRows, setPmLogRows] = useState([
-    { id: 1, srNo: "01", equipment: "Pasteurizer-01",        pmTask: "Check & clean heat exchanger plates",        frequency: "Monthly",    scheduledDate: "2026-07-15", doneDate: "2026-07-15", parametersChecked: "Plate gap, gasket condition",  status: "Done",    doneBy: "Manoj P.", verified: "Mgr. Rao"  },
+    { id: 1, srNo: "01", equipment: "Pasteurizer-01",          pmTask: "Check & clean heat exchanger plates",        frequency: "Monthly",    scheduledDate: "2026-07-15", doneDate: "2026-07-15", parametersChecked: "Plate gap, gasket condition",  status: "Done",    doneBy: "Manoj P.", verified: "Mgr. Rao"  },
     { id: 2, srNo: "02", equipment: "Milk Silo RMST-1",        pmTask: "Agitator seal & bearing inspection",          frequency: "Monthly",    scheduledDate: "2026-07-15", doneDate: "2026-07-15", parametersChecked: "Seal leakage, bearing temp",    status: "Done",    doneBy: "Manoj P.", verified: "Mgr. Rao"  },
     { id: 3, srNo: "03", equipment: "Pouch Filling Machine FL1",pmTask: "Clean & lubricate sealing jaw assembly",     frequency: "Weekly",     scheduledDate: "2026-07-18", doneDate: "2026-07-18", parametersChecked: "Seal temp, film alignment",     status: "Done",    doneBy: "Rajiv S.", verified: "Mgr. Rao"  },
     { id: 4, srNo: "04", equipment: "Refrigeration Comp. R-2", pmTask: "Check refrigerant level & oil pressure",     frequency: "Fortnightly",scheduledDate: "2026-07-20", doneDate: "-",          parametersChecked: "Gas pressure, oil level",       status: "Pending", doneBy: "-",        verified: "-"         },
@@ -139,20 +138,20 @@ export default function PlantFormatsCalc() {
   ]);
 
   const [breakdownLogRows, setBreakdownLogRows] = useState([
-    { id: 1, reportNo: "BD-01/26", date: "2026-07-14", machine: "Pouch Filling Machine - FL1", breakdownTime: "09:15", resumedTime: "09:55", downtime: "40 min",  rootCause: "Film roll jam in sealing jaw",       correctiveAction: "Replaced sealing jaw silicon pad",   preventiveAction: "Weekly jaw inspection added to PM",  spareUsed: "Silicon Pad (2 pcs)", engineer: "Manoj P.", status: "Closed" },
+    { id: 1, reportNo: "BD-01/26", date: "2026-07-14", machine: "Pouch Filling Machine - FL1", breakdownTime: "09:15", resumedTime: "09:55", downtime: "40 min",  rootCause: "Film roll jam in sealing jaw",       correctiveAction: "Replaced sealing jaw silicon pad",    preventiveAction: "Weekly jaw inspection added to PM",  spareUsed: "Silicon Pad (2 pcs)", engineer: "Manoj P.", status: "Closed" },
     { id: 2, reportNo: "BD-02/26", date: "2026-07-15", machine: "Pasteurizer-01 Pump",          breakdownTime: "14:30", resumedTime: "16:00", downtime: "90 min",  rootCause: "Bearing failure - vibration noise",  correctiveAction: "Bearing replaced & pump re-aligned",  preventiveAction: "Vibration monitoring quarterly",     spareUsed: "SKF Bearing 6204",    engineer: "Manoj P.", status: "Closed" },
     { id: 3, reportNo: "BD-03/26", date: "2026-07-16", machine: "Refrigeration Comp.-2",        breakdownTime: "22:00", resumedTime: "23:30", downtime: "90 min",  rootCause: "Refrigerant leak - high pressure",  correctiveAction: "Leak sealed & gas recharged",          preventiveAction: "Gas pressure check fortnightly",     spareUsed: "R-404A 2 kg",         engineer: "Rajiv S.", status: "Closed" },
   ]);
 
   const [equipHistoryRows, setEquipHistoryRows] = useState([
     { id: 1, date: "2026-07-15", equipId: "PAST-01", eventType: "PM",         description: "Heat exchanger plate inspection & cleaning",       techName: "Manoj P.", sparesUsed: "Gasket Set (8 pcs)", cost: "₹ 1,200", nextDueDate: "2026-08-15", remarks: "Plates OK, no pitting" },
-    { id: 2, date: "2026-07-15", equipId: "PAST-01", eventType: "Calibration",description: "Temperature sensor & FDV calibration",               techName: "Dr. Verma",sparesUsed: "Nil",               cost: "Nil",      nextDueDate: "2027-01-15", remarks: "Calibration cert issued" },
-    { id: 3, date: "2026-07-15", equipId: "FL1",     eventType: "Breakdown",  description: "Sealing jaw silicon pad replaced",                 techName: "Manoj P.", sparesUsed: "Silicon Pad x2",     cost: "₹ 450",   nextDueDate: "2026-07-22", remarks: "BD Report BD-01/26" },
+    { id: 2, date: "2026-07-15", equipId: "PAST-01", eventType: "Calibration",description: "Temperature sensor & FDV calibration",              techName: "Dr. Verma",sparesUsed: "Nil",               cost: "Nil",      nextDueDate: "2027-01-15", remarks: "Calibration cert issued" },
+    { id: 3, date: "2026-07-15", equipId: "FL1",     eventType: "Breakdown",  description: "Sealing jaw silicon pad replaced",                  techName: "Manoj P.", sparesUsed: "Silicon Pad x2",     cost: "₹ 450",   nextDueDate: "2026-07-22", remarks: "BD Report BD-01/26" },
     { id: 4, date: "2026-07-10", equipId: "RMST-1",  eventType: "PM",         description: "Agitator seal & bearing greasing done",            techName: "Rajiv S.", sparesUsed: "Grease 200g",        cost: "₹ 180",   nextDueDate: "2026-08-10", remarks: "OK, no leakage" },
   ]);
 
   const [sparePartsRows, setSparePartsRows] = useState([
-    { id: 1, partCode: "SP-SK-6204",  partName: "SKF Ball Bearing 6204",         equipUsedFor: "Pasteurizer Pump",      uom: "Nos",  openingStock: "3",  received: "2",  issued: "1",  closingStock: "4",  minLevel: "2", reorderQty: "5", supplier: "SKF India",      remarks: "Last issued BD-02/26" },
+    { id: 1, partCode: "SP-SK-6204",  partName: "SKF Ball Bearing 6204",          equipUsedFor: "Pasteurizer Pump",      uom: "Nos",  openingStock: "3",  received: "2",  issued: "1",  closingStock: "4",  minLevel: "2", reorderQty: "5", supplier: "SKF India",      remarks: "Last issued BD-02/26" },
     { id: 2, partCode: "SP-SJ-PAD",   partName: "Sealing Jaw Silicon Pad",        equipUsedFor: "Filling Machine FL1",   uom: "Nos",  openingStock: "10", received: "0",  issued: "2",  closingStock: "8",  minLevel: "4", reorderQty: "10",supplier: "Tetra Pak",      remarks: "BD-01/26 used 2 pcs" },
     { id: 3, partCode: "SP-GS-PH01",  partName: "PHE Gasket Set (Pasteurizer)",   equipUsedFor: "Pasteurizer PAST-01",   uom: "Set",  openingStock: "2",  received: "3",  issued: "1",  closingStock: "4",  minLevel: "2", reorderQty: "5", supplier: "APV India",      remarks: "PM July use" },
     { id: 4, partCode: "SP-RF-404A",  partName: "R-404A Refrigerant Gas",         equipUsedFor: "Refrigeration Comp.",   uom: "Kg",   openingStock: "5",  received: "4",  issued: "2",  closingStock: "7",  minLevel: "4", reorderQty: "8", supplier: "Bry-Air",        remarks: "BD-03/26 used 2 kg" },
@@ -161,14 +160,14 @@ export default function PlantFormatsCalc() {
 
   const [utilityLogRows, setUtilityLogRows] = useState([
     { id: 1, dateTime: "2026-07-18 06:00", utility: "Boiler (IBR Fired)",            param1Label: "Steam Press (kg/cm²)", param1: "7.5", param2Label: "Feed Water Temp (°C)", param2: "80",  param3Label: "Fuel Used (Litre)", param3: "45",  param4Label: "Efficiency (%)", param4: "82", status: "Normal", operator: "Vijay K." },
-    { id: 2, dateTime: "2026-07-18 06:00", utility: "Chiller Unit-1",                param1Label: "Suction Temp (°C)",   param1: "2.5", param2Label: "Discharge Pr (bar)",   param2: "12.5",param3Label: "Chilled Water Temp",param3: "1.5", param4Label: "Amp Draw (A)",   param4: "42", status: "Normal", operator: "Vijay K." },
+    { id: 2, dateTime: "2026-07-18 06:00", utility: "Chiller Unit-1",               param1Label: "Suction Temp (°C)",   param1: "2.5", param2Label: "Discharge Pr (bar)",   param2: "12.5",param3Label: "Chilled Water Temp",param3: "1.5", param4Label: "Amp Draw (A)",   param4: "42", status: "Normal", operator: "Vijay K." },
     { id: 3, dateTime: "2026-07-18 06:00", utility: "Air Compressor",              param1Label: "Line Pressure (bar)",  param1: "7.2", param2Label: "Oil Level",            param2: "OK",  param3Label: "Drain Blow Done",   param3: "Yes", param4Label: "Amp Draw (A)",   param4: "28", status: "Normal", operator: "Vijay K." },
     { id: 4, dateTime: "2026-07-18 06:00", utility: "RO Water Plant",              param1Label: "Feed TDS (ppm)",      param1: "450", param2Label: "Product TDS (ppm)",    param2: "45",  param3Label: "Rejection Rate (%)",param3: "40",  param4Label: "Flow (L/hr)",    param4: "500", status: "Normal", operator: "Rakesh M." },
     { id: 5, dateTime: "2026-07-18 14:00", utility: "Boiler (IBR Fired)",            param1Label: "Steam Press (kg/cm²)", param1: "7.8", param2Label: "Feed Water Temp (°C)", param2: "82",  param3Label: "Fuel Used (Litre)", param3: "48",  param4Label: "Efficiency (%)", param4: "83", status: "Normal", operator: "Rakesh M." },
   ]);
 
   const [lubricationRows, setLubricationRows] = useState([
-    { id: 1, equipId: "PAST-01", machine: "Pasteurizer-01",         lubricationPoint: "Pump bearing housing",         lubricantGrade: "Castrol Molub-Alloy 777", frequency: "Monthly",     lastDoneDate: "2026-07-01", nextDueDate: "2026-08-01", qtyUsed: "50 g",  doneBy: "Manoj P.", verified: "Mgr. Rao",  remarks: "OK" },
+    { id: 1, equipId: "PAST-01", machine: "Pasteurizer-01",          lubricationPoint: "Pump bearing housing",         lubricantGrade: "Castrol Molub-Alloy 777", frequency: "Monthly",     lastDoneDate: "2026-07-01", nextDueDate: "2026-08-01", qtyUsed: "50 g",  doneBy: "Manoj P.", verified: "Mgr. Rao",  remarks: "OK" },
     { id: 2, equipId: "FL1",     machine: "Filling Machine FL1",     lubricationPoint: "Sealing jaw pivot & rails",    lubricantGrade: "Food Grade Oil ISO 46",    frequency: "Weekly",      lastDoneDate: "2026-07-14", nextDueDate: "2026-07-21", qtyUsed: "10 ml", doneBy: "Rajiv S.", verified: "Mgr. Rao",  remarks: "PM done" },
     { id: 3, equipId: "HMGN-01", machine: "Homogenizer",             lubricationPoint: "Crankshaft & con-rod bearings",lubricantGrade: "Hydraulic Oil ISO 46",      frequency: "Fortnightly", lastDoneDate: "2026-07-10", nextDueDate: "2026-07-24", qtyUsed: "200 ml",doneBy: "Manoj P.", verified: "Mgr. Rao",  remarks: "No leak" },
     { id: 4, equipId: "COMP-02", machine: "Refrigeration Comp.-2",   lubricationPoint: "Compressor crankcase oil",     lubricantGrade: "Suniso 3GS Ref. Oil",       frequency: "Monthly",     lastDoneDate: "2026-07-05", nextDueDate: "2026-08-05", qtyUsed: "1 Ltr", doneBy: "Rajiv S.", verified: "Mgr. Rao",  remarks: "Level topped" },
@@ -248,7 +247,7 @@ export default function PlantFormatsCalc() {
   const deleteRow = (id: number) => {
     switch (selectedFormatId) {
       case "rm-reception":     if(rmReceptionRows.length>1)   setRmReceptionRows(p=>p.filter(r=>r.id!==id));    break;
-      case "bmr":              if(bmrRows.length>1)           setBmrRows(p=>p.filter(r=>r.id!==id));            break;
+      case "bmr":              if(bmrRows.length>1)            setBmrRows(p=>p.filter(r=>r.id!==id));            break;
       case "process-monitoring":if(processRows.length>1)       setProcessRows(p=>p.filter(r=>r.id!==id));        break;
       case "packing-dispatch": if(packingRows.length>1)        setPackingRows(p=>p.filter(r=>r.id!==id));        break;
       case "cip-cleaning":     if(cipRows.length>1)            setCipRows(p=>p.filter(r=>r.id!==id));            break;
@@ -278,7 +277,7 @@ export default function PlantFormatsCalc() {
           <div>
             <CardTitle className="flex items-center gap-2 text-2xl font-bold font-headline">
               <FileText className="h-7 w-7 text-emerald-400" />
-              Dairy Plant Formats & Log Sheets (प्लांट लॉग शीट)
+              Dairy Plant Formats & Log Sheets
             </CardTitle>
             <CardDescription className="text-emerald-200 mt-1 text-xs md:text-sm">
               Ready-to-print dairy plant operational & maintenance log sheets. Customize, fill, and export as A4 PDF.
@@ -349,9 +348,6 @@ export default function PlantFormatsCalc() {
                             <Icon className="h-3.5 w-3.5 flex-shrink-0" />
                             <span className="leading-tight">{fmt.title}</span>
                           </div>
-                          <div className={cn("text-[9px] mt-0.5 ml-5", selectedFormatId === fmt.id ? "text-emerald-200" : "text-slate-400")}>
-                            {fmt.titleHi}
-                          </div>
                         </button>
                       );
                     })}
@@ -406,7 +402,6 @@ export default function PlantFormatsCalc() {
               </div>
               <div className="mt-2 text-center">
                 <div className="text-[13px] font-black uppercase tracking-wide text-black">{selectedFormat?.title}</div>
-                <div className="text-[9px] text-slate-500 font-semibold">{selectedFormat?.titleHi}</div>
               </div>
             </div>
 
@@ -980,7 +975,7 @@ export default function PlantFormatsCalc() {
                 <div className="text-center w-32 border-t border-black pt-1">PLANT MANAGER SIGN</div>
               </div>
               <div className="border-t border-slate-300 pt-2 text-center text-[7.5px] text-slate-400 font-bold tracking-widest uppercase">
-                POWERED BY DAIRY HUB QUALITY SYSTEM
+                POWERED BY DAIRY HUB ERP SYSTEM
               </div>
             </div>
 
@@ -988,7 +983,6 @@ export default function PlantFormatsCalc() {
         </div>
       </div>
 
-      {/* Global CSS overrides for A4 Printing layout */}
       <style dangerouslySetInnerHTML={{
         __html: `
         @media print {
@@ -996,8 +990,8 @@ export default function PlantFormatsCalc() {
           #print-area-formats, #print-area-formats * { visibility: visible; }
           #print-area-formats {
             position: absolute; left: 0; top: 0;
-            width: ${selectedFormat?.orientation === 'landscape' ? '297mm' : '210mm'} !important;
-            height: ${selectedFormat?.orientation === 'landscape' ? '210mm' : '297mm'} !important;
+            width: ${selectedFormat.orientation === 'landscape' ? '297mm' : '210mm'} !important;
+            height: ${selectedFormat.orientation === 'landscape' ? '210mm' : '297mm'} !important;
             padding: 10mm !important; margin: 0 !important;
             border: none !important; box-shadow: none !important;
             background-color: white !important;
@@ -1005,8 +999,7 @@ export default function PlantFormatsCalc() {
           }
           .print\\:hidden { display: none !important; }
         }
-        `
-      }} />
+      `}} />
     </div>
   );
 }
