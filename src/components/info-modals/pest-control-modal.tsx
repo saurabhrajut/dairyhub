@@ -158,9 +158,9 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string }
       <SafeHTML html={content.sections.introduction.content} />
     </Section>
   ),
-  types: ({ content, accent }) => (
-    <Section title={content.sections.types_of_pests.title} icon={Bug} accentColor={accent}>
-      <SafeHTML html={content.sections.types_of_pests.content} />
+  biology: ({ content, accent }) => (
+    <Section title={content.sections.biology.title} icon={Bug} accentColor={accent}>
+      <SafeHTML html={content.sections.biology.content} />
     </Section>
   ),
   ipm: ({ content, accent }) => (
@@ -168,19 +168,44 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string }
       <SafeHTML html={content.sections.ipm.content} />
     </Section>
   ),
-  control_methods: ({ content, accent }) => (
-    <Section title={content.sections.control_methods.title} icon={Settings} accentColor={accent}>
-      <SafeHTML html={content.sections.control_methods.content} />
+  zoning: ({ content, accent }) => (
+    <Section title={content.sections.zoning.title} icon={LayoutGrid} accentColor={accent}>
+      <SafeHTML html={content.sections.zoning.content} />
     </Section>
   ),
-  prevention: ({ content, accent }) => (
-    <Section title={content.sections.prevention.title} icon={Shield} accentColor={accent}>
-      <SafeHTML html={content.sections.prevention.content} />
+  physical: ({ content, accent }) => (
+    <Section title={content.sections.physical.title} icon={Settings} accentColor={accent}>
+      <SafeHTML html={content.sections.physical.content} />
     </Section>
   ),
-  monitoring: ({ content, accent }) => (
-    <Section title={content.sections.monitoring.title} icon={Search} accentColor={accent}>
-      <SafeHTML html={content.sections.monitoring.content} />
+  chemical: ({ content, accent }) => (
+    <Section title={content.sections.chemical.title} icon={BugOff} accentColor={accent}>
+      <SafeHTML html={content.sections.chemical.content} />
+    </Section>
+  ),
+  spp: ({ content, accent }) => (
+    <Section title={content.sections.spp.title} icon={AlertTriangle} accentColor={accent}>
+      <SafeHTML html={content.sections.spp.content} />
+    </Section>
+  ),
+  rodent: ({ content, accent }) => (
+    <Section title={content.sections.rodent.title} icon={Shield} accentColor={accent}>
+      <SafeHTML html={content.sections.rodent.content} />
+    </Section>
+  ),
+  digital: ({ content, accent }) => (
+    <Section title={content.sections.digital.title} icon={Activity} accentColor={accent}>
+      <SafeHTML html={content.sections.digital.content} />
+    </Section>
+  ),
+  compliance: ({ content, accent }) => (
+    <Section title={content.sections.compliance.title} icon={Search} accentColor={accent}>
+      <SafeHTML html={content.sections.compliance.content} />
+    </Section>
+  ),
+  training: ({ content, accent }) => (
+    <Section title={content.sections.training.title} icon={BookOpen} accentColor={accent}>
+      <SafeHTML html={content.sections.training.content} />
     </Section>
   ),
   conclusion: ({ content, accent }) => (
@@ -198,28 +223,39 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string }
 const getTopicGroups = (c: any, lang: "hi" | "en") => {
   return [
     {
-      groupLabel: lang === "hi" ? "बुनियाद (Foundation)" : "Foundation",
+      groupLabel: lang === "hi" ? "बुनियाद और जीव विज्ञान (Foundation & Biology)" : "Foundation & Biology",
       groupIcon: BookOpen,
       topics: [
-        { value: "intro", title: c.tabs.intro, subtitle: "Importance & Basics", icon: BookOpen, accent: "blue", badge: "Core", badgeVariant: "secondary" as const, colorClass: "text-blue-600", bgClass: "bg-blue-50 hover:bg-blue-100", borderClass: "border-blue-200 hover:border-blue-400" },
-        { value: "types", title: c.tabs.types, subtitle: "Common dairy pests", icon: Bug, accent: "red", badge: "Threats", badgeVariant: "destructive" as const, colorClass: "text-red-600", bgClass: "bg-red-50 hover:bg-red-100", borderClass: "border-red-200 hover:border-red-400" },
+        { value: "intro", title: c.tabs.intro, subtitle: "Importance & PRP", icon: BookOpen, accent: "blue", badge: "Core", badgeVariant: "secondary" as const, colorClass: "text-blue-600", bgClass: "bg-blue-50 hover:bg-blue-100", borderClass: "border-blue-200 hover:border-blue-400" },
+        { value: "biology", title: c.tabs.biology, subtitle: "Identification Key", icon: Bug, accent: "red", badge: "Biology", badgeVariant: "destructive" as const, colorClass: "text-red-600", bgClass: "bg-red-50 hover:bg-red-100", borderClass: "border-red-200 hover:border-red-400" },
+        { value: "ipm", title: c.tabs.ipm, subtitle: "7 Pillars Framework", icon: ShieldCheck, accent: "emerald", badge: "System", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400" },
       ],
     },
     {
-      groupLabel: lang === "hi" ? "रणनीतियाँ और तरीके (Strategies & Methods)" : "Strategies & Methods",
+      groupLabel: lang === "hi" ? "नियंत्रण और ज़ोनिंग (Controls & Zoning)" : "Controls & Zoning",
       groupIcon: ShieldCheck,
       topics: [
-        { value: "ipm", title: c.tabs.ipm, subtitle: "Integrated Pest Management", icon: ShieldCheck, accent: "emerald", badge: "System", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400" },
-        { value: "control_methods", title: c.tabs.control_methods, subtitle: "Physical, Chemical & Bio", icon: Settings, accent: "orange", badge: "Action", badgeVariant: "secondary" as const, colorClass: "text-orange-600", bgClass: "bg-orange-50 hover:bg-orange-100", borderClass: "border-orange-200 hover:border-orange-400" },
+        { value: "zoning", title: c.tabs.zoning, subtitle: "Risk Zones & Traffic", icon: LayoutGrid, accent: "indigo", badge: "Zoning", badgeVariant: "secondary" as const, colorClass: "text-indigo-600", bgClass: "bg-indigo-50 hover:bg-indigo-100", borderClass: "border-indigo-200 hover:border-indigo-400" },
+        { value: "physical", title: c.tabs.physical, subtitle: "ILTs, Air Curtains & Heat", icon: Settings, accent: "orange", badge: "Physical", badgeVariant: "secondary" as const, colorClass: "text-orange-600", bgClass: "bg-orange-50 hover:bg-orange-100", borderClass: "border-orange-200 hover:border-orange-400" },
+        { value: "chemical", title: c.tabs.chemical, subtitle: "IRAC MoA & Baits", icon: BugOff, accent: "rose", badge: "Chemical", badgeVariant: "secondary" as const, colorClass: "text-rose-600", bgClass: "bg-rose-50 hover:bg-rose-100", borderClass: "border-rose-200 hover:border-rose-400" },
       ],
     },
     {
-      groupLabel: lang === "hi" ? "संचालन और निष्कर्ष (Operations & Summary)" : "Operations & Summary",
+      groupLabel: lang === "hi" ? "विशिष्ट कीट और डिजिटल (Specialized & Digital)" : "Specialized & Digital",
       groupIcon: Search,
       topics: [
-        { value: "prevention", title: c.tabs.prevention, subtitle: "Facility design & hygiene", icon: Shield, accent: "teal", badge: "Prevention", badgeVariant: "secondary" as const, colorClass: "text-teal-600", bgClass: "bg-teal-50 hover:bg-teal-100", borderClass: "border-teal-200 hover:border-teal-400" },
-        { value: "monitoring", title: c.tabs.monitoring, subtitle: "Inspection & records", icon: Search, accent: "purple", badge: "Audit", badgeVariant: "secondary" as const, colorClass: "text-purple-600", bgClass: "bg-purple-50 hover:bg-purple-100", borderClass: "border-purple-200 hover:border-purple-400" },
-        { value: "conclusion", title: c.tabs.conclusion, subtitle: "Final wrap-up", icon: CheckCircle, accent: "cyan", badge: "Summary", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400", wide: true },
+        { value: "spp", title: c.tabs.spp, subtitle: "Powder & Storage Pests", icon: AlertTriangle, accent: "amber", badge: "SPP", badgeVariant: "secondary" as const, colorClass: "text-amber-600", bgClass: "bg-amber-50 hover:bg-amber-100", borderClass: "border-amber-200 hover:border-amber-400" },
+        { value: "rodent", title: c.tabs.rodent, subtitle: "3-Zone Rodent Defense", icon: Shield, accent: "teal", badge: "Rodent", badgeVariant: "secondary" as const, colorClass: "text-teal-600", bgClass: "bg-teal-50 hover:bg-teal-100", borderClass: "border-teal-200 hover:border-teal-400" },
+        { value: "digital", title: c.tabs.digital, subtitle: "Smart Traps & IoT", icon: Activity, accent: "purple", badge: "Digital", badgeVariant: "secondary" as const, colorClass: "text-purple-600", bgClass: "bg-purple-50 hover:bg-purple-100", borderClass: "border-purple-200 hover:border-purple-400" },
+      ],
+    },
+    {
+      groupLabel: lang === "hi" ? "अनुपालन और निष्कर्ष (Compliance & Summary)" : "Compliance & Summary",
+      groupIcon: CheckCircle,
+      topics: [
+        { value: "compliance", title: c.tabs.compliance, subtitle: "Audit & Documentation", icon: Search, accent: "cyan", badge: "Audit", badgeVariant: "secondary" as const, colorClass: "text-cyan-600", bgClass: "bg-cyan-50 hover:bg-cyan-100", borderClass: "border-cyan-200 hover:border-cyan-400" },
+        { value: "training", title: c.tabs.training, subtitle: "Culture & Response", icon: BookOpen, accent: "blue", badge: "SOP", badgeVariant: "secondary" as const, colorClass: "text-blue-600", bgClass: "bg-blue-50 hover:bg-blue-100", borderClass: "border-blue-200 hover:border-blue-400" },
+        { value: "conclusion", title: c.tabs.conclusion, subtitle: "Final Summary", icon: CheckCircle, accent: "emerald", badge: "Wrap-up", badgeVariant: "secondary" as const, colorClass: "text-emerald-600", bgClass: "bg-emerald-50 hover:bg-emerald-100", borderClass: "border-emerald-200 hover:border-emerald-400" },
       ],
     },
   ];
