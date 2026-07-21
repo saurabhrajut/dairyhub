@@ -12,8 +12,8 @@ export async function generateOfflineResponse(
   language: string = "English"
 ): Promise<string> {
   
-  // 1. Fake Delay (1 second) - Real AI feel ke liye
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  // 1. Instant response delay (50ms) for realistic feel without lag
+  await new Promise(resolve => setTimeout(resolve, 50));
 
   const lastUserMessage = messages[messages.length - 1]?.content || "";
   const promptLower = systemPrompt.toLowerCase();
