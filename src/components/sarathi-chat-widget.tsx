@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
 import { 
   Bot, 
   Loader2, 
@@ -18,13 +19,16 @@ import {
   GraduationCap,
   FileText,
   Settings,
-  ChevronRight
+  ChevronRight,
+  RotateCcw,
+  User,
+  CheckCircle2
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { generateOfflineResponse } from '@/lib/my-offline-ai';
 import { selectOfflineQuestions, evaluateOfflineAnswer } from '@/lib/my-offline-ai/interview';
 
@@ -49,8 +53,6 @@ type GyanAITopic =
 // --- STYLES ---
 const CONTENT_STYLES = `
   .strict-html-wrap {
-    width: 100% !important;
-    max-width: 100% !important;
     box-sizing: border-box !important;
   }
   .strict-html-wrap * {
@@ -66,12 +68,9 @@ const CONTENT_STYLES = `
 // Simple PDF text extraction using canvas approach
 async function extractPDFText(file: File): Promise<string> {
     try {
-      // Use Mozilla's PDF.js with proper Next.js configuration
       const pdfjs = await import('pdfjs-dist');
       
-      // Configure worker
       if (typeof window !== 'undefined') {
-        // FIX: Yahan end mein '.js' ko hata kar '.mjs' kar diya hai
         pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
       }
       
@@ -91,7 +90,6 @@ async function extractPDFText(file: File): Promise<string> {
       return fullText.trim() || 'PDF text extraction completed but no text found. Please ensure your PDF contains selectable text.';
     } catch (error) {
       console.error('PDF extraction error:', error);
-      // Fallback: just return a message
       return `Unable to extract text from PDF. Please try a different file or ensure the PDF contains selectable text. Error: ${error}`;
     }
   }
@@ -201,46 +199,41 @@ async function sarathiAIOffline(
   language: string,
   history: Array<{ role: string; content: string }>
 ): Promise<string> {
-  const isHinglish = language === 'Hinglish';
-  
-  let genderInstruction = "";
-  if (isHinglish) {
-    if (gender === 'male') {
-      genderInstruction = `Address the user in a very friendly manner as "Bhai", "Bhaiya", or "Yaar".`;
-    } else if (gender === 'female') {
-      genderInstruction = `Address the user in a very friendly manner as "Behen", "Didi", or "Dear".`;
-    } else {
-      genderInstruction = `Address the user in a very friendly manner as "Dost" or "Yaar".`;
-    }
-  } else {
-    if (gender === 'male') {
-      genderInstruction = `Address the user in a very friendly manner as "bro", "brother", or "buddy".`;
-    } else if (gender === 'female') {
-      genderInstruction = `Address the user in a very friendly manner as "sister", "didi", or "dear".`;
-    } else {
-      genderInstruction = `Address the user in a very friendly manner as "friend" or "champion".`;
-    }
-  }
-
-  const systemPrompt = `You are Sarathi - a friendly, super witty, and slightly comedic AI companion for the dairy and food industry.
-  
-Your character & guidelines:
-- You are a close friend (dost/yaar) to the user.
-- ${genderInstruction}
-- Talk like a real friend, using a casual, warm, and highly engaging tone.
-- Crack light jokes, funny comments, or witty remarks ("beech beech me comedy type baat") in between your conversation, but always maintain a helpful and supportive attitude.
-- Answer user queries with useful and informative information about dairy technology, food processing, quality, industry practices, etc.
-- Response language: ${language}.
-- Keep responses relatively brief, conversational, and use emojis to make it lively.
-- User's name: ${userName}
-- User's gender: ${gender}`;
-
   const messages = [
     ...history.map(h => ({ role: h.role, content: h.content })),
     { role: "user", content: question }
   ];
 
-  return await callClaudeAPI(messages, systemPrompt);
+  try {
+    const isHinglish = language === 'Hinglish';
+    let genderInstruction = "";
+    if (isHinglish) {
+      if (gender === 'male') genderInstruction = `Address the user in a very friendly manner as "Bhai", "Bhaiya", or "Yaar".`;
+      else if (gender === 'female') genderInstruction = `Address the user in a very friendly manner as "Behen", "Didi", or "Dear".`;
+      else genderInstruction = `Address the user in a very friendly manner as "Dost" or "Yaar".`;
+    } else {
+      if (gender === 'male') genderInstruction = `Address the user in a very friendly manner as "bro", "brother", or "buddy".`;
+      else if (gender === 'female') genderInstruction = `Address the user in a very friendly manner as "sister", "didi", or "dear".`;
+      else genderInstruction = `Address the user in a very friendly manner as "friend" or "champion".`;
+    }
+
+    const systemPrompt = `You are Sarathi - a friendly, super witty, and slightly comedic AI companion for the dairy and food industry.
+  
+Your character & guidelines:
+- You are a close friend (dost/yaar) to the user.
+- ${genderInstruction}
+- Talk like a real friend, using a casual, warm, and highly engaging tone.
+- Crack light jokes, funny comments, or witty remarks in between your conversation.
+- Answer user queries with useful information about dairy technology, food processing, quality, etc.
+- Response language: ${language}.
+- User's name: ${userName}
+- User's gender: ${gender}`;
+
+    return await callClaudeAPI(messages, systemPrompt);
+  } catch (e) {
+    // Instant local offline engine fallback
+    return await generateOfflineResponse(messages, "Sarathi friendly assistant", userName, (gender as any) || 'other', language);
+  }
 }
 
 // Gyan AI - Domain Expert
@@ -250,23 +243,23 @@ async function gyanAIOffline(
   language: string,
   history: Array<{ role: string; content: string }>
 ): Promise<string> {
-  const systemPrompt = `You are an expert AI assistant specializing in: ${topic}
-
-Your role:
-- Provide deep, specialized knowledge
-- Be professional yet approachable
-- Response language: ${language}
-- Give practical, actionable advice
-- Use examples from the food industry
-
-Keep responses focused and valuable.`;
-
   const messages = [
     ...history.map(h => ({ role: h.role, content: h.content })),
     { role: "user", content: question }
   ];
 
-  return await callClaudeAPI(messages, systemPrompt);
+  try {
+    const systemPrompt = `You are an expert AI assistant specializing in: ${topic}
+Your role:
+- Provide deep, specialized knowledge
+- Response language: ${language}
+- Give practical, actionable advice`;
+
+    return await callClaudeAPI(messages, systemPrompt);
+  } catch (e) {
+    // Instant local offline engine fallback
+    return await generateOfflineResponse(messages, `Expert in ${topic}`, "User", "other", language);
+  }
 }
 
 // Interview Preparation - Smart Mock Interviews
@@ -421,10 +414,9 @@ export function SarathiChatWidget() {
       </div>
 
       {/* Chat Container */}
-      {/* FIX APPLIED: Changed `w-[92vw] right-4` to `left-4 right-4 w-auto` on mobile for perfect centering */}
       <div className={cn(
-        "fixed bottom-4 left-4 right-4 sm:left-auto z-50 w-auto sm:w-[400px] h-[85vh] sm:h-[70vh] max-h-[85vh] bg-slate-50 border border-slate-200/50 rounded-3xl shadow-2xl flex flex-col transition-all duration-500 origin-bottom-right overflow-hidden strict-html-wrap",
-        isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-12 pointer-events-none'
+        "fixed z-50 bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 w-auto sm:w-[400px] max-w-[calc(100vw-2rem)] h-[80vh] sm:h-[620px] max-h-[85vh] bg-slate-50 border border-slate-200/80 rounded-3xl shadow-2xl flex flex-col transition-all duration-300 overflow-hidden",
+        isOpen ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 translate-y-6 scale-95 pointer-events-none'
       )}>
         <style dangerouslySetInnerHTML={{ __html: CONTENT_STYLES }} />
         <ChatInterface 
@@ -538,7 +530,6 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
     const cacheKey = getCacheKey();
     const cached = cacheKey ? localStorage.getItem(cacheKey) : null;
 
-    // Don't restore cache for interview mode
     if (cached && !(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation')) {
         try {
             const data = JSON.parse(cached);
@@ -547,7 +538,6 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             const twentyFourHours = 24 * 60 * 60 * 1000;
             
             if (now - savedTime > twentyFourHours) {
-                // Expired! Clear the cache key and start fresh
                 if (cacheKey) localStorage.removeItem(cacheKey);
                 if (activeMode === 'sarathi') {
                     setTimeout(triggerWelcomeMessage, 400);
@@ -572,7 +562,6 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
   useEffect(() => {
     const cacheKey = getCacheKey();
-    // Don't cache interview sessions
     if (cacheKey && messages.length > 0 && !(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation')) {
         localStorage.setItem(cacheKey, JSON.stringify({ 
             messages, 
@@ -715,7 +704,6 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             }
         }
 
-        // Update history for next turn
         setHistory(prev => [...prev, { role: 'assistant', content: responseText || followUpText || '' }]);
 
     } catch (error: any) {
@@ -781,7 +769,6 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
       setIsProcessingResume(true);
       
       try {
-          // Parse resume offline
           const extractedText = await parseResumeOffline(resumeFile);
           setResumeText(extractedText);
           
@@ -831,7 +818,6 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
               return;
           }
 
-          // Generate initial interview questions (ONLINE MODE)
           const result = await interviewPrepperOffline(
               extractedText,
               experienceLevel,
@@ -1046,7 +1032,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
             </div>
         )}
 
-        {/* Header - Premium Dark Pattern */}
+        {/* Header */}
         <div className="px-4 py-3 flex items-center justify-between shrink-0 shadow-md transition-all duration-500 border-b border-white/10 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 text-white z-20">
             <div className="flex items-center gap-3 flex-1">
                 {activeMode === 'gyan-ai' && (
@@ -1139,9 +1125,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                 <button
                                     key={topic.id}
                                     onClick={() => startTopicChat(topic.id as GyanAITopic)}
-                                    className={cn(
-                                      "group relative flex flex-col items-center justify-center p-4 sm:p-5 bg-white hover:shadow-lg rounded-2xl border border-gray-100 hover:border-transparent text-center aspect-square transition-all duration-300 transform hover:scale-[1.03] active:scale-95 hover:ring-2 hover:ring-offset-1 hover:ring-indigo-200 box-border w-full col-span-2 sm:col-span-1"
-                                    )}
+                                    className="group relative flex flex-col items-center justify-center p-4 sm:p-5 bg-white hover:shadow-md rounded-2xl border border-gray-100 hover:border-indigo-200 text-center aspect-square transition-all duration-200 active:scale-95 box-border w-full col-span-2 sm:col-span-1"
                                 >
                                     <div className={cn("absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity", topic.bgLight)} />
                                     
@@ -1152,7 +1136,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                                     </span>
 
                                     <div className="relative z-10">
-                                      <div className={cn("p-3 rounded-xl bg-gradient-to-br text-white mb-3 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md", topic.color)}>
+                                      <div className={cn("p-3 rounded-xl bg-gradient-to-br text-white mb-3 shadow-sm transition-transform duration-300 group-hover:shadow-md", topic.color)}>
                                         <topic.icon className="w-6 h-6" />
                                       </div>
                                     </div>
@@ -1166,28 +1150,23 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
 
                             <button
                                 onClick={() => setSelectedTopic('Interview Preparation')}
-                                className={cn(
-                                  "group relative flex flex-col items-center justify-center p-4 sm:p-5 bg-white hover:shadow-lg rounded-2xl border border-gray-100 hover:border-transparent text-center aspect-square transition-all duration-300 transform hover:scale-[1.03] active:scale-95 hover:ring-2 hover:ring-offset-1 hover:ring-indigo-200 box-border w-full col-span-2 sm:col-span-1"
-                                )}
+                                className="group relative flex flex-col items-center justify-center p-4 sm:p-5 bg-white hover:shadow-md rounded-2xl border border-gray-100 hover:border-indigo-200 text-center aspect-square transition-all duration-200 active:scale-95 box-border w-full col-span-2 sm:col-span-1"
                             >
                                 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity bg-indigo-50 hover:bg-indigo-100" />
                                 
                                 <span className="absolute top-2 right-2 z-20">
                                   <Badge variant="secondary" className="text-[9px] px-1.5 py-0 font-bold leading-4 border bg-purple-100 text-purple-700 border-purple-200">
-                                    Mock Test
+                                    Mock Interview
                                   </Badge>
                                 </span>
 
                                 <div className="relative z-10">
                                   <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white mb-3 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md">
-                                    <FileText className="w-6 h-6" />
+                                    <BrainCircuit className="w-6 h-6" />
                                   </div>
                                 </div>
                                 <span className="relative z-10 font-bold text-xs sm:text-sm font-headline text-slate-700 group-hover:text-slate-900 transition-colors leading-tight line-clamp-2 px-1">
-                                  Mock Interview
-                                </span>
-                                <span className="relative z-10 text-[10px] text-slate-400 mt-1 line-clamp-1 group-hover:text-slate-500">
-                                  Upload & Practice
+                                  Interview Prep
                                 </span>
                                 <ChevronRight className="absolute bottom-1 right-1 h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <Sparkles className="absolute top-1 right-1 h-2.5 w-2.5 text-yellow-400 opacity-0 group-hover:opacity-100 transition-all group-hover:rotate-12" />
@@ -1197,292 +1176,241 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
                 </ScrollArea>
             )}
 
-            {/* Interview Setup */}
+            {/* Interview Prep Setup Screen */}
             {isInterviewSetup && (
-                <div className="flex-1 flex flex-col p-4 sm:p-8 bg-slate-50 items-center justify-center text-center space-y-6 overflow-hidden relative">
-                    <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-indigo-50/50 to-transparent pointer-events-none" />
-                    
-                    <div className="space-y-3 flex-shrink-0 relative z-10 mt-2">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
-                            <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-white drop-shadow-sm" />
-                        </div>
-                        <div>
-                            <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-1 font-headline">🎯 DairyHub Interview Prep</h2>
-                            <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
-                                Analyze your PDF/DOC resume and simulate real mock interviews
+                <ScrollArea className="flex-1 bg-slate-50/50">
+                    <div className="p-4 sm:p-6 space-y-5 max-w-md mx-auto">
+                        <div className="text-center space-y-1">
+                            <h3 className="text-lg font-bold text-slate-800 font-headline">
+                                🎯 Mock Interview Setup
+                            </h3>
+                            <p className="text-xs text-slate-500">
+                                Upload your resume to generate personalized technical questions
                             </p>
                         </div>
-                    </div>
 
-                    <div className="w-full max-w-sm space-y-4 flex-1 flex flex-col justify-center relative z-10">
-                         <div className="grid grid-cols-2 gap-3">
-                             {/* Experience Level */}
-                             <div className="space-y-1.5 text-left">
-                                 <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block px-1">Exp Level</label>
-                                 <Select value={experienceLevel} onValueChange={(v: any) => setExperienceLevel(v)}>
-                                     <SelectTrigger className="w-full h-11 bg-white border-slate-200 shadow-sm rounded-xl text-xs font-medium focus:ring-indigo-400">
-                                         <SelectValue />
-                                     </SelectTrigger>
-                                     <SelectContent className="bg-white border-slate-200 shadow-xl rounded-xl">
-                                         <SelectItem value="Fresher Student" className="text-xs">🎓 Fresher</SelectItem>
-                                         <SelectItem value="Experienced Person" className="text-xs">💼 Experienced</SelectItem>
-                                     </SelectContent>
-                                 </Select>
-                             </div>
-                             
-                             {/* Interview Mode */}
-                             <div className="space-y-1.5 text-left">
-                                 <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block px-1">Mode</label>
-                                 <Select value={interviewMode} onValueChange={(v: any) => setInterviewMode(v)}>
-                                     <SelectTrigger className="w-full h-11 bg-white border-slate-200 shadow-sm rounded-xl text-xs font-medium focus:ring-indigo-400">
-                                         <SelectValue />
-                                     </SelectTrigger>
-                                     <SelectContent className="bg-white border-slate-200 shadow-xl rounded-xl">
-                                         <SelectItem value="offline" className="text-xs">📴 Offline (Local)</SelectItem>
-                                         <SelectItem value="online" className="text-xs">🌐 Online (AI)</SelectItem>
-                                     </SelectContent>
-                                 </Select>
-                             </div>
-                         </div>
-
-                        {/* File Upload */}
-                        <div 
-                            onClick={() => fileInputRef.current?.click()}
-                            className={cn(
-                                "group relative border-2 border-dashed rounded-2xl p-6 h-28 transition-all cursor-pointer overflow-hidden flex-shrink-0 flex items-center justify-center",
-                                fileName 
-                                  ? "border-emerald-400 bg-emerald-50/50 shadow-sm" 
-                                  : "border-slate-300 hover:border-indigo-400 bg-white hover:bg-indigo-50/30 shadow-sm"
-                            )}
-                        >
-                            <input 
-                                ref={fileInputRef}
-                                type="file" 
-                                className="hidden" 
-                                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                onChange={handleFileSelect}
-                            />
+                        {/* File Upload Box */}
+                        <div className="space-y-3">
+                            <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+                                1. Upload Resume (PDF/DOCX)
+                            </label>
                             
-                            <div className="flex flex-col items-center justify-center gap-2 relative z-10 w-full">
-                                {fileName ? (
-                                    <>
-                                        <div className="w-10 h-10 bg-emerald-100 p-2.5 rounded-full shadow-sm animate-bounce text-emerald-600">
-                                            <FileCheck className="w-full h-full" />
+                            <input 
+                                type="file" 
+                                ref={fileInputRef}
+                                onChange={handleFileSelect}
+                                accept=".pdf,.doc,.docx"
+                                className="hidden"
+                            />
+
+                            <div 
+                                onClick={() => fileInputRef.current?.click()}
+                                className={cn(
+                                    "border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer transition-all duration-300",
+                                    resumeFile 
+                                        ? "border-emerald-400 bg-emerald-50/50" 
+                                        : "border-slate-300 hover:border-indigo-400 bg-white hover:bg-indigo-50/30"
+                                )}
+                            >
+                                {resumeFile ? (
+                                    <div className="flex items-center justify-center gap-3">
+                                        <FileCheck className="w-8 h-8 text-emerald-600 shrink-0" />
+                                        <div className="text-left min-w-0">
+                                            <p className="text-xs font-bold text-slate-800 truncate">{fileName}</p>
+                                            <p className="text-[10px] text-emerald-600 font-medium">Ready for AI analysis</p>
                                         </div>
-                                        <div className="text-center w-full px-2">
-                                            <span className="text-sm font-bold text-emerald-800 truncate block w-full">{fileName}</span>
-                                            <span className="text-[10px] text-emerald-600 font-medium">Click to change</span>
-                                        </div>
-                                    </>
+                                    </div>
                                 ) : (
-                                    <>
-                                        <div className="w-10 h-10 bg-slate-50 p-2.5 rounded-full group-hover:bg-indigo-100 transition-colors border border-slate-100 text-slate-400 group-hover:text-indigo-500">
-                                            <Upload className="w-full h-full" />
+                                    <div className="space-y-2">
+                                        <Upload className="w-8 h-8 text-slate-400 mx-auto" />
+                                        <div>
+                                            <p className="text-xs font-bold text-slate-700">Click to upload resume</p>
+                                            <p className="text-[10px] text-slate-400 mt-0.5">PDF, DOC, DOCX (Max 5MB)</p>
                                         </div>
-                                        <div className="text-center">
-                                            <span className="text-sm font-bold text-slate-700 block">Drop Resume</span>
-                                            <span className="text-[10px] text-slate-400">PDF, DOC, DOCX • Max 5MB</span>
-                                        </div>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         </div>
 
+                        {/* Experience Level Selector */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+                                2. Select Experience Level
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                                {[
+                                    { id: 'Fresher Student', label: '🎓 Student / Fresher' },
+                                    { id: 'Experienced Person', label: '💼 Experienced (1+ Yrs)' }
+                                ].map(level => (
+                                    <button
+                                        key={level.id}
+                                        onClick={() => setExperienceLevel(level.id as any)}
+                                        className={cn(
+                                            "p-3 rounded-xl border text-xs font-bold text-center transition-all",
+                                            experienceLevel === level.id 
+                                                ? "border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm" 
+                                                : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                                        )}
+                                    >
+                                        {level.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Mode Switcher */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+                                3. Mode Selection
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                                <button
+                                    onClick={() => setInterviewMode('offline')}
+                                    className={cn(
+                                        "p-2.5 rounded-xl border text-xs font-bold text-center transition-all",
+                                        interviewMode === 'offline' 
+                                            ? "border-emerald-600 bg-emerald-50 text-emerald-700 shadow-sm" 
+                                            : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                                    )}
+                                >
+                                    ⚡ Fast Offline Mode
+                                </button>
+                                <button
+                                    onClick={() => setInterviewMode('online')}
+                                    className={cn(
+                                        "p-2.5 rounded-xl border text-xs font-bold text-center transition-all",
+                                        interviewMode === 'online' 
+                                            ? "border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm" 
+                                            : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                                    )}
+                                >
+                                    🌐 Real-time Online AI
+                                </button>
+                            </div>
+                        </div>
+
                         {/* Start Button */}
-                        <Button 
-                            className={cn(
-                                "w-full h-12 text-sm font-bold transition-all duration-300 rounded-xl flex-shrink-0",
-                                resumeFile 
-                                  ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/20 hover:scale-[1.02]" 
-                                  : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
-                            )}
-                            disabled={!resumeFile || isProcessingResume}
+                        <Button
                             onClick={startInterview}
+                            disabled={!resumeFile || isProcessingResume}
+                            className="w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/25 transition-all text-sm"
                         >
                             {isProcessingResume ? (
                                 <>
-                                    <Loader2 className="animate-spin mr-2 w-4 h-4" />
-                                    Analyzing...
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    Analyzing Resume...
                                 </>
                             ) : (
                                 <>
-                                    <Sparkles className="mr-2 w-4 h-4" />
-                                    Start Interview
+                                    <Sparkles className="w-4 h-4 mr-2" />
+                                    Start Interview Simulation
                                 </>
                             )}
                         </Button>
                     </div>
-                </div>
+                </ScrollArea>
             )}
 
-            {/* Main Chat View */}
-            {!isGyanHome && !isInterviewSetup && (
-                <div className="flex flex-col flex-1 min-h-0 overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-slate-50/80">
+            {/* Chat Message Scroll Area */}
+            {(!isGyanHome && !isInterviewSetup) && (
+                <div ref={scrollRef} className="flex-1 p-4 space-y-4 overflow-y-auto bg-slate-50/30">
+                    {messages.map((msg) => (
+                        <div key={msg.id} className="space-y-2">
+                            {msg.isQuestionAnswer ? (
+                                <div className="bg-white border border-indigo-100 rounded-2xl p-4 shadow-sm space-y-3 my-2">
+                                    <div className="flex items-start gap-2">
+                                        <Badge className="bg-indigo-600 text-white text-[10px] shrink-0 mt-0.5">
+                                            Question
+                                        </Badge>
+                                        <p className="text-xs font-bold text-slate-800 leading-relaxed">
+                                            {msg.question}
+                                        </p>
+                                    </div>
+                                    
+                                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 text-xs space-y-1">
+                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                                            Sample Model Answer:
+                                        </span>
+                                        <p className="text-slate-700 leading-relaxed font-sans text-xs">
+                                            {msg.answer}
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className={cn(
+                                    "flex flex-col max-w-[85%] rounded-2xl p-3 shadow-sm text-xs transition-all",
+                                    msg.role === 'user' 
+                                      ? "bg-gradient-to-br from-indigo-600 to-purple-600 text-white ml-auto rounded-tr-none" 
+                                      : "bg-white border border-slate-200/80 text-slate-800 mr-auto rounded-tl-none shadow-slate-100"
+                                )}>
+                                    <span className="whitespace-pre-wrap leading-relaxed">{msg.text}</span>
+                                    <span className="text-[8px] opacity-70 mt-1 text-right block self-end">{msg.timestamp}</span>
+                                </div>
+                            )}
+                        </div>
+                    ))}
                     
-                    {/* Reset Button for Active Interview */}
-                    {activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation' && messages.length > 0 && (
-                        <div className="px-4 py-2 border-b border-slate-200/50 bg-white/80 backdrop-blur-sm shrink-0 z-10 shadow-sm flex items-center justify-between">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Interview Mode</span>
-                            <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={resetInterview}
-                                className="h-7 text-[10px] bg-white hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all rounded-lg font-semibold text-slate-600 border-slate-200 px-2.5"
-                            >
-                                <X className="w-3 h-3 mr-1" />
-                                Reset
-                            </Button>
+                    {isLoading && (
+                        <div className="flex items-center gap-2 text-xs text-slate-500 p-3 bg-white rounded-2xl border border-slate-200 mr-auto max-w-[60%] shadow-sm animate-pulse">
+                            <Loader2 className="h-4 w-4 animate-spin text-indigo-600 shrink-0" />
+                            <span className="font-medium">Sarathi is thinking...</span>
                         </div>
                     )}
-                    
-                    <ScrollArea className="flex-1 px-4 sm:px-6 pb-3 pt-4" viewportRef={scrollRef}>
-                        <div className="flex flex-col gap-4 pb-2">
-                            {messages.length === 0 && (
-                                <div className="flex flex-col items-center justify-center h-48 text-center text-slate-400 space-y-3 mt-4">
-                                    <div className="w-16 h-16 rounded-2xl border-2 border-white shadow-md overflow-hidden bg-indigo-50 mx-auto">
-                                        <img 
-                                            src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
-                                            alt="Sarathi Avatar"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-bold text-slate-700">Ready to chat with Sarathi!</p>
-                                        <p className="text-xs text-slate-500 max-w-[200px] mx-auto">Let's chat like a friend about dairy tech, jobs, or just chill!</p>
-                                    </div>
-                                </div>
-                            )}
-                            
-                            {messages.map((msg) => {
-                                if (msg.isQuestionAnswer) {
-                                    return (
-                                        <div key={msg.id} className="bg-white p-4 sm:p-5 rounded-2xl border border-indigo-100 shadow-sm ml-2 sm:ml-4 max-w-[95%]">
-                                            <div className="flex gap-2.5 items-start mb-3">
-                                                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-xl shadow-sm flex-shrink-0 mt-0.5">
-                                                    <BrainCircuit className="w-4 h-4 text-white" />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="inline-block bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full mb-1.5 uppercase tracking-wide">
-                                                        Interview Question
-                                                    </div>
-                                                    <p className="font-bold text-sm sm:text-base text-slate-800 leading-snug mb-1">{msg.question}</p>
-                                                </div>
-                                            </div>
-                                            <div className="pl-10 space-y-2.5">
-                                                <div className="inline-block bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
-                                                    Professional Answer
-                                                </div>
-                                                <div className="text-slate-700 leading-relaxed bg-slate-50/50 p-3 sm:p-4 rounded-xl border border-slate-100">
-                                                    <p className="text-xs sm:text-sm" dangerouslySetInnerHTML={{ __html: msg.answer?.replace(/\n/g, '<br />') || "" }} />
-                                                </div>
-                                                <div className="text-[11px] text-indigo-600 font-semibold bg-indigo-50/50 px-3 py-2 rounded-lg border border-indigo-100/50 flex items-center gap-1.5">
-                                                    <Sparkles className="w-3.5 h-3.5" /> Practice this in your own words
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                }
-                                return (
-                                    <div key={msg.id} className={cn(
-                                        "flex gap-2 sm:gap-3 max-w-[90%]", 
-                                        msg.role === 'user' ? "self-end flex-row-reverse" : "self-start"
-                                    )}>
-                                        {msg.role === 'user' ? (
-                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border-2 border-white shadow-sm flex-shrink-0 overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mt-1">
-                                                <span className="text-white text-[10px] sm:text-xs font-bold shadow-inner">YOU</span>
-                                            </div>
-                                        ) : (
-                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border-2 border-white shadow-sm flex-shrink-0 overflow-hidden bg-indigo-50 mt-1">
-                                                <img 
-                                                    src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
-                                                    alt="Sarathi Avatar"
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                        )}
-                                        <div className={cn(
-                                            "py-2.5 px-3.5 sm:py-3 sm:px-4 rounded-2xl shadow-sm relative group text-sm leading-relaxed break-words",
-                                            msg.role === 'user' 
-                                                ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-tr-sm" 
-                                                : "bg-white border border-slate-100 text-slate-800 rounded-tl-sm"
-                                        )}>
-                                            <p dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br />') }} className="strict-html-wrap" />
-                                            <span className={cn(
-                                                "text-[9px] sm:text-[10px] font-mono absolute -bottom-5 right-0 bg-transparent px-1 opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap",
-                                                msg.role === 'user' ? "text-slate-400" : "text-slate-400 left-0 right-auto"
-                                            )}>{msg.timestamp}</span>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                            
-                            {isLoading && (
-                                <div className="self-start flex gap-2 ml-10 sm:ml-12 mt-1 mb-2">
-                                    <div className="bg-white border border-slate-100 py-2.5 px-4 rounded-2xl rounded-tl-sm shadow-sm flex gap-1.5 items-center">
-                                        <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0s]"></span>
-                                        <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
-                                        <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]"></span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </ScrollArea>
-
-                    {/* Input Area */}
-                    <div className="px-3 sm:px-4 pt-3 pb-3 sm:pb-4 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.02)] shrink-0 z-10">
-                        <div className="flex items-center gap-2 mb-2 px-1">
-                            <Select value={language} onValueChange={setLanguage}>
-                                <SelectTrigger className="h-7 text-[10px] bg-slate-50 border-slate-200 rounded-lg px-2.5 w-[90px] focus:ring-0 focus:ring-offset-0">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent className="bg-white border-slate-200 shadow-lg rounded-xl min-w-[100px]">
-                                    <SelectItem value="English" className="text-xs">🇬🇧 EN</SelectItem>
-                                    <SelectItem value="Hinglish" className="text-xs">🇮🇳 HING</SelectItem>
-                                </SelectContent>
-                            </Select>
-
-                            {activeMode === 'sarathi' && (
-                                <Select value={sarathiMode} onValueChange={(v: any) => setSarathiMode(v)}>
-                                    <SelectTrigger className="h-7 text-[10px] bg-slate-50 border-slate-200 rounded-lg px-2.5 w-[100px] focus:ring-0 focus:ring-offset-0">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent className="bg-white border-slate-200 shadow-lg rounded-xl min-w-[120px]">
-                                        <SelectItem value="offline" className="text-xs">📴 Offline</SelectItem>
-                                        <SelectItem value="online" className="text-xs">🌐 Online</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        </div>
-
-                        <form 
-                            onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
-                            className="flex items-stretch gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 focus-within:border-indigo-300 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-50 transition-all duration-200"
-                        >
-                            <Input 
-                                ref={inputRef}
-                                value={input} 
-                                onChange={(e) => setInput(e.target.value)} 
-                                placeholder={activeMode === 'sarathi' ? "Message Sarathi..." : "Ask your question..."}
-                                className="flex-1 border-none bg-transparent shadow-none focus-visible:ring-0 min-h-[40px] text-sm px-3 placeholder-slate-400"
-                                disabled={isLoading}
-                            />
-                            <Button 
-                                type="submit" 
-                                size="icon" 
-                                className={cn(
-                                    "h-10 w-10 rounded-xl shrink-0 transition-all duration-200",
-                                    !input.trim() || isLoading 
-                                      ? "bg-slate-200 text-slate-400 shadow-none cursor-not-allowed" 
-                                      : "bg-indigo-600 text-white shadow-md hover:bg-indigo-700 hover:scale-105 active:scale-95"
-                                )}
-                                disabled={isLoading || !input.trim()}
-                            >
-                                <Send className={cn("w-4 h-4", input.trim() ? "ml-0.5" : "")} />
-                            </Button>
-                        </form>
-                    </div>
                 </div>
             )}
+
+            {/* Controls Bar for Active Interview */}
+            {(activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation' && messages.length > 0) && (
+                <div className="px-3 py-2 bg-indigo-50/80 border-t border-indigo-100 flex items-center justify-between text-xs">
+                    <span className="text-[11px] font-semibold text-indigo-800 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        Mock Interview Active ({interviewMode.toUpperCase()})
+                    </span>
+                    <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={resetInterview}
+                        className="h-7 text-[10px] font-bold text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                    >
+                        <RotateCcw className="w-3 h-3 mr-1" />
+                        Reset Interview
+                    </Button>
+                </div>
+            )}
+
+            {/* Input Bar */}
+            {(!isGyanHome && !isInterviewSetup) && (
+                <div className="p-3 border-t border-slate-200/80 bg-white flex items-center gap-2 shrink-0 z-10 shadow-lg">
+                    {/* Language Selector Dropdown */}
+                    <select
+                        value={language}
+                        onChange={(e) => setLanguage(e.target.value)}
+                        className="h-9 px-2 text-[10px] font-bold bg-slate-100 border border-slate-200 text-slate-700 rounded-xl focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    >
+                        <option value="English">EN</option>
+                        <option value="Hinglish">Hinglish</option>
+                    </select>
+
+                    <Input
+                        ref={inputRef}
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleSendMessage(); }}
+                        placeholder={activeMode === 'sarathi' ? 'Ask Sarathi AI...' : 'Ask expert or type answer...'}
+                        className="flex-1 text-xs h-9 bg-slate-50 border-slate-200 focus-visible:ring-indigo-500 rounded-xl"
+                    />
+                    
+                    <Button 
+                        size="icon" 
+                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl h-9 w-9 flex items-center justify-center shrink-0 shadow-md transition-transform active:scale-95"
+                        onClick={() => handleSendMessage()}
+                        disabled={isLoading || !input.trim()}
+                    >
+                        <Send className="h-4 w-4" />
+                    </Button>
+                </div>
+            )}
+
         </div>
     </div>
   );
