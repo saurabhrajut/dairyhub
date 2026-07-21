@@ -1,1507 +1,1699 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, memo, useCallback } from "react";
-import { 
-  FileSpreadsheet, Printer, Download, Trash2, Plus, RefreshCw, Info, Edit3, Calendar as CalendarIcon,
-  DollarSign, Droplets, Target, Percent, ArrowRight, CheckCircle2, Loader2, FileDown, 
-  LayoutDashboard, Package, Calculator, Weight, PieChart, XCircle, Scale, PlusCircle, AlertTriangle
+import React, { useState, useRef, useMemo } from "react";
+import {
+  Printer, Download, FileText, Building2, MapPin, Calendar,
+  Plus, Trash2, Loader2,
+  ShieldCheck, ClipboardList, Package, Wrench, BarChart3, Truck, Factory,
+  Settings, BookOpen, Archive, Zap, Droplets, ClipboardCheck,
+  Columns, RotateCw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-// Interfaces
-interface ProductCostRow {
-  id: string;
-  name: string;
-  allocatedMilk: string;      // Raw input volume (L or Kg)
-  rawMilkCost: string;        // ₹/L or Kg
-  yieldFactor: string;        // Output qty per unit input (e.g. 1.0 for milk, 0.15 for paneer)
-  sellingPrice: string;       // ₹/Unit of finished product
-  packagingCost: string;      // ₹/Unit
-  ingredientsCost: string;    // ₹/Unit
-  energyCost: string;         // ₹/Unit
-  logisticsCost: string;      // ₹/Unit
-  processLoss: string;        // %
-  type: "Liquid" | "Fermented" | "Drink" | "Solid" | "Frozen" | "Custom";
+type FormatType =
+  // ── Plant Operations (Production) ──
+  | "rm-reception"
+  | "bmr"
+  | "process-monitoring"
+  | "processing-standardization"
+  | "qa-lab-log"
+  | "packing-dispatch"
+  | "packaging-qc"
+  | "cold-room-register"
+  | "cip-cleaning"
+  | "curd-dahi-log"
+  | "machine-breakdown"
+  | "yield-handover"
+  // ── Maintenance (Mechanical & Utilities) ──
+  | "pm-log"
+  | "breakdown-log"
+  | "equipment-history"
+  | "spare-parts"
+  | "utility-log"
+  | "boiler-log"
+  | "refrigeration-log"
+  | "electrical-dg-log"
+  | "compressor-log"
+  | "calibration-register"
+  | "etp-wtp-log"
+  | "lubrication-log"
+  | "work-permit";
+
+interface FormatInfo {
+  id: FormatType;
+  title: string;
+  description: string;
+  orientation: "portrait" | "landscape";
+  icon: any;
+  group: string;
 }
 
-interface FixedExpenseRowData {
-  id: string;
-  name: string;
-  cost: string;
-}
+const FORMATS_CATALOG: FormatInfo[] = [
+  // ── PLANT OPERATIONS GROUP (12 Formats) ──
+  { id: "rm-reception",              title: "Raw Milk Reception & Storage Log",          description: "Dock-to-silo reception record for tankers.",                               orientation: "landscape", icon: Truck,          group: "Plant Operations" },
+  { id: "bmr",                       title: "Batch Manufacturing Record (BMR)",           description: "Step-by-step batch record with CCP sign-off.",                             orientation: "landscape", icon: ClipboardList,  group: "Plant Operations" },
+  { id: "process-monitoring",        title: "Process Monitoring Log",                     description: "Hourly pasteurizer temp, pressure & flow log.",                            orientation: "landscape", icon: Factory,        group: "Plant Operations" },
+  { id: "processing-standardization",title: "Milk Processing & Standardization Log",   description: "Fat/SNF standardization, cream separation & Pearson dosage.",             orientation: "landscape", icon: Factory,        group: "Plant Operations" },
+  { id: "qa-lab-log",                title: "Quality & Lab Testing Register",            description: "Organoleptic, Fat%, SNF%, Acidity, MBRT, Alcohol & heat stability.",      orientation: "landscape", icon: ShieldCheck,    group: "Plant Operations" },
+  { id: "packing-dispatch",          title: "Packing & Dispatch Log",                    description: "Packed qty, vehicle loading & dispatch clearance.",                        orientation: "landscape", icon: Package,        group: "Plant Operations" },
+  { id: "packaging-qc",              title: "Packaging QC & Weight Check Log",          description: "Pouch weight variation, leakage test, sealing temp & print quality.",       orientation: "landscape", icon: Package,        group: "Plant Operations" },
+  { id: "cold-room-register",        title: "Cold Room Temp & Stock Register",          description: "Cold room temp log (-25°C to 4°C), stack height & FIFO dispatch.",        orientation: "landscape", icon: Archive,        group: "Plant Operations" },
+  { id: "cip-cleaning",              title: "CIP & Cleaning Log",                        description: "Chemical CIP log: temp, concentration, duration, QA.",                    orientation: "landscape", icon: ShieldCheck,    group: "Plant Operations" },
+  { id: "curd-dahi-log",             title: "Dahi, Lassi & Culturing Process Log",      description: "Inoculation temp, starter culture dosage, incubation time & acidity.",     orientation: "landscape", icon: ClipboardList,  group: "Plant Operations" },
+  { id: "machine-breakdown",         title: "Machine Breakdown & Maintenance Log",        description: "Downtime tracker for failures, corrective actions.",                       orientation: "portrait",  icon: Wrench,         group: "Plant Operations" },
+  { id: "yield-handover",            title: "Production Yield & Shift Handover Report",   description: "Shift summary: milk input, output, yield%, pending.",                      orientation: "landscape", icon: BarChart3,      group: "Plant Operations" },
 
-// Preset Products list to initialize the grid
-const DEFAULT_PRODUCTS: ProductCostRow[] = [
-  { id: "p1", name: "Full Cream Milk (FCM)", allocatedMilk: "5000", rawMilkCost: "45", yieldFactor: "1.0", sellingPrice: "66", packagingCost: "2.2", ingredientsCost: "0.0", energyCost: "1.2", logisticsCost: "1.0", processLoss: "0.5", type: "Liquid" },
-  { id: "p2", name: "Standard Milk", allocatedMilk: "3000", rawMilkCost: "45", yieldFactor: "1.0", sellingPrice: "60", packagingCost: "2.0", ingredientsCost: "0.0", energyCost: "1.2", logisticsCost: "1.0", processLoss: "0.5", type: "Liquid" },
-  { id: "p3", name: "Toned Milk (TM)", allocatedMilk: "4000", rawMilkCost: "45", yieldFactor: "1.0", sellingPrice: "54", packagingCost: "1.8", ingredientsCost: "0.0", energyCost: "1.2", logisticsCost: "1.0", processLoss: "0.5", type: "Liquid" },
-  { id: "p4", name: "Double Toned (DTM)", allocatedMilk: "0", rawMilkCost: "45", yieldFactor: "1.0", sellingPrice: "48", packagingCost: "1.8", ingredientsCost: "0.0", energyCost: "1.2", logisticsCost: "1.0", processLoss: "0.5", type: "Liquid" },
-  { id: "p5", name: "Skimmed Milk (SM)", allocatedMilk: "0", rawMilkCost: "45", yieldFactor: "1.0", sellingPrice: "42", packagingCost: "1.8", ingredientsCost: "0.0", energyCost: "1.2", logisticsCost: "1.0", processLoss: "0.5", type: "Liquid" },
-  { id: "p6", name: "Toned Curd (Dahi)", allocatedMilk: "1500", rawMilkCost: "45", yieldFactor: "1.0", sellingPrice: "65", packagingCost: "2.5", ingredientsCost: "0.5", energyCost: "2.0", logisticsCost: "1.5", processLoss: "1.0", type: "Fermented" },
-  { id: "p7", name: "Paneer (Fresh)", allocatedMilk: "1000", rawMilkCost: "45", yieldFactor: "0.15", sellingPrice: "380", packagingCost: "5.0", ingredientsCost: "0.0", energyCost: "5.0", logisticsCost: "3.0", processLoss: "2.0", type: "Solid" },
-  { id: "p8", name: "Sweet Lassi", allocatedMilk: "800", rawMilkCost: "45", yieldFactor: "1.2", sellingPrice: "90", packagingCost: "3.5", ingredientsCost: "2.5", energyCost: "2.0", logisticsCost: "1.5", processLoss: "1.5", type: "Drink" },
-  { id: "p9", name: "Masala Chach", allocatedMilk: "1200", rawMilkCost: "45", yieldFactor: "1.6", sellingPrice: "35", packagingCost: "2.0", ingredientsCost: "1.5", energyCost: "1.5", logisticsCost: "1.0", processLoss: "1.5", type: "Drink" },
-  { id: "p10", name: "Ice Cream", allocatedMilk: "0", rawMilkCost: "45", yieldFactor: "1.8", sellingPrice: "250", packagingCost: "10.0", ingredientsCost: "8.0", energyCost: "8.0", logisticsCost: "4.0", processLoss: "1.5", type: "Frozen" }
+  // ── MAINTENANCE GROUP (13 Formats) ──
+  { id: "pm-log",                    title: "Preventive Maintenance (PM) Log",            description: "Scheduled PM tasks, frequency, status & sign-off.",                       orientation: "landscape", icon: Settings,       group: "Maintenance" },
+  { id: "breakdown-log",             title: "Breakdown Maintenance Log",                  description: "Detailed breakdown root cause, CAPA & downtime log.",                     orientation: "landscape", icon: Wrench,         group: "Maintenance" },
+  { id: "equipment-history",         title: "Equipment History Card",                     description: "Full lifecycle record: PM, breakdown, calibration events.",                orientation: "portrait",  icon: BookOpen,       group: "Maintenance" },
+  { id: "spare-parts",               title: "Spare Parts Inventory Register",             description: "Stock in/out register for maintenance spare parts.",                       orientation: "landscape", icon: Archive,        group: "Maintenance" },
+  { id: "utility-log",               title: "Utility Log Sheet",                          description: "Boiler, chiller, compressor & RO daily readings log.",                    orientation: "landscape", icon: Zap,            group: "Maintenance" },
+  { id: "boiler-log",                title: "Boiler & Steam Generation Log",              description: "Steam pressure, feed water temp, blowdown, fuel cons & flue temp.",       orientation: "landscape", icon: Zap,            group: "Maintenance" },
+  { id: "refrigeration-log",         title: "Refrigeration & Ammonia Plant Log",          description: "Suction/Discharge pressure, oil pressure, glycol temp & load.",        orientation: "landscape", icon: Wrench,         group: "Maintenance" },
+  { id: "electrical-dg-log",         title: "Electrical Power & DG Set Daily Log",        description: "Power Factor (PF), EB kWh meter, DG run hours, diesel level & load.",     orientation: "landscape", icon: Zap,            group: "Maintenance" },
+  { id: "compressor-log",            title: "Air Compressor & Pneumatic Log",             description: "Line pressure (bar), dew point, oil level, moisture drain & hours.",       orientation: "portrait",  icon: Settings,       group: "Maintenance" },
+  { id: "calibration-register",      title: "Instrument Calibration Register",            description: "Pressure gauges, RTD temp sensors, flow meters & balance calib log.",      orientation: "landscape", icon: BookOpen,       group: "Maintenance" },
+  { id: "etp-wtp-log",               title: "ETP & WTP Environmental Log",                description: "Influent/Effluent pH, COD, BOD, TSS, aeration & chemical dosing.",        orientation: "landscape", icon: Droplets,       group: "Maintenance" },
+  { id: "lubrication-log",           title: "Lubrication Log Sheet",                      description: "Scheduled lubrication points, lubricant grade & quantity.",                orientation: "portrait",  icon: Droplets,       group: "Maintenance" },
+  { id: "work-permit",               title: "Daily Maintenance / Work Permit Register",   description: "Hot/cold work permits, hazard control & closure record.",                  orientation: "landscape", icon: ClipboardCheck, group: "Maintenance" },
 ];
 
-const DEFAULT_FIXED_EXPENSES: FixedExpenseRowData[] = [
-  { id: "f1", name: "Salaries & Wages", cost: "150000" },
-  { id: "f2", name: "Factory Rent", cost: "50000" },
-  { id: "f3", name: "Electricity (Fixed)", cost: "15000" },
-  { id: "f4", name: "Boiler Fuel & Water", cost: "25000" },
-  { id: "f5", name: "Plant Maintenance", cost: "12000" },
-  { id: "f6", name: "Marketing & Sales", cost: "20000" }
-];
+const GROUPS = ["Plant Operations", "Maintenance"];
 
-export default function PlantCostCalc() {
+export default function PlantFormatsCalc() {
   const { toast } = useToast();
-  const reportRef = useRef<HTMLDivElement>(null);
-  const monthlyReportRef = useRef<HTMLDivElement>(null);
-  
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
-  });
+  const printAreaRef = useRef<HTMLDivElement>(null);
 
-  const [selectedMonth, setSelectedMonth] = useState(() => new Date().getMonth() + 1);
-  const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear());
-
-  const [period, setPeriod] = useState<"daily" | "monthly">("monthly");
-  const [products, setProducts] = useState<ProductCostRow[]>(DEFAULT_PRODUCTS);
-  const [fixedExpenses, setFixedExpenses] = useState<FixedExpenseRowData[]>(DEFAULT_FIXED_EXPENSES);
-  const [taxRate, setTaxRate] = useState("0");
-  const [workingDays, setWorkingDays] = useState("25");
+  const [companyName, setCompanyName] = useState("DAIRY HUB COOPERATIVE");
+  const [plantLocation, setPlantLocation] = useState("MAIN PROCESS PLANT");
+  const [currentDate, setCurrentDate] = useState(() => new Date().toISOString().split("T")[0]);
+  const [selectedFormatId, setSelectedFormatId] = useState<FormatType>("rm-reception");
   const [isDownloading, setIsDownloading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"sheet" | "report" | "monthly" | "principles">("sheet");
 
-  // Load from localStorage when Date changes
-  useEffect(() => {
-    try {
-      const savedProducts = localStorage.getItem(`dairyhub_plant_products_${selectedDate}`);
-      const savedFixed = localStorage.getItem(`dairyhub_plant_fixed_${selectedDate}`);
-      const savedTax = localStorage.getItem(`dairyhub_plant_tax_${selectedDate}`);
-      const savedDays = localStorage.getItem(`dairyhub_plant_days_${selectedDate}`);
+  // ════════════════════════════════════════════════════
+  //  STATE — PLANT OPERATIONS (7 formats)
+  // ════════════════════════════════════════════════════
 
-      if (savedProducts) setProducts(JSON.parse(savedProducts));
-      else setProducts(DEFAULT_PRODUCTS);
+  const [rmReceptionRows, setRmReceptionRows] = useState([
+    { id: 1, tankerNo: "HR-55-A-1234", supplier: "Banas Union",       arrivalTime: "06:15", qty: "15000", temp: "4.2", acidity: "0.130", fat: "4.20", snf: "8.50", cob: "Negative", status: "Accepted", siloAllotted: "SILO-01", operator: "Amit K." },
+    { id: 2, tankerNo: "UP-16-T-8899", supplier: "Center-12 Raw",     arrivalTime: "07:45", qty: "8500",  temp: "5.5", acidity: "0.140", fat: "4.50", snf: "8.60", cob: "Negative", status: "Accepted", siloAllotted: "SILO-02", operator: "Ritu S." },
+    { id: 3, tankerNo: "MH-12-Q-4567", supplier: "Saras Collection",  arrivalTime: "09:00", qty: "12000", temp: "8.2", acidity: "0.180", fat: "3.80", snf: "8.10", cob: "Positive", status: "Rejected", siloAllotted: "-",       operator: "Amit K." },
+  ]);
 
-      if (savedFixed) setFixedExpenses(JSON.parse(savedFixed));
-      else setFixedExpenses(DEFAULT_FIXED_EXPENSES);
+  const [bmrRows, setBmrRows] = useState([
+    { id: 1, step: "01", operation: "Raw Milk Intake from SILO-01",          startTime: "06:30", endTime: "07:00", milkQty: "10000", temp: "4.2",  remarks: "Chilled, COB Clear",          doneBy: "Amit K.",    verified: "Mgr. Rao"  },
+    { id: 2, step: "02", operation: "Pre-heating & Clarification",            startTime: "07:05", endTime: "07:20", milkQty: "10000", temp: "40.0", remarks: "Clarifier running OK",         doneBy: "Suresh V.",  verified: "Mgr. Rao"  },
+    { id: 3, step: "03", operation: "Pasteurization (HTST 72°C/15s)",         startTime: "07:20", endTime: "08:30", milkQty: "10000", temp: "72.5", remarks: "FDV open, no flow divert",     doneBy: "Suresh V.",  verified: "Dr. Verma" },
+    { id: 4, step: "04", operation: "Homogenization (200/50 bar)",            startTime: "07:20", endTime: "08:30", milkQty: "10000", temp: "68.0", remarks: "Pressure stable",              doneBy: "Ritu S.",    verified: "Dr. Verma" },
+    { id: 5, step: "05", operation: "Chilling & Transfer to PMST-1",          startTime: "08:30", endTime: "09:00", milkQty: "9980",  temp: "4.5",  remarks: "0.2% process loss OK",        doneBy: "Ritu S.",    verified: "Mgr. Rao"  },
+  ]);
 
-      if (savedTax) setTaxRate(savedTax);
-      else setTaxRate("0");
+  const [processRows, setProcessRows] = useState([
+    { id: 1, time: "06:00", equipment: "Pasteurizer-01", inletTemp: "4.2", htTemp: "72.8", outTemp: "4.0", pressure: "2.5", flowRate: "10000", phpStatus: "Pass",  operator: "Suresh V." },
+    { id: 2, time: "07:00", equipment: "Pasteurizer-01", inletTemp: "4.5", htTemp: "72.6", outTemp: "4.1", pressure: "2.5", flowRate: "10000", phpStatus: "Pass",  operator: "Suresh V." },
+    { id: 3, time: "08:00", equipment: "Pasteurizer-01", inletTemp: "4.8", htTemp: "71.9", outTemp: "4.2", pressure: "2.4", flowRate: "9800",  phpStatus: "Alert", operator: "Suresh V." },
+    { id: 4, time: "09:00", equipment: "Pasteurizer-01", inletTemp: "4.3", htTemp: "72.5", outTemp: "4.0", pressure: "2.5", flowRate: "10000", phpStatus: "Pass",  operator: "Ritu S."   },
+  ]);
 
-      if (savedDays) setWorkingDays(savedDays);
-      else setWorkingDays("25");
-    } catch (e) {
-      console.error("Failed to load plant costing draft", e);
-    }
-  }, [selectedDate]);
+  const [packingRows, setPackingRows] = useState([
+    { id: 1, batchNo: "B-FCM-101", product: "Full Cream Milk Pouch 500ml", shift: "A", packedQty: "9960 Pouches", vehicle: "HR-55-T-2200",  destination: "Depot - Delhi NCR",     dispatchTime: "14:00", tempAtDispatch: "4.5", status: "Dispatched", operator: "Vikram S." },
+    { id: 2, batchNo: "B-TM-154",  product: "Toned Milk Pouch 500ml",     shift: "A", packedQty: "7970 Pouches", vehicle: "UP-80-AB-5512", destination: "Depot - Meerut",        dispatchTime: "14:30", tempAtDispatch: "4.8", status: "Dispatched", operator: "Vikram S." },
+    { id: 3, batchNo: "B-PNR-05",  product: "Fresh Paneer 200g",          shift: "B", packedQty: "760 Packs",    vehicle: "HR-26-C-9988",  destination: "Hotel Chain Delivery",  dispatchTime: "17:00", tempAtDispatch: "5.0", status: "Dispatched", operator: "Rakesh M." },
+  ]);
 
-  // Save changes to localStorage helper
-  const saveDraft = useCallback((
-    updatedProducts: ProductCostRow[],
-    updatedFixed: FixedExpenseRowData[],
-    updatedTax: string,
-    updatedDays: string,
-    targetDate: string
-  ) => {
-    try {
-      localStorage.setItem(`dairyhub_plant_products_${targetDate}`, JSON.stringify(updatedProducts));
-      localStorage.setItem(`dairyhub_plant_fixed_${targetDate}`, JSON.stringify(updatedFixed));
-      localStorage.setItem(`dairyhub_plant_tax_${targetDate}`, updatedTax);
-      localStorage.setItem(`dairyhub_plant_days_${targetDate}`, updatedDays);
+  const [cipRows, setCipRows] = useState([
+    { id: 1, equipment: "Pasteurizer-01",    cipType: "Pre-Rinse (Water)",          startTime: "05:30", endTime: "05:45", temp: "60", causticConc: "-",   acidConc: "-",   duration: "15 min", operator: "Vijay K.", qaStatus: "OK" },
+    { id: 2, equipment: "Pasteurizer-01",    cipType: "Caustic Wash (NaOH 2%)",    startTime: "05:45", endTime: "06:15", temp: "80", causticConc: "2.0", acidConc: "-",   duration: "30 min", operator: "Vijay K.", qaStatus: "OK" },
+    { id: 3, equipment: "Pasteurizer-01",    cipType: "Acid Wash (HNO₃ 1.5%)",     startTime: "06:25", endTime: "06:55", temp: "70", causticConc: "-",   acidConc: "1.5", duration: "30 min", operator: "Vijay K.", qaStatus: "OK" },
+    { id: 4, equipment: "Milk Silo RMST-1",  cipType: "Full CIP Cycle",            startTime: "10:00", endTime: "11:30", temp: "85", causticConc: "2.5", acidConc: "1.5", duration: "90 min", operator: "Rakesh M.", qaStatus: "OK" },
+  ]);
 
-      // Track saved dates
-      const savedDates = localStorage.getItem("dairyhub_plant_saved_dates");
-      const list: string[] = savedDates ? JSON.parse(savedDates) : [];
-      if (!list.includes(targetDate)) {
-        list.push(targetDate);
-        localStorage.setItem("dairyhub_plant_saved_dates", JSON.stringify(list));
-      }
-    } catch (e) {
-      console.error("Failed to save draft", e);
-    }
-  }, []);
+  const [breakdownMaintRows, setBreakdownMaintRows] = useState([
+    { id: 1, date: "2026-07-14", machine: "Pouch Filling Machine - FL1",     breakdownTime: "09:15", rootCause: "Film roll jam in sealing jaw",        action: "Replaced sealing jaw silicon pad",    resumedTime: "09:55", downtime: "40 min",  spareUsed: "Silicon Pad (2 pcs)",  engineer: "Manoj P.",  status: "Resolved" },
+    { id: 2, date: "2026-07-15", machine: "Pasteurizer-01 Pump",             breakdownTime: "14:30", rootCause: "Vibration - bearing noise",           action: "Bearing replaced & pump re-aligned",  resumedTime: "16:00", downtime: "90 min",  spareUsed: "SKF Bearing 6204",     engineer: "Manoj P.",  status: "Resolved" },
+    { id: 3, date: "2026-07-16", machine: "Refrigeration Compressor-2",      breakdownTime: "22:00", rootCause: "High pressure trip",                  action: "Gas leak found, topped up & sealed",  resumedTime: "23:30", downtime: "90 min",  spareUsed: "R-404A 2 kg",          engineer: "Rajiv S.",  status: "Resolved" },
+  ]);
 
-  // Update handlers
-  const handleProductChange = (id: string, field: keyof ProductCostRow, val: string) => {
-    const updated = products.map(p => p.id === id ? { ...p, [field]: val } : p);
-    setProducts(updated);
-    saveDraft(updated, fixedExpenses, taxRate, workingDays, selectedDate);
+  const [yieldRows, setYieldRows] = useState([
+    { id: 1, shift: "A (06:00-14:00)", product: "Full Cream Milk Pouch", milkInput: "10000", output: "9960",   yieldPct: "99.6",       rejections: "0",         pendingBatches: "Nil", operator: "Suresh V." },
+    { id: 2, shift: "A (06:00-14:00)", product: "Fresh Paneer",          milkInput: "1000",  output: "152 Kg", yieldPct: "15.2 (conv)", rejections: "0",         pendingBatches: "Nil", operator: "Suresh V." },
+    { id: 3, shift: "B (14:00-22:00)", product: "Toned Milk Pouch",      milkInput: "8000",  output: "7970",   yieldPct: "99.6",        rejections: "10 Leak",   pendingBatches: "Nil", operator: "Rakesh M." },
+    { id: 4, shift: "B (14:00-22:00)", product: "Sweet Lassi Pouch",     milkInput: "500",   output: "590",    yieldPct: "118 (sugar)", rejections: "0",         pendingBatches: "Nil", operator: "Rakesh M." },
+  ]);
+
+  // ════════════════════════════════════════════════════
+  //  STATE — MAINTENANCE (7 formats)
+  // ════════════════════════════════════════════════════
+
+  const [pmLogRows, setPmLogRows] = useState([
+    { id: 1, srNo: "01", equipment: "Pasteurizer-01",          pmTask: "Check & clean heat exchanger plates",        frequency: "Monthly",    scheduledDate: "2026-07-15", doneDate: "2026-07-15", parametersChecked: "Plate gap, gasket condition",  status: "Done",    doneBy: "Manoj P.", verified: "Mgr. Rao"  },
+    { id: 2, srNo: "02", equipment: "Milk Silo RMST-1",        pmTask: "Agitator seal & bearing inspection",          frequency: "Monthly",    scheduledDate: "2026-07-15", doneDate: "2026-07-15", parametersChecked: "Seal leakage, bearing temp",    status: "Done",    doneBy: "Manoj P.", verified: "Mgr. Rao"  },
+    { id: 3, srNo: "03", equipment: "Pouch Filling Machine FL1",pmTask: "Clean & lubricate sealing jaw assembly",     frequency: "Weekly",     scheduledDate: "2026-07-18", doneDate: "2026-07-18", parametersChecked: "Seal temp, film alignment",     status: "Done",    doneBy: "Rajiv S.", verified: "Mgr. Rao"  },
+    { id: 4, srNo: "04", equipment: "Refrigeration Comp. R-2", pmTask: "Check refrigerant level & oil pressure",     frequency: "Fortnightly",scheduledDate: "2026-07-20", doneDate: "-",          parametersChecked: "Gas pressure, oil level",       status: "Pending", doneBy: "-",        verified: "-"         },
+    { id: 5, srNo: "05", equipment: "Boiler (IBR)",             pmTask: "Blow-down, safety valve & gauge check",     frequency: "Weekly",     scheduledDate: "2026-07-18", doneDate: "2026-07-18", parametersChecked: "Safety valve lift, pressure",   status: "Done",    doneBy: "Vijay K.", verified: "Mgr. Rao"  },
+  ]);
+
+  const [breakdownLogRows, setBreakdownLogRows] = useState([
+    { id: 1, reportNo: "BD-01/26", date: "2026-07-14", machine: "Pouch Filling Machine - FL1", breakdownTime: "09:15", resumedTime: "09:55", downtime: "40 min",  rootCause: "Film roll jam in sealing jaw",       correctiveAction: "Replaced sealing jaw silicon pad",    preventiveAction: "Weekly jaw inspection added to PM",  spareUsed: "Silicon Pad (2 pcs)", engineer: "Manoj P.", status: "Closed" },
+    { id: 2, reportNo: "BD-02/26", date: "2026-07-15", machine: "Pasteurizer-01 Pump",          breakdownTime: "14:30", resumedTime: "16:00", downtime: "90 min",  rootCause: "Bearing failure - vibration noise",  correctiveAction: "Bearing replaced & pump re-aligned",  preventiveAction: "Vibration monitoring quarterly",     spareUsed: "SKF Bearing 6204",    engineer: "Manoj P.", status: "Closed" },
+    { id: 3, reportNo: "BD-03/26", date: "2026-07-16", machine: "Refrigeration Comp.-2",        breakdownTime: "22:00", resumedTime: "23:30", downtime: "90 min",  rootCause: "Refrigerant leak - high pressure",  correctiveAction: "Leak sealed & gas recharged",          preventiveAction: "Gas pressure check fortnightly",     spareUsed: "R-404A 2 kg",         engineer: "Rajiv S.", status: "Closed" },
+  ]);
+
+  const [equipHistoryRows, setEquipHistoryRows] = useState([
+    { id: 1, date: "2026-07-15", equipId: "PAST-01", eventType: "PM",         description: "Heat exchanger plate inspection & cleaning",       techName: "Manoj P.", sparesUsed: "Gasket Set (8 pcs)", cost: "₹ 1,200", nextDueDate: "2026-08-15", remarks: "Plates OK, no pitting" },
+    { id: 2, date: "2026-07-15", equipId: "PAST-01", eventType: "Calibration",description: "Temperature sensor & FDV calibration",              techName: "Dr. Verma",sparesUsed: "Nil",               cost: "Nil",      nextDueDate: "2027-01-15", remarks: "Calibration cert issued" },
+    { id: 3, date: "2026-07-15", equipId: "FL1",     eventType: "Breakdown",  description: "Sealing jaw silicon pad replaced",                  techName: "Manoj P.", sparesUsed: "Silicon Pad x2",     cost: "₹ 450",   nextDueDate: "2026-07-22", remarks: "BD Report BD-01/26" },
+    { id: 4, date: "2026-07-10", equipId: "RMST-1",  eventType: "PM",         description: "Agitator seal & bearing greasing done",            techName: "Rajiv S.", sparesUsed: "Grease 200g",        cost: "₹ 180",   nextDueDate: "2026-08-10", remarks: "OK, no leakage" },
+  ]);
+
+  const [sparePartsRows, setSparePartsRows] = useState([
+    { id: 1, partCode: "SP-SK-6204",  partName: "SKF Ball Bearing 6204",          equipUsedFor: "Pasteurizer Pump",      uom: "Nos",  openingStock: "3",  received: "2",  issued: "1",  closingStock: "4",  minLevel: "2", reorderQty: "5", supplier: "SKF India",      remarks: "Last issued BD-02/26" },
+    { id: 2, partCode: "SP-SJ-PAD",   partName: "Sealing Jaw Silicon Pad",        equipUsedFor: "Filling Machine FL1",   uom: "Nos",  openingStock: "10", received: "0",  issued: "2",  closingStock: "8",  minLevel: "4", reorderQty: "10",supplier: "Tetra Pak",      remarks: "BD-01/26 used 2 pcs" },
+    { id: 3, partCode: "SP-GS-PH01",  partName: "PHE Gasket Set (Pasteurizer)",   equipUsedFor: "Pasteurizer PAST-01",   uom: "Set",  openingStock: "2",  received: "3",  issued: "1",  closingStock: "4",  minLevel: "2", reorderQty: "5", supplier: "APV India",      remarks: "PM July use" },
+    { id: 4, partCode: "SP-RF-404A",  partName: "R-404A Refrigerant Gas",         equipUsedFor: "Refrigeration Comp.",   uom: "Kg",   openingStock: "5",  received: "4",  issued: "2",  closingStock: "7",  minLevel: "4", reorderQty: "8", supplier: "Bry-Air",        remarks: "BD-03/26 used 2 kg" },
+    { id: 5, partCode: "SP-OIL-HYD",  partName: "Hydraulic Oil ISO 46",           equipUsedFor: "Homogenizer",           uom: "Ltrs", openingStock: "10", received: "20", issued: "5",  closingStock: "25", minLevel: "10",reorderQty: "20",supplier: "Castrol India",  remarks: "Routine oil change" },
+  ]);
+
+  const [utilityLogRows, setUtilityLogRows] = useState([
+    { id: 1, dateTime: "2026-07-18 06:00", utility: "Boiler (IBR Fired)",            param1Label: "Steam Press (kg/cm²)", param1: "7.5", param2Label: "Feed Water Temp (°C)", param2: "80",  param3Label: "Fuel Used (Litre)", param3: "45",  param4Label: "Efficiency (%)", param4: "82", status: "Normal", operator: "Vijay K." },
+    { id: 2, dateTime: "2026-07-18 06:00", utility: "Chiller Unit-1",               param1Label: "Suction Temp (°C)",   param1: "2.5", param2Label: "Discharge Pr (bar)",   param2: "12.5",param3Label: "Chilled Water Temp",param3: "1.5", param4Label: "Amp Draw (A)",   param4: "42", status: "Normal", operator: "Vijay K." },
+    { id: 3, dateTime: "2026-07-18 06:00", utility: "Air Compressor",              param1Label: "Line Pressure (bar)",  param1: "7.2", param2Label: "Oil Level",            param2: "OK",  param3Label: "Drain Blow Done",   param3: "Yes", param4Label: "Amp Draw (A)",   param4: "28", status: "Normal", operator: "Vijay K." },
+    { id: 4, dateTime: "2026-07-18 06:00", utility: "RO Water Plant",              param1Label: "Feed TDS (ppm)",      param1: "450", param2Label: "Product TDS (ppm)",    param2: "45",  param3Label: "Rejection Rate (%)",param3: "40",  param4Label: "Flow (L/hr)",    param4: "500", status: "Normal", operator: "Rakesh M." },
+    { id: 5, dateTime: "2026-07-18 14:00", utility: "Boiler (IBR Fired)",            param1Label: "Steam Press (kg/cm²)", param1: "7.8", param2Label: "Feed Water Temp (°C)", param2: "82",  param3Label: "Fuel Used (Litre)", param3: "48",  param4Label: "Efficiency (%)", param4: "83", status: "Normal", operator: "Rakesh M." },
+  ]);
+
+  const [lubricationRows, setLubricationRows] = useState([
+    { id: 1, equipId: "PAST-01", machine: "Pasteurizer-01",          lubricationPoint: "Pump bearing housing",         lubricantGrade: "Castrol Molub-Alloy 777", frequency: "Monthly",     lastDoneDate: "2026-07-01", nextDueDate: "2026-08-01", qtyUsed: "50 g",  doneBy: "Manoj P.", verified: "Mgr. Rao",  remarks: "OK" },
+    { id: 2, equipId: "FL1",     machine: "Filling Machine FL1",     lubricationPoint: "Sealing jaw pivot & rails",    lubricantGrade: "Food Grade Oil ISO 46",    frequency: "Weekly",      lastDoneDate: "2026-07-14", nextDueDate: "2026-07-21", qtyUsed: "10 ml", doneBy: "Rajiv S.", verified: "Mgr. Rao",  remarks: "PM done" },
+    { id: 3, equipId: "HMGN-01", machine: "Homogenizer",             lubricationPoint: "Crankshaft & con-rod bearings",lubricantGrade: "Hydraulic Oil ISO 46",      frequency: "Fortnightly", lastDoneDate: "2026-07-10", nextDueDate: "2026-07-24", qtyUsed: "200 ml",doneBy: "Manoj P.", verified: "Mgr. Rao",  remarks: "No leak" },
+    { id: 4, equipId: "COMP-02", machine: "Refrigeration Comp.-2",   lubricationPoint: "Compressor crankcase oil",     lubricantGrade: "Suniso 3GS Ref. Oil",       frequency: "Monthly",     lastDoneDate: "2026-07-05", nextDueDate: "2026-08-05", qtyUsed: "1 Ltr", doneBy: "Rajiv S.", verified: "Mgr. Rao",  remarks: "Level topped" },
+    { id: 5, equipId: "BOILER",  machine: "Boiler Feed Water Pump",  lubricationPoint: "Pump coupling & bearing",      lubricantGrade: "Grease - Lithium EP2",      frequency: "Monthly",     lastDoneDate: "2026-07-08", nextDueDate: "2026-08-08", qtyUsed: "30 g",  doneBy: "Vijay K.", verified: "Mgr. Rao",  remarks: "OK" },
+  ]);
+
+  const [workPermitRows, setWorkPermitRows] = useState([
+    { id: 1, permitNo: "WP-2026-01", date: "2026-07-14", workDescription: "Hot work - welding on boiler steam line",    equipment: "Boiler Steam Line",    workType: "Hot Work",  hazard: "Burn / Fire",        precautions: "Fire extinguisher standby, PPE full",   issuedBy: "Mgr. Rao",  startTime: "10:00", endTime: "12:00", status: "Closed", closedBy: "Mgr. Rao"  },
+    { id: 2, permitNo: "WP-2026-02", date: "2026-07-15", workDescription: "Electrical panel maintenance - pasteurizer", equipment: "Pasteurizer DB Panel", workType: "Electrical",hazard: "Electrocution",       precautions: "LOTO applied, rubber gloves, insulated tools",issuedBy: "Mgr. Rao",  startTime: "09:00", endTime: "11:30", status: "Closed", closedBy: "Mgr. Rao"  },
+    { id: 3, permitNo: "WP-2026-03", date: "2026-07-16", workDescription: "Confined space entry - silo RMST-1 cleaning",equipment: "Milk Silo RMST-1",     workType: "Confined Space",hazard: "Asphyxiation / Fall",precautions: "Gas test done, lifeline, buddy system",  issuedBy: "Mgr. Rao",  startTime: "14:00", endTime: "17:00", status: "Closed", closedBy: "Mgr. Rao"  },
+  ]);
+
+  // ── New Plant Operations (Production) Formats ──
+  const [processingRows, setProcessingRows] = useState([
+    { id: 1, silo: "SILO-01", milkQty: "10000", rawFat: "4.50", rawSnf: "8.50", targetFat: "4.00", targetSnf: "8.50", skimAdded: "1250", creamAdded: "0", finalFat: "4.00", finalSnf: "8.50", operator: "Amit K." },
+    { id: 2, silo: "SILO-02", milkQty: "8000",  rawFat: "3.80", rawSnf: "8.40", targetFat: "4.50", targetSnf: "8.50", skimAdded: "0",    creamAdded: "180", finalFat: "4.50", finalSnf: "8.50", operator: "Suresh V." }
+  ]);
+
+  const [qaLabRows, setQaLabRows] = useState([
+    { id: 1, source: "Tanker HR-55-A-1234", batchNo: "TK-101", temp: "4.2", acidity: "0.135", mbrt: "5.5 hrs", alcoholTest: "Negative (68%)", cob: "Negative", fat: "4.20", snf: "8.55", analyst: "Dr. Verma" },
+    { id: 2, source: "Pasteurizer Outlet",   batchNo: "PST-202", temp: "4.0", acidity: "0.130", mbrt: ">6 hrs",  alcoholTest: "Negative (68%)", cob: "Negative", fat: "4.00", snf: "8.50", analyst: "Ritu S." }
+  ]);
+
+  const [packagingQcRows, setPackagingQcRows] = useState([
+    { id: 1, machineNo: "FL-01", product: "Full Cream 500ml", time: "09:00", targetWeight: "505g", actualWeight: "504.8g", sealingTemp: "165°C", leakCheck: "Pass", printCheck: "Clear (MRP/Exp)", inspector: "Rajesh T." },
+    { id: 2, machineNo: "FL-02", product: "Toned Milk 500ml",  time: "09:30", targetWeight: "504g", actualWeight: "504.2g", sealingTemp: "162°C", leakCheck: "Pass", printCheck: "Clear (MRP/Exp)", inspector: "Rajesh T." }
+  ]);
+
+  const [coldRoomRegRows, setColdRoomRegRows] = useState([
+    { id: 1, coldRoomNo: "Cold Room #1", time: "08:00", temp: "3.5°C", product: "Milk Pouches (FCM/TM)", crateCount: "1250", stackHeight: "5 Crates", fifoStatus: "Maintained", defrostStatus: "Normal", incharge: "Vikram S." },
+    { id: 2, coldRoomNo: "Cold Room #2", time: "08:00", temp: "2.8°C", product: "Paneer & Dahi Crates",  crateCount: "420",  stackHeight: "4 Crates", fifoStatus: "Maintained", defrostStatus: "Defrosting", incharge: "Vikram S." }
+  ]);
+
+  const [curdDahiRows, setCurdDahiRows] = useState([
+    { id: 1, batchNo: "DH-2026-01", product: "Pouch Dahi 400g", milkQty: "2000 L", cultureCode: "YC-380", inocTemp: "43.0°C", startTime: "10:00", setTime: "14:30", finalAcidity: "0.75%", operator: "Suresh V." },
+    { id: 2, batchNo: "LS-2026-04", product: "Sweet Lassi 200ml", milkQty: "1500 L", cultureCode: "ABT-5",   inocTemp: "42.5°C", startTime: "11:00", setTime: "15:15", finalAcidity: "0.68%", operator: "Ritu S." }
+  ]);
+
+  // ── New Maintenance (Mechanical & Utilities) Formats ──
+  const [boilerLogRows, setBoilerLogRows] = useState([
+    { id: 1, shiftTime: "06:00", steamPress: "7.5 bar", feedTemp: "82°C", softenerHardness: "<5 ppm", blowdown: "Done (10s)", fuelCons: "45 L/hr", flueTemp: "185°C", operator: "Vijay K." },
+    { id: 2, shiftTime: "10:00", steamPress: "7.8 bar", feedTemp: "85°C", softenerHardness: "<5 ppm", blowdown: "Done (10s)", fuelCons: "48 L/hr", flueTemp: "188°C", operator: "Vijay K." }
+  ]);
+
+  const [refrigerationLogRows, setRefrigerationLogRows] = useState([
+    { id: 1, compNo: "Ammonia Comp #1", suctionPress: "2.1 bar", dischargePress: "12.2 bar", oilPress: "3.5 bar", glycolTemp: "1.2°C", condenserWaterTemp: "28.5°C", ampDraw: "145 A", operator: "Rajiv S." },
+    { id: 2, compNo: "Ammonia Comp #2", suctionPress: "2.2 bar", dischargePress: "12.0 bar", oilPress: "3.4 bar", glycolTemp: "1.5°C", condenserWaterTemp: "28.0°C", ampDraw: "140 A", operator: "Rajiv S." }
+  ]);
+
+  const [electricalDgRows, setElectricalDgRows] = useState([
+    { id: 1, time: "06:00", ebMeterKwh: "145280", powerFactor: "0.98", dgRunHrs: "1240.5 h", dieselLevel: "450 L", phaseAmp: "R:320 A, Y:315 A, B:322 A", voltage: "415 V", electrician: "Manoj P." },
+    { id: 2, time: "14:00", ebMeterKwh: "147110", powerFactor: "0.97", dgRunHrs: "1240.5 h", dieselLevel: "450 L", phaseAmp: "R:340 A, Y:335 A, B:338 A", voltage: "412 V", electrician: "Manoj P." }
+  ]);
+
+  const [compressorRows, setCompressorRows] = useState([
+    { id: 1, compId: "Screw Comp AC-1", time: "06:00", linePress: "7.2 bar", dewPoint: "3.0°C", oilLevel: "Normal (3/4)", moistureDrain: "Auto Blow OK", totalRunHrs: "3420 h", operator: "Vijay K." },
+    { id: 2, compId: "Vane Comp AC-2",  time: "06:00", linePress: "7.0 bar", dewPoint: "3.5°C", oilLevel: "Normal (1/2)", moistureDrain: "Auto Blow OK", totalRunHrs: "2150 h", operator: "Vijay K." }
+  ]);
+
+  const [calibrationRegRows, setCalibrationRegRows] = useState([
+    { id: 1, tagNo: "PG-PST-01", instName: "Pasteurizer Inlet Pressure Gauge", location: "Pasteurizer #1", range: "0 - 10 bar", lastCalibDate: "2026-01-10", nextDueDate: "2027-01-10", standardUsed: "Master Calibrator", errorDeviation: "0.02 bar", technician: "Dr. Verma", certNo: "CAL-2026-88" },
+    { id: 2, tagNo: "RTD-SILO-02", instName: "Pt-100 Temp Sensor",              location: "Milk Silo #2",   range: "-20 to 100°C", lastCalibDate: "2026-03-15", nextDueDate: "2027-03-15", standardUsed: "Fluke Calibrator",  errorDeviation: "0.1°C",     technician: "Dr. Verma", certNo: "CAL-2026-104" }
+  ]);
+
+  const [etpWtpRows, setEtpWtpRows] = useState([
+    { id: 1, time: "08:00", rawWaterFlow: "120 m³", treatedWaterPh: "7.2", etpInletPh: "6.5", aerationDo: "2.5 ppm", sludgeDischarge: "500 L", dosingChem: "Alum 5kg, Polymer 1kg", operator: "Rakesh M." },
+    { id: 2, time: "16:00", rawWaterFlow: "115 m³", treatedWaterPh: "7.4", etpInletPh: "6.8", aerationDo: "2.8 ppm", sludgeDischarge: "450 L", dosingChem: "Alum 5kg, Polymer 1kg", operator: "Rakesh M." }
+  ]);
+
+  // ════════════════════════════════════════════════════
+  //  MEMOS & HANDLERS
+  // ════════════════════════════════════════════════════
+
+  const selectedFormat = useMemo(() => FORMATS_CATALOG.find(f => f.id === selectedFormatId)!, [selectedFormatId]);
+
+  // Dynamic custom columns & orientation state
+  const [customColumnsMap, setCustomColumnsMap] = useState<Record<string, string[]>>({});
+  const [customCellValues, setCustomCellValues] = useState<Record<string, Record<string | number, Record<string, string>>>>({});
+  const [orientationMap, setOrientationMap] = useState<Record<string, "portrait" | "landscape">>({});
+
+  const currentOrientation = orientationMap[selectedFormatId] || selectedFormat?.orientation || "portrait";
+
+  const toggleOrientation = () => {
+    const next = currentOrientation === "landscape" ? "portrait" : "landscape";
+    setOrientationMap(prev => ({ ...prev, [selectedFormatId]: next }));
+    toast({
+      title: "Page Orientation Changed",
+      description: `Layout set to ${next.toUpperCase()} A4 mode.`,
+    });
   };
 
-  const handleFixedExpenseChange = (id: string, field: keyof FixedExpenseRowData, val: string) => {
-    const updated = fixedExpenses.map(f => f.id === id ? { ...f, [field]: val } : f);
-    setFixedExpenses(updated);
-    saveDraft(products, updated, taxRate, workingDays, selectedDate);
-  };
-
-  const handleAddFixedExpense = () => {
-    const updated = [...fixedExpenses, { id: `f_${Date.now()}`, name: "", cost: "0" }];
-    setFixedExpenses(updated);
-    saveDraft(products, updated, taxRate, workingDays, selectedDate);
-  };
-
-  const handleRemoveFixedExpense = (id: string) => {
-    const updated = fixedExpenses.filter(f => f.id !== id);
-    setFixedExpenses(updated);
-    saveDraft(products, updated, taxRate, workingDays, selectedDate);
-  };
-
-  const handleAddProduct = () => {
-    const updated: ProductCostRow[] = [...products, {
-      id: `p_${Date.now()}`,
-      name: "Custom Product",
-      allocatedMilk: "0",
-      rawMilkCost: "45",
-      yieldFactor: "1.0",
-      sellingPrice: "50",
-      packagingCost: "2.0",
-      ingredientsCost: "0.0",
-      energyCost: "1.0",
-      logisticsCost: "1.0",
-      processLoss: "0.5",
-      type: "Custom"
-    }];
-    setProducts(updated);
-    saveDraft(updated, fixedExpenses, taxRate, workingDays, selectedDate);
-  };
-
-  const handleRemoveProduct = (id: string) => {
-    const updated = products.filter(p => p.id !== id);
-    setProducts(updated);
-    saveDraft(updated, fixedExpenses, taxRate, workingDays, selectedDate);
-  };
-
-  const handleDaysChange = (val: string) => {
-    setWorkingDays(val);
-    saveDraft(products, fixedExpenses, taxRate, val, selectedDate);
-  };
-
-  const handleTaxChange = (val: string) => {
-    setTaxRate(val);
-    saveDraft(products, fixedExpenses, val, workingDays, selectedDate);
-  };
-
-  const handleReset = () => {
-    if (window.confirm("क्या आप इस तारीख की गणनाओं को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?")) {
-      setProducts(DEFAULT_PRODUCTS);
-      setFixedExpenses(DEFAULT_FIXED_EXPENSES);
-      setTaxRate("0");
-      setWorkingDays("25");
-      saveDraft(DEFAULT_PRODUCTS, DEFAULT_FIXED_EXPENSES, "0", "25", selectedDate);
+  const addColumn = () => {
+    const existing = customColumnsMap[selectedFormatId] || [];
+    const defaultName = `Custom Col ${existing.length + 1}`;
+    const inputName = window.prompt("Enter new Column Header Name:", defaultName);
+    if (inputName !== null && inputName.trim() !== "") {
+      const colName = inputName.trim();
+      setCustomColumnsMap(prev => ({
+        ...prev,
+        [selectedFormatId]: [...(prev[selectedFormatId] || []), colName]
+      }));
       toast({
-        title: "Reset Successful",
-        description: "Data has been reset to defaults for this date.",
+        title: "Custom Column Added",
+        description: `Added column "${colName}".`,
       });
     }
   };
 
-  // FINANCIAL CORE CALCULATION LOGIC
-  const financials = useMemo(() => {
-    const numDays = parseFloat(workingDays) || 25;
-    const numTaxRate = parseFloat(taxRate) || 0;
+  const removeColumn = (colName: string) => {
+    setCustomColumnsMap(prev => ({
+      ...prev,
+      [selectedFormatId]: (prev[selectedFormatId] || []).filter(c => c !== colName)
+    }));
+  };
 
-    let totalAllocatedMilkDaily = 0;
-    let totalRevenueDaily = 0;
-    let totalRawMilkCostDaily = 0;
-    let totalVariableProcessingCostDaily = 0;
-    
-    // Calculate product-wise details
-    const productCalculations = products.map(prod => {
-      const allocatedDaily = parseFloat(prod.allocatedMilk) || 0;
-      const rawCostPerL = parseFloat(prod.rawMilkCost) || 0;
-      const yieldFact = parseFloat(prod.yieldFactor) || 0;
-      const sellPrice = parseFloat(prod.sellingPrice) || 0;
-      const pack = parseFloat(prod.packagingCost) || 0;
-      const ing = parseFloat(prod.ingredientsCost) || 0;
-      const energy = parseFloat(prod.energyCost) || 0;
-      const logistics = parseFloat(prod.logisticsCost) || 0;
-      const lossPct = parseFloat(prod.processLoss) || 0;
-
-      // Outputs
-      const dailyGrossOutput = allocatedDaily * yieldFact;
-      const dailyLossQty = dailyGrossOutput * (lossPct / 100);
-      const dailySaleableQty = Math.max(0, dailyGrossOutput - dailyLossQty);
-
-      // Financials
-      const dailyRevenue = dailySaleableQty * sellPrice;
-      const dailyRawMilkCost = allocatedDaily * rawCostPerL;
-      const dailyVariableProcCost = dailySaleableQty * (pack + ing + energy + logistics);
-      const dailyTotalVariableCost = dailyRawMilkCost + dailyVariableProcCost;
-      const dailyContribution = dailyRevenue - dailyTotalVariableCost;
-
-      // Totals Accumulation
-      totalAllocatedMilkDaily += allocatedDaily;
-      totalRevenueDaily += dailyRevenue;
-      totalRawMilkCostDaily += dailyRawMilkCost;
-      totalVariableProcessingCostDaily += dailyVariableProcCost;
-
-      // Per Unit metrics
-      const unitVariableCost = dailySaleableQty > 0 ? dailyTotalVariableCost / dailySaleableQty : 0;
-      const unitContribution = sellPrice - unitVariableCost;
-      const contributionMarginPct = sellPrice > 0 ? (unitContribution / sellPrice) * 100 : 0;
-
-      return {
-        id: prod.id,
-        name: prod.name,
-        allocatedDaily,
-        dailySaleableQty,
-        dailyRevenue,
-        dailyRawMilkCost,
-        dailyVariableProcCost,
-        dailyTotalVariableCost,
-        dailyContribution,
-        unitVariableCost,
-        unitContribution,
-        contributionMarginPct,
-        yieldFact,
-        lossPct
-      };
-    });
-
-    // Sum up totals based on the selected period (daily vs monthly)
-    const multiplier = period === "monthly" ? numDays : 1;
-
-    const periodAllocatedMilk = totalAllocatedMilkDaily * multiplier;
-    const periodRevenue = totalRevenueDaily * multiplier;
-    const periodRawMilkCost = totalRawMilkCostDaily * multiplier;
-    const periodVariableProcessingCost = totalVariableProcessingCostDaily * multiplier;
-    const periodTotalVariableCost = periodRawMilkCost + periodVariableProcessingCost;
-
-    // Fixed Overheads
-    const monthlyFixedExpenses = fixedExpenses.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
-    const periodFixedCost = period === "monthly" ? monthlyFixedExpenses : monthlyFixedExpenses / numDays;
-
-    const periodTotalCost = periodTotalVariableCost + periodFixedCost;
-    
-    // Profit Metrics
-    const grossProfit = periodRevenue - periodTotalVariableCost;
-    const netProfitPreTax = periodRevenue - periodTotalCost;
-    const taxAmount = netProfitPreTax > 0 ? netProfitPreTax * (numTaxRate / 100) : 0;
-    const netProfitPostTax = netProfitPreTax - taxAmount;
-    const profitMarginPct = periodRevenue > 0 ? (netProfitPostTax / periodRevenue) * 100 : 0;
-
-    // Overall Cost of Processing (CoP) per litre of milk intake
-    const overallCoPPerLitre = periodAllocatedMilk > 0 ? (periodTotalCost - periodRawMilkCost) / periodAllocatedMilk : 0;
-
-    // Multi-Product Break-Even calculations
-    const totalContributionDaily = totalRevenueDaily - periodTotalVariableCost / multiplier;
-    const overallCMR = totalRevenueDaily > 0 ? totalContributionDaily / totalRevenueDaily : 0;
-    
-    const breakEvenRevenue = overallCMR > 0 ? periodFixedCost / overallCMR : 0;
-    const safetyMarginPct = periodRevenue > 0 ? ((periodRevenue - breakEvenRevenue) / periodRevenue) * 100 : 0;
-
-    const costStructure = {
-      rawMilk: periodTotalCost > 0 ? (periodRawMilkCost / periodTotalCost) * 100 : 0,
-      processing: periodTotalCost > 0 ? (periodVariableProcessingCost / periodTotalCost) * 100 : 0,
-      fixedOverheads: periodTotalCost > 0 ? (periodFixedCost / periodTotalCost) * 100 : 0,
-    };
-
-    return {
-      periodAllocatedMilk,
-      periodRevenue,
-      periodRawMilkCost,
-      periodVariableProcessingCost,
-      periodTotalVariableCost,
-      monthlyFixedExpenses,
-      periodFixedCost,
-      periodTotalCost,
-      grossProfit,
-      netProfitPreTax,
-      taxAmount,
-      netProfitPostTax,
-      profitMarginPct,
-      overallCoPPerLitre,
-      breakEvenRevenue,
-      safetyMarginPct,
-      costStructure,
-      productCalculations
-    };
-  }, [products, fixedExpenses, period, workingDays, taxRate]);
-
-  // MONTHLY DYNAMIC DATA AGGREGATOR
-  const getMonthlySummaryData = useCallback((year: number, month: number) => {
-    // Correctly get number of days in the month (e.g. 28, 29, 30, 31)
-    const daysInMonth = new Date(year, month, 0).getDate();
-    const dailyList = [];
-    
-    let totalAllocatedMilk = 0;
-    let totalRevenue = 0;
-    let totalVariableCost = 0;
-    let totalFixedCost = 0;
-    let totalCost = 0;
-    let totalNetProfit = 0;
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      const savedProducts = localStorage.getItem(`dairyhub_plant_products_${dateStr}`);
-      const savedFixed = localStorage.getItem(`dairyhub_plant_fixed_${dateStr}`);
-      const savedTax = localStorage.getItem(`dairyhub_plant_tax_${dateStr}`);
-      const savedDays = localStorage.getItem(`dairyhub_plant_days_${dateStr}`);
-
-      if (savedProducts && savedFixed) {
-        try {
-          const productsList: ProductCostRow[] = JSON.parse(savedProducts);
-          const fixedList: FixedExpenseRowData[] = JSON.parse(savedFixed);
-          const numTaxRate = parseFloat(savedTax || "0") || 0;
-          const numDays = parseFloat(savedDays || "25") || 25;
-
-          let dayAllocated = 0;
-          let dayRevenue = 0;
-          let dayRawMilkCost = 0;
-          let dayVariableProcCost = 0;
-
-          productsList.forEach(prod => {
-            const qty = parseFloat(prod.allocatedMilk) || 0;
-            const raw = parseFloat(prod.rawMilkCost) || 0;
-            const y = parseFloat(prod.yieldFactor) || 0;
-            const price = parseFloat(prod.sellingPrice) || 0;
-            const pack = parseFloat(prod.packagingCost) || 0;
-            const ing = parseFloat(prod.ingredientsCost) || 0;
-            const energy = parseFloat(prod.energyCost) || 0;
-            const logistics = parseFloat(prod.logisticsCost) || 0;
-            const loss = parseFloat(prod.processLoss) || 0;
-
-            const gross = qty * y;
-            const saleable = Math.max(0, gross - (gross * loss / 105)); // Exact loss percentage formula
-
-            dayAllocated += qty;
-            dayRevenue += saleable * price;
-            dayRawMilkCost += qty * raw;
-            dayVariableProcCost += saleable * (pack + ing + energy + logistics);
-          });
-
-          const dayVariableCost = dayRawMilkCost + dayVariableProcCost;
-          
-          const monthlyFixed = fixedList.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
-          const dayFixedCost = monthlyFixed / numDays;
-
-          const dayTotalCost = dayVariableCost + dayFixedCost;
-          const dayNetProfitPreTax = dayRevenue - dayTotalCost;
-          const dayTax = dayNetProfitPreTax > 0 ? dayNetProfitPreTax * (numTaxRate / 100) : 0;
-          const dayNetProfit = dayNetProfitPreTax - dayTax;
-
-          totalAllocatedMilk += dayAllocated;
-          totalRevenue += dayRevenue;
-          totalVariableCost += dayVariableCost;
-          totalFixedCost += dayFixedCost;
-          totalCost += dayTotalCost;
-          totalNetProfit += dayNetProfit;
-
-          dailyList.push({
-            date: dateStr,
-            hasData: true,
-            allocatedMilk: dayAllocated,
-            revenue: dayRevenue,
-            variableCost: dayVariableCost,
-            fixedCost: dayFixedCost,
-            totalCost: dayTotalCost,
-            netProfit: dayNetProfit
-          });
-        } catch (e) {
-          console.error("Failed to parse daily plant costing", dateStr, e);
-          dailyList.push({ date: dateStr, hasData: false });
+  const updateCustomCell = (rowId: string | number, colName: string, value: string) => {
+    setCustomCellValues(prev => ({
+      ...prev,
+      [selectedFormatId]: {
+        ...(prev[selectedFormatId] || {}),
+        [rowId]: {
+          ...((prev[selectedFormatId] || {})[rowId] || {}),
+          [colName]: value
         }
-      } else {
-        dailyList.push({ date: dateStr, hasData: false });
       }
-    }
-
-    return {
-      dailyList,
-      totals: {
-        allocatedMilk: totalAllocatedMilk,
-        revenue: totalRevenue,
-        variableCost: totalVariableCost,
-        fixedCost: totalFixedCost,
-        totalCost: totalCost,
-        netProfit: totalNetProfit
-      }
-    };
-  }, []);
-
-  // Browser Print handler
-  const handlePrintMonthly = () => {
-    window.print();
+    }));
   };
 
-  // CSV Export for Excel
-  const handleExportMonthlyCSV = () => {
-    const data = getMonthlySummaryData(selectedYear, selectedMonth);
-    const headers = [
-      "Date", "Milk Processed (L/Kg)", "Total Revenue (₹)", "Variable Cost (₹)", "Fixed Cost (₹)", "Total Cost (₹)", "Net Profit (₹)"
-    ];
-
-    const rows = data.dailyList.map(row => {
-      const dayNum = row.date.split("-")[2];
-      if (!row.hasData) {
-        return [row.date, "—", "—", "—", "—", "—", "—"];
-      }
-      return [
-        row.date,
-        row.allocatedMilk || 0,
-        row.revenue || 0,
-        row.variableCost || 0,
-        row.fixedCost || 0,
-        row.totalCost || 0,
-        row.netProfit || 0
-      ];
-    });
-
-    // Add totals row
-    rows.push([
-      "Total",
-      data.totals.allocatedMilk,
-      data.totals.revenue,
-      data.totals.variableCost,
-      data.totals.fixedCost,
-      data.totals.totalCost,
-      data.totals.netProfit
-    ]);
-
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
-    
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `Plant_Costing_Monthly_Summary_${selectedYear}_${selectedMonth}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const getCustomCell = (rowId: string | number, colName: string) => {
+    return customCellValues[selectedFormatId]?.[rowId]?.[colName] || "";
   };
 
-  const fmt = (n: number) => n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
-  const fmtDec = (n: number, dec = 2) => n.toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  const renderCustomHeaderCols = () => {
+    const cols = customColumnsMap[selectedFormatId] || [];
+    return cols.map((colName, cIdx) => (
+      <th key={`custom-col-head-${cIdx}`} className="border border-black px-1.5 py-1 text-center font-bold min-w-[80px]">
+        <div className="flex items-center justify-between gap-1">
+          <span className="truncate">{colName}</span>
+          <button
+            type="button"
+            onClick={() => removeColumn(colName)}
+            className="text-red-500 hover:text-red-700 font-extrabold print:hidden text-[9px] px-1"
+            title="Remove Column"
+          >
+            ×
+          </button>
+        </div>
+      </th>
+    ));
+  };
 
-  const downloadPdf = async () => {
-    if (!reportRef.current) return;
+  const renderCustomBodyCells = (rowId: number | string) => {
+    const cols = customColumnsMap[selectedFormatId] || [];
+    return cols.map((colName, cIdx) => (
+      <td key={`custom-col-cell-${cIdx}`} className="border border-black p-0.5 text-center min-w-[80px]">
+        <input
+          type="text"
+          value={getCustomCell(rowId, colName)}
+          onChange={(e) => updateCustomCell(rowId, colName, e.target.value)}
+          className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 focus:outline-none"
+          placeholder="-"
+        />
+      </td>
+    ));
+  };
+
+  const handlePrint = () => window.print();
+
+  const handleDownloadPdf = async () => {
+    if (!printAreaRef.current) return;
     setIsDownloading(true);
     try {
-      const canvas = await html2canvas(reportRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
+      printAreaRef.current.classList.add("is-exporting-pdf");
+      const canvas = await html2canvas(printAreaRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      printAreaRef.current.classList.remove("is-exporting-pdf");
       const imgData = canvas.toDataURL("image/png");
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Dairy_Hub_Plant_Cost_Report_${selectedDate}.pdf`);
-      toast({
-        title: "Export Completed",
-        description: "Your PDF Costing Report has been downloaded.",
-      });
+      const isLandscape = currentOrientation === "landscape";
+      const pdf = new jsPDF({ orientation: isLandscape ? "l" : "p", unit: "mm", format: "a4" });
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, (canvas.height * pdfWidth) / canvas.width);
+      pdf.save(`plant_${selectedFormat.id}_${currentDate}.pdf`);
+      toast({ title: "PDF Generated", description: "Your printable PDF log sheet is ready." });
     } catch (e) {
-      console.error(e);
-      toast({
-        title: "Export Failed",
-        description: "Failed to generate report PDF. Please try again.",
-        variant: "destructive"
-      });
+      if (printAreaRef.current) {
+        printAreaRef.current.classList.remove("is-exporting-pdf");
+      }
+      toast({ title: "Export Failed", description: "Failed to generate PDF.", variant: "destructive" });
     }
     setIsDownloading(false);
   };
 
-  // PDF Export for monthly summary sheet
-  const downloadMonthlyPdf = async () => {
-    if (!monthlyReportRef.current) return;
-    setIsDownloading(true);
-    try {
-      const canvas = await html2canvas(monthlyReportRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
-      const imgData = canvas.toDataURL("image/png");
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Dairy_Hub_Plant_Monthly_Cost_Summary_${selectedYear}_${selectedMonth}.pdf`);
-      toast({
-        title: "Export Completed",
-        description: "Your PDF Monthly Costing Report has been downloaded.",
-      });
-    } catch (e) {
-      console.error(e);
-      toast({
-        title: "Export Failed",
-        description: "Failed to generate report PDF. Please try again.",
-        variant: "destructive"
-      });
+  // ── Update helpers ──
+  const updateRmReceptionRow   = (id: number, f: string, v: string) => setRmReceptionRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateBmrRow           = (id: number, f: string, v: string) => setBmrRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateProcessRow       = (id: number, f: string, v: string) => setProcessRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updatePackingRow       = (id: number, f: string, v: string) => setPackingRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateCipRow           = (id: number, f: string, v: string) => setCipRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateBreakdownMaintRow= (id: number, f: string, v: string) => setBreakdownMaintRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateYieldRow         = (id: number, f: string, v: string) => setYieldRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updatePmLogRow         = (id: number, f: string, v: string) => setPmLogRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateBreakdownLogRow  = (id: number, f: string, v: string) => setBreakdownLogRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateEquipHistoryRow  = (id: number, f: string, v: string) => setEquipHistoryRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateSparePartsRow    = (id: number, f: string, v: string) => setSparePartsRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateUtilityLogRow    = (id: number, f: string, v: string) => setUtilityLogRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateLubricationRow   = (id: number, f: string, v: string) => setLubricationRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateWorkPermitRow    = (id: number, f: string, v: string) => setWorkPermitRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateProcessingRow        = (id: number, f: string, v: string) => setProcessingRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateQaLabRow             = (id: number, f: string, v: string) => setQaLabRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updatePackagingQcRow       = (id: number, f: string, v: string) => setPackagingQcRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateColdRoomRegRow       = (id: number, f: string, v: string) => setColdRoomRegRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateCurdDahiRow          = (id: number, f: string, v: string) => setCurdDahiRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateBoilerLogRow         = (id: number, f: string, v: string) => setBoilerLogRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateRefrigerationLogRow  = (id: number, f: string, v: string) => setRefrigerationLogRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateElectricalDgRow      = (id: number, f: string, v: string) => setElectricalDgRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateCompressorRow        = (id: number, f: string, v: string) => setCompressorRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateCalibrationRegRow    = (id: number, f: string, v: string) => setCalibrationRegRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateEtpWtpRow            = (id: number, f: string, v: string) => setEtpWtpRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+
+  // ── Add Row ──
+  const addRow = () => {
+    const now = Date.now();
+    switch (selectedFormatId) {
+      case "rm-reception":    setRmReceptionRows(p=>[...p,{id:now,tankerNo:"",supplier:"",arrivalTime:"",qty:"",temp:"",acidity:"",fat:"",snf:"",cob:"Negative",status:"Accepted",siloAllotted:"",operator:""}]); break;
+      case "bmr":             setBmrRows(p=>[...p,{id:now,step:String(p.length+1).padStart(2,"0"),operation:"",startTime:"",endTime:"",milkQty:"",temp:"",remarks:"",doneBy:"",verified:""}]); break;
+      case "process-monitoring": setProcessRows(p=>[...p,{id:now,time:"",equipment:"",inletTemp:"",htTemp:"",outTemp:"",pressure:"",flowRate:"",phpStatus:"Pass",operator:""}]); break;
+      case "processing-standardization": setProcessingRows(p=>[...p,{id:now,silo:"",milkQty:"",rawFat:"",rawSnf:"",targetFat:"",targetSnf:"",skimAdded:"",creamAdded:"",finalFat:"",finalSnf:"",operator:""}]); break;
+      case "qa-lab-log":                setQaLabRows(p=>[...p,{id:now,source:"",batchNo:"",temp:"",acidity:"",mbrt:"",alcoholTest:"",cob:"Negative",fat:"",snf:"",analyst:""}]); break;
+      case "packing-dispatch":setPackingRows(p=>[...p,{id:now,batchNo:"",product:"",shift:"",packedQty:"",vehicle:"",destination:"",dispatchTime:"",tempAtDispatch:"",status:"Dispatched",operator:""}]); break;
+      case "packaging-qc":              setPackagingQcRows(p=>[...p,{id:now,machineNo:"",product:"",time:"",targetWeight:"",actualWeight:"",sealingTemp:"",leakCheck:"Pass",printCheck:"Clear",inspector:""}]); break;
+      case "cold-room-register":        setColdRoomRegRows(p=>[...p,{id:now,coldRoomNo:"",time:"",temp:"",product:"",crateCount:"",stackHeight:"",fifoStatus:"Maintained",defrostStatus:"Normal",incharge:""}]); break;
+      case "cip-cleaning":    setCipRows(p=>[...p,{id:now,equipment:"",cipType:"",startTime:"",endTime:"",temp:"",causticConc:"",acidConc:"",duration:"",operator:"",qaStatus:"OK"}]); break;
+      case "curd-dahi-log":             setCurdDahiRows(p=>[...p,{id:now,batchNo:"",product:"",milkQty:"",cultureCode:"",inocTemp:"",startTime:"",setTime:"",finalAcidity:"",operator:""}]); break;
+      case "machine-breakdown":setBreakdownMaintRows(p=>[...p,{id:now,date:currentDate,machine:"",breakdownTime:"",rootCause:"",action:"",resumedTime:"",downtime:"",spareUsed:"",engineer:"",status:"Resolved"}]); break;
+      case "yield-handover":  setYieldRows(p=>[...p,{id:now,shift:"",product:"",milkInput:"",output:"",yieldPct:"",rejections:"0",pendingBatches:"Nil",operator:""}]); break;
+      case "pm-log":          setPmLogRows(p=>[...p,{id:now,srNo:String(p.length+1).padStart(2,"0"),equipment:"",pmTask:"",frequency:"Monthly",scheduledDate:currentDate,doneDate:"",parametersChecked:"",status:"Pending",doneBy:"",verified:""}]); break;
+      case "breakdown-log":   setBreakdownLogRows(p=>[...p,{id:now,reportNo:`BD-${String(p.length+1).padStart(2,"0")}/26`,date:currentDate,machine:"",breakdownTime:"",resumedTime:"",downtime:"",rootCause:"",correctiveAction:"",preventiveAction:"",spareUsed:"",engineer:"",status:"Open"}]); break;
+      case "equipment-history":setEquipHistoryRows(p=>[...p,{id:now,date:currentDate,equipId:"",eventType:"PM",description:"",techName:"",sparesUsed:"Nil",cost:"Nil",nextDueDate:"",remarks:""}]); break;
+      case "spare-parts":     setSparePartsRows(p=>[...p,{id:now,partCode:"",partName:"",equipUsedFor:"",uom:"Nos",openingStock:"0",received:"0",issued:"0",closingStock:"0",minLevel:"",reorderQty:"",supplier:"",remarks:""}]); break;
+      case "utility-log":     setUtilityLogRows(p=>[...p,{id:now,dateTime:"",utility:"",param1Label:"Reading 1",param1:"",param2Label:"Reading 2",param2:"",param3Label:"Reading 3",param3:"",param4Label:"Reading 4",param4:"",status:"Normal",operator:""}]); break;
+      case "boiler-log":                setBoilerLogRows(p=>[...p,{id:now,shiftTime:"",steamPress:"",feedTemp:"",softenerHardness:"",blowdown:"",fuelCons:"",flueTemp:"",operator:""}]); break;
+      case "refrigeration-log":         setRefrigerationLogRows(p=>[...p,{id:now,compNo:"",suctionPress:"",dischargePress:"",oilPress:"",glycolTemp:"",condenserWaterTemp:"",ampDraw:"",operator:""}]); break;
+      case "electrical-dg-log":         setElectricalDgRows(p=>[...p,{id:now,time:"",ebMeterKwh:"",powerFactor:"",dgRunHrs:"",dieselLevel:"",phaseAmp:"",voltage:"",electrician:""}]); break;
+      case "compressor-log":            setCompressorRows(p=>[...p,{id:now,compId:"",time:"",linePress:"",dewPoint:"",oilLevel:"",moistureDrain:"",totalRunHrs:"",operator:""}]); break;
+      case "calibration-register":      setCalibrationRegRows(p=>[...p,{id:now,tagNo:"",instName:"",location:"",range:"",lastCalibDate:currentDate,nextDueDate:"",standardUsed:"",errorDeviation:"",technician:"",certNo:""}]); break;
+      case "etp-wtp-log":               setEtpWtpRows(p=>[...p,{id:now,time:"",rawWaterFlow:"",treatedWaterPh:"",etpInletPh:"",aerationDo:"",sludgeDischarge:"",dosingChem:"",operator:""}]); break;
+      case "lubrication-log": setLubricationRows(p=>[...p,{id:now,equipId:"",machine:"",lubricationPoint:"",lubricantGrade:"",frequency:"Monthly",lastDoneDate:currentDate,nextDueDate:"",qtyUsed:"",doneBy:"",verified:"",remarks:""}]); break;
+      case "work-permit":     setWorkPermitRows(p=>[...p,{id:now,permitNo:`WP-2026-${String(p.length+1).padStart(2,"0")}`,date:currentDate,workDescription:"",equipment:"",workType:"Cold Work",hazard:"",precautions:"",issuedBy:"",startTime:"",endTime:"",status:"Open",closedBy:""}]); break;
     }
-    setIsDownloading(false);
   };
+
+  // ── Delete Row ──
+  const deleteRow = (id: number) => {
+    switch (selectedFormatId) {
+      case "rm-reception":     if(rmReceptionRows.length>1)   setRmReceptionRows(p=>p.filter(r=>r.id!==id));    break;
+      case "bmr":              if(bmrRows.length>1)            setBmrRows(p=>p.filter(r=>r.id!==id));            break;
+      case "process-monitoring":if(processRows.length>1)       setProcessRows(p=>p.filter(r=>r.id!==id));        break;
+      case "processing-standardization": if(processingRows.length>1) setProcessingRows(p=>p.filter(r=>r.id!==id)); break;
+      case "qa-lab-log":       if(qaLabRows.length>1)          setQaLabRows(p=>p.filter(r=>r.id!==id));          break;
+      case "packing-dispatch": if(packingRows.length>1)        setPackingRows(p=>p.filter(r=>r.id!==id));        break;
+      case "packaging-qc":     if(packagingQcRows.length>1)    setPackagingQcRows(p=>p.filter(r=>r.id!==id));    break;
+      case "cold-room-register": if(coldRoomRegRows.length>1)  setColdRoomRegRows(p=>p.filter(r=>r.id!==id));    break;
+      case "cip-cleaning":     if(cipRows.length>1)            setCipRows(p=>p.filter(r=>r.id!==id));            break;
+      case "curd-dahi-log":    if(curdDahiRows.length>1)       setCurdDahiRows(p=>p.filter(r=>r.id!==id));       break;
+      case "machine-breakdown":if(breakdownMaintRows.length>1) setBreakdownMaintRows(p=>p.filter(r=>r.id!==id)); break;
+      case "yield-handover":   if(yieldRows.length>1)          setYieldRows(p=>p.filter(r=>r.id!==id));          break;
+      case "pm-log":           if(pmLogRows.length>1)          setPmLogRows(p=>p.filter(r=>r.id!==id));          break;
+      case "breakdown-log":    if(breakdownLogRows.length>1)   setBreakdownLogRows(p=>p.filter(r=>r.id!==id));   break;
+      case "equipment-history":if(equipHistoryRows.length>1)   setEquipHistoryRows(p=>p.filter(r=>r.id!==id));   break;
+      case "spare-parts":      if(sparePartsRows.length>1)     setSparePartsRows(p=>p.filter(r=>r.id!==id));     break;
+      case "utility-log":      if(utilityLogRows.length>1)     setUtilityLogRows(p=>p.filter(r=>r.id!==id));     break;
+      case "boiler-log":       if(boilerLogRows.length>1)      setBoilerLogRows(p=>p.filter(r=>r.id!==id));      break;
+      case "refrigeration-log":if(refrigerationLogRows.length>1) setRefrigerationLogRows(p=>p.filter(r=>r.id!==id)); break;
+      case "electrical-dg-log":if(electricalDgRows.length>1)   setElectricalDgRows(p=>p.filter(r=>r.id!==id));   break;
+      case "compressor-log":   if(compressorRows.length>1)     setCompressorRows(p=>p.filter(r=>r.id!==id));     break;
+      case "calibration-register": if(calibrationRegRows.length>1) setCalibrationRegRows(p=>p.filter(r=>r.id!==id)); break;
+      case "etp-wtp-log":      if(etpWtpRows.length>1)         setEtpWtpRows(p=>p.filter(r=>r.id!==id));         break;
+      case "lubrication-log":  if(lubricationRows.length>1)    setLubricationRows(p=>p.filter(r=>r.id!==id));    break;
+      case "work-permit":      if(workPermitRows.length>1)     setWorkPermitRows(p=>p.filter(r=>r.id!==id));     break;
+    }
+  };
+
+  const inp = "w-full bg-transparent border-none focus:ring-0";
 
   return (
     <div className="space-y-6">
-      
+
       {/* Top Header Card */}
-      <Card className="border-b-4 border-b-indigo-600 shadow-md">
-        <CardHeader className="bg-gradient-to-br from-indigo-900 to-slate-900 text-white p-6 rounded-t-xl">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <CardTitle className="flex items-center gap-2 text-2xl font-bold font-headline">
-                <FileSpreadsheet className="h-7 w-7 text-indigo-400" />
-                Dairy Plant Costing Calculator (लागत गणना पत्रक)
-              </CardTitle>
-              <CardDescription className="text-indigo-200 mt-1 text-xs md:text-sm">
-                Real-time multi-product Excel-based spreadsheet simulation. Enter parameters to analyze plant P&L.
-              </CardDescription>
-            </div>
-            
-            {/* Controls */}
-            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-              
-              {/* Daily / Monthly Period Tab selection */}
-              {activeTab !== "monthly" && (
-                <div className="flex items-center bg-white/10 rounded-lg p-1 border border-white/20">
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    onClick={() => setPeriod("daily")} 
-                    className={cn("h-8 text-xs text-white hover:bg-white/20 font-bold", period === "daily" && "bg-indigo-600 hover:bg-indigo-700")}
-                  >
-                    Daily
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    onClick={() => setPeriod("monthly")} 
-                    className={cn("h-8 text-xs text-white hover:bg-white/20 font-bold", period === "monthly" && "bg-indigo-600 hover:bg-indigo-700")}
-                  >
-                    Monthly
-                  </Button>
-                </div>
-              )}
-
-              {/* Date Selector for daily views */}
-              {activeTab !== "monthly" ? (
-                <div className="flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 rounded-lg text-sm font-semibold">
-                  <CalendarIcon className="h-4 w-4 text-indigo-400" />
-                  <input 
-                    type="date" 
-                    value={selectedDate} 
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="bg-transparent border-none text-white focus:outline-none focus:ring-0 text-xs w-[115px] cursor-pointer" 
-                  />
-                </div>
-              ) : (
-                /* Month & Year selectors for monthly views */
-                <div className="flex flex-wrap items-center gap-2">
-                  <div className="flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 rounded-lg text-sm font-semibold">
-                    <span className="text-[10px] font-bold text-indigo-200 uppercase">Month:</span>
-                    <select
-                      value={selectedMonth}
-                      onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                      className="bg-transparent border-none text-white focus:outline-none text-xs w-[85px] cursor-pointer bg-indigo-900"
-                    >
-                      {Array.from({ length: 12 }, (_, i) => (
-                        <option key={i + 1} value={i + 1} className="text-black">
-                          {new Date(2026, i, 1).toLocaleString("en-IN", { month: "long" })}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 rounded-lg text-sm font-semibold">
-                    <span className="text-[10px] font-bold text-indigo-200 uppercase">Year:</span>
-                    <select
-                      value={selectedYear}
-                      onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                      className="bg-transparent border-none text-white focus:outline-none text-xs w-[60px] cursor-pointer bg-indigo-900"
-                    >
-                      {[2024, 2025, 2026, 2027, 2028].map((y) => (
-                        <option key={y} value={y} className="text-black">
-                          {y}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              )}
-
-              {/* Reset */}
-              {activeTab !== "monthly" && (
-                <Button size="icon" variant="destructive" onClick={handleReset} title="Reset Data for selected date" className="h-9 w-9">
-                  <RefreshCw className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
+      <Card className="border-b-4 border-b-emerald-600 shadow-md">
+        <CardHeader className="bg-gradient-to-br from-emerald-950 to-slate-900 text-white p-6 rounded-t-xl">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-2xl font-bold font-headline">
+              <FileText className="h-7 w-7 text-emerald-400" />
+              Dairy Plant Formats & Log Sheets
+            </CardTitle>
+            <CardDescription className="text-emerald-200 mt-1 text-xs md:text-sm">
+              Ready-to-print dairy plant operational & maintenance log sheets. Customize, fill, and export as A4 PDF.
+            </CardDescription>
           </div>
         </CardHeader>
-
-        {/* Tab Selection */}
-        <div className="flex border-t bg-slate-50 overflow-x-auto text-sm">
-          <button 
-            onClick={() => setActiveTab("sheet")} 
-            className={cn("px-6 py-3 font-bold border-b-2 transition-all flex items-center gap-2", activeTab === "sheet" ? "border-indigo-600 text-indigo-600 bg-white" : "border-transparent text-slate-500 hover:text-slate-700")}
-          >
-            <Scale className="w-4 h-4"/> Input Spreadsheet Grid
-          </button>
-          <button 
-            onClick={() => setActiveTab("report")} 
-            className={cn("px-6 py-3 font-bold border-b-2 transition-all flex items-center gap-2", activeTab === "report" ? "border-indigo-600 text-indigo-600 bg-white" : "border-transparent text-slate-500 hover:text-slate-700")}
-          >
-            <PieChart className="w-4 h-4"/> Daily P&L Dashboard
-          </button>
-          <button 
-            onClick={() => setActiveTab("monthly")} 
-            className={cn("px-6 py-3 font-bold border-b-2 transition-all flex items-center gap-2", activeTab === "monthly" ? "border-indigo-600 text-indigo-600 bg-white" : "border-transparent text-slate-500 hover:text-slate-700")}
-          >
-            <FileSpreadsheet className="w-4 h-4"/> Monthly Summary (मासिक सारांश)
-          </button>
-          <button 
-            onClick={() => setActiveTab("principles")} 
-            className={cn("px-6 py-3 font-bold border-b-2 transition-all flex items-center gap-2", activeTab === "principles" ? "border-indigo-600 text-indigo-600 bg-white" : "border-transparent text-slate-500 hover:text-slate-700")}
-          >
-            <Info className="w-4 h-4"/> Formulas & Principles
-          </button>
-        </div>
       </Card>
 
-      {/* Global Config Row (Daily edit mode only) */}
-      {activeTab !== "monthly" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in slide-in-from-top-1">
-          <Card className="p-3 border shadow-sm flex flex-col justify-between">
-            <Label className="text-[10px] font-bold text-slate-400 uppercase">Working Days / Month (कार्य दिवस)</Label>
-            <div className="flex items-center gap-2 mt-1">
-              <Input 
-                type="number" 
-                value={workingDays} 
-                onChange={(e) => handleDaysChange(e.target.value)} 
-                className="h-8 text-sm font-bold border-indigo-200 focus:ring-indigo-500" 
-              />
-              <span className="text-xs text-slate-500 font-semibold">Days</span>
-            </div>
-          </Card>
-          
-          <Card className="p-3 border shadow-sm flex flex-col justify-between">
-            <Label className="text-[10px] font-bold text-slate-400 uppercase">Income Tax Rate (आयकर दर)</Label>
-            <div className="flex items-center gap-2 mt-1">
-              <Input 
-                type="number" 
-                value={taxRate} 
-                onChange={(e) => handleTaxChange(e.target.value)} 
-                className="h-8 text-sm font-bold border-indigo-200 focus:ring-indigo-500" 
-              />
-              <span className="text-xs text-slate-500 font-semibold">%</span>
-            </div>
-          </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-          <Card className="p-3 border shadow-sm flex flex-col justify-between bg-indigo-50/50">
-            <Label className="text-[10px] font-bold text-indigo-500 uppercase">Total Raw Milk Processed</Label>
-            <div className="mt-1">
-              <span className="text-lg font-extrabold text-indigo-900">{fmt(financials.periodAllocatedMilk)}</span>
-              <span className="text-[10px] text-indigo-600 font-semibold ml-1">L/Kg per {period === 'monthly' ? 'month' : 'day'}</span>
-            </div>
-          </Card>
+        {/* ── Sidebar ── */}
+        <div className="lg:col-span-1 space-y-4 print:hidden">
 
-          <Card className="p-3 border shadow-sm flex flex-col justify-between bg-green-50/50">
-            <Label className="text-[10px] font-bold text-green-600 uppercase">Net Profit (Post-Tax)</Label>
-            <div className="mt-1">
-              <span className={cn("text-lg font-extrabold", financials.netProfitPostTax >= 0 ? "text-green-700" : "text-red-600")}>
-                ₹ {fmt(financials.netProfitPostTax)}
-              </span>
-              <span className="text-[10px] text-green-600 font-semibold ml-1">/ {period === 'monthly' ? 'Month' : 'Day'}</span>
-            </div>
-          </Card>
-        </div>
-      )}
-
-      {/* TAB 1: SPREADSHEET GRID */}
-      {activeTab === "sheet" && (
-        <div className="space-y-6">
-          
-          {/* Main Grid Card */}
-          <Card className="border border-slate-200 shadow-sm overflow-hidden">
+          {/* Plant Info */}
+          <Card className="border border-slate-200 shadow-sm">
             <CardHeader className="bg-slate-100 p-4 border-b">
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-base font-bold text-indigo-950 flex items-center gap-1.5">
-                  <FileSpreadsheet className="h-5 w-5 text-indigo-600" />
-                  Product Cost Parameters Spreadsheet (उत्पाद लागत विवरणिका)
-                </CardTitle>
-                <Button size="sm" variant="outline" onClick={handleAddProduct} className="h-8 text-xs bg-white text-indigo-600 font-bold border-indigo-200 hover:bg-indigo-50">
-                  <Plus className="w-3.5 h-3.5 mr-1" /> Add Product
-                </Button>
-              </div>
+              <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">1. Plant Info</CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
-              <div className="w-full overflow-x-auto">
-                <Table className="min-w-[1200px] text-xs">
-                  <TableHeader className="bg-slate-50">
-                    <TableRow>
-                      <TableHead className="font-bold text-slate-800 w-[180px]">Product Name</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[100px]">Milk Vol (L/Kg)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[90px]">Milk Cost (₹/L)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[80px]">Yield Factor</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[80px]">Price (₹/Unit)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[80px]">Pack (₹/U)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[80px]">Ingredients (₹/U)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[80px]">Energy (₹/U)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[80px]">Logistics (₹/U)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[70px]">Loss (%)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-right w-[110px] bg-indigo-50/50">Finished Qty</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-right w-[120px] bg-green-50/50">Margin (₹)</TableHead>
-                      <TableHead className="font-bold text-slate-800 text-center w-[50px]"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {products.map((prod) => {
-                      const calc = financials.productCalculations.find(c => c.id === prod.id);
-                      return (
-                        <TableRow key={prod.id} className="hover:bg-slate-50 border-b">
-                          <TableCell className="font-bold text-slate-700">
-                            <Input 
-                              type="text" 
-                              value={prod.name} 
-                              onChange={(e) => handleProductChange(prod.id, "name", e.target.value)} 
-                              className="h-8 text-xs font-bold border-transparent hover:border-slate-300 focus:border-indigo-500 bg-transparent py-1 px-2" 
-                            />
-                          </TableCell>
-                          
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" 
-                              value={prod.allocatedMilk} 
-                              onChange={(e) => handleProductChange(prod.id, "allocatedMilk", e.target.value)} 
-                              className="h-8 text-xs text-center font-semibold" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" 
-                              value={prod.rawMilkCost} 
-                              onChange={(e) => handleProductChange(prod.id, "rawMilkCost", e.target.value)} 
-                              className="h-8 text-xs text-center" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" step="0.01"
-                              value={prod.yieldFactor} 
-                              onChange={(e) => handleProductChange(prod.id, "yieldFactor", e.target.value)} 
-                              className="h-8 text-xs text-center" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" 
-                              value={prod.sellingPrice} 
-                              onChange={(e) => handleProductChange(prod.id, "sellingPrice", e.target.value)} 
-                              className="h-8 text-xs text-center font-bold text-green-700" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" step="0.1"
-                              value={prod.packagingCost} 
-                              onChange={(e) => handleProductChange(prod.id, "packagingCost", e.target.value)} 
-                              className="h-8 text-xs text-center" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" step="0.1"
-                              value={prod.ingredientsCost} 
-                              onChange={(e) => handleProductChange(prod.id, "ingredientsCost", e.target.value)} 
-                              className="h-8 text-xs text-center" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" step="0.1"
-                              value={prod.energyCost} 
-                              onChange={(e) => handleProductChange(prod.id, "energyCost", e.target.value)} 
-                              className="h-8 text-xs text-center" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" step="0.1"
-                              value={prod.logisticsCost} 
-                              onChange={(e) => handleProductChange(prod.id, "logisticsCost", e.target.value)} 
-                              className="h-8 text-xs text-center" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="p-1">
-                            <Input 
-                              type="number" step="0.1"
-                              value={prod.processLoss} 
-                              onChange={(e) => handleProductChange(prod.id, "processLoss", e.target.value)} 
-                              className="h-8 text-xs text-center text-red-600" 
-                            />
-                          </TableCell>
-
-                          <TableCell className="text-right font-bold bg-indigo-50/20 pr-3">
-                            {calc ? fmt(calc.dailySaleableQty) : 0} units
-                          </TableCell>
-
-                          <TableCell className={cn("text-right font-bold pr-3 bg-green-50/20", (calc?.dailyContribution || 0) >= 0 ? "text-green-700" : "text-red-600")}>
-                            ₹ {calc ? fmt(calc.dailyContribution) : 0}
-                          </TableCell>
-
-                          <TableCell className="text-center">
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              onClick={() => handleRemoveProduct(prod.id)}
-                              className="h-6 w-6 text-red-500 hover:bg-red-50"
-                            >
-                              <XCircle className="w-4 h-4" />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+            <CardContent className="p-4 space-y-3">
+              <div>
+                <Label className="text-[10px] font-bold text-slate-500 uppercase">Company Name</Label>
+                <div className="relative mt-1">
+                  <Building2 className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                  <Input value={companyName} onChange={e => setCompanyName(e.target.value.toUpperCase())} className="pl-9 h-9 text-xs font-bold border-slate-200" />
+                </div>
+              </div>
+              <div>
+                <Label className="text-[10px] font-bold text-slate-500 uppercase">Plant / Unit</Label>
+                <div className="relative mt-1">
+                  <MapPin className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                  <Input value={plantLocation} onChange={e => setPlantLocation(e.target.value.toUpperCase())} className="pl-9 h-9 text-xs border-slate-200" />
+                </div>
+              </div>
+              <div>
+                <Label className="text-[10px] font-bold text-slate-500 uppercase">Date</Label>
+                <div className="relative mt-1">
+                  <Calendar className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                  <Input type="date" value={currentDate} onChange={e => setCurrentDate(e.target.value)} className="pl-9 h-9 text-xs border-slate-200" />
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Fixed Expenses Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <Card className="md:col-span-2 border border-slate-200 shadow-sm">
-              <CardHeader className="bg-slate-100 p-4 border-b flex flex-row justify-between items-center">
-                <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                  <Calculator className="h-4.5 w-4.5 text-indigo-600" />
-                  Monthly Fixed Overheads (मासिक स्थिर खर्चे)
-                </CardTitle>
-                <Button size="sm" variant="outline" onClick={handleAddFixedExpense} className="h-7 text-xs bg-white border-slate-200">
-                  <Plus className="w-3.5 h-3.5 mr-1" /> Add Expense
-                </Button>
-              </CardHeader>
-              <CardContent className="p-4 space-y-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {fixedExpenses.map((expense) => (
-                    <div key={expense.id} className="flex gap-2 items-center bg-slate-50 p-2 rounded-lg border border-slate-200">
-                      <Input 
-                        placeholder="Expense Name" 
-                        value={expense.name} 
-                        onChange={(e) => handleFixedExpenseChange(expense.id, "name", e.target.value)} 
-                        className="h-8 text-xs bg-white font-semibold flex-grow" 
-                      />
-                      <div className="relative w-28 shrink-0">
-                        <Input 
-                          type="number" 
-                          value={expense.cost} 
-                          onChange={(e) => handleFixedExpenseChange(expense.id, "cost", e.target.value)} 
-                          className="h-8 text-xs bg-white text-right pr-6 font-bold" 
-                        />
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-bold">₹</span>
-                      </div>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => handleRemoveFixedExpense(expense.id)}
-                        className="h-7 w-7 text-red-500 hover:bg-red-50 shrink-0"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-                <div className="pt-2 border-t flex justify-between items-center text-xs font-bold text-slate-600 bg-slate-100 p-2 rounded-lg mt-2">
-                  <span>कुल मासिक स्थिर ओवरहेड्स (Total Monthly Fixed Overheads):</span>
-                  <span className="text-sm font-black text-indigo-900">₹ {fmt(financials.monthlyFixedExpenses)}</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-indigo-100 bg-indigo-50/30 p-4 flex flex-col justify-between">
-              <div>
-                <h3 className="font-bold text-indigo-950 text-sm flex items-center gap-1.5 mb-3">
-                  <LayoutDashboard className="w-4 h-4 text-indigo-600" />
-                  Quick Financial Health
-                </h3>
-                
-                <div className="space-y-3">
-                  <div className="flex justify-between border-b pb-1.5 text-xs text-slate-600">
-                    <span>Total Period Revenue:</span>
-                    <strong className="text-green-700">₹ {fmt(financials.periodRevenue)}</strong>
-                  </div>
-                  <div className="flex justify-between border-b pb-1.5 text-xs text-slate-600">
-                    <span>Total Period Cost:</span>
-                    <strong className="text-red-600">₹ {fmt(financials.periodTotalCost)}</strong>
-                  </div>
-                  <div className="flex justify-between border-b pb-1.5 text-xs text-slate-600">
-                    <span>Gross Operating Profit:</span>
-                    <strong className="text-indigo-700">₹ {fmt(financials.grossProfit)}</strong>
-                  </div>
-                  <div className="flex justify-between pb-1 text-xs text-slate-600">
-                    <span>Net Profit Margin:</span>
-                    <Badge className={cn("text-[10px]", financials.profitMarginPct >= 15 ? "bg-green-600" : (financials.profitMarginPct > 0 ? "bg-amber-500" : "bg-red-500"))}>
-                      {fmtDec(financials.profitMarginPct, 1)}%
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-indigo-100">
-                <Button 
-                  onClick={() => setActiveTab("report")}
-                  className="w-full bg-indigo-600 text-white font-bold h-9 hover:bg-indigo-700 text-xs shadow-sm flex items-center justify-center gap-1"
-                >
-                  View P&L Report <ArrowRight className="w-3.5 h-3.5" />
-                </Button>
-              </div>
-            </Card>
-
-          </div>
-
-        </div>
-      )}
-
-      {/* TAB 2: DAILY P&L DASHBOARD */}
-      {activeTab === "report" && (
-        <div className="space-y-6 animate-in fade-in-50 duration-200">
-          
-          <div className="flex justify-end">
-            <Button onClick={downloadPdf} disabled={isDownloading} className="bg-indigo-600 hover:bg-indigo-700 h-10 text-xs shadow-md font-bold text-white flex gap-1">
-              {isDownloading ? <Loader2 className="w-4 h-4 animate-spin"/> : <FileDown className="w-4 h-4"/>} 
-              Download Costing Report PDF
-            </Button>
-          </div>
-
-          <div ref={reportRef} id="print-area" className="bg-white border-2 border-indigo-100 rounded-xl overflow-hidden shadow-lg p-6 space-y-6 print:border-none print:shadow-none print:p-0 print:m-0 print:w-[210mm] print:h-[297mm]">
-            
-            {/* Print Header */}
-            <div className="flex justify-between items-start border-b pb-4">
-              <div>
-                <h1 className="text-xl font-bold text-indigo-950 tracking-tight font-headline flex items-center gap-1.5">
-                  <FileSpreadsheet className="h-6 w-6 text-indigo-600" />
-                  DAIRY HUB - PLANT COSTING & PROFITABILITY SHEET
-                </h1>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Date of Generation: {selectedDate} | Analysis Period: {period.toUpperCase()} ({workingDays} operating days/mo)
-                </p>
-              </div>
-              <Badge variant="outline" className="border-indigo-600 text-indigo-600 font-bold px-3 py-1 uppercase tracking-wider">
-                {period} report
-              </Badge>
-            </div>
-
-            {/* Overall Health Indicators */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="p-4 rounded-xl border bg-slate-50 flex flex-col justify-between shadow-sm">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Total Milk Processed</span>
-                <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-xl font-black text-slate-800">{fmt(financials.periodAllocatedMilk)}</span>
-                  <span className="text-xs font-semibold text-slate-500">L/Kg</span>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl border bg-slate-50 flex flex-col justify-between shadow-sm">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Total Operating Cost</span>
-                <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-xl font-black text-red-600">₹ {fmt(financials.periodTotalCost)}</span>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl border bg-slate-50 flex flex-col justify-between shadow-sm">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Net Profit (Post-Tax)</span>
-                <div className="mt-2 flex items-baseline gap-1">
-                  <span className={cn("text-xl font-black", financials.netProfitPostTax >= 0 ? "text-green-600" : "text-red-500")}>
-                    ₹ {fmt(financials.netProfitPostTax)}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl border bg-slate-50 flex flex-col justify-between shadow-sm">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Cost of Processing (CoP)</span>
-                <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-xl font-black text-indigo-700">₹ {fmtDec(financials.overallCoPPerLitre)}</span>
-                  <span className="text-xs font-semibold text-indigo-500">/Litre</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Break-Even Progress Bar */}
-            <Card className="p-4 border border-indigo-100 bg-slate-50/50">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-2">
-                <span className="text-xs font-bold text-slate-700 flex items-center gap-1">
-                  <Target className="h-4 w-4 text-indigo-600" />
-                  Plant Break-Even Point (BEP) Analysis (सम-विच्छेद विश्लेषण)
-                </span>
-                <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-bold", financials.safetyMarginPct > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700")}>
-                  {financials.safetyMarginPct > 0 ? `Safety Margin: +${financials.safetyMarginPct.toFixed(1)}%` : `Operating at Loss: ${financials.safetyMarginPct.toFixed(1)}%`}
-                </span>
-              </div>
-              
-              {financials.safetyMarginPct > 0 ? (
-                <div className="space-y-1">
-                  <div className="h-3 w-full bg-slate-200 rounded-full overflow-hidden flex border">
-                    <div className="bg-indigo-600 h-full" style={{ width: `${Math.max(5, Math.min(95, 100 - financials.safetyMarginPct))}%` }} />
-                    <div className="bg-green-500 h-full" style={{ width: `${Math.max(5, Math.min(95, financials.safetyMarginPct))}%` }} />
-                  </div>
-                  <div className="flex justify-between text-[9px] font-mono text-slate-500">
-                    <span>Break-Even Turnaround: ₹ {fmt(financials.breakEvenRevenue)}</span>
-                    <span className="font-bold text-green-700">Current Turnover: ₹ {fmt(financials.periodRevenue)}</span>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-red-500 shrink-0" />
-                  <p className="text-[11px] text-red-700 font-semibold leading-relaxed">
-                    चेतावनी: आपका प्लांट घाटे में चल रहा है। ब्रेक-ईवन तक पहुँचने के लिए बिक्री को कम से कम 
-                    <strong> ₹ {fmt(financials.breakEvenRevenue - financials.periodRevenue)}</strong> बढ़ाना होगा।
-                  </p>
-                </div>
-              )}
-            </Card>
-
-            {/* Split Visual Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-              
-              {/* Cost Contribution percentages */}
-              <div className="md:col-span-1 border rounded-xl p-4 bg-slate-50 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-1">
-                    <PieChart className="w-3.5 h-3.5 text-slate-400" /> Cost Structure Contribution
-                  </h3>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                        <span>Raw Milk Cost (कच्चा दूध लागत)</span>
-                        <span>{financials.costStructure.rawMilk.toFixed(1)}%</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                        <div className="bg-blue-500 h-full" style={{ width: `${financials.costStructure.rawMilk}%` }} />
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                        <span>Variable Processing (परिवर्तनीय प्रसंस्करण)</span>
-                        <span>{financials.costStructure.processing.toFixed(1)}%</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                        <div className="bg-orange-400 h-full" style={{ width: `${financials.costStructure.processing}%` }} />
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                        <span>Fixed Overheads (स्थिर ओवरहेड्स)</span>
-                        <span>{financials.costStructure.fixedOverheads.toFixed(1)}%</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                        <div className="bg-purple-500 h-full" style={{ width: `${financials.costStructure.fixedOverheads}%` }} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white border rounded-lg p-3 text-[10px] text-slate-500 leading-relaxed font-mono mt-4">
-                  * Raw Milk Cost (₹{fmt(financials.periodRawMilkCost)}) contributes the majority of expenses in dairy operations.
-                </div>
-              </div>
-
-              {/* Financial Statement Sheet (The P&L Table) */}
-              <div className="md:col-span-2 border rounded-xl overflow-hidden bg-white">
-                <Table className="w-full text-xs">
-                  <TableHeader className="bg-slate-100">
-                    <TableRow>
-                      <TableHead className="font-bold text-slate-700 pl-4 py-2.5">P&L Account Line Item</TableHead>
-                      <TableHead className="text-right font-bold text-slate-700 pr-4 py-2.5">Value (₹)</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow className="border-b">
-                      <TableCell className="font-bold text-slate-800 pl-4 py-2">Saleable Product Turnover (Revenue)</TableCell>
-                      <TableCell className="text-right font-black text-green-700 pr-4 py-2">₹ {fmt(financials.periodRevenue)}</TableCell>
-                    </TableRow>
-                    
-                    <TableRow className="border-b">
-                      <TableCell className="text-slate-600 pl-4 py-2">Less: Raw Material Intake Cost</TableCell>
-                      <TableCell className="text-right text-red-500 pr-4 py-2">- ₹ {fmt(financials.periodRawMilkCost)}</TableCell>
-                    </TableRow>
-                    
-                    <TableRow className="border-b">
-                      <TableCell className="text-slate-600 pl-4 py-2">Less: Variable Processing Costs (Pack, Ingredients, Energy, Logistics)</TableCell>
-                      <TableCell className="text-right text-red-400 pr-4 py-2">- ₹ {fmt(financials.periodVariableProcessingCost)}</TableCell>
-                    </TableRow>
-                    
-                    <TableRow className="border-b font-bold bg-slate-50/50">
-                      <TableCell className="text-indigo-900 pl-4 py-2">Gross Contribution (Operating Margin)</TableCell>
-                      <TableCell className="text-right text-indigo-700 pr-4 py-2">₹ {fmt(financials.grossProfit)}</TableCell>
-                    </TableRow>
-
-                    <TableRow className="border-b">
-                      <TableCell className="text-slate-600 pl-4 py-2">Less: Allocated Fixed Overheads (Salaries, Rent, Utilities)</TableCell>
-                      <TableCell className="text-right text-red-400 pr-4 py-2">- ₹ {fmt(financials.periodFixedCost)}</TableCell>
-                    </TableRow>
-                    
-                    <TableRow className="border-b font-bold bg-slate-50">
-                      <TableCell className="text-slate-800 pl-4 py-2">Net Profit Before Income Tax (EBT)</TableCell>
-                      <TableCell className="text-right font-extrabold text-slate-800 pr-4 py-2">₹ {fmt(financials.netProfitPreTax)}</TableCell>
-                    </TableRow>
-
-                    {financials.taxAmount > 0 && (
-                      <TableRow className="border-b">
-                        <TableCell className="text-slate-500 pl-4 py-2">Less: Income Tax Provision @ {taxRate}%</TableCell>
-                        <TableCell className="text-right text-red-400 pr-4 py-2">- ₹ {fmt(financials.taxAmount)}</TableCell>
-                      </TableRow>
-                    )}
-
-                    <TableRow className="bg-indigo-600 text-white font-extrabold hover:bg-indigo-700">
-                      <TableCell className="pl-4 py-2.5 uppercase text-xs tracking-wider">Net Profit Post-Tax (EAT)</TableCell>
-                      <TableCell className="text-right pr-4 py-2.5 text-base font-black">₹ {fmt(financials.netProfitPostTax)}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-
-            </div>
-
-            {/* Product wise performance card breakdown list */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
-                <Package className="w-4 h-4 text-indigo-600" /> Individual Product Margins Breakdown
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {financials.productCalculations.filter(c => c.allocatedDaily > 0).map(c => (
-                  <div key={c.id} className="p-3 rounded-lg border border-slate-200 bg-white space-y-1.5 shadow-sm">
-                    <div className="flex justify-between items-start">
-                      <span className="font-bold text-slate-800 text-xs truncate max-w-[150px]">{c.name}</span>
-                      <Badge className={cn("text-[9px] px-1.5 py-0.5", c.dailyContribution >= 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700")}>
-                        {fmtDec(c.contributionMarginPct, 1)}% Margin
-                      </Badge>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-500">
-                      <div>Milk Intake: <strong className="text-slate-700 font-mono">{fmt(c.allocatedDaily * (period === 'monthly' ? parseFloat(workingDays) : 1))} L</strong></div>
-                      <div>Yield Output: <strong className="text-indigo-600 font-mono">{fmt(c.dailySaleableQty * (period === 'monthly' ? parseFloat(workingDays) : 1))} Units</strong></div>
-                      <div className="col-span-2 border-t pt-1 mt-1 flex justify-between font-bold text-indigo-900">
-                        <span>Period Contribution:</span>
-                        <span>₹ {fmt(c.dailyContribution * (period === 'monthly' ? parseFloat(workingDays) : 1))}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="hidden print:block mt-6 pt-3 border-t border-slate-350 text-center text-[8px] text-slate-400 font-bold uppercase tracking-wider">
-              POWERED BY DAIRY HUB ERP SYSTEM
-            </div>
-
-          </div>
-
-        </div>
-      )}
-
-      {/* TAB 3: MONTHLY SUMMARY OVERVIEW */}
-      {activeTab === "monthly" && (() => {
-        const mData = getMonthlySummaryData(selectedYear, selectedMonth);
-        return (
-          <div className="space-y-6 animate-in fade-in-50 duration-200">
-            
-            {/* Quick Metrics Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 print:hidden">
-              <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1.5">
-                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Total Month Intake</span>
-                <span className="text-xl font-extrabold text-indigo-950">
-                  {fmt(mData.totals.allocatedMilk)} L/Kg
-                </span>
-                <span className="text-[10px] text-slate-500">Cumulative milk processed</span>
-              </div>
-              <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1.5">
-                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider text-green-600">Total Month Revenue</span>
-                <span className="text-xl font-extrabold text-green-700">
-                  ₹ {fmt(mData.totals.revenue)}
-                </span>
-                <span className="text-[10px] text-slate-500">Total turnover generated</span>
-              </div>
-              <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1.5">
-                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider text-emerald-600">Net Month Profit</span>
-                <span className={cn("text-xl font-extrabold", mData.totals.netProfit >= 0 ? "text-emerald-700" : "text-rose-600")}>
-                  ₹ {fmt(mData.totals.netProfit)}
-                </span>
-                <span className="text-[10px] text-slate-500">Combined net margin (post-tax)</span>
-              </div>
-              <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1.5">
-                <span className="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Logged Days</span>
-                <span className="text-xl font-extrabold text-indigo-800">
-                  {mData.dailyList.filter(d => d.hasData).length} / {mData.dailyList.length} Days
-                </span>
-                <span className="text-[10px] text-slate-500">Active records in database</span>
-              </div>
-            </div>
-
-            {/* Print/Export buttons */}
-            <div className="flex gap-2 justify-end print:hidden">
-              <Button size="sm" onClick={handlePrintMonthly} className="text-xs bg-slate-800 hover:bg-slate-900 text-white">
-                <Printer className="w-3.5 h-3.5 mr-1.5" /> Print Summary (प्रिंट)
-              </Button>
-              <Button size="sm" onClick={downloadMonthlyPdf} disabled={isDownloading} className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white">
-                {isDownloading ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin"/> : <FileDown className="w-3.5 h-3.5 mr-1.5" />}
-                Download PDF
-              </Button>
-              <Button size="sm" onClick={handleExportMonthlyCSV} className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-500">
-                <Download className="w-3.5 h-3.5 mr-1.5" /> Export Excel (CSV)
-              </Button>
-            </div>
-
-            {/* Monthly grid to print */}
-            <div 
-              ref={monthlyReportRef}
-              id="print-area"
-              className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm overflow-hidden print:border-none print:shadow-none print:p-0 print:m-0 print:w-[210mm] print:h-[297mm]"
-            >
-              {/* Report Header for printing */}
-              <div className="hidden print:flex justify-between items-end border-b-2 border-slate-800 pb-3 mb-4">
-                <div>
-                  <h1 className="text-base font-black text-slate-900 uppercase">Dairy Plant Monthly Costing & Profitability Summary</h1>
-                  <p className="text-[9px] text-slate-500 font-semibold mt-0.5">Month: {new Date(selectedYear, selectedMonth - 1, 1).toLocaleString("en-IN", { month: "long", year: "numeric" })}</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-[8px] uppercase font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">Monthly Report</span>
-                  <p className="text-[8px] text-slate-400 mt-0.5">Generated by Dairy Hub App</p>
-                </div>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-[11px] border-collapse border border-slate-200 text-slate-700">
-                  <thead>
-                    <tr className="bg-slate-50 text-slate-600 font-bold border-b border-slate-350">
-                      <th className="border border-slate-200 px-2 py-2 text-left w-16">Date</th>
-                      <th className="border border-slate-200 px-2 py-2 text-right">Milk Processed (L)</th>
-                      <th className="border border-slate-200 px-2 py-2 text-right">Revenue (₹)</th>
-                      <th className="border border-slate-200 px-2 py-2 text-right">Variable Cost (₹)</th>
-                      <th className="border border-slate-200 px-2 py-2 text-right">Fixed Cost (₹)</th>
-                      <th className="border border-slate-200 px-2 py-2 text-right">Total Cost (₹)</th>
-                      <th className="border border-slate-200 px-2 py-2 text-right">Net Profit (₹)</th>
-                      <th className="border border-slate-200 px-2 py-2 text-center w-14 print:hidden">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-150">
-                    {mData.dailyList.map(row => {
-                      const dayNum = row.date.split("-")[2];
-                      if (!row.hasData) {
-                        return (
-                          <tr key={row.date} className="hover:bg-slate-50/40 text-slate-400">
-                            <td className="border border-slate-200 px-2 py-1.5 font-bold font-mono">{dayNum}</td>
-                            <td className="border border-slate-200 px-2 py-1.5 text-right">—</td>
-                            <td className="border border-slate-200 px-2 py-1.5 text-right">—</td>
-                            <td className="border border-slate-200 px-2 py-1.5 text-right">—</td>
-                            <td className="border border-slate-200 px-2 py-1.5 text-right">—</td>
-                            <td className="border border-slate-200 px-2 py-1.5 text-right">—</td>
-                            <td className="border border-slate-200 px-2 py-1.5 text-right">—</td>
-                            <td className="border border-slate-200 px-2 py-1.5 text-center print:hidden">
-                              <Button 
-                                size="sm" 
-                                variant="ghost" 
-                                className="h-6 px-2 text-[10px] text-indigo-600 hover:text-indigo-850"
-                                onClick={() => {
-                                  setSelectedDate(row.date);
-                                  setActiveTab("sheet");
-                                }}
-                              >
-                                Create
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      }
-
+          {/* Format Selector — grouped */}
+          <Card className="border border-slate-200 shadow-sm">
+            <CardHeader className="bg-slate-100 p-4 border-b">
+              <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">2. Select Format</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 space-y-3">
+              {GROUPS.map(group => (
+                <div key={group}>
+                  <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 px-1 mb-1.5">{group}</div>
+                  <div className="space-y-1.5">
+                    {FORMATS_CATALOG.filter(f => f.group === group).map(fmt => {
+                      const Icon = fmt.icon;
                       return (
-                        <tr key={row.date} className="hover:bg-slate-50 text-slate-700 bg-emerald-50/5">
-                          <td className="border border-slate-200 px-2 py-1.5 font-black font-mono text-slate-800">{dayNum}</td>
-                          <td className="border border-slate-200 px-2 py-1.5 text-right font-semibold">{fmt(row.allocatedMilk || 0)}</td>
-                          <td className="border border-slate-200 px-2 py-1.5 text-right font-semibold text-green-700">{fmt(row.revenue || 0)}</td>
-                          <td className="border border-slate-200 px-2 py-1.5 text-right text-slate-650">{fmt(row.variableCost || 0)}</td>
-                          <td className="border border-slate-200 px-2 py-1.5 text-right text-slate-500">{fmt(row.fixedCost || 0)}</td>
-                          <td className="border border-slate-200 px-2 py-1.5 text-right text-red-600 font-medium">{fmt(row.totalCost || 0)}</td>
-                          <td className={cn("border border-slate-200 px-2 py-1.5 text-right font-black", (row.netProfit || 0) >= 0 ? "text-emerald-700" : "text-rose-600")}>
-                            ₹ {fmt(row.netProfit || 0)}
-                          </td>
-                          <td className="border border-slate-200 px-2 py-1.5 text-center print:hidden">
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              className="h-6 px-2 text-[10px] text-indigo-650 hover:text-indigo-800"
-                              onClick={() => {
-                                setSelectedDate(row.date);
-                                setActiveTab("sheet");
-                              }}
-                            >
-                              Edit
-                            </Button>
-                          </td>
-                        </tr>
+                        <button
+                          key={fmt.id}
+                          onClick={() => setSelectedFormatId(fmt.id)}
+                          className={cn(
+                            "w-full text-left p-2.5 rounded-lg border text-xs transition-all",
+                            selectedFormatId === fmt.id
+                              ? "bg-emerald-700 border-emerald-600 text-white font-bold shadow"
+                              : "bg-white border-slate-200 text-slate-700 hover:border-emerald-400 hover:bg-emerald-50"
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Icon className="h-3.5 w-3.5 flex-shrink-0" />
+                            <span className="leading-tight">{fmt.title}</span>
+                          </div>
+                        </button>
                       );
                     })}
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
 
-                    {/* Grand Monthly Totals Row */}
-                    <tr className="bg-slate-100 font-extrabold text-slate-900 border-t-2 border-slate-350">
-                      <td className="border border-slate-200 px-2 py-2">Total</td>
-                      <td className="border border-slate-200 px-2 py-2 text-right">{fmt(mData.totals.allocatedMilk)} L</td>
-                      <td className="border border-slate-200 px-2 py-2 text-right text-green-700">₹ {fmt(mData.totals.revenue)}</td>
-                      <td className="border border-slate-200 px-2 py-2 text-right">{fmt(mData.totals.variableCost)}</td>
-                      <td className="border border-slate-200 px-2 py-2 text-right text-slate-600">{fmt(mData.totals.fixedCost)}</td>
-                      <td className="border border-slate-200 px-2 py-2 text-right text-red-600">{fmt(mData.totals.totalCost)}</td>
-                      <td className={cn("border border-slate-200 px-2 py-2 text-right text-base font-black", mData.totals.netProfit >= 0 ? "text-emerald-700" : "text-rose-600")}>
-                        ₹ {fmt(mData.totals.netProfit)}
-                      </td>
-                      <td className="border border-slate-200 px-2 py-2 text-center print:hidden"></td>
-                    </tr>
-                  </tbody>
-                </table>
+          {/* Actions */}
+          <Card className="border border-slate-200 shadow-sm">
+            <CardHeader className="bg-slate-100 p-4 border-b">
+              <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">3. Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 space-y-2">
+              <Button onClick={addRow} variant="outline" size="sm" className="w-full text-xs border-emerald-600 text-emerald-700 hover:bg-emerald-50 font-bold">
+                <Plus className="w-3.5 h-3.5 mr-2" /> Add Row
+              </Button>
+              <Button onClick={addColumn} variant="outline" size="sm" className="w-full text-xs border-blue-600 text-blue-700 hover:bg-blue-50 font-bold">
+                <Columns className="w-3.5 h-3.5 mr-2" /> Add Column
+              </Button>
+              <Button onClick={toggleOrientation} variant="outline" size="sm" className="w-full text-xs border-slate-300 text-slate-700 hover:bg-slate-50 font-bold">
+                <RotateCw className="w-3.5 h-3.5 mr-2" /> {currentOrientation === "landscape" ? "A4 Landscape" : "A4 Portrait"}
+              </Button>
+              <Button onClick={handlePrint} variant="outline" size="sm" className="w-full text-xs border-slate-300 font-semibold">
+                <Printer className="w-3.5 h-3.5 mr-2" /> Print
+              </Button>
+              <Button onClick={handleDownloadPdf} disabled={isDownloading} size="sm" className="w-full text-xs bg-emerald-700 hover:bg-emerald-800 text-white font-bold">
+                {isDownloading ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" /> : <Download className="w-3.5 h-3.5 mr-2" />}
+                Download PDF
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* ── Preview Column ── */}
+        <div className="lg:col-span-3 space-y-4">
+
+          {/* Print Controls Top Bar */}
+          <div className="flex flex-wrap justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200 gap-2 print:hidden">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-700 uppercase">Layout: {currentOrientation} A4</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" onClick={addRow} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex gap-1">
+                <Plus className="w-3.5 h-3.5" /> Add Row
+              </Button>
+              <Button size="sm" onClick={addColumn} variant="outline" className="border-blue-600 text-blue-700 hover:bg-blue-50 font-bold text-xs flex gap-1">
+                <Columns className="w-3.5 h-3.5" /> Add Column
+              </Button>
+              <Button size="sm" onClick={toggleOrientation} variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs flex gap-1">
+                <RotateCw className="w-3.5 h-3.5" /> {currentOrientation === "landscape" ? "A4 Landscape" : "A4 Portrait"}
+              </Button>
+              <Button size="sm" onClick={handlePrint} className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex gap-1">
+                <Printer className="w-4 h-4" /> Print
+              </Button>
+              <Button size="sm" onClick={handleDownloadPdf} disabled={isDownloading} className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex gap-1">
+                {isDownloading ? <Loader2 className="w-4 h-4 animate-spin"/> : <Download className="w-4 h-4"/>} 
+                Download PDF
+              </Button>
+            </div>
+          </div>
+
+          {/* Document Sheet Area with Touch Horizontal Scroll for Mobile */}
+          <div className="overflow-x-auto print:overflow-visible touch-pan-x pb-4">
+            <div
+              id="print-area-formats"
+              ref={printAreaRef}
+              className={cn(
+                "bg-white border border-slate-200 shadow-md font-sans text-black mx-auto overflow-hidden print:border-none print:shadow-none print:p-0 print:m-0",
+                currentOrientation === "landscape" 
+                  ? "w-[297mm] min-h-[210mm] p-[15mm] print:w-[297mm] print:h-[210mm]" 
+                  : "w-[210mm] min-h-[297mm] p-[15mm] print:w-[210mm] print:h-[297mm]"
+              )}
+              style={{ boxSizing: "border-box" }}
+            >
+            {/* Document Header */}
+            <div className="space-y-3 mb-4">
+              <div className="border-2 border-black p-3 text-center bg-white">
+                <h1 className="text-base font-black tracking-widest text-black uppercase leading-tight">
+                  {companyName || "DAIRY HUB COOPERATIVE"}
+                </h1>
+                <p className="text-[10px] font-bold text-slate-800 uppercase mt-1 tracking-wider">
+                  {plantLocation || "MAIN PROCESS PLANT"}
+                </p>
+                <div className="border-t border-black my-2" />
+                <h2 className="text-sm font-black tracking-widest text-black uppercase leading-none">
+                  {selectedFormat?.title}
+                </h2>
               </div>
 
-              <div className="hidden print:block mt-6 pt-3 border-t border-slate-300 text-center text-[8px] text-slate-400 font-semibold uppercase tracking-wider">
+              {/* Meta Details Row */}
+              <div className="grid grid-cols-3 border border-black p-2 bg-slate-50 text-[10px] font-bold gap-2 text-black">
+                <div>DATE: <span className="font-normal border-b border-black border-dotted ml-1">{currentDate}</span></div>
+                <div className="text-center">SHIFT IN-CHARGE: <span className="font-normal border-b border-black border-dotted ml-1">_________________</span></div>
+                <div className="text-right">FORMAT NO: <span className="font-mono font-normal border-b border-black border-dotted ml-1">PLT-{selectedFormat?.id.toUpperCase().replace(/-/g,"")}-{currentDate.replace(/-/g,"")}</span></div>
+              </div>
+            </div>
+
+            {/* ── Format Tables ── */}
+            <div className="space-y-3">
+
+              {/* ═══ 1. Raw Milk Reception & Storage Log ═══ */}
+              {selectedFormatId === "rm-reception" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 w-20">Tanker No.</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Supplier</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Time</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Qty (L)</th>
+                      <th className="border border-black px-1.5 py-1 w-12">Temp (°C)</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Acidity</th>
+                      <th className="border border-black px-1.5 py-1 w-10">Fat</th>
+                      <th className="border border-black px-1.5 py-1 w-10">SNF</th>
+                      <th className="border border-black px-1.5 py-1 w-16">COB Test</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Status</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Silo</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {rmReceptionRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.tankerNo} onChange={e=>updateRmReceptionRow(r.id,"tankerNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.supplier} onChange={e=>updateRmReceptionRow(r.id,"supplier",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.arrivalTime} onChange={e=>updateRmReceptionRow(r.id,"arrivalTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.qty} onChange={e=>updateRmReceptionRow(r.id,"qty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateRmReceptionRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.acidity} onChange={e=>updateRmReceptionRow(r.id,"acidity",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.fat} onChange={e=>updateRmReceptionRow(r.id,"fat",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.snf} onChange={e=>updateRmReceptionRow(r.id,"snf",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.cob} onChange={e=>updateRmReceptionRow(r.id,"cob",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold",r.cob.toLowerCase().includes("positive")?"text-red-700":"text-slate-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateRmReceptionRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase().includes("reject")?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.siloAllotted} onChange={e=>updateRmReceptionRow(r.id,"siloAllotted",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateRmReceptionRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                      <tr className="bg-slate-50 font-bold border-t-2 border-black">
+                        <td colSpan={3} className="border border-black px-1.5 py-1 text-[9px] uppercase">Total Received</td>
+                        <td className="border border-black px-1.5 py-1 text-right font-black font-mono text-[9px]">{rmReceptionRows.reduce((s,r)=>s+(parseFloat(r.qty)||0),0).toLocaleString()} L</td>
+                        <td colSpan={9} className="border border-black px-1.5 py-1 bg-slate-100"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 2. Batch Manufacturing Record (BMR) ═══ */}
+              {selectedFormatId === "bmr" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 w-10">Step</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Operation / Process Step</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Start</th>
+                      <th className="border border-black px-1.5 py-1 w-14">End</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Milk Qty (L)</th>
+                      <th className="border border-black px-1.5 py-1 w-12">Temp (°C)</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Remarks / CCP</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Done By</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Verified By</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {bmrRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.step} onChange={e=>updateBmrRow(r.id,"step",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operation} onChange={e=>updateBmrRow(r.id,"operation",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateBmrRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.endTime} onChange={e=>updateBmrRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.milkQty} onChange={e=>updateBmrRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateBmrRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateBmrRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updateBmrRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updateBmrRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 3. Process Monitoring Log ═══ */}
+              {selectedFormatId === "process-monitoring" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 w-12">Time</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Equipment</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Inlet Temp</th>
+                      <th className="border border-black px-1.5 py-1 w-16">HT Temp (°C)</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Outlet Temp</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Press (bar)</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Flow (L/hr)</th>
+                      <th className="border border-black px-1.5 py-1 w-14">PHP Status</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {processRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateProcessRow(r.id,"time",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.equipment} onChange={e=>updateProcessRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.inletTemp} onChange={e=>updateProcessRow(r.id,"inletTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.htTemp} onChange={e=>updateProcessRow(r.id,"htTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold",parseFloat(r.htTemp)<72?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.outTemp} onChange={e=>updateProcessRow(r.id,"outTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.pressure} onChange={e=>updateProcessRow(r.id,"pressure",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.flowRate} onChange={e=>updateProcessRow(r.id,"flowRate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.phpStatus} onChange={e=>updateProcessRow(r.id,"phpStatus",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.phpStatus.toLowerCase()==="alert"||r.phpStatus.toLowerCase()==="fail"?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateProcessRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 4. Packing & Dispatch Log ═══ */}
+              {selectedFormatId === "packing-dispatch" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 w-16">Batch No.</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Product</th>
+                      <th className="border border-black px-1.5 py-1 w-10">Shift</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Packed Qty</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Vehicle No.</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Destination</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Dispatch</th>
+                      <th className="border border-black px-1.5 py-1 w-12">Temp</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Status</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {packingRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.batchNo} onChange={e=>updatePackingRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updatePackingRow(r.id,"product",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.shift} onChange={e=>updatePackingRow(r.id,"shift",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.packedQty} onChange={e=>updatePackingRow(r.id,"packedQty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.vehicle} onChange={e=>updatePackingRow(r.id,"vehicle",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.destination} onChange={e=>updatePackingRow(r.id,"destination",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dispatchTime} onChange={e=>updatePackingRow(r.id,"dispatchTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.tempAtDispatch} onChange={e=>updatePackingRow(r.id,"tempAtDispatch",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updatePackingRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase()==="dispatched"?"text-green-700":"text-orange-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updatePackingRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 5. CIP & Cleaning Log ═══ */}
+              {selectedFormatId === "cip-cleaning" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 text-left">Equipment</th>
+                      <th className="border border-black px-1.5 py-1 text-left">CIP Type / Step</th>
+                      <th className="border border-black px-1.5 py-1 w-12">Start</th>
+                      <th className="border border-black px-1.5 py-1 w-12">End</th>
+                      <th className="border border-black px-1.5 py-1 w-12">Temp</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Caustic (%)</th>
+                      <th className="border border-black px-1.5 py-1 w-12">Acid (%)</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Duration</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Operator</th>
+                      <th className="border border-black px-1.5 py-1 w-12">QA</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {cipRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.equipment} onChange={e=>updateCipRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.cipType} onChange={e=>updateCipRow(r.id,"cipType",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateCipRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.endTime} onChange={e=>updateCipRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateCipRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.causticConc} onChange={e=>updateCipRow(r.id,"causticConc",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.acidConc} onChange={e=>updateCipRow(r.id,"acidConc",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.duration} onChange={e=>updateCipRow(r.id,"duration",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCipRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.qaStatus} onChange={e=>updateCipRow(r.id,"qaStatus",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.qaStatus.toLowerCase()!=="ok"?"text-red-700":"text-green-700")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 6. Machine Breakdown & Maintenance Log ═══ */}
+              {selectedFormatId === "machine-breakdown" && (
+                <div className="w-full">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-16">Date</th>
+                      <th className="border border-black px-1 py-1 text-left">Machine</th>
+                      <th className="border border-black px-1 py-1 w-12">B/D Time</th>
+                      <th className="border border-black px-1 py-1 text-left">Root Cause</th>
+                      <th className="border border-black px-1 py-1 text-left">Action Taken</th>
+                      <th className="border border-black px-1 py-1 w-12">Resumed</th>
+                      <th className="border border-black px-1 py-1 w-12">Downtime</th>
+                      <th className="border border-black px-1 py-1 text-left">Spare Used</th>
+                      <th className="border border-black px-1 py-1 w-14">Engineer</th>
+                      <th className="border border-black px-1 py-1 w-12">Status</th>
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {breakdownMaintRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input type="date" value={r.date} onChange={e=>updateBreakdownMaintRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.machine} onChange={e=>updateBreakdownMaintRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.breakdownTime} onChange={e=>updateBreakdownMaintRow(r.id,"breakdownTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-red-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rootCause} onChange={e=>updateBreakdownMaintRow(r.id,"rootCause",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.action} onChange={e=>updateBreakdownMaintRow(r.id,"action",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.resumedTime} onChange={e=>updateBreakdownMaintRow(r.id,"resumedTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-green-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.downtime} onChange={e=>updateBreakdownMaintRow(r.id,"downtime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.spareUsed} onChange={e=>updateBreakdownMaintRow(r.id,"spareUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.engineer} onChange={e=>updateBreakdownMaintRow(r.id,"engineer",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateBreakdownMaintRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="resolved"?"text-green-700":"text-red-700")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 7. Production Yield & Shift Handover Report ═══ */}
+              {selectedFormatId === "yield-handover" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 text-left">Shift / Timing</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Product</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Milk Input (L)</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Output Qty</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Yield (%)</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Rejections</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Pending Batches</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {yieldRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.shift} onChange={e=>updateYieldRow(r.id,"shift",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updateYieldRow(r.id,"product",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.milkInput} onChange={e=>updateYieldRow(r.id,"milkInput",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.output} onChange={e=>updateYieldRow(r.id,"output",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.yieldPct} onChange={e=>updateYieldRow(r.id,"yieldPct",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold",parseFloat(r.yieldPct)<98?"text-orange-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rejections} onChange={e=>updateYieldRow(r.id,"rejections",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center",r.rejections==="0"||r.rejections.toLowerCase()==="nil"?"text-green-700":"text-red-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.pendingBatches} onChange={e=>updateYieldRow(r.id,"pendingBatches",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateYieldRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                      <tr className="bg-slate-50 font-bold border-t-2 border-black">
+                        <td colSpan={2} className="border border-black px-1.5 py-1 text-[9px] uppercase">Total Milk Processed</td>
+                        <td className="border border-black px-1.5 py-1 text-right font-black font-mono text-[9px]">{yieldRows.reduce((s,r)=>s+(parseFloat(r.milkInput)||0),0).toLocaleString()} L</td>
+                        <td colSpan={5} className="border border-black px-1.5 py-1 bg-slate-100"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══════════════ MAINTENANCE FORMATS ═══════════════ */}
+
+              {/* ═══ 8. Preventive Maintenance (PM) Log ═══ */}
+              {selectedFormatId === "pm-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 w-8">Sr.</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Equipment / Machine</th>
+                      <th className="border border-black px-1.5 py-1 text-left">PM Task Description</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Frequency</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Scheduled Date</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Done Date</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Parameters Checked</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Status</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Done By</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Verified By</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {pmLogRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.srNo} onChange={e=>updatePmLogRow(r.id,"srNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.equipment} onChange={e=>updatePmLogRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.pmTask} onChange={e=>updatePmLogRow(r.id,"pmTask",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.frequency} onChange={e=>updatePmLogRow(r.id,"frequency",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.scheduledDate} onChange={e=>updatePmLogRow(r.id,"scheduledDate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.doneDate} onChange={e=>updatePmLogRow(r.id,"doneDate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.parametersChecked} onChange={e=>updatePmLogRow(r.id,"parametersChecked",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updatePmLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase()==="done"?"text-green-700":r.status.toLowerCase()==="pending"?"text-orange-600":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updatePmLogRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updatePmLogRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 9. Breakdown Maintenance Log ═══ */}
+              {selectedFormatId === "breakdown-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-16">Report No.</th>
+                      <th className="border border-black px-1 py-1 w-14">Date</th>
+                      <th className="border border-black px-1 py-1 text-left">Machine</th>
+                      <th className="border border-black px-1 py-1 w-12">B/D Time</th>
+                      <th className="border border-black px-1 py-1 w-12">Resumed</th>
+                      <th className="border border-black px-1 py-1 w-12">Downtime</th>
+                      <th className="border border-black px-1 py-1 text-left">Root Cause</th>
+                      <th className="border border-black px-1 py-1 text-left">Corrective Action</th>
+                      <th className="border border-black px-1 py-1 text-left">Preventive Action (CAPA)</th>
+                      <th className="border border-black px-1 py-1 text-left">Spare Used</th>
+                      <th className="border border-black px-1 py-1 w-14">Engineer</th>
+                      <th className="border border-black px-1 py-1 w-12">Status</th>
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {breakdownLogRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.reportNo} onChange={e=>updateBreakdownLogRow(r.id,"reportNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.date} onChange={e=>updateBreakdownLogRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.machine} onChange={e=>updateBreakdownLogRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.breakdownTime} onChange={e=>updateBreakdownLogRow(r.id,"breakdownTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-red-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.resumedTime} onChange={e=>updateBreakdownLogRow(r.id,"resumedTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-green-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.downtime} onChange={e=>updateBreakdownLogRow(r.id,"downtime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rootCause} onChange={e=>updateBreakdownLogRow(r.id,"rootCause",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.correctiveAction} onChange={e=>updateBreakdownLogRow(r.id,"correctiveAction",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.preventiveAction} onChange={e=>updateBreakdownLogRow(r.id,"preventiveAction",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-600")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.spareUsed} onChange={e=>updateBreakdownLogRow(r.id,"spareUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.engineer} onChange={e=>updateBreakdownLogRow(r.id,"engineer",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateBreakdownLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-red-700")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 10. Equipment History Card ═══ */}
+              {selectedFormatId === "equipment-history" && (
+                <div className="w-full">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 w-18">Date</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Equip ID</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Event Type</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Description</th>
+                      <th className="border border-black px-1.5 py-1 w-16">Technician</th>
+                      <th className="border border-black px-1.5 py-1 w-20">Spares Used</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Cost</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Next Due</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Remarks</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {equipHistoryRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input type="date" value={r.date} onChange={e=>updateEquipHistoryRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.equipId} onChange={e=>updateEquipHistoryRow(r.id,"equipId",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.eventType} onChange={e=>updateEquipHistoryRow(r.id,"eventType",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.eventType==="Breakdown"?"text-red-700":r.eventType==="PM"?"text-teal-700":"text-blue-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.description} onChange={e=>updateEquipHistoryRow(r.id,"description",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.techName} onChange={e=>updateEquipHistoryRow(r.id,"techName",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.sparesUsed} onChange={e=>updateEquipHistoryRow(r.id,"sparesUsed",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.cost} onChange={e=>updateEquipHistoryRow(r.id,"cost",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.nextDueDate} onChange={e=>updateEquipHistoryRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateEquipHistoryRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-600")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 11. Spare Parts Inventory Register ═══ */}
+              {selectedFormatId === "spare-parts" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-16">Part Code</th>
+                      <th className="border border-black px-1 py-1 text-left">Part Name</th>
+                      <th className="border border-black px-1 py-1 text-left">Equipment Used For</th>
+                      <th className="border border-black px-1 py-1 w-10">UOM</th>
+                      <th className="border border-black px-1 py-1 w-14">Opening Stock</th>
+                      <th className="border border-black px-1 py-1 w-14">Received</th>
+                      <th className="border border-black px-1 py-1 w-12">Issued</th>
+                      <th className="border border-black px-1 py-1 w-14">Closing Stock</th>
+                      <th className="border border-black px-1 py-1 w-12">Min Level</th>
+                      <th className="border border-black px-1 py-1 w-14">Reorder Qty</th>
+                      <th className="border border-black px-1 py-1 w-18">Supplier</th>
+                      <th className="border border-black px-1 py-1 text-left">Remarks</th>
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {sparePartsRows.map(r => (
+                        <tr key={r.id} className={cn((parseInt(r.closingStock)||0)<=(parseInt(r.minLevel)||0)?"bg-red-50":"")}>
+                          <td className="border border-black p-0.5"><input value={r.partCode} onChange={e=>updateSparePartsRow(r.id,"partCode",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.partName} onChange={e=>updateSparePartsRow(r.id,"partName",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.equipUsedFor} onChange={e=>updateSparePartsRow(r.id,"equipUsedFor",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.uom} onChange={e=>updateSparePartsRow(r.id,"uom",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.openingStock} onChange={e=>updateSparePartsRow(r.id,"openingStock",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.received} onChange={e=>updateSparePartsRow(r.id,"received",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono text-teal-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.issued} onChange={e=>updateSparePartsRow(r.id,"issued",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono text-orange-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.closingStock} onChange={e=>updateSparePartsRow(r.id,"closingStock",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-black",parseInt(r.closingStock)<=parseInt(r.minLevel)?"text-red-700":"")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.minLevel} onChange={e=>updateSparePartsRow(r.id,"minLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.reorderQty} onChange={e=>updateSparePartsRow(r.id,"reorderQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.supplier} onChange={e=>updateSparePartsRow(r.id,"supplier",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateSparePartsRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-600")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="text-[8px] text-red-600 font-semibold mt-1">* Red highlighted rows = stock at or below minimum level (reorder required)</div>
+                </div>
+              )}
+
+              {/* ═══ 12. Utility Log Sheet ═══ */}
+              {selectedFormatId === "utility-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-24">Date & Time</th>
+                      <th className="border border-black px-1 py-1 text-left">Utility / Equipment</th>
+                      <th className="border border-black px-1 py-1 text-left">Parameter 1</th>
+                      <th className="border border-black px-1 py-1 w-12">Value</th>
+                      <th className="border border-black px-1 py-1 text-left">Parameter 2</th>
+                      <th className="border border-black px-1 py-1 w-12">Value</th>
+                      <th className="border border-black px-1 py-1 text-left">Parameter 3</th>
+                      <th className="border border-black px-1 py-1 w-12">Value</th>
+                      <th className="border border-black px-1 py-1 text-left">Parameter 4</th>
+                      <th className="border border-black px-1 py-1 w-12">Value</th>
+                      <th className="border border-black px-1 py-1 w-14">Status</th>
+                      <th className="border border-black px-1 py-1 w-14">Operator</th>
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {utilityLogRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.dateTime} onChange={e=>updateUtilityLogRow(r.id,"dateTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.utility} onChange={e=>updateUtilityLogRow(r.id,"utility",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.param1Label} onChange={e=>updateUtilityLogRow(r.id,"param1Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.param1} onChange={e=>updateUtilityLogRow(r.id,"param1",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.param2Label} onChange={e=>updateUtilityLogRow(r.id,"param2Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.param2} onChange={e=>updateUtilityLogRow(r.id,"param2",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.param3Label} onChange={e=>updateUtilityLogRow(r.id,"param3Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.param3} onChange={e=>updateUtilityLogRow(r.id,"param3",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.param4Label} onChange={e=>updateUtilityLogRow(r.id,"param4Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.param4} onChange={e=>updateUtilityLogRow(r.id,"param4",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateUtilityLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="normal"?"text-green-700":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateUtilityLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 13. Lubrication Log Sheet ═══ */}
+              {selectedFormatId === "lubrication-log" && (
+                <div className="w-full">
+                  <table className="w-full text-[9px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1.5 py-1 w-16">Equip ID</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Machine / Equipment</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Lubrication Point</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Lubricant Grade</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Frequency</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Last Done</th>
+                      <th className="border border-black px-1.5 py-1 w-18">Next Due</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Qty Used</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Done By</th>
+                      <th className="border border-black px-1.5 py-1 w-14">Verified</th>
+                      <th className="border border-black px-1.5 py-1 text-left">Remarks</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {lubricationRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.equipId} onChange={e=>updateLubricationRow(r.id,"equipId",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.machine} onChange={e=>updateLubricationRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.lubricationPoint} onChange={e=>updateLubricationRow(r.id,"lubricationPoint",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.lubricantGrade} onChange={e=>updateLubricationRow(r.id,"lubricantGrade",e.target.value)} className={cn(inp,"text-[9px] p-1 font-mono text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.frequency} onChange={e=>updateLubricationRow(r.id,"frequency",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.lastDoneDate} onChange={e=>updateLubricationRow(r.id,"lastDoneDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.nextDueDate} onChange={e=>updateLubricationRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.qtyUsed} onChange={e=>updateLubricationRow(r.id,"qtyUsed",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updateLubricationRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updateLubricationRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateLubricationRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-600")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 14. Daily Maintenance / Work Permit Register ═══ */}
+              {selectedFormatId === "work-permit" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-16">Permit No.</th>
+                      <th className="border border-black px-1 py-1 w-14">Date</th>
+                      <th className="border border-black px-1 py-1 text-left">Work Description</th>
+                      <th className="border border-black px-1 py-1 text-left">Equipment / Area</th>
+                      <th className="border border-black px-1 py-1 w-18">Work Type</th>
+                      <th className="border border-black px-1 py-1 text-left">Hazard Identified</th>
+                      <th className="border border-black px-1 py-1 text-left">Precautions Taken</th>
+                      <th className="border border-black px-1 py-1 w-16">Issued By</th>
+                      <th className="border border-black px-1 py-1 w-12">Start</th>
+                      <th className="border border-black px-1 py-1 w-12">End</th>
+                      <th className="border border-black px-1 py-1 w-12">Status</th>
+                      <th className="border border-black px-1 py-1 w-14">Closed By</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {workPermitRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.permitNo} onChange={e=>updateWorkPermitRow(r.id,"permitNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.date} onChange={e=>updateWorkPermitRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.workDescription} onChange={e=>updateWorkPermitRow(r.id,"workDescription",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.equipment} onChange={e=>updateWorkPermitRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.workType} onChange={e=>updateWorkPermitRow(r.id,"workType",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.workType==="Hot Work"?"text-red-700":r.workType==="Electrical"?"text-orange-700":"text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.hazard} onChange={e=>updateWorkPermitRow(r.id,"hazard",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.precautions} onChange={e=>updateWorkPermitRow(r.id,"precautions",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.issuedBy} onChange={e=>updateWorkPermitRow(r.id,"issuedBy",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateWorkPermitRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.endTime} onChange={e=>updateWorkPermitRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateWorkPermitRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-orange-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.closedBy} onChange={e=>updateWorkPermitRow(r.id,"closedBy",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 15. Milk Processing & Standardization Log ═══ */}
+              {selectedFormatId === "processing-standardization" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-14">Silo / Tank</th>
+                      <th className="border border-black px-1 py-1 w-16">Milk Qty (L)</th>
+                      <th className="border border-black px-1 py-1 w-12">Raw Fat%</th>
+                      <th className="border border-black px-1 py-1 w-12">Raw SNF%</th>
+                      <th className="border border-black px-1 py-1 w-12">Tgt Fat%</th>
+                      <th className="border border-black px-1 py-1 w-12">Tgt SNF%</th>
+                      <th className="border border-black px-1 py-1 w-16">Skim Added (L)</th>
+                      <th className="border border-black px-1 py-1 w-16">Cream Added (kg)</th>
+                      <th className="border border-black px-1 py-1 w-12">Final Fat%</th>
+                      <th className="border border-black px-1 py-1 w-12">Final SNF%</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {processingRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.silo} onChange={e=>updateProcessingRow(r.id,"silo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.milkQty} onChange={e=>updateProcessingRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rawFat} onChange={e=>updateProcessingRow(r.id,"rawFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rawSnf} onChange={e=>updateProcessingRow(r.id,"rawSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.targetFat} onChange={e=>updateProcessingRow(r.id,"targetFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.targetSnf} onChange={e=>updateProcessingRow(r.id,"targetSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.skimAdded} onChange={e=>updateProcessingRow(r.id,"skimAdded",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.creamAdded} onChange={e=>updateProcessingRow(r.id,"creamAdded",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.finalFat} onChange={e=>updateProcessingRow(r.id,"finalFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-black text-blue-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.finalSnf} onChange={e=>updateProcessingRow(r.id,"finalSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-black text-blue-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateProcessingRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 16. Quality & Lab Testing Register ═══ */}
+              {selectedFormatId === "qa-lab-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 text-left">Sample Source</th>
+                      <th className="border border-black px-1 py-1 w-16">Batch/Tanker</th>
+                      <th className="border border-black px-1 py-1 w-12">Temp (°C)</th>
+                      <th className="border border-black px-1 py-1 w-12">Acidity</th>
+                      <th className="border border-black px-1 py-1 w-14">MBRT</th>
+                      <th className="border border-black px-1 py-1 text-left">Alcohol Test</th>
+                      <th className="border border-black px-1 py-1 w-14">COB</th>
+                      <th className="border border-black px-1 py-1 w-10">Fat%</th>
+                      <th className="border border-black px-1 py-1 w-10">SNF%</th>
+                      <th className="border border-black px-1 py-1 w-16">Analyst</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {qaLabRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.source} onChange={e=>updateQaLabRow(r.id,"source",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.batchNo} onChange={e=>updateQaLabRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateQaLabRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.acidity} onChange={e=>updateQaLabRow(r.id,"acidity",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.mbrt} onChange={e=>updateQaLabRow(r.id,"mbrt",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.alcoholTest} onChange={e=>updateQaLabRow(r.id,"alcoholTest",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.cob} onChange={e=>updateQaLabRow(r.id,"cob",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.cob.toLowerCase().includes("positive")?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.fat} onChange={e=>updateQaLabRow(r.id,"fat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.snf} onChange={e=>updateQaLabRow(r.id,"snf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.analyst} onChange={e=>updateQaLabRow(r.id,"analyst",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 17. Packaging QC & Weight Check Log ═══ */}
+              {selectedFormatId === "packaging-qc" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-14">Machine No</th>
+                      <th className="border border-black px-1 py-1 text-left">Product / Variant</th>
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Target Wt</th>
+                      <th className="border border-black px-1 py-1 w-16">Actual Wt</th>
+                      <th className="border border-black px-1 py-1 w-16">Sealing Temp</th>
+                      <th className="border border-black px-1 py-1 w-14">Leak Check</th>
+                      <th className="border border-black px-1 py-1 text-left">Print/MRP Check</th>
+                      <th className="border border-black px-1 py-1 w-16">Inspector</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {packagingQcRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.machineNo} onChange={e=>updatePackagingQcRow(r.id,"machineNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updatePackagingQcRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updatePackagingQcRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.targetWeight} onChange={e=>updatePackagingQcRow(r.id,"targetWeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.actualWeight} onChange={e=>updatePackagingQcRow(r.id,"actualWeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.sealingTemp} onChange={e=>updatePackagingQcRow(r.id,"sealingTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.leakCheck} onChange={e=>updatePackagingQcRow(r.id,"leakCheck",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.leakCheck.toLowerCase()==="pass"?"text-green-700":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.printCheck} onChange={e=>updatePackagingQcRow(r.id,"printCheck",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.inspector} onChange={e=>updatePackagingQcRow(r.id,"inspector",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 18. Cold Room Temp & Stock Register ═══ */}
+              {selectedFormatId === "cold-room-register" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-20">Cold Room</th>
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-14">Room Temp</th>
+                      <th className="border border-black px-1 py-1 text-left">Product Variant</th>
+                      <th className="border border-black px-1 py-1 w-16">Crate Count</th>
+                      <th className="border border-black px-1 py-1 w-18">Stack Height</th>
+                      <th className="border border-black px-1 py-1 w-20">FIFO Status</th>
+                      <th className="border border-black px-1 py-1 w-18">Defrost Status</th>
+                      <th className="border border-black px-1 py-1 w-16">Incharge</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {coldRoomRegRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.coldRoomNo} onChange={e=>updateColdRoomRegRow(r.id,"coldRoomNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateColdRoomRegRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateColdRoomRegRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-cyan-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updateColdRoomRegRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.crateCount} onChange={e=>updateColdRoomRegRow(r.id,"crateCount",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.stackHeight} onChange={e=>updateColdRoomRegRow(r.id,"stackHeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.fifoStatus} onChange={e=>updateColdRoomRegRow(r.id,"fifoStatus",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.defrostStatus} onChange={e=>updateColdRoomRegRow(r.id,"defrostStatus",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.incharge} onChange={e=>updateColdRoomRegRow(r.id,"incharge",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 19. Dahi, Lassi & Culturing Process Log ═══ */}
+              {selectedFormatId === "curd-dahi-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-16">Batch No</th>
+                      <th className="border border-black px-1 py-1 text-left">Product</th>
+                      <th className="border border-black px-1 py-1 w-14">Milk Qty</th>
+                      <th className="border border-black px-1 py-1 w-16">Culture Code</th>
+                      <th className="border border-black px-1 py-1 w-14">Inoc. Temp</th>
+                      <th className="border border-black px-1 py-1 w-12">Start</th>
+                      <th className="border border-black px-1 py-1 w-12">Set Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Final Acidity</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {curdDahiRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.batchNo} onChange={e=>updateCurdDahiRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updateCurdDahiRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.milkQty} onChange={e=>updateCurdDahiRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.cultureCode} onChange={e=>updateCurdDahiRow(r.id,"cultureCode",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.inocTemp} onChange={e=>updateCurdDahiRow(r.id,"inocTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateCurdDahiRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.setTime} onChange={e=>updateCurdDahiRow(r.id,"setTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.finalAcidity} onChange={e=>updateCurdDahiRow(r.id,"finalAcidity",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-amber-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCurdDahiRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 20. Boiler & Steam Generation Log ═══ */}
+              {selectedFormatId === "boiler-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-14">Shift/Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Steam Press</th>
+                      <th className="border border-black px-1 py-1 w-14">Feed Temp</th>
+                      <th className="border border-black px-1 py-1 text-left">Softener Hardness</th>
+                      <th className="border border-black px-1 py-1 w-18">Blowdown Status</th>
+                      <th className="border border-black px-1 py-1 w-16">Fuel Consumed</th>
+                      <th className="border border-black px-1 py-1 w-14">Flue Temp</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {boilerLogRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.shiftTime} onChange={e=>updateBoilerLogRow(r.id,"shiftTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.steamPress} onChange={e=>updateBoilerLogRow(r.id,"steamPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-red-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.feedTemp} onChange={e=>updateBoilerLogRow(r.id,"feedTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.softenerHardness} onChange={e=>updateBoilerLogRow(r.id,"softenerHardness",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.blowdown} onChange={e=>updateBoilerLogRow(r.id,"blowdown",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.fuelCons} onChange={e=>updateBoilerLogRow(r.id,"fuelCons",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.flueTemp} onChange={e=>updateBoilerLogRow(r.id,"flueTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateBoilerLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 21. Refrigeration & Ammonia Plant Log ═══ */}
+              {selectedFormatId === "refrigeration-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 text-left">Compressor ID</th>
+                      <th className="border border-black px-1 py-1 w-14">Suction Pr</th>
+                      <th className="border border-black px-1 py-1 w-14">Disch Pr</th>
+                      <th className="border border-black px-1 py-1 w-14">Oil Pr</th>
+                      <th className="border border-black px-1 py-1 w-16">Glycol Temp</th>
+                      <th className="border border-black px-1 py-1 w-20">Condenser Temp</th>
+                      <th className="border border-black px-1 py-1 w-14">Amp Draw</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {refrigerationLogRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.compNo} onChange={e=>updateRefrigerationLogRow(r.id,"compNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.suctionPress} onChange={e=>updateRefrigerationLogRow(r.id,"suctionPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dischargePress} onChange={e=>updateRefrigerationLogRow(r.id,"dischargePress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.oilPress} onChange={e=>updateRefrigerationLogRow(r.id,"oilPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.glycolTemp} onChange={e=>updateRefrigerationLogRow(r.id,"glycolTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-cyan-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.condenserWaterTemp} onChange={e=>updateRefrigerationLogRow(r.id,"condenserWaterTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.ampDraw} onChange={e=>updateRefrigerationLogRow(r.id,"ampDraw",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateRefrigerationLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 22. Electrical Power & DG Set Daily Log ═══ */}
+              {selectedFormatId === "electrical-dg-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-20">EB Meter kWh</th>
+                      <th className="border border-black px-1 py-1 w-14">Power Factor</th>
+                      <th className="border border-black px-1 py-1 w-18">DG Run Hours</th>
+                      <th className="border border-black px-1 py-1 w-16">Diesel Level</th>
+                      <th className="border border-black px-1 py-1 text-left">Phase Load (A)</th>
+                      <th className="border border-black px-1 py-1 w-14">Voltage (V)</th>
+                      <th className="border border-black px-1 py-1 w-16">Electrician</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {electricalDgRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateElectricalDgRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.ebMeterKwh} onChange={e=>updateElectricalDgRow(r.id,"ebMeterKwh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.powerFactor} onChange={e=>updateElectricalDgRow(r.id,"powerFactor",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dgRunHrs} onChange={e=>updateElectricalDgRow(r.id,"dgRunHrs",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dieselLevel} onChange={e=>updateElectricalDgRow(r.id,"dieselLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.phaseAmp} onChange={e=>updateElectricalDgRow(r.id,"phaseAmp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.voltage} onChange={e=>updateElectricalDgRow(r.id,"voltage",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.electrician} onChange={e=>updateElectricalDgRow(r.id,"electrician",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 23. Air Compressor & Pneumatic Log ═══ */}
+              {selectedFormatId === "compressor-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 text-left">Compressor ID</th>
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Line Press</th>
+                      <th className="border border-black px-1 py-1 w-14">Dew Point</th>
+                      <th className="border border-black px-1 py-1 w-16">Oil Level</th>
+                      <th className="border border-black px-1 py-1 text-left">Moisture Drain</th>
+                      <th className="border border-black px-1 py-1 w-16">Total Run Hrs</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {compressorRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.compId} onChange={e=>updateCompressorRow(r.id,"compId",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateCompressorRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.linePress} onChange={e=>updateCompressorRow(r.id,"linePress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dewPoint} onChange={e=>updateCompressorRow(r.id,"dewPoint",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.oilLevel} onChange={e=>updateCompressorRow(r.id,"oilLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.moistureDrain} onChange={e=>updateCompressorRow(r.id,"moistureDrain",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.totalRunHrs} onChange={e=>updateCompressorRow(r.id,"totalRunHrs",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCompressorRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 24. Instrument Calibration Register ═══ */}
+              {selectedFormatId === "calibration-register" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-16">Tag No</th>
+                      <th className="border border-black px-1 py-1 text-left">Instrument Name</th>
+                      <th className="border border-black px-1 py-1 text-left">Location</th>
+                      <th className="border border-black px-1 py-1 w-16">Range</th>
+                      <th className="border border-black px-1 py-1 w-16">Last Calib</th>
+                      <th className="border border-black px-1 py-1 w-16">Next Due</th>
+                      <th className="border border-black px-1 py-1 text-left">Standard Used</th>
+                      <th className="border border-black px-1 py-1 w-14">Error</th>
+                      <th className="border border-black px-1 py-1 w-16">Technician</th>
+                      <th className="border border-black px-1 py-1 w-18">Cert No.</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {calibrationRegRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.tagNo} onChange={e=>updateCalibrationRegRow(r.id,"tagNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.instName} onChange={e=>updateCalibrationRegRow(r.id,"instName",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.location} onChange={e=>updateCalibrationRegRow(r.id,"location",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.range} onChange={e=>updateCalibrationRegRow(r.id,"range",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.lastCalibDate} onChange={e=>updateCalibrationRegRow(r.id,"lastCalibDate",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.nextDueDate} onChange={e=>updateCalibrationRegRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.standardUsed} onChange={e=>updateCalibrationRegRow(r.id,"standardUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.errorDeviation} onChange={e=>updateCalibrationRegRow(r.id,"errorDeviation",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.technician} onChange={e=>updateCalibrationRegRow(r.id,"technician",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.certNo} onChange={e=>updateCalibrationRegRow(r.id,"certNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-teal-800")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 25. ETP & WTP Environmental Daily Log ═══ */}
+              {selectedFormatId === "etp-wtp-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Raw Water Flow</th>
+                      <th className="border border-black px-1 py-1 w-14">Treated pH</th>
+                      <th className="border border-black px-1 py-1 w-14">ETP Inlet pH</th>
+                      <th className="border border-black px-1 py-1 w-16">Aeration DO</th>
+                      <th className="border border-black px-1 py-1 w-18">Sludge Discharge</th>
+                      <th className="border border-black px-1 py-1 text-left">Dosing Chemical Used</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {etpWtpRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateEtpWtpRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rawWaterFlow} onChange={e=>updateEtpWtpRow(r.id,"rawWaterFlow",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.treatedWaterPh} onChange={e=>updateEtpWtpRow(r.id,"treatedWaterPh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.etpInletPh} onChange={e=>updateEtpWtpRow(r.id,"etpInletPh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.aerationDo} onChange={e=>updateEtpWtpRow(r.id,"aerationDo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.sludgeDischarge} onChange={e=>updateEtpWtpRow(r.id,"sludgeDischarge",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dosingChem} onChange={e=>updateEtpWtpRow(r.id,"dosingChem",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateEtpWtpRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+            </div>
+
+            {/* Signature Footer */}
+            <div className="pt-8 space-y-4">
+              <div className="flex justify-between items-center text-[8.5px] font-bold uppercase tracking-wider px-4">
+                <div className="text-center w-32 border-t border-black pt-1">OPERATOR SIGN</div>
+                <div className="text-center w-32 border-t border-black pt-1">SHIFT INCHARGE</div>
+                <div className="text-center w-32 border-t border-black pt-1">PLANT MANAGER SIGN</div>
+              </div>
+              <div className="border-t border-slate-300 pt-2 text-center text-[7.5px] text-slate-400 font-bold tracking-widest uppercase">
                 POWERED BY DAIRY HUB ERP SYSTEM
               </div>
             </div>
 
           </div>
-        );
-      })()}
+        </div>
+      </div>
+    </div>
 
-      {/* TAB 4: FORMULAS & PRINCIPLES */}
-      {activeTab === "principles" && (
-        <Card className="border border-slate-200 shadow-sm">
-          <CardHeader className="bg-slate-100 p-4 border-b">
-            <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Info className="h-4.5 w-4.5 text-indigo-600" />
-              Bilingual Costing Principles & Excel Formulas (लागत गणना सिद्धांत और एक्सेल सूत्र)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6 space-y-6 text-xs text-slate-700">
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
-              <div className="space-y-2 border-l-4 border-l-blue-500 pl-3">
-                <h4 className="font-bold text-blue-900">1. Allocated Milk Volume & Yield (दूध की मात्रा और उत्पाद क्षमता)</h4>
-                <p className="leading-relaxed">
-                  <strong>English:</strong> Each product requires a specific amount of raw input. The yield factor determines how much finished product is made from 1 unit of milk.
-                  <br />• <em>FCM / Toned Milk:</em> Yield is 1.0 (1 Litre milk gives 1 Litre pouch).
-                  <br />• <em>Paneer:</em> Yield is 0.15 (1 Litre milk gives 150 grams / 0.15 kg Paneer).
-                  <br />• <em>Lassi:</em> Yield is 1.2 (due to water, sugar, and solids addition).
-                </p>
-                <p className="text-slate-500 italic">
-                  <strong>Hindi:</strong> कच्चे दूध की मात्रा का गुणन उत्पाद क्षमता (Yield) से किया जाता है। उदाहरण के लिए, पनीर की क्षमता 0.15 है, यानी 1000 लीटर कच्चे दूध से 150 किलो पनीर प्राप्त होगा।
-                </p>
-              </div>
-
-              <div className="space-y-2 border-l-4 border-l-orange-500 pl-3">
-                <h4 className="font-bold text-orange-950">2. Variable vs Fixed Costs (परिवर्तनीय बनाम स्थिर खर्चे)</h4>
-                <p className="leading-relaxed">
-                  <strong>English:</strong> 
-                  <br />• <em>Variable:</em> Expenses that increase with every unit produced (Raw milk price, packaging film, energy/boiler, logistics).
-                  <br />• <em>Fixed:</em> Overhead expenditures that remain constant monthly regardless of volume (Labor salaries, factory rent, fixed electricity meter charges).
-                </p>
-                <p className="text-slate-500 italic">
-                  <strong>Hindi:</strong> 
-                  <br />• <em>परिवर्तनीय खर्च:</em> उत्पादन बढ़ने के साथ बढ़ने वाले खर्च (कच्चा दूध, पैकेजिंग फिल्म, अतिरिक्त सामग्री, परिवहन)।
-                  <br />• <em>स्थिर खर्च:</em> उत्पादन कम या ज्यादा होने पर भी समान रहने वाले मासिक खर्च (कर्मचारी वेतन, कारखाना किराया, मशीन मेंटेनेंस)।
-                </p>
-              </div>
-
-              <div className="space-y-2 border-l-4 border-l-purple-500 pl-3">
-                <h4 className="font-bold text-purple-950">3. Process Loss & Saleable Output (प्रक्रिया नुकसान और बिक्री मात्रा)</h4>
-                <p className="leading-relaxed">
-                  <strong>English:</strong> Leakage, evaporation, pipe remnants, or packing errors reduce output.
-                  <br />• <strong>Saleable Qty = Milk Volume × Yield × (1 - Loss%)</strong>
-                </p>
-                <p className="text-slate-500 italic">
-                  <strong>Hindi:</strong> पाइप में चिपकने, फैलने या पैकिंग में खराबी के कारण होने वाला नुकसान।
-                  <br />• <strong>बिक्री योग्य मात्रा = दूध मात्रा × Yield × (1 - नुकसान%)</strong>
-                </p>
-              </div>
-
-              <div className="space-y-2 border-l-4 border-l-green-500 pl-3">
-                <h4 className="font-bold text-green-900">4. Break-Even Analysis (सम-विच्छेद विश्लेषण)</h4>
-                <p className="leading-relaxed">
-                  <strong>English:</strong> Break-even is computed via the Contribution Margin Ratio (CMR) to handle multiple products.
-                  <br />• <strong>CMR = (Total Revenue - Total Variable Cost) ÷ Total Revenue</strong>
-                  <br />• <strong>Break-Even Revenue = Total Fixed Overheads ÷ CMR</strong>
-                </p>
-                <p className="text-slate-500 italic">
-                  <strong>Hindi:</strong> मल्टी-प्रोडक्ट प्लांट के लिए ब्रेक-ईवन टर्नओवर कुल योगदान अनुपात (CMR) के आधार पर निकाला जाता है।
-                  <br />• <strong>BEP रेवेन्यू = कुल मासिक स्थिर खर्च ÷ CMR</strong>
-                </p>
-              </div>
-
-            </div>
-
-            {/* Formula Excel Cheat Sheet */}
-            <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2">
-              <h3 className="font-bold text-indigo-900 flex items-center gap-1 text-sm font-bold">
-                <Calculator className="h-4 w-4" /> Excel Mathematical Formula Dictionary (एक्सेल सूत्र संदर्भ)
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[11px] text-slate-800 p-2">
-                <div className="space-y-1">
-                  <div><strong>1. Finished Units Qty:</strong></div>
-                  <div className="bg-white p-1.5 rounded border text-indigo-600 font-bold">=Milk_Qty * Yield_Factor * (1 - Process_Loss%)</div>
-                </div>
-                <div className="space-y-1">
-                  <div><strong>2. Total Product Variable Cost:</strong></div>
-                  <div className="bg-white p-1.5 rounded border text-indigo-600 font-bold">=(Milk_Qty * Raw_Milk_Rate) + (Finished_Units * Sum(Pack, Ingredients, Energy, Logistics))</div>
-                </div>
-                <div className="space-y-1">
-                  <div><strong>3. Overall Plant Contribution:</strong></div>
-                  <div className="bg-white p-1.5 rounded border text-indigo-600 font-bold">=Total_Revenue - Total_Variable_Costs</div>
-                </div>
-                <div className="space-y-1">
-                  <div><strong>4. Net Profit Post-Tax:</strong></div>
-                  <div className="bg-white p-1.5 rounded border text-indigo-600 font-bold">=(Gross_Profit - Fixed_Costs) * (1 - Tax_Rate%)</div>
-                </div>
-              </div>
-            </div>
-
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Global CSS overrides for A4 Printing layout */}
-      <style jsx global>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          #print-area, #print-area * {
-            visibility: visible;
-          }
-          #print-area {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 210mm !important;
-            height: 297mm !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
-            background-color: white !important;
-          }
-          .print\\:hidden {
-            display: none !important;
-          }
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        .is-exporting-pdf .print\\:hidden,
+        .is-exporting-pdf .no-pdf {
+          display: none !important;
         }
-      `}</style>
+        @media print {
+          body * { visibility: hidden; }
+          #print-area-formats, #print-area-formats * { visibility: visible; }
+          #print-area-formats {
+            position: absolute; left: 0; top: 0;
+            width: ${currentOrientation === 'landscape' ? '297mm' : '210mm'} !important;
+            height: ${currentOrientation === 'landscape' ? '210mm' : '297mm'} !important;
+            padding: 10mm !important; margin: 0 !important;
+            border: none !important; box-shadow: none !important;
+            background-color: white !important;
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+          }
+          .print\\:hidden { display: none !important; }
+        }
+      `}} />
     </div>
   );
 }
