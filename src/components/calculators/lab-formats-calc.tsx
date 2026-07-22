@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { savePdfFile } from "@/lib/mobile-download";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -420,7 +421,15 @@ export function LabFormatsCalc() {
     setIsDownloading(true);
     try {
       printAreaRef.current.classList.add("is-exporting-pdf");
-      const canvas = await html2canvas(printAreaRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      const canvas = await html2canvas(printAreaRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: printAreaRef.current.scrollWidth || 1200,
+        windowHeight: printAreaRef.current.scrollHeight || 1600,
+        scrollX: 0,
+        scrollY: 0,
+      });
       printAreaRef.current.classList.remove("is-exporting-pdf");
       const imgData = canvas.toDataURL("image/png");
       
@@ -435,7 +444,7 @@ export function LabFormatsCalc() {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`lab_${selectedFormat.id}_${currentDate}.pdf`);
+      await savePdfFile(pdf, `lab_${selectedFormat.id}_${currentDate}.pdf`);
       
       toast({
         title: "PDF Format Generated",
@@ -448,8 +457,8 @@ export function LabFormatsCalc() {
       console.error(e);
       toast({
         title: "Export Failed",
-        description: "Failed to generate report PDF.",
-        variant: "destructive"
+        description: "Failed to generate PDF format.",
+        variant: "destructive",
       });
     }
     setIsDownloading(false);
