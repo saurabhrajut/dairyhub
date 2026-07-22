@@ -14,24 +14,36 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { savePdfFile } from "@/lib/mobile-download";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 type FormatType =
-  // ── Plant Operations ──
+  // ── Plant Operations (Production) ──
   | "rm-reception"
   | "bmr"
   | "process-monitoring"
+  | "processing-standardization"
+  | "qa-lab-log"
   | "packing-dispatch"
+  | "packaging-qc"
+  | "cold-room-register"
   | "cip-cleaning"
+  | "curd-dahi-log"
   | "machine-breakdown"
   | "yield-handover"
-  // ── Maintenance ──
+  // ── Maintenance (Mechanical & Utilities) ──
   | "pm-log"
   | "breakdown-log"
   | "equipment-history"
   | "spare-parts"
   | "utility-log"
+  | "boiler-log"
+  | "refrigeration-log"
+  | "electrical-dg-log"
+  | "compressor-log"
+  | "calibration-register"
+  | "etp-wtp-log"
   | "lubrication-log"
   | "work-permit";
 
@@ -45,22 +57,34 @@ interface FormatInfo {
 }
 
 const FORMATS_CATALOG: FormatInfo[] = [
-  // ── PLANT OPERATIONS GROUP ──
-  { id: "rm-reception",      title: "Raw Milk Reception & Storage Log",          description: "Dock-to-silo reception record for tankers.",                               orientation: "landscape", icon: Truck,          group: "Plant Operations" },
-  { id: "bmr",               title: "Batch Manufacturing Record (BMR)",           description: "Step-by-step batch record with CCP sign-off.",                             orientation: "landscape", icon: ClipboardList,  group: "Plant Operations" },
-  { id: "process-monitoring",title: "Process Monitoring Log",                     description: "Hourly pasteurizer temp, pressure & flow log.",                            orientation: "landscape", icon: Factory,        group: "Plant Operations" },
-  { id: "packing-dispatch",  title: "Packing & Dispatch Log",                    description: "Packed qty, vehicle loading & dispatch clearance.",                        orientation: "landscape", icon: Package,        group: "Plant Operations" },
-  { id: "cip-cleaning",      title: "CIP & Cleaning Log",                        description: "Chemical CIP log: temp, concentration, duration, QA.",                    orientation: "landscape", icon: ShieldCheck,    group: "Plant Operations" },
-  { id: "machine-breakdown", title: "Machine Breakdown & Maintenance Log",        description: "Downtime tracker for failures, corrective actions.",                       orientation: "portrait",  icon: Wrench,         group: "Plant Operations" },
-  { id: "yield-handover",    title: "Production Yield & Shift Handover Report",   description: "Shift summary: milk input, output, yield%, pending.", orientation: "landscape", icon: BarChart3,      group: "Plant Operations" },
-  // ── MAINTENANCE GROUP ──
-  { id: "pm-log",            title: "Preventive Maintenance (PM) Log",            description: "Scheduled PM tasks, frequency, status & sign-off.",                       orientation: "landscape", icon: Settings,       group: "Maintenance" },
-  { id: "breakdown-log",     title: "Breakdown Maintenance Log",                  description: "Detailed breakdown root cause, CAPA & downtime log.",                     orientation: "landscape", icon: Wrench,         group: "Maintenance" },
-  { id: "equipment-history", title: "Equipment History Card",                     description: "Full lifecycle record: PM, breakdown, calibration events.",                orientation: "portrait",  icon: BookOpen,       group: "Maintenance" },
-  { id: "spare-parts",       title: "Spare Parts Inventory Register",             description: "Stock in/out register for maintenance spare parts.",                       orientation: "landscape", icon: Archive,        group: "Maintenance" },
-  { id: "utility-log",       title: "Utility Log Sheet",                          description: "Boiler, chiller, compressor & RO daily readings log.",                    orientation: "landscape", icon: Zap,            group: "Maintenance" },
-  { id: "lubrication-log",   title: "Lubrication Log Sheet",                      description: "Scheduled lubrication points, lubricant grade & quantity.",                orientation: "portrait",  icon: Droplets,       group: "Maintenance" },
-  { id: "work-permit",       title: "Daily Maintenance / Work Permit Register",   description: "Hot/cold work permits, hazard control & closure record.",                  orientation: "landscape", icon: ClipboardCheck, group: "Maintenance" },
+  // ── PLANT OPERATIONS GROUP (12 Formats) ──
+  { id: "rm-reception",              title: "Raw Milk Reception & Storage Log",          description: "Dock-to-silo reception record for tankers.",                               orientation: "landscape", icon: Truck,          group: "Plant Operations" },
+  { id: "bmr",                       title: "Batch Manufacturing Record (BMR)",           description: "Step-by-step batch record with CCP sign-off.",                             orientation: "landscape", icon: ClipboardList,  group: "Plant Operations" },
+  { id: "process-monitoring",        title: "Process Monitoring Log",                     description: "Hourly pasteurizer temp, pressure & flow log.",                            orientation: "landscape", icon: Factory,        group: "Plant Operations" },
+  { id: "processing-standardization",title: "Milk Processing & Standardization Log",   description: "Fat/SNF standardization, cream separation & Pearson dosage.",             orientation: "landscape", icon: Factory,        group: "Plant Operations" },
+  { id: "qa-lab-log",                title: "Quality & Lab Testing Register",            description: "Organoleptic, Fat%, SNF%, Acidity, MBRT, Alcohol & heat stability.",      orientation: "landscape", icon: ShieldCheck,    group: "Plant Operations" },
+  { id: "packing-dispatch",          title: "Packing & Dispatch Log",                    description: "Packed qty, vehicle loading & dispatch clearance.",                        orientation: "landscape", icon: Package,        group: "Plant Operations" },
+  { id: "packaging-qc",              title: "Packaging QC & Weight Check Log",          description: "Pouch weight variation, leakage test, sealing temp & print quality.",       orientation: "landscape", icon: Package,        group: "Plant Operations" },
+  { id: "cold-room-register",        title: "Cold Room Temp & Stock Register",          description: "Cold room temp log (-25°C to 4°C), stack height & FIFO dispatch.",        orientation: "landscape", icon: Archive,        group: "Plant Operations" },
+  { id: "cip-cleaning",              title: "CIP & Cleaning Log",                        description: "Chemical CIP log: temp, concentration, duration, QA.",                    orientation: "landscape", icon: ShieldCheck,    group: "Plant Operations" },
+  { id: "curd-dahi-log",             title: "Dahi, Lassi & Culturing Process Log",      description: "Inoculation temp, starter culture dosage, incubation time & acidity.",     orientation: "landscape", icon: ClipboardList,  group: "Plant Operations" },
+  { id: "machine-breakdown",         title: "Machine Breakdown & Maintenance Log",        description: "Downtime tracker for failures, corrective actions.",                       orientation: "portrait",  icon: Wrench,         group: "Plant Operations" },
+  { id: "yield-handover",            title: "Production Yield & Shift Handover Report",   description: "Shift summary: milk input, output, yield%, pending.",                      orientation: "landscape", icon: BarChart3,      group: "Plant Operations" },
+
+  // ── MAINTENANCE GROUP (13 Formats) ──
+  { id: "pm-log",                    title: "Preventive Maintenance (PM) Log",            description: "Scheduled PM tasks, frequency, status & sign-off.",                       orientation: "landscape", icon: Settings,       group: "Maintenance" },
+  { id: "breakdown-log",             title: "Breakdown Maintenance Log",                  description: "Detailed breakdown root cause, CAPA & downtime log.",                     orientation: "landscape", icon: Wrench,         group: "Maintenance" },
+  { id: "equipment-history",         title: "Equipment History Card",                     description: "Full lifecycle record: PM, breakdown, calibration events.",                orientation: "portrait",  icon: BookOpen,       group: "Maintenance" },
+  { id: "spare-parts",               title: "Spare Parts Inventory Register",             description: "Stock in/out register for maintenance spare parts.",                       orientation: "landscape", icon: Archive,        group: "Maintenance" },
+  { id: "utility-log",               title: "Utility Log Sheet",                          description: "Boiler, chiller, compressor & RO daily readings log.",                    orientation: "landscape", icon: Zap,            group: "Maintenance" },
+  { id: "boiler-log",                title: "Boiler & Steam Generation Log",              description: "Steam pressure, feed water temp, blowdown, fuel cons & flue temp.",       orientation: "landscape", icon: Zap,            group: "Maintenance" },
+  { id: "refrigeration-log",         title: "Refrigeration & Ammonia Plant Log",          description: "Suction/Discharge pressure, oil pressure, glycol temp & load.",        orientation: "landscape", icon: Wrench,         group: "Maintenance" },
+  { id: "electrical-dg-log",         title: "Electrical Power & DG Set Daily Log",        description: "Power Factor (PF), EB kWh meter, DG run hours, diesel level & load.",     orientation: "landscape", icon: Zap,            group: "Maintenance" },
+  { id: "compressor-log",            title: "Air Compressor & Pneumatic Log",             description: "Line pressure (bar), dew point, oil level, moisture drain & hours.",       orientation: "portrait",  icon: Settings,       group: "Maintenance" },
+  { id: "calibration-register",      title: "Instrument Calibration Register",            description: "Pressure gauges, RTD temp sensors, flow meters & balance calib log.",      orientation: "landscape", icon: BookOpen,       group: "Maintenance" },
+  { id: "etp-wtp-log",               title: "ETP & WTP Environmental Log",                description: "Influent/Effluent pH, COD, BOD, TSS, aeration & chemical dosing.",        orientation: "landscape", icon: Droplets,       group: "Maintenance" },
+  { id: "lubrication-log",           title: "Lubrication Log Sheet",                      description: "Scheduled lubrication points, lubricant grade & quantity.",                orientation: "portrait",  icon: Droplets,       group: "Maintenance" },
+  { id: "work-permit",               title: "Daily Maintenance / Work Permit Register",   description: "Hot/cold work permits, hazard control & closure record.",                  orientation: "landscape", icon: ClipboardCheck, group: "Maintenance" },
 ];
 
 const GROUPS = ["Plant Operations", "Maintenance"];
@@ -181,6 +205,63 @@ export default function PlantFormatsCalc() {
     { id: 3, permitNo: "WP-2026-03", date: "2026-07-16", workDescription: "Confined space entry - silo RMST-1 cleaning",equipment: "Milk Silo RMST-1",     workType: "Confined Space",hazard: "Asphyxiation / Fall",precautions: "Gas test done, lifeline, buddy system",  issuedBy: "Mgr. Rao",  startTime: "14:00", endTime: "17:00", status: "Closed", closedBy: "Mgr. Rao"  },
   ]);
 
+  // ── New Plant Operations (Production) Formats ──
+  const [processingRows, setProcessingRows] = useState([
+    { id: 1, silo: "SILO-01", milkQty: "10000", rawFat: "4.50", rawSnf: "8.50", targetFat: "4.00", targetSnf: "8.50", skimAdded: "1250", creamAdded: "0", finalFat: "4.00", finalSnf: "8.50", operator: "Amit K." },
+    { id: 2, silo: "SILO-02", milkQty: "8000",  rawFat: "3.80", rawSnf: "8.40", targetFat: "4.50", targetSnf: "8.50", skimAdded: "0",    creamAdded: "180", finalFat: "4.50", finalSnf: "8.50", operator: "Suresh V." }
+  ]);
+
+  const [qaLabRows, setQaLabRows] = useState([
+    { id: 1, source: "Tanker HR-55-A-1234", batchNo: "TK-101", temp: "4.2", acidity: "0.135", mbrt: "5.5 hrs", alcoholTest: "Negative (68%)", cob: "Negative", fat: "4.20", snf: "8.55", analyst: "Dr. Verma" },
+    { id: 2, source: "Pasteurizer Outlet",   batchNo: "PST-202", temp: "4.0", acidity: "0.130", mbrt: ">6 hrs",  alcoholTest: "Negative (68%)", cob: "Negative", fat: "4.00", snf: "8.50", analyst: "Ritu S." }
+  ]);
+
+  const [packagingQcRows, setPackagingQcRows] = useState([
+    { id: 1, machineNo: "FL-01", product: "Full Cream 500ml", time: "09:00", targetWeight: "505g", actualWeight: "504.8g", sealingTemp: "165°C", leakCheck: "Pass", printCheck: "Clear (MRP/Exp)", inspector: "Rajesh T." },
+    { id: 2, machineNo: "FL-02", product: "Toned Milk 500ml",  time: "09:30", targetWeight: "504g", actualWeight: "504.2g", sealingTemp: "162°C", leakCheck: "Pass", printCheck: "Clear (MRP/Exp)", inspector: "Rajesh T." }
+  ]);
+
+  const [coldRoomRegRows, setColdRoomRegRows] = useState([
+    { id: 1, coldRoomNo: "Cold Room #1", time: "08:00", temp: "3.5°C", product: "Milk Pouches (FCM/TM)", crateCount: "1250", stackHeight: "5 Crates", fifoStatus: "Maintained", defrostStatus: "Normal", incharge: "Vikram S." },
+    { id: 2, coldRoomNo: "Cold Room #2", time: "08:00", temp: "2.8°C", product: "Paneer & Dahi Crates",  crateCount: "420",  stackHeight: "4 Crates", fifoStatus: "Maintained", defrostStatus: "Defrosting", incharge: "Vikram S." }
+  ]);
+
+  const [curdDahiRows, setCurdDahiRows] = useState([
+    { id: 1, batchNo: "DH-2026-01", product: "Pouch Dahi 400g", milkQty: "2000 L", cultureCode: "YC-380", inocTemp: "43.0°C", startTime: "10:00", setTime: "14:30", finalAcidity: "0.75%", operator: "Suresh V." },
+    { id: 2, batchNo: "LS-2026-04", product: "Sweet Lassi 200ml", milkQty: "1500 L", cultureCode: "ABT-5",   inocTemp: "42.5°C", startTime: "11:00", setTime: "15:15", finalAcidity: "0.68%", operator: "Ritu S." }
+  ]);
+
+  // ── New Maintenance (Mechanical & Utilities) Formats ──
+  const [boilerLogRows, setBoilerLogRows] = useState([
+    { id: 1, shiftTime: "06:00", steamPress: "7.5 bar", feedTemp: "82°C", softenerHardness: "<5 ppm", blowdown: "Done (10s)", fuelCons: "45 L/hr", flueTemp: "185°C", operator: "Vijay K." },
+    { id: 2, shiftTime: "10:00", steamPress: "7.8 bar", feedTemp: "85°C", softenerHardness: "<5 ppm", blowdown: "Done (10s)", fuelCons: "48 L/hr", flueTemp: "188°C", operator: "Vijay K." }
+  ]);
+
+  const [refrigerationLogRows, setRefrigerationLogRows] = useState([
+    { id: 1, compNo: "Ammonia Comp #1", suctionPress: "2.1 bar", dischargePress: "12.2 bar", oilPress: "3.5 bar", glycolTemp: "1.2°C", condenserWaterTemp: "28.5°C", ampDraw: "145 A", operator: "Rajiv S." },
+    { id: 2, compNo: "Ammonia Comp #2", suctionPress: "2.2 bar", dischargePress: "12.0 bar", oilPress: "3.4 bar", glycolTemp: "1.5°C", condenserWaterTemp: "28.0°C", ampDraw: "140 A", operator: "Rajiv S." }
+  ]);
+
+  const [electricalDgRows, setElectricalDgRows] = useState([
+    { id: 1, time: "06:00", ebMeterKwh: "145280", powerFactor: "0.98", dgRunHrs: "1240.5 h", dieselLevel: "450 L", phaseAmp: "R:320 A, Y:315 A, B:322 A", voltage: "415 V", electrician: "Manoj P." },
+    { id: 2, time: "14:00", ebMeterKwh: "147110", powerFactor: "0.97", dgRunHrs: "1240.5 h", dieselLevel: "450 L", phaseAmp: "R:340 A, Y:335 A, B:338 A", voltage: "412 V", electrician: "Manoj P." }
+  ]);
+
+  const [compressorRows, setCompressorRows] = useState([
+    { id: 1, compId: "Screw Comp AC-1", time: "06:00", linePress: "7.2 bar", dewPoint: "3.0°C", oilLevel: "Normal (3/4)", moistureDrain: "Auto Blow OK", totalRunHrs: "3420 h", operator: "Vijay K." },
+    { id: 2, compId: "Vane Comp AC-2",  time: "06:00", linePress: "7.0 bar", dewPoint: "3.5°C", oilLevel: "Normal (1/2)", moistureDrain: "Auto Blow OK", totalRunHrs: "2150 h", operator: "Vijay K." }
+  ]);
+
+  const [calibrationRegRows, setCalibrationRegRows] = useState([
+    { id: 1, tagNo: "PG-PST-01", instName: "Pasteurizer Inlet Pressure Gauge", location: "Pasteurizer #1", range: "0 - 10 bar", lastCalibDate: "2026-01-10", nextDueDate: "2027-01-10", standardUsed: "Master Calibrator", errorDeviation: "0.02 bar", technician: "Dr. Verma", certNo: "CAL-2026-88" },
+    { id: 2, tagNo: "RTD-SILO-02", instName: "Pt-100 Temp Sensor",              location: "Milk Silo #2",   range: "-20 to 100°C", lastCalibDate: "2026-03-15", nextDueDate: "2027-03-15", standardUsed: "Fluke Calibrator",  errorDeviation: "0.1°C",     technician: "Dr. Verma", certNo: "CAL-2026-104" }
+  ]);
+
+  const [etpWtpRows, setEtpWtpRows] = useState([
+    { id: 1, time: "08:00", rawWaterFlow: "120 m³", treatedWaterPh: "7.2", etpInletPh: "6.5", aerationDo: "2.5 ppm", sludgeDischarge: "500 L", dosingChem: "Alum 5kg, Polymer 1kg", operator: "Rakesh M." },
+    { id: 2, time: "16:00", rawWaterFlow: "115 m³", treatedWaterPh: "7.4", etpInletPh: "6.8", aerationDo: "2.8 ppm", sludgeDischarge: "450 L", dosingChem: "Alum 5kg, Polymer 1kg", operator: "Rakesh M." }
+  ]);
+
   // ════════════════════════════════════════════════════
   //  MEMOS & HANDLERS
   // ════════════════════════════════════════════════════
@@ -285,14 +366,22 @@ export default function PlantFormatsCalc() {
     setIsDownloading(true);
     try {
       printAreaRef.current.classList.add("is-exporting-pdf");
-      const canvas = await html2canvas(printAreaRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      const canvas = await html2canvas(printAreaRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: printAreaRef.current.scrollWidth || 1200,
+        windowHeight: printAreaRef.current.scrollHeight || 1600,
+        scrollX: 0,
+        scrollY: 0,
+      });
       printAreaRef.current.classList.remove("is-exporting-pdf");
       const imgData = canvas.toDataURL("image/png");
       const isLandscape = currentOrientation === "landscape";
       const pdf = new jsPDF({ orientation: isLandscape ? "l" : "p", unit: "mm", format: "a4" });
       const pdfWidth = pdf.internal.pageSize.getWidth();
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, (canvas.height * pdfWidth) / canvas.width);
-      pdf.save(`plant_${selectedFormat.id}_${currentDate}.pdf`);
+      await savePdfFile(pdf, `plant_${selectedFormat.id}_${currentDate}.pdf`);
       toast({ title: "PDF Generated", description: "Your printable PDF log sheet is ready." });
     } catch (e) {
       if (printAreaRef.current) {
@@ -318,6 +407,17 @@ export default function PlantFormatsCalc() {
   const updateUtilityLogRow    = (id: number, f: string, v: string) => setUtilityLogRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
   const updateLubricationRow   = (id: number, f: string, v: string) => setLubricationRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
   const updateWorkPermitRow    = (id: number, f: string, v: string) => setWorkPermitRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateProcessingRow        = (id: number, f: string, v: string) => setProcessingRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateQaLabRow             = (id: number, f: string, v: string) => setQaLabRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updatePackagingQcRow       = (id: number, f: string, v: string) => setPackagingQcRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateColdRoomRegRow       = (id: number, f: string, v: string) => setColdRoomRegRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateCurdDahiRow          = (id: number, f: string, v: string) => setCurdDahiRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateBoilerLogRow         = (id: number, f: string, v: string) => setBoilerLogRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateRefrigerationLogRow  = (id: number, f: string, v: string) => setRefrigerationLogRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateElectricalDgRow      = (id: number, f: string, v: string) => setElectricalDgRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateCompressorRow        = (id: number, f: string, v: string) => setCompressorRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateCalibrationRegRow    = (id: number, f: string, v: string) => setCalibrationRegRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
+  const updateEtpWtpRow            = (id: number, f: string, v: string) => setEtpWtpRows(p => p.map(r => r.id===id?{...r,[f]:v}:r));
 
   // ── Add Row ──
   const addRow = () => {
@@ -326,8 +426,13 @@ export default function PlantFormatsCalc() {
       case "rm-reception":    setRmReceptionRows(p=>[...p,{id:now,tankerNo:"",supplier:"",arrivalTime:"",qty:"",temp:"",acidity:"",fat:"",snf:"",cob:"Negative",status:"Accepted",siloAllotted:"",operator:""}]); break;
       case "bmr":             setBmrRows(p=>[...p,{id:now,step:String(p.length+1).padStart(2,"0"),operation:"",startTime:"",endTime:"",milkQty:"",temp:"",remarks:"",doneBy:"",verified:""}]); break;
       case "process-monitoring": setProcessRows(p=>[...p,{id:now,time:"",equipment:"",inletTemp:"",htTemp:"",outTemp:"",pressure:"",flowRate:"",phpStatus:"Pass",operator:""}]); break;
+      case "processing-standardization": setProcessingRows(p=>[...p,{id:now,silo:"",milkQty:"",rawFat:"",rawSnf:"",targetFat:"",targetSnf:"",skimAdded:"",creamAdded:"",finalFat:"",finalSnf:"",operator:""}]); break;
+      case "qa-lab-log":                setQaLabRows(p=>[...p,{id:now,source:"",batchNo:"",temp:"",acidity:"",mbrt:"",alcoholTest:"",cob:"Negative",fat:"",snf:"",analyst:""}]); break;
       case "packing-dispatch":setPackingRows(p=>[...p,{id:now,batchNo:"",product:"",shift:"",packedQty:"",vehicle:"",destination:"",dispatchTime:"",tempAtDispatch:"",status:"Dispatched",operator:""}]); break;
+      case "packaging-qc":              setPackagingQcRows(p=>[...p,{id:now,machineNo:"",product:"",time:"",targetWeight:"",actualWeight:"",sealingTemp:"",leakCheck:"Pass",printCheck:"Clear",inspector:""}]); break;
+      case "cold-room-register":        setColdRoomRegRows(p=>[...p,{id:now,coldRoomNo:"",time:"",temp:"",product:"",crateCount:"",stackHeight:"",fifoStatus:"Maintained",defrostStatus:"Normal",incharge:""}]); break;
       case "cip-cleaning":    setCipRows(p=>[...p,{id:now,equipment:"",cipType:"",startTime:"",endTime:"",temp:"",causticConc:"",acidConc:"",duration:"",operator:"",qaStatus:"OK"}]); break;
+      case "curd-dahi-log":             setCurdDahiRows(p=>[...p,{id:now,batchNo:"",product:"",milkQty:"",cultureCode:"",inocTemp:"",startTime:"",setTime:"",finalAcidity:"",operator:""}]); break;
       case "machine-breakdown":setBreakdownMaintRows(p=>[...p,{id:now,date:currentDate,machine:"",breakdownTime:"",rootCause:"",action:"",resumedTime:"",downtime:"",spareUsed:"",engineer:"",status:"Resolved"}]); break;
       case "yield-handover":  setYieldRows(p=>[...p,{id:now,shift:"",product:"",milkInput:"",output:"",yieldPct:"",rejections:"0",pendingBatches:"Nil",operator:""}]); break;
       case "pm-log":          setPmLogRows(p=>[...p,{id:now,srNo:String(p.length+1).padStart(2,"0"),equipment:"",pmTask:"",frequency:"Monthly",scheduledDate:currentDate,doneDate:"",parametersChecked:"",status:"Pending",doneBy:"",verified:""}]); break;
@@ -335,6 +440,12 @@ export default function PlantFormatsCalc() {
       case "equipment-history":setEquipHistoryRows(p=>[...p,{id:now,date:currentDate,equipId:"",eventType:"PM",description:"",techName:"",sparesUsed:"Nil",cost:"Nil",nextDueDate:"",remarks:""}]); break;
       case "spare-parts":     setSparePartsRows(p=>[...p,{id:now,partCode:"",partName:"",equipUsedFor:"",uom:"Nos",openingStock:"0",received:"0",issued:"0",closingStock:"0",minLevel:"",reorderQty:"",supplier:"",remarks:""}]); break;
       case "utility-log":     setUtilityLogRows(p=>[...p,{id:now,dateTime:"",utility:"",param1Label:"Reading 1",param1:"",param2Label:"Reading 2",param2:"",param3Label:"Reading 3",param3:"",param4Label:"Reading 4",param4:"",status:"Normal",operator:""}]); break;
+      case "boiler-log":                setBoilerLogRows(p=>[...p,{id:now,shiftTime:"",steamPress:"",feedTemp:"",softenerHardness:"",blowdown:"",fuelCons:"",flueTemp:"",operator:""}]); break;
+      case "refrigeration-log":         setRefrigerationLogRows(p=>[...p,{id:now,compNo:"",suctionPress:"",dischargePress:"",oilPress:"",glycolTemp:"",condenserWaterTemp:"",ampDraw:"",operator:""}]); break;
+      case "electrical-dg-log":         setElectricalDgRows(p=>[...p,{id:now,time:"",ebMeterKwh:"",powerFactor:"",dgRunHrs:"",dieselLevel:"",phaseAmp:"",voltage:"",electrician:""}]); break;
+      case "compressor-log":            setCompressorRows(p=>[...p,{id:now,compId:"",time:"",linePress:"",dewPoint:"",oilLevel:"",moistureDrain:"",totalRunHrs:"",operator:""}]); break;
+      case "calibration-register":      setCalibrationRegRows(p=>[...p,{id:now,tagNo:"",instName:"",location:"",range:"",lastCalibDate:currentDate,nextDueDate:"",standardUsed:"",errorDeviation:"",technician:"",certNo:""}]); break;
+      case "etp-wtp-log":               setEtpWtpRows(p=>[...p,{id:now,time:"",rawWaterFlow:"",treatedWaterPh:"",etpInletPh:"",aerationDo:"",sludgeDischarge:"",dosingChem:"",operator:""}]); break;
       case "lubrication-log": setLubricationRows(p=>[...p,{id:now,equipId:"",machine:"",lubricationPoint:"",lubricantGrade:"",frequency:"Monthly",lastDoneDate:currentDate,nextDueDate:"",qtyUsed:"",doneBy:"",verified:"",remarks:""}]); break;
       case "work-permit":     setWorkPermitRows(p=>[...p,{id:now,permitNo:`WP-2026-${String(p.length+1).padStart(2,"0")}`,date:currentDate,workDescription:"",equipment:"",workType:"Cold Work",hazard:"",precautions:"",issuedBy:"",startTime:"",endTime:"",status:"Open",closedBy:""}]); break;
     }
@@ -346,8 +457,13 @@ export default function PlantFormatsCalc() {
       case "rm-reception":     if(rmReceptionRows.length>1)   setRmReceptionRows(p=>p.filter(r=>r.id!==id));    break;
       case "bmr":              if(bmrRows.length>1)            setBmrRows(p=>p.filter(r=>r.id!==id));            break;
       case "process-monitoring":if(processRows.length>1)       setProcessRows(p=>p.filter(r=>r.id!==id));        break;
+      case "processing-standardization": if(processingRows.length>1) setProcessingRows(p=>p.filter(r=>r.id!==id)); break;
+      case "qa-lab-log":       if(qaLabRows.length>1)          setQaLabRows(p=>p.filter(r=>r.id!==id));          break;
       case "packing-dispatch": if(packingRows.length>1)        setPackingRows(p=>p.filter(r=>r.id!==id));        break;
+      case "packaging-qc":     if(packagingQcRows.length>1)    setPackagingQcRows(p=>p.filter(r=>r.id!==id));    break;
+      case "cold-room-register": if(coldRoomRegRows.length>1)  setColdRoomRegRows(p=>p.filter(r=>r.id!==id));    break;
       case "cip-cleaning":     if(cipRows.length>1)            setCipRows(p=>p.filter(r=>r.id!==id));            break;
+      case "curd-dahi-log":    if(curdDahiRows.length>1)       setCurdDahiRows(p=>p.filter(r=>r.id!==id));       break;
       case "machine-breakdown":if(breakdownMaintRows.length>1) setBreakdownMaintRows(p=>p.filter(r=>r.id!==id)); break;
       case "yield-handover":   if(yieldRows.length>1)          setYieldRows(p=>p.filter(r=>r.id!==id));          break;
       case "pm-log":           if(pmLogRows.length>1)          setPmLogRows(p=>p.filter(r=>r.id!==id));          break;
@@ -355,6 +471,12 @@ export default function PlantFormatsCalc() {
       case "equipment-history":if(equipHistoryRows.length>1)   setEquipHistoryRows(p=>p.filter(r=>r.id!==id));   break;
       case "spare-parts":      if(sparePartsRows.length>1)     setSparePartsRows(p=>p.filter(r=>r.id!==id));     break;
       case "utility-log":      if(utilityLogRows.length>1)     setUtilityLogRows(p=>p.filter(r=>r.id!==id));     break;
+      case "boiler-log":       if(boilerLogRows.length>1)      setBoilerLogRows(p=>p.filter(r=>r.id!==id));      break;
+      case "refrigeration-log":if(refrigerationLogRows.length>1) setRefrigerationLogRows(p=>p.filter(r=>r.id!==id)); break;
+      case "electrical-dg-log":if(electricalDgRows.length>1)   setElectricalDgRows(p=>p.filter(r=>r.id!==id));   break;
+      case "compressor-log":   if(compressorRows.length>1)     setCompressorRows(p=>p.filter(r=>r.id!==id));     break;
+      case "calibration-register": if(calibrationRegRows.length>1) setCalibrationRegRows(p=>p.filter(r=>r.id!==id)); break;
+      case "etp-wtp-log":      if(etpWtpRows.length>1)         setEtpWtpRows(p=>p.filter(r=>r.id!==id));         break;
       case "lubrication-log":  if(lubricationRows.length>1)    setLubricationRows(p=>p.filter(r=>r.id!==id));    break;
       case "work-permit":      if(workPermitRows.length>1)     setWorkPermitRows(p=>p.filter(r=>r.id!==id));     break;
     }
@@ -519,20 +641,25 @@ export default function PlantFormatsCalc() {
               style={{ boxSizing: "border-box" }}
             >
             {/* Document Header */}
-            <div className="border-b-2 border-black pb-3 mb-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-[11px] font-black uppercase tracking-widest text-black">{companyName}</div>
-                  <div className="text-[9px] font-semibold text-slate-600 uppercase">{plantLocation}</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[9px] font-bold text-slate-500 uppercase">FORMAT NO.</div>
-                  <div className="text-[9px] font-mono text-black">PLT-{selectedFormat?.id.toUpperCase().replace(/-/g,"")}-{currentDate.replace(/-/g,"")}</div>
-                  <div className="text-[9px] text-slate-500 mt-0.5">Date: <span className="font-bold text-black">{currentDate}</span></div>
-                </div>
+            <div className="space-y-3 mb-4">
+              <div className="border-2 border-black p-3 text-center bg-white">
+                <h1 className="text-base font-black tracking-widest text-black uppercase leading-tight">
+                  {companyName || "DAIRY HUB COOPERATIVE"}
+                </h1>
+                <p className="text-[10px] font-bold text-slate-800 uppercase mt-1 tracking-wider">
+                  {plantLocation || "MAIN PROCESS PLANT"}
+                </p>
+                <div className="border-t border-black my-2" />
+                <h2 className="text-sm font-black tracking-widest text-black uppercase leading-none">
+                  {selectedFormat?.title}
+                </h2>
               </div>
-              <div className="mt-2 text-center">
-                <div className="text-[13px] font-black uppercase tracking-wide text-black">{selectedFormat?.title}</div>
+
+              {/* Meta Details Row */}
+              <div className="grid grid-cols-3 border border-black p-2 bg-slate-50 text-[10px] font-bold gap-2 text-black">
+                <div>DATE: <span className="font-normal border-b border-black border-dotted ml-1">{currentDate}</span></div>
+                <div className="text-center">SHIFT IN-CHARGE: <span className="font-normal border-b border-black border-dotted ml-1">_________________</span></div>
+                <div className="text-right">FORMAT NO: <span className="font-mono font-normal border-b border-black border-dotted ml-1">PLT-{selectedFormat?.id.toUpperCase().replace(/-/g,"")}-{currentDate.replace(/-/g,"")}</span></div>
               </div>
             </div>
 
@@ -1111,6 +1238,422 @@ export default function PlantFormatsCalc() {
                           <td className="border border-black p-0.5"><input value={r.endTime} onChange={e=>updateWorkPermitRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
                           <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateWorkPermitRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-orange-700")} /></td>
                           <td className="border border-black p-0.5"><input value={r.closedBy} onChange={e=>updateWorkPermitRow(r.id,"closedBy",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 15. Milk Processing & Standardization Log ═══ */}
+              {selectedFormatId === "processing-standardization" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-14">Silo / Tank</th>
+                      <th className="border border-black px-1 py-1 w-16">Milk Qty (L)</th>
+                      <th className="border border-black px-1 py-1 w-12">Raw Fat%</th>
+                      <th className="border border-black px-1 py-1 w-12">Raw SNF%</th>
+                      <th className="border border-black px-1 py-1 w-12">Tgt Fat%</th>
+                      <th className="border border-black px-1 py-1 w-12">Tgt SNF%</th>
+                      <th className="border border-black px-1 py-1 w-16">Skim Added (L)</th>
+                      <th className="border border-black px-1 py-1 w-16">Cream Added (kg)</th>
+                      <th className="border border-black px-1 py-1 w-12">Final Fat%</th>
+                      <th className="border border-black px-1 py-1 w-12">Final SNF%</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {processingRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.silo} onChange={e=>updateProcessingRow(r.id,"silo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.milkQty} onChange={e=>updateProcessingRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rawFat} onChange={e=>updateProcessingRow(r.id,"rawFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rawSnf} onChange={e=>updateProcessingRow(r.id,"rawSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.targetFat} onChange={e=>updateProcessingRow(r.id,"targetFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.targetSnf} onChange={e=>updateProcessingRow(r.id,"targetSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.skimAdded} onChange={e=>updateProcessingRow(r.id,"skimAdded",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.creamAdded} onChange={e=>updateProcessingRow(r.id,"creamAdded",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.finalFat} onChange={e=>updateProcessingRow(r.id,"finalFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-black text-blue-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.finalSnf} onChange={e=>updateProcessingRow(r.id,"finalSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-black text-blue-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateProcessingRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 16. Quality & Lab Testing Register ═══ */}
+              {selectedFormatId === "qa-lab-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 text-left">Sample Source</th>
+                      <th className="border border-black px-1 py-1 w-16">Batch/Tanker</th>
+                      <th className="border border-black px-1 py-1 w-12">Temp (°C)</th>
+                      <th className="border border-black px-1 py-1 w-12">Acidity</th>
+                      <th className="border border-black px-1 py-1 w-14">MBRT</th>
+                      <th className="border border-black px-1 py-1 text-left">Alcohol Test</th>
+                      <th className="border border-black px-1 py-1 w-14">COB</th>
+                      <th className="border border-black px-1 py-1 w-10">Fat%</th>
+                      <th className="border border-black px-1 py-1 w-10">SNF%</th>
+                      <th className="border border-black px-1 py-1 w-16">Analyst</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {qaLabRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.source} onChange={e=>updateQaLabRow(r.id,"source",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.batchNo} onChange={e=>updateQaLabRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateQaLabRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.acidity} onChange={e=>updateQaLabRow(r.id,"acidity",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.mbrt} onChange={e=>updateQaLabRow(r.id,"mbrt",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.alcoholTest} onChange={e=>updateQaLabRow(r.id,"alcoholTest",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.cob} onChange={e=>updateQaLabRow(r.id,"cob",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.cob.toLowerCase().includes("positive")?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.fat} onChange={e=>updateQaLabRow(r.id,"fat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.snf} onChange={e=>updateQaLabRow(r.id,"snf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.analyst} onChange={e=>updateQaLabRow(r.id,"analyst",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 17. Packaging QC & Weight Check Log ═══ */}
+              {selectedFormatId === "packaging-qc" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-14">Machine No</th>
+                      <th className="border border-black px-1 py-1 text-left">Product / Variant</th>
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Target Wt</th>
+                      <th className="border border-black px-1 py-1 w-16">Actual Wt</th>
+                      <th className="border border-black px-1 py-1 w-16">Sealing Temp</th>
+                      <th className="border border-black px-1 py-1 w-14">Leak Check</th>
+                      <th className="border border-black px-1 py-1 text-left">Print/MRP Check</th>
+                      <th className="border border-black px-1 py-1 w-16">Inspector</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {packagingQcRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.machineNo} onChange={e=>updatePackagingQcRow(r.id,"machineNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updatePackagingQcRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updatePackagingQcRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.targetWeight} onChange={e=>updatePackagingQcRow(r.id,"targetWeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.actualWeight} onChange={e=>updatePackagingQcRow(r.id,"actualWeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.sealingTemp} onChange={e=>updatePackagingQcRow(r.id,"sealingTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.leakCheck} onChange={e=>updatePackagingQcRow(r.id,"leakCheck",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.leakCheck.toLowerCase()==="pass"?"text-green-700":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.printCheck} onChange={e=>updatePackagingQcRow(r.id,"printCheck",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.inspector} onChange={e=>updatePackagingQcRow(r.id,"inspector",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 18. Cold Room Temp & Stock Register ═══ */}
+              {selectedFormatId === "cold-room-register" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-20">Cold Room</th>
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-14">Room Temp</th>
+                      <th className="border border-black px-1 py-1 text-left">Product Variant</th>
+                      <th className="border border-black px-1 py-1 w-16">Crate Count</th>
+                      <th className="border border-black px-1 py-1 w-18">Stack Height</th>
+                      <th className="border border-black px-1 py-1 w-20">FIFO Status</th>
+                      <th className="border border-black px-1 py-1 w-18">Defrost Status</th>
+                      <th className="border border-black px-1 py-1 w-16">Incharge</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {coldRoomRegRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.coldRoomNo} onChange={e=>updateColdRoomRegRow(r.id,"coldRoomNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateColdRoomRegRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateColdRoomRegRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-cyan-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updateColdRoomRegRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.crateCount} onChange={e=>updateColdRoomRegRow(r.id,"crateCount",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.stackHeight} onChange={e=>updateColdRoomRegRow(r.id,"stackHeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.fifoStatus} onChange={e=>updateColdRoomRegRow(r.id,"fifoStatus",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.defrostStatus} onChange={e=>updateColdRoomRegRow(r.id,"defrostStatus",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.incharge} onChange={e=>updateColdRoomRegRow(r.id,"incharge",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 19. Dahi, Lassi & Culturing Process Log ═══ */}
+              {selectedFormatId === "curd-dahi-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-16">Batch No</th>
+                      <th className="border border-black px-1 py-1 text-left">Product</th>
+                      <th className="border border-black px-1 py-1 w-14">Milk Qty</th>
+                      <th className="border border-black px-1 py-1 w-16">Culture Code</th>
+                      <th className="border border-black px-1 py-1 w-14">Inoc. Temp</th>
+                      <th className="border border-black px-1 py-1 w-12">Start</th>
+                      <th className="border border-black px-1 py-1 w-12">Set Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Final Acidity</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {curdDahiRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.batchNo} onChange={e=>updateCurdDahiRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updateCurdDahiRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.milkQty} onChange={e=>updateCurdDahiRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.cultureCode} onChange={e=>updateCurdDahiRow(r.id,"cultureCode",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.inocTemp} onChange={e=>updateCurdDahiRow(r.id,"inocTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateCurdDahiRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.setTime} onChange={e=>updateCurdDahiRow(r.id,"setTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.finalAcidity} onChange={e=>updateCurdDahiRow(r.id,"finalAcidity",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-amber-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCurdDahiRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 20. Boiler & Steam Generation Log ═══ */}
+              {selectedFormatId === "boiler-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-14">Shift/Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Steam Press</th>
+                      <th className="border border-black px-1 py-1 w-14">Feed Temp</th>
+                      <th className="border border-black px-1 py-1 text-left">Softener Hardness</th>
+                      <th className="border border-black px-1 py-1 w-18">Blowdown Status</th>
+                      <th className="border border-black px-1 py-1 w-16">Fuel Consumed</th>
+                      <th className="border border-black px-1 py-1 w-14">Flue Temp</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {boilerLogRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.shiftTime} onChange={e=>updateBoilerLogRow(r.id,"shiftTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.steamPress} onChange={e=>updateBoilerLogRow(r.id,"steamPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-red-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.feedTemp} onChange={e=>updateBoilerLogRow(r.id,"feedTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.softenerHardness} onChange={e=>updateBoilerLogRow(r.id,"softenerHardness",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.blowdown} onChange={e=>updateBoilerLogRow(r.id,"blowdown",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.fuelCons} onChange={e=>updateBoilerLogRow(r.id,"fuelCons",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.flueTemp} onChange={e=>updateBoilerLogRow(r.id,"flueTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateBoilerLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 21. Refrigeration & Ammonia Plant Log ═══ */}
+              {selectedFormatId === "refrigeration-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 text-left">Compressor ID</th>
+                      <th className="border border-black px-1 py-1 w-14">Suction Pr</th>
+                      <th className="border border-black px-1 py-1 w-14">Disch Pr</th>
+                      <th className="border border-black px-1 py-1 w-14">Oil Pr</th>
+                      <th className="border border-black px-1 py-1 w-16">Glycol Temp</th>
+                      <th className="border border-black px-1 py-1 w-20">Condenser Temp</th>
+                      <th className="border border-black px-1 py-1 w-14">Amp Draw</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {refrigerationLogRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.compNo} onChange={e=>updateRefrigerationLogRow(r.id,"compNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.suctionPress} onChange={e=>updateRefrigerationLogRow(r.id,"suctionPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dischargePress} onChange={e=>updateRefrigerationLogRow(r.id,"dischargePress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.oilPress} onChange={e=>updateRefrigerationLogRow(r.id,"oilPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.glycolTemp} onChange={e=>updateRefrigerationLogRow(r.id,"glycolTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-cyan-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.condenserWaterTemp} onChange={e=>updateRefrigerationLogRow(r.id,"condenserWaterTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.ampDraw} onChange={e=>updateRefrigerationLogRow(r.id,"ampDraw",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateRefrigerationLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 22. Electrical Power & DG Set Daily Log ═══ */}
+              {selectedFormatId === "electrical-dg-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-20">EB Meter kWh</th>
+                      <th className="border border-black px-1 py-1 w-14">Power Factor</th>
+                      <th className="border border-black px-1 py-1 w-18">DG Run Hours</th>
+                      <th className="border border-black px-1 py-1 w-16">Diesel Level</th>
+                      <th className="border border-black px-1 py-1 text-left">Phase Load (A)</th>
+                      <th className="border border-black px-1 py-1 w-14">Voltage (V)</th>
+                      <th className="border border-black px-1 py-1 w-16">Electrician</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {electricalDgRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateElectricalDgRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.ebMeterKwh} onChange={e=>updateElectricalDgRow(r.id,"ebMeterKwh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.powerFactor} onChange={e=>updateElectricalDgRow(r.id,"powerFactor",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dgRunHrs} onChange={e=>updateElectricalDgRow(r.id,"dgRunHrs",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dieselLevel} onChange={e=>updateElectricalDgRow(r.id,"dieselLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.phaseAmp} onChange={e=>updateElectricalDgRow(r.id,"phaseAmp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.voltage} onChange={e=>updateElectricalDgRow(r.id,"voltage",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.electrician} onChange={e=>updateElectricalDgRow(r.id,"electrician",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 23. Air Compressor & Pneumatic Log ═══ */}
+              {selectedFormatId === "compressor-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 text-left">Compressor ID</th>
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Line Press</th>
+                      <th className="border border-black px-1 py-1 w-14">Dew Point</th>
+                      <th className="border border-black px-1 py-1 w-16">Oil Level</th>
+                      <th className="border border-black px-1 py-1 text-left">Moisture Drain</th>
+                      <th className="border border-black px-1 py-1 w-16">Total Run Hrs</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {compressorRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.compId} onChange={e=>updateCompressorRow(r.id,"compId",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateCompressorRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.linePress} onChange={e=>updateCompressorRow(r.id,"linePress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dewPoint} onChange={e=>updateCompressorRow(r.id,"dewPoint",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.oilLevel} onChange={e=>updateCompressorRow(r.id,"oilLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.moistureDrain} onChange={e=>updateCompressorRow(r.id,"moistureDrain",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.totalRunHrs} onChange={e=>updateCompressorRow(r.id,"totalRunHrs",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCompressorRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 24. Instrument Calibration Register ═══ */}
+              {selectedFormatId === "calibration-register" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-16">Tag No</th>
+                      <th className="border border-black px-1 py-1 text-left">Instrument Name</th>
+                      <th className="border border-black px-1 py-1 text-left">Location</th>
+                      <th className="border border-black px-1 py-1 w-16">Range</th>
+                      <th className="border border-black px-1 py-1 w-16">Last Calib</th>
+                      <th className="border border-black px-1 py-1 w-16">Next Due</th>
+                      <th className="border border-black px-1 py-1 text-left">Standard Used</th>
+                      <th className="border border-black px-1 py-1 w-14">Error</th>
+                      <th className="border border-black px-1 py-1 w-16">Technician</th>
+                      <th className="border border-black px-1 py-1 w-18">Cert No.</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {calibrationRegRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.tagNo} onChange={e=>updateCalibrationRegRow(r.id,"tagNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.instName} onChange={e=>updateCalibrationRegRow(r.id,"instName",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.location} onChange={e=>updateCalibrationRegRow(r.id,"location",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.range} onChange={e=>updateCalibrationRegRow(r.id,"range",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.lastCalibDate} onChange={e=>updateCalibrationRegRow(r.id,"lastCalibDate",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={r.nextDueDate} onChange={e=>updateCalibrationRegRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.standardUsed} onChange={e=>updateCalibrationRegRow(r.id,"standardUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.errorDeviation} onChange={e=>updateCalibrationRegRow(r.id,"errorDeviation",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.technician} onChange={e=>updateCalibrationRegRow(r.id,"technician",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.certNo} onChange={e=>updateCalibrationRegRow(r.id,"certNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-teal-800")} /></td>
+                          {renderCustomBodyCells(r.id)}
+                          <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* ═══ 25. ETP & WTP Environmental Daily Log ═══ */}
+              {selectedFormatId === "etp-wtp-log" && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                    <thead><tr className="bg-slate-100 text-center font-bold">
+                      <th className="border border-black px-1 py-1 w-12">Time</th>
+                      <th className="border border-black px-1 py-1 w-16">Raw Water Flow</th>
+                      <th className="border border-black px-1 py-1 w-14">Treated pH</th>
+                      <th className="border border-black px-1 py-1 w-14">ETP Inlet pH</th>
+                      <th className="border border-black px-1 py-1 w-16">Aeration DO</th>
+                      <th className="border border-black px-1 py-1 w-18">Sludge Discharge</th>
+                      <th className="border border-black px-1 py-1 text-left">Dosing Chemical Used</th>
+                      <th className="border border-black px-1 py-1 w-16">Operator</th>
+                      {renderCustomHeaderCols()}
+                      <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                    </tr></thead>
+                    <tbody>
+                      {etpWtpRows.map(r => (
+                        <tr key={r.id}>
+                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateEtpWtpRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.rawWaterFlow} onChange={e=>updateEtpWtpRow(r.id,"rawWaterFlow",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.treatedWaterPh} onChange={e=>updateEtpWtpRow(r.id,"treatedWaterPh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.etpInletPh} onChange={e=>updateEtpWtpRow(r.id,"etpInletPh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.aerationDo} onChange={e=>updateEtpWtpRow(r.id,"aerationDo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.sludgeDischarge} onChange={e=>updateEtpWtpRow(r.id,"sludgeDischarge",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.dosingChem} onChange={e=>updateEtpWtpRow(r.id,"dosingChem",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateEtpWtpRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
