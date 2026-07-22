@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { savePdfFile, saveFile } from "@/lib/mobile-download";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -441,7 +442,7 @@ export default function PlantCostCalc() {
   };
 
   // CSV Export for Excel
-  const handleExportMonthlyCSV = () => {
+  const handleExportMonthlyCSV = async () => {
     const data = getMonthlySummaryData(selectedYear, selectedMonth);
     const headers = [
       "Date", "Milk Processed (L/Kg)", "Total Revenue (₹)", "Variable Cost (₹)", "Fixed Cost (₹)", "Total Cost (₹)", "Net Profit (₹)"
@@ -474,16 +475,8 @@ export default function PlantCostCalc() {
       data.totals.netProfit
     ]);
 
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
-    
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `Plant_Costing_Monthly_Summary_${selectedYear}_${selectedMonth}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const csvRawText = [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    await saveFile(csvRawText, `Plant_Costing_Monthly_Summary_${selectedYear}_${selectedMonth}.csv`, "text/csv;charset=utf-8;");
   };
 
   const fmt = (n: number) => n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
@@ -493,14 +486,21 @@ export default function PlantCostCalc() {
     if (!reportRef.current) return;
     setIsDownloading(true);
     try {
-      const canvas = await html2canvas(reportRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      const canvas = await html2canvas(reportRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: reportRef.current.scrollWidth || 1000,
+        scrollX: 0,
+        scrollY: 0,
+      });
       const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       const imgData = canvas.toDataURL("image/png");
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Dairy_Hub_Plant_Cost_Report_${selectedDate}.pdf`);
+      await savePdfFile(pdf, `Dairy_Hub_Plant_Cost_Report_${selectedDate}.pdf`);
       toast({
         title: "Export Completed",
         description: "Your PDF Costing Report has been downloaded.",
@@ -521,14 +521,21 @@ export default function PlantCostCalc() {
     if (!monthlyReportRef.current) return;
     setIsDownloading(true);
     try {
-      const canvas = await html2canvas(monthlyReportRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      const canvas = await html2canvas(monthlyReportRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: monthlyReportRef.current.scrollWidth || 1000,
+        scrollX: 0,
+        scrollY: 0,
+      });
       const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       const imgData = canvas.toDataURL("image/png");
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Dairy_Hub_Plant_Monthly_Cost_Summary_${selectedYear}_${selectedMonth}.pdf`);
+      await savePdfFile(pdf, `Dairy_Hub_Plant_Monthly_Cost_Summary_${selectedYear}_${selectedMonth}.pdf`);
       toast({
         title: "Export Completed",
         description: "Your PDF Monthly Costing Report has been downloaded.",
