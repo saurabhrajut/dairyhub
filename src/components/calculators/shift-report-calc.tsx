@@ -3,11 +3,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { 
   FileSpreadsheet, Printer, Download, Trash2, User, Clock, Calendar as CalendarIcon, HelpCircle,
-  Mail, MessageCircle, Plus
+  Mail, MessageCircle, Plus, Building2, Sparkles, CheckCircle2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { savePdfFile, saveFile } from "@/lib/mobile-download";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -115,7 +116,358 @@ const parseUnitsPerCrate = (name: string): number => {
   return 1;
 };
 
-const mergeColdBlastStock = (savedRows: ColdBlastRow[]): ColdBlastRow[] => {
+export interface DairyCompanyConfig {
+  id: string;
+  name: string;
+  dispatchVariants: string[];
+  coldBlastVariants: { name: string; unitsPerCrate: number }[];
+}
+
+export const DAIRY_COMPANIES: Record<string, DairyCompanyConfig> = {
+  amul: {
+    id: "amul",
+    name: "Amul Dairy",
+    dispatchVariants: [
+      "Amul Gold", "Amul Taaza", "Amul Slim (HDTM)", "Amul Cow Milk",
+      "Amul Masti Dahi", "Amul Probiotic Dahi", "Amul Meetha Dahi",
+      "Amul Masti Buttermilk", "Amul Tadka Chaas", "Amul Paneer", "Amul Lassi"
+    ],
+    coldBlastVariants: [
+      { name: "Amul Butter 16x500x20 gm", unitsPerCrate: 16 },
+      { name: "Amul Fresh Paneer 15x200 gm Carton", unitsPerCrate: 15 },
+      { name: "Amul Premium Dahi 14x400 Gm Cup Crate", unitsPerCrate: 14 },
+      { name: "Amul Probiotic BM 12x500 mL Pet Bottle", unitsPerCrate: 12 },
+      { name: "Amul Butter Sandwich Bread 10x400gm", unitsPerCrate: 10 },
+      { name: "Amul Curd Pouch 16x700 gm Crate", unitsPerCrate: 16 },
+      { name: "AMUL LOW FAT DAHI POUCH 74x150 GM CRATE", unitsPerCrate: 74 },
+      { name: "Amul Masti Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Amul Masti Dahi Cup 28x200 Gm Crate", unitsPerCrate: 28 },
+      { name: "Amul Masti Dahi Pouch 12x1 Kg Crate", unitsPerCrate: 12 },
+      { name: "Amul Meetha Dahi Cup 28x185 gm Crate", unitsPerCrate: 28 },
+      { name: "Amul Meethi Lassi 40X300 mL Pouch Crate", unitsPerCrate: 40 },
+      { name: "Amul Pro. Buttermilk 40x300 mL Pouch", unitsPerCrate: 40 },
+      { name: "Amul Pro. Tadka Chaas 24x500 mL Pouch", unitsPerCrate: 24 }
+    ]
+  },
+  mother_dairy: {
+    id: "mother_dairy",
+    name: "Mother Dairy",
+    dispatchVariants: [
+      "Full Cream Milk (FCM)", "Toned Milk (Taaza)", "Double Toned (Live Lite)",
+      "Mother Dairy Cow Milk", "Classic Dahi", "Ultimate Dahi",
+      "Mishti Doi", "Tadka Chaas", "Plain Lassi", "Fresh Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Mother Dairy Fresh Paneer 15x200 gm", unitsPerCrate: 15 },
+      { name: "Mother Dairy Classic Dahi 14x400 gm Cup", unitsPerCrate: 14 },
+      { name: "Mother Dairy Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Mother Dairy Mishti Doi 28x80 gm Cup", unitsPerCrate: 28 },
+      { name: "Mother Dairy Tadka Chaas 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Mother Dairy Plain Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Mother Dairy Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  nandini: {
+    id: "nandini",
+    name: "Nandini (KMF Karnataka)",
+    dispatchVariants: [
+      "Nandini Full Cream Milk", "Nandini Special Milk", "Nandini Toned Milk",
+      "Nandini Double Toned", "Nandini Samvruddhi", "Nandini GoodLife UHT",
+      "Nandini Curd / Dahi", "Nandini Spiced Buttermilk", "Nandini Sweet Lassi", "Nandini Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Nandini Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Nandini Curd Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Nandini Curd Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Nandini Buttermilk 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Nandini Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Nandini Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  verka: {
+    id: "verka",
+    name: "Verka (Punjab Milkfed)",
+    dispatchVariants: [
+      "Verka Full Cream Milk", "Verka Shakti Toned Milk", "Verka Special DTM",
+      "Verka Cow Milk", "Verka Dahi", "Verka Kheer",
+      "Verka Plain Lassi", "Verka Namkeen Lassi", "Verka Fresh Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Verka Fresh Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Verka Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Verka Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Verka Lassi Pouch 40x200 ml", unitsPerCrate: 40 },
+      { name: "Verka Kheer Cup 28x150 gm", unitsPerCrate: 28 },
+      { name: "Verka Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  saras: {
+    id: "saras",
+    name: "Saras (RCDF Rajasthan)",
+    dispatchVariants: [
+      "Saras Gold (FCM)", "Saras Taj (Standardized)", "Saras Smart (Toned)",
+      "Saras Lite (DTM)", "Saras Cow Milk", "Saras Plain Dahi",
+      "Saras Masala Chaas", "Saras Sweet Lassi", "Saras Fresh Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Saras Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Saras Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Saras Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Saras Masala Chaas 30x300 ml", unitsPerCrate: 30 },
+      { name: "Saras Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Saras Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  sudha: {
+    id: "sudha",
+    name: "Sudha (COMFED Bihar)",
+    dispatchVariants: [
+      "Sudha Gold (FCM)", "Sudha Shakti (Standardized)", "Sudha Healthy (Toned)",
+      "Sudha Smart (DTM)", "Sudha Cow Milk", "Sudha Special Dahi",
+      "Sudha Masala Lassi", "Sudha Sweet Lassi", "Sudha Fresh Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Sudha Fresh Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Sudha Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Sudha Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Sudha Masala Lassi 30x200 ml", unitsPerCrate: 30 },
+      { name: "Sudha Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Sudha Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  aavin: {
+    id: "aavin",
+    name: "Aavin (Tamil Nadu)",
+    dispatchVariants: [
+      "Aavin Premium Full Cream", "Aavin Standardized Milk", "Aavin Toned Milk",
+      "Aavin Double Toned", "Aavin Diet Milk", "Aavin Curd",
+      "Aavin Buttermilk", "Aavin Lassi", "Aavin Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Aavin Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Aavin Curd Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Aavin Curd Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Aavin Buttermilk 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Aavin Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Aavin Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  milma: {
+    id: "milma",
+    name: "Milma (Kerala)",
+    dispatchVariants: [
+      "Milma Rich (Full Cream)", "Milma Smart (Toned)", "Milma Double Toned",
+      "Milma Cow Milk", "Milma Fresh Curd", "Milma Sambharam (Buttermilk)",
+      "Milma Sweet Lassi", "Milma Paneer", "Milma Peda"
+    ],
+    coldBlastVariants: [
+      { name: "Milma Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Milma Curd Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Milma Curd Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Milma Sambharam 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Milma Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Milma Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  vijaya: {
+    id: "vijaya",
+    name: "Vijaya (AP & Telangana)",
+    dispatchVariants: [
+      "Vijaya Full Cream Milk", "Vijaya Standard Milk", "Vijaya Toned Milk",
+      "Vijaya Double Toned Milk", "Vijaya Cow Milk", "Vijaya Fresh Dahi",
+      "Vijaya Masala Buttermilk", "Vijaya Lassi", "Vijaya Fresh Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Vijaya Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Vijaya Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Vijaya Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Vijaya Buttermilk 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Vijaya Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Vijaya Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  parag: {
+    id: "parag",
+    name: "Parag Milk Foods",
+    dispatchVariants: [
+      "Parag Gold (FCM)", "Parag Taaza (Toned)", "Parag Lite (DTM)",
+      "Parag Cow Milk", "Parag Premium Dahi", "Parag Plain Dahi",
+      "Parag Masala Chaas", "Parag Sweet Lassi", "Parag Fresh Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Parag Fresh Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Parag Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Parag Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Parag Masala Chaas 30x300 ml Bottle", unitsPerCrate: 30 },
+      { name: "Parag Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Parag Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  paras: {
+    id: "paras",
+    name: "Paras Dairy",
+    dispatchVariants: [
+      "Paras Premium Milk (FCM)", "Paras Standard Milk", "Paras Toned Milk",
+      "Paras DTM", "Paras Pure Desi Dahi", "Paras Premium Dahi",
+      "Paras Masala Chaas", "Paras Lassi", "Paras Fresh Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Paras Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Paras Premium Dahi 14x400 gm Cup", unitsPerCrate: 14 },
+      { name: "Paras Pure Dahi 12x1 kg Pouch", unitsPerCrate: 12 },
+      { name: "Paras Masala Chaas 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Paras Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Paras Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  ananda: {
+    id: "ananda",
+    name: "Ananda Dairy",
+    dispatchVariants: [
+      "Ananda Gold (FCM)", "Ananda Toned Milk", "Ananda Double Toned Milk",
+      "Ananda Cow Milk", "Ananda Rabri Dahi", "Ananda Masti Dahi",
+      "Ananda Masala Chaas", "Ananda Lassi", "Ananda Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Ananda Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Ananda Masti Dahi 14x400 gm Cup", unitsPerCrate: 14 },
+      { name: "Ananda Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Ananda Rabri Dahi 28x200 gm Cup", unitsPerCrate: 28 },
+      { name: "Ananda Chaas 30x300 ml Pouch", unitsPerCrate: 30 },
+      { name: "Ananda Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 }
+    ]
+  },
+  gyan: {
+    id: "gyan",
+    name: "Gyan Dairy",
+    dispatchVariants: [
+      "Gyan Full Cream Milk", "Gyan Toned Milk", "Gyan Cow Milk",
+      "Gyan DTM", "Gyan Premium Dahi", "Gyan Lassi",
+      "Gyan Masala Chaas", "Gyan Fresh Paneer", "Gyan Khoya / Mawa"
+    ],
+    coldBlastVariants: [
+      { name: "Gyan Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Gyan Premium Dahi 14x400 gm Cup", unitsPerCrate: 14 },
+      { name: "Gyan Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Gyan Masala Chaas 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Gyan Lassi Pouch 40x200 ml", unitsPerCrate: 40 },
+      { name: "Gyan Khoya / Mawa 10x1 kg Pack", unitsPerCrate: 10 }
+    ]
+  },
+  heritage: {
+    id: "heritage",
+    name: "Heritage Foods",
+    dispatchVariants: [
+      "Heritage Special FCM", "Heritage Daily Toned Milk", "Heritage Cow Milk",
+      "Heritage Double Toned", "Heritage Curd / Dahi", "Heritage Buttermilk",
+      "Heritage Lassi", "Heritage Fresh Paneer", "Heritage Ghee"
+    ],
+    coldBlastVariants: [
+      { name: "Heritage Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Heritage Curd Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Heritage Curd Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Heritage Buttermilk 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Heritage Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Heritage Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  hatsun: {
+    id: "hatsun",
+    name: "Hatsun / Arokya Dairy",
+    dispatchVariants: [
+      "Arokya Full Cream Milk", "Arokya Toned Milk", "Arokya Double Toned",
+      "Hatsun Curd", "Hatsun Buttermilk", "Hatsun Paneer",
+      "Hatsun Table Butter", "Hatsun Ghee"
+    ],
+    coldBlastVariants: [
+      { name: "Hatsun Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Hatsun Curd Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Hatsun Curd Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Hatsun Buttermilk 30x200 ml Pouch", unitsPerCrate: 30 },
+      { name: "Hatsun Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  abhi_federation: {
+    id: "abhi_federation",
+    name: "Abhi Federation",
+    dispatchVariants: [
+      "Fed. Full Cream Milk", "Fed. Standard Milk", "Fed. Toned Milk",
+      "Fed. Double Toned Milk", "Fed. Fresh Dahi", "Fed. Masala Chaas",
+      "Fed. Sweet Lassi", "Fed. Fresh Paneer"
+    ],
+    coldBlastVariants: [
+      { name: "Fed. Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Fed. Dahi 14x400 gm Cup Crate", unitsPerCrate: 14 },
+      { name: "Fed. Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Fed. Masala Chaas 30x300 ml", unitsPerCrate: 30 },
+      { name: "Fed. Sweet Lassi 40x200 ml", unitsPerCrate: 40 }
+    ]
+  },
+  country_delight: {
+    id: "country_delight",
+    name: "Country Delight / Direct Dairies",
+    dispatchVariants: [
+      "Desi Cow Milk", "Buffalo Milk", "Low Fat Milk",
+      "Taaza Dahi", "Ghar Jaisa Dahi", "Fresh Paneer", "Desi White Butter"
+    ],
+    coldBlastVariants: [
+      { name: "Fresh Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Taaza Dahi Matka 5 kg", unitsPerCrate: 1 },
+      { name: "Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Desi Butter 10x500 gm Pack", unitsPerCrate: 10 }
+    ]
+  },
+  standard_plant: {
+    id: "standard_plant",
+    name: "Standard Processing Plant Format",
+    dispatchVariants: [
+      "Full Cream Milk (FCM 6.0/9.0)", "Standardized Milk (SM 4.5/8.5)",
+      "Toned Milk (TM 3.0/8.5)", "Double Toned Milk (DTM 1.5/9.0)",
+      "Skimmed Milk (SNF 8.7)", "Cow Milk (3.5/8.5)",
+      "Fresh Dahi (Pouch/Cup)", "Flavored Milk", "Fresh Paneer", "Desi Ghee"
+    ],
+    coldBlastVariants: [
+      { name: "Fresh Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Standard Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Standard Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Spiced Buttermilk 30x200 ml", unitsPerCrate: 30 },
+      { name: "Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 },
+      { name: "Table Butter 16x500 gm", unitsPerCrate: 16 }
+    ]
+  },
+  standard_bmc: {
+    id: "standard_bmc",
+    name: "Bulk Milk Chilling Center (BMC) Format",
+    dispatchVariants: [
+      "Chilled Mixed Raw Milk (4°C)", "Chilled Cow Raw Milk (4°C)",
+      "Chilled Buffalo Raw Milk (4°C)", "Chilled Skimmed Milk",
+      "Cream (40% Fat)", "Chilled Whey Water"
+    ],
+    coldBlastVariants: [
+      { name: "Sample Milk Bottles 24x500 ml", unitsPerCrate: 24 },
+      { name: "Chilled Cream Cans 20 L", unitsPerCrate: 1 }
+    ]
+  },
+  local_company: {
+    id: "local_company",
+    name: "Local Dairy / Other Dairy",
+    dispatchVariants: [
+      "Full Cream Milk (FCM)", "Toned Milk (TM)", "Double Toned Milk (DTM)",
+      "Cow Milk", "Fresh Dahi", "Matka Dahi", "Masala Chaas",
+      "Sweet Lassi", "Paneer", "Khoya / Mawa"
+    ],
+    coldBlastVariants: [
+      { name: "Fresh Paneer 15x200 gm Pack", unitsPerCrate: 15 },
+      { name: "Dahi Cup 14x400 gm Crate", unitsPerCrate: 14 },
+      { name: "Dahi Pouch 12x1 kg Crate", unitsPerCrate: 12 },
+      { name: "Matka Dahi 5 kg Bucket", unitsPerCrate: 1 },
+      { name: "Masala Chaas 30x300 ml", unitsPerCrate: 30 },
+      { name: "Sweet Lassi 40x200 ml Pouch", unitsPerCrate: 40 }
+    ]
+  }
+};
+
+const mergeColdBlastStock = (savedRows: ColdBlastRow[], defaultVariants = DEFAULT_COLD_BLAST_VARIANTS): ColdBlastRow[] => {
   if (!savedRows || !Array.isArray(savedRows)) return [];
   const savedMap = new Map<string, ColdBlastRow>();
   savedRows.forEach(row => {
@@ -124,7 +476,7 @@ const mergeColdBlastStock = (savedRows: ColdBlastRow[]): ColdBlastRow[] => {
     }
   });
 
-  const merged = DEFAULT_COLD_BLAST_VARIANTS.map(v => {
+  const merged = defaultVariants.map(v => {
     const saved = savedMap.get(v.name);
     return {
       variant: v.name,
@@ -137,7 +489,7 @@ const mergeColdBlastStock = (savedRows: ColdBlastRow[]): ColdBlastRow[] => {
   });
 
   savedRows.forEach((row, idx) => {
-    if (idx >= DEFAULT_COLD_BLAST_VARIANTS.length) {
+    if (idx >= defaultVariants.length) {
       merged.push({
         variant: row.variant || "",
         unitsPerCrate: row.unitsPerCrate || "1",
@@ -149,7 +501,7 @@ const mergeColdBlastStock = (savedRows: ColdBlastRow[]): ColdBlastRow[] => {
     }
   });
 
-  const currentExtraCount = merged.length - DEFAULT_COLD_BLAST_VARIANTS.length;
+  const currentExtraCount = merged.length - defaultVariants.length;
   if (currentExtraCount < 5) {
     for (let i = currentExtraCount; i < 5; i++) {
       merged.push({
@@ -192,6 +544,17 @@ export default function ShiftReportCalc() {
 
   const defaultDate = new Date().toISOString().split('T')[0];
 
+  // Company Selection State
+  const [selectedCompanyKey, setSelectedCompanyKey] = useState<string>(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const savedKey = localStorage.getItem(`dairyhub_selected_company_key_${defaultDate}`) || localStorage.getItem("dairyhub_selected_company_key");
+        if (savedKey && DAIRY_COMPANIES[savedKey]) return savedKey;
+      }
+    } catch (e) {}
+    return "";
+  });
+
   const [companyNameCB, setCompanyNameCB] = useState(() => {
     try {
       if (typeof window !== "undefined") {
@@ -202,7 +565,7 @@ export default function ShiftReportCalc() {
         }
       }
     } catch (e) {}
-    return "V S Anand Foods Processing (MPS Sonipat)";
+    return "";
   });
 
   const [closingStockCB, setClosingStockCB] = useState<ColdBlastRow[]>(() => {
@@ -217,6 +580,10 @@ export default function ShiftReportCalc() {
     } catch (e) {}
     return mergeColdBlastStock([]);
   });
+
+  // Custom Monthly Closing Stock Rows state
+  const [customMonthlyClosingStock, setCustomMonthlyClosingStock] = useState<ClosingStockRow[]>([]);
+  const [customMonthlyClosingStockCB, setCustomMonthlyClosingStockCB] = useState<ColdBlastRow[]>([]);
   
   // Header Meta
   const [date, setDate] = useState(defaultDate);
@@ -284,7 +651,6 @@ export default function ShiftReportCalc() {
           const data = JSON.parse(saved);
           const isOldDefault = data.companyName && (
             data.companyName.includes("V S Anand") || 
-            data.companyName.includes("VSA") || 
             data.companyName === "V S Anand Foods Processing (MPS Sonipat)"
           );
           if (!isOldDefault) return data.companyName || "";
@@ -323,11 +689,14 @@ export default function ShiftReportCalc() {
         }
         if (saved) {
           const data = JSON.parse(saved);
-          if (data.rightOfficerLabel) return data.rightOfficerLabel;
+          if (data.rightOfficerLabel) {
+            const isVsa = data.rightOfficerLabel.includes("VSA");
+            return isVsa ? "Shift Incharge" : data.rightOfficerLabel;
+          }
         }
       }
     } catch (e) {}
-    return "VSA Shift Incharge";
+    return "Shift Incharge";
   });
 
   const [customRightLabel, setCustomRightLabel] = useState(() => {
@@ -347,6 +716,48 @@ export default function ShiftReportCalc() {
   });
 
   const activeRightLabel = rightOfficerLabel === "Custom" ? customRightLabel : rightOfficerLabel;
+
+  const handleCompanySelect = (val: string) => {
+    setSelectedCompanyKey(val);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(`dairyhub_selected_company_key_${date}`, val);
+      localStorage.setItem("dairyhub_selected_company_key", val);
+    }
+
+    if (val && val !== "none" && DAIRY_COMPANIES[val]) {
+      const comp = DAIRY_COMPANIES[val];
+      setCompanyName(comp.name);
+      setCompanyNameCB(comp.name);
+
+      // Populate Dispatched details for this company
+      const dispatchRows = comp.dispatchVariants.map(variant => ({
+        variant, vehicleNo: "", qty: "", fat: "", snf: ""
+      }));
+      for (let i = 0; i < 3; i++) {
+        dispatchRows.push({ variant: "", vehicleNo: "", qty: "", fat: "", snf: "" });
+      }
+      setDispatchedDetails(dispatchRows);
+
+      // Populate Cold & Blast closing stock for this company
+      const coldBlastRows = comp.coldBlastVariants.map(v => ({
+        variant: v.name,
+        unitsPerCrate: String(v.unitsPerCrate),
+        coldCrates: "",
+        coldUbd: "",
+        blastCrates: "",
+        blastUbd: ""
+      }));
+      for (let i = 0; i < 5; i++) {
+        coldBlastRows.push({ variant: "", unitsPerCrate: "1", coldCrates: "", coldUbd: "", blastCrates: "", blastUbd: "" });
+      }
+      setClosingStockCB(coldBlastRows);
+
+      toast({
+        title: "Company Selected",
+        description: `Loaded ${comp.name} product list & report template.`,
+      });
+    }
+  };
 
   // Closing Stock
   const [closingStock, setClosingStock] = useState<ClosingStockRow[]>(() => {
@@ -454,7 +865,6 @@ export default function ShiftReportCalc() {
         // Filter out old cached default values
         const isOldDefaultCompany = data.companyName && (
           data.companyName.includes("V S Anand") || 
-          data.companyName.includes("VSA") || 
           data.companyName === "V S Anand Foods Processing (MPS Sonipat)"
         );
         setCompanyName(isOldDefaultCompany ? "" : (data.companyName || ""));
@@ -465,7 +875,12 @@ export default function ShiftReportCalc() {
         );
         setLeftOfficerLabel(isOldDefaultLeft ? "" : (data.leftOfficerLabel || ""));
 
-        if (data.rightOfficerLabel) setRightOfficerLabel(data.rightOfficerLabel);
+        if (data.rightOfficerLabel) {
+          const isVsa = data.rightOfficerLabel.includes("VSA");
+          setRightOfficerLabel(isVsa ? "Shift Incharge" : data.rightOfficerLabel);
+        } else {
+          setRightOfficerLabel("Shift Incharge");
+        }
         if (data.customRightLabel !== undefined) setCustomRightLabel(data.customRightLabel);
         if (data.closingStock) setClosingStock(data.closingStock);
         if (data.storeInventory) setStoreInventory(data.storeInventory);
@@ -505,7 +920,7 @@ export default function ShiftReportCalc() {
         if (dataCB.companyNameCB) setCompanyNameCB(dataCB.companyNameCB);
         if (dataCB.closingStockCB) setClosingStockCB(mergeColdBlastStock(dataCB.closingStockCB));
       } else {
-        setCompanyNameCB("V S Anand Foods Processing (MPS Sonipat)");
+        setCompanyNameCB("");
         setClosingStockCB(mergeColdBlastStock([]));
       }
       
@@ -555,7 +970,7 @@ export default function ShiftReportCalc() {
       setShiftIncharge("");
       setBanasOfficer("");
       setLeftOfficerLabel("");
-      setRightOfficerLabel("VSA Shift Incharge");
+      setRightOfficerLabel("Shift Incharge");
       setCustomRightLabel("");
 
       if (reportType === "milk_dispatch") {
@@ -770,7 +1185,7 @@ export default function ShiftReportCalc() {
   };
 
   // Export to CSV
-  const handleExportCSV = () => {
+  const handleExportCSV = async () => {
     let csvContent = "data:text/csv;charset=utf-8,";
     
     if (reportType === "milk_dispatch") {
@@ -828,7 +1243,7 @@ export default function ShiftReportCalc() {
       csvContent += `TOTAL DISPATCHED,,${calculateTotalDispatchedQty()},,\r\n`;
     } else {
       csvContent += `"${companyNameCB || "CLOSING STOCK REPORT"}"\r\n`;
-      csvContent += `Date,${date},Time,${time},Shift,${shift},VSA Shift Incharge,${shiftIncharge},Banas Officer,${banasOfficer}\r\n\r\n`;
+      csvContent += `Date,${date},Time,${time},Shift,${shift},${activeRightLabel || "Shift Incharge"},${shiftIncharge},${leftOfficerLabel || "Officer"},${banasOfficer}\r\n\r\n`;
 
       csvContent += "CLOSING STOCK (COLD ROOM & BLAST ROOM)\r\n";
       csvContent += "VARIENT,COLD ROOM CRATES,COLD ROOM UBD,COLD ROOM TOTAL,BLAST ROOM CRATES,BLAST ROOM UBD,BLAST ROOM TOTAL,GRAND TOTAL CRATES\r\n";
@@ -844,13 +1259,8 @@ export default function ShiftReportCalc() {
       csvContent += `TOTALS,${totalsCB.coldCrates},${totalsCB.coldUbd},${totalsCB.coldTotal.toFixed(2)},${totalsCB.blastCrates},${totalsCB.blastUbd},${totalsCB.blastTotal.toFixed(2)},${totalsCB.grandTotal.toFixed(2)}\r\n`;
     }
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `${reportType === "milk_dispatch" ? "Shift_Report" : "Cold_Blast_Report"}_${date}_${shift.replace(/\s+/g, '_')}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const cleanCsvText = csvContent.replace(/^data:text\/csv;charset=utf-8,/, "");
+    await saveFile(cleanCsvText, `${reportType === "milk_dispatch" ? "Shift_Report" : "Cold_Blast_Report"}_${date}_${shift.replace(/\s+/g, '_')}.csv`, "text/csv;charset=utf-8;");
 
     toast({
       title: "Export Success",
@@ -1138,11 +1548,11 @@ export default function ShiftReportCalc() {
 
           <div style="margin-top: 30px; display: flex; justify-content: space-between; padding: 0 20px;">
             <div style="width: 140px; border-top: 1px solid #000; text-align: center; padding-top: 4px; font-weight: bold; font-size: 8px;">
-              (Banas Officer)
+              (${leftOfficerLabel ? leftOfficerLabel : "Officer"})
               <div style="font-weight: normal; font-size: 7px; margin-top: 4px;">Name: ${banasOfficer || "_________________"}</div>
             </div>
             <div style="width: 140px; border-top: 1px solid #000; text-align: center; padding-top: 4px; font-weight: bold; font-size: 8px;">
-              (VSA Shift Incharge)
+              (Incharge)
               <div style="font-weight: normal; font-size: 7px; margin-top: 4px;">Name: ${shiftIncharge || "_________________"}</div>
             </div>
           </div>
@@ -1487,7 +1897,7 @@ export default function ShiftReportCalc() {
     }
   };
 
-  const handleExportMonthlyCSV = (year: number, month: number, reportData: any) => {
+  const handleExportMonthlyCSV = async (year: number, month: number, reportData: any) => {
     let csvContent = "data:text/csv;charset=utf-8,";
     
     if (reportType === "milk_dispatch") {
@@ -1511,13 +1921,8 @@ export default function ShiftReportCalc() {
       csvContent += `\r\nTOTALS,,,${totals.coldCrates},${totals.coldUbd},${totals.coldTotal.toFixed(2)},${totals.blastCrates},${totals.blastUbd},${totals.blastTotal.toFixed(2)},${totals.grandTotal.toFixed(2)}\r\n`;
     }
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `Monthly_${reportType === "milk_dispatch" ? "Shift" : "Cold_Room"}_Summary_${year}_${month}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const cleanCsvText = csvContent.replace(/^data:text\/csv;charset=utf-8,/, "");
+    await saveFile(cleanCsvText, `Monthly_${reportType === "milk_dispatch" ? "Shift" : "Cold_Room"}_Summary_${year}_${month}.csv`, "text/csv;charset=utf-8;");
 
     toast({
       title: "Export Success",
@@ -1679,7 +2084,7 @@ export default function ShiftReportCalc() {
               <div class="flex-child" style="display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; padding: 0 10px; margin-top: 50px;">
                   <div style="width: 110px; border-top: 1px solid #000; text-align: center; padding-top: 3px; font-weight: bold; font-size: 8px;">
-                    (${leftOfficerLabel ? leftOfficerLabel : "Banas Officer"})
+                    (${leftOfficerLabel ? leftOfficerLabel : "Officer"})
                   </div>
                   <div style="width: 110px; border-top: 1px solid #000; text-align: center; padding-top: 3px; font-weight: bold; font-size: 8px;">
                     (${activeRightLabel ? activeRightLabel : "Shift Incharge"})
@@ -1864,10 +2269,10 @@ export default function ShiftReportCalc() {
 
               <div style="display: flex; justify-content: space-between; padding: 0 10px; margin-top: 50px;">
                 <div style="width: 150px; border-top: 1px solid #000; text-align: center; padding-top: 3px; font-weight: bold; font-size: 8px;">
-                  (Banas Officer)
+                  (${leftOfficerLabel ? leftOfficerLabel : "Officer"})
                 </div>
                 <div style="width: 150px; border-top: 1px solid #000; text-align: center; padding-top: 3px; font-weight: bold; font-size: 8px;">
-                  (VSA Shift Incharge)
+                  (Incharge)
                 </div>
               </div>
             </div>
@@ -2381,11 +2786,11 @@ export default function ShiftReportCalc() {
 
             <div class="sig-section">
               <div class="sig-box">
-                (Banas Officer)
+                (${leftOfficerLabel ? leftOfficerLabel : "Officer"})
                 <div style="font-weight: normal; font-size: 7px; margin-top: 4px;">Name: ${banasOfficer || "_________________"}</div>
               </div>
               <div class="sig-box">
-                (VSA Shift Incharge)
+                (Incharge)
                 <div style="font-weight: normal; font-size: 7px; margin-top: 4px;">Name: ${shiftIncharge || "_________________"}</div>
               </div>
             </div>
@@ -2420,7 +2825,7 @@ export default function ShiftReportCalc() {
           }`}
         >
           <FileSpreadsheet className="w-3.5 h-3.5" />
-          Daily Entry (दैनिक रिपोर्ट)
+          Daily Entry
         </button>
         <button
           onClick={() => setActiveTab("monthly")}
@@ -2431,7 +2836,7 @@ export default function ShiftReportCalc() {
           }`}
         >
           <CalendarIcon className="w-3.5 h-3.5" />
-          Monthly Summary (मासिक क्लोजिंग)
+          Monthly Summary
         </button>
       </div>
 
@@ -2439,7 +2844,7 @@ export default function ShiftReportCalc() {
         <>
           {/* ── COMPANY NAME HEADER ── */}
           <div className="p-5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1.5 text-center">
-            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Company / Processing Unit (संस्था का नाम)</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Company / Processing Unit</span>
             <input 
               type="text" 
               placeholder="Enter Company / Processing Unit Name..."
@@ -2518,11 +2923,100 @@ export default function ShiftReportCalc() {
         </div>
       </div>
 
-      {/* ── HEADER DETAILS FORM ── */}
+      {/* ── COMPANY SELECTION DROPDOWN BAR ── */}
+      <div className="bg-gradient-to-r from-indigo-900 via-blue-900 to-slate-900 p-4 sm:p-5 rounded-xl border-2 border-indigo-400 shadow-md text-white flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-indigo-300 animate-pulse" />
+            <h3 className="text-sm font-extrabold tracking-wide uppercase text-indigo-100 flex items-center gap-2">
+              Select Dairy Company <span className="text-red-400 font-black">*</span>
+            </h3>
+          </div>
+          <p className="text-[11px] text-indigo-200">
+            Select a company to load its product list and shift report template.
+          </p>
+        </div>
+        
+        <div className="w-full md:w-80 shrink-0">
+          <Select
+            value={selectedCompanyKey || "none"}
+            onValueChange={(val) => {
+              if (val !== "none") {
+                handleCompanySelect(val);
+              } else {
+                setSelectedCompanyKey("");
+              }
+            }}
+          >
+            <SelectTrigger className="h-10 text-xs font-black text-slate-900 bg-white border-2 border-indigo-300 focus:ring-2 focus:ring-indigo-400 shadow-sm">
+              <SelectValue placeholder="-- Select Dairy Company --" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none" className="text-xs text-slate-400 italic">-- Select Dairy Company --</SelectItem>
+              {Object.values(DAIRY_COMPANIES).map((comp) => (
+                <SelectItem key={comp.id} value={comp.id} className="text-xs font-bold text-slate-800">
+                  🏢 {comp.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {(!selectedCompanyKey || selectedCompanyKey === "none") ? (
+        <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100/60 border-2 border-dashed border-amber-300 p-10 rounded-2xl text-center space-y-4 shadow-sm my-4">
+          <div className="inline-flex p-4 bg-amber-100/80 rounded-full text-amber-600 shadow-inner">
+            <Building2 className="w-10 h-10" />
+          </div>
+          <div className="space-y-1.5 max-w-lg mx-auto">
+            <h3 className="text-base font-extrabold text-amber-900">Select a Dairy Company to Load Products</h3>
+            <p className="text-xs text-amber-800 leading-relaxed">
+              Please select your dairy company from the <strong>"Select Dairy Company"</strong> dropdown above to load the relevant product list and shift report template.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+            {Object.values(DAIRY_COMPANIES).map((comp) => (
+              <button
+                key={comp.id}
+                onClick={() => handleCompanySelect(comp.id)}
+                className="px-3 py-1.5 bg-white hover:bg-indigo-50 text-indigo-900 text-xs font-bold border border-indigo-200 rounded-lg shadow-sm transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                {comp.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+      <>
+      {/* Active Company Badge Header */}
+      <div className="p-3 bg-indigo-50/80 border border-indigo-200 rounded-xl flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="p-1.5 bg-indigo-600 text-white rounded-md text-xs font-bold">
+            <Building2 className="w-4 h-4" />
+          </span>
+          <div>
+            <span className="text-[10px] uppercase font-bold text-indigo-500 tracking-wider">Active Selected Company</span>
+            <h4 className="text-sm font-extrabold text-indigo-950 flex items-center gap-1.5">
+              {companyName || DAIRY_COMPANIES[selectedCompanyKey]?.name}
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 inline" />
+            </h4>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-slate-500 font-medium">Change Company:</span>
+          <button 
+            onClick={() => setSelectedCompanyKey("")}
+            className="text-xs text-indigo-700 hover:text-indigo-900 underline font-bold"
+          >
+            Change / Reset Company
+          </button>
+        </div>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
         <div className="space-y-1.5">
           <Label className="text-xs font-semibold text-slate-600 flex items-center gap-1">
-            <CalendarIcon className="w-3.5 h-3.5 text-slate-400" /> Date (दिनांक)
+            <CalendarIcon className="w-3.5 h-3.5 text-slate-400" /> Date
           </Label>
           <Input 
             type="date" 
@@ -2534,7 +3028,7 @@ export default function ShiftReportCalc() {
         
         <div className="space-y-1.5">
           <Label className="text-xs font-semibold text-slate-600 flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-slate-400" /> Time (समय)
+            <Clock className="w-3.5 h-3.5 text-slate-400" /> Time
           </Label>
           <Input 
             type="time" 
@@ -2545,7 +3039,7 @@ export default function ShiftReportCalc() {
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-slate-600">Shift (शिफ्ट)</Label>
+          <Label className="text-xs font-semibold text-slate-600">Shift</Label>
           <Select value={shift} onValueChange={setShift}>
             <SelectTrigger className="h-9 text-xs focus:ring-teal-500">
               <SelectValue />
@@ -2604,7 +3098,7 @@ export default function ShiftReportCalc() {
           {/* Closing Stock Grid Card */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="px-4 py-3 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 flex justify-between items-center">
-              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">CLOSING STOCK (अंतिम स्टॉक)</span>
+              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">CLOSING STOCK</span>
               <span className="text-[11px] font-semibold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">
                 Total Qty: {calculateTotalClosingStockQty().toLocaleString('en-IN')} kg
               </span>
@@ -2743,12 +3237,22 @@ export default function ShiftReportCalc() {
                 </tbody>
               </table>
             </div>
+
+            {/* Add Row Button for Closing Stock */}
+            <div className="p-3 bg-slate-50 border-t border-slate-200">
+              <button
+                onClick={() => setClosingStock(prev => [...prev, { tank: "", variant: "", qty: "", fat: "", snf: "", acidity: "", temp: "" }])}
+                className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1.5 rounded-lg transition-all"
+              >
+                + Add Row
+              </button>
+            </div>
           </div>
 
           {/* Store Inventory Card */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="px-4 py-3 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
-              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">STORE STOCK (स्टोर विवरण)</span>
+              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">STORE STOCK</span>
             </div>
             
             <div className="overflow-x-auto w-full">
@@ -2814,6 +3318,16 @@ export default function ShiftReportCalc() {
                 </tbody>
               </table>
             </div>
+
+            {/* Add Row Button for Store Inventory */}
+            <div className="p-3 bg-slate-50 border-t border-slate-200">
+              <button
+                onClick={() => setStoreInventory(prev => [...prev, { item: "", bags: "", qty: "" }])}
+                className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1.5 rounded-lg transition-all"
+              >
+                + Add Row
+              </button>
+            </div>
           </div>
         </div>
 
@@ -2823,7 +3337,7 @@ export default function ShiftReportCalc() {
           {/* Tanker Unloading Card */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="px-4 py-3 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 flex justify-between items-center">
-              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">Tanker Unloading (टैंकर अनलोडिंग)</span>
+              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">Tanker Unloading</span>
               <span className="text-[11px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                 Total: {calculateTotalUnloadingQty().toLocaleString('en-IN')} kg
               </span>
@@ -2931,12 +3445,22 @@ export default function ShiftReportCalc() {
                 </tbody>
               </table>
             </div>
+
+            {/* Add Row Button for Tanker Unloading */}
+            <div className="p-3 bg-slate-50 border-t border-slate-200">
+              <button
+                onClick={() => setTankerUnloading(prev => [...prev, { variant: "", tankerNo: "", qty: "", fat: "", snf: "" }])}
+                className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1.5 rounded-lg transition-all"
+              >
+                + Add Row
+              </button>
+            </div>
           </div>
 
           {/* Tanker Standing on Dock Card */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="px-4 py-3 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 flex justify-between items-center">
-              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">Tanker Standing on Dock (खड़े टैंकर)</span>
+              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">Tanker Standing on Dock</span>
               <span className="text-[11px] font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">
                 Total: {calculateTotalStandingQty().toLocaleString('en-IN')} kg
               </span>
@@ -3044,12 +3568,22 @@ export default function ShiftReportCalc() {
                 </tbody>
               </table>
             </div>
+
+            {/* Add Row Button for Tanker Standing */}
+            <div className="p-3 bg-slate-50 border-t border-slate-200">
+              <button
+                onClick={() => setTankerStanding(prev => [...prev, { variant: "", tankerNo: "", qty: "", fat: "", snf: "" }])}
+                className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1.5 rounded-lg transition-all"
+              >
+                + Add Row
+              </button>
+            </div>
           </div>
 
           {/* Dispatched Details Card */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="px-4 py-3 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 flex justify-between items-center">
-              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">Dispatched Details (डिस्पैच विवरण)</span>
+              <span className="font-bold text-slate-700 text-xs sm:text-sm uppercase tracking-wider">Dispatched Details</span>
               <span className="text-[11px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">
                 Total: {calculateTotalDispatchedQty().toLocaleString('en-IN')} kg
               </span>
@@ -3157,6 +3691,16 @@ export default function ShiftReportCalc() {
                 </tbody>
               </table>
             </div>
+
+            {/* Add Row Button for Dispatched Details */}
+            <div className="p-3 bg-slate-50 border-t border-slate-200">
+              <button
+                onClick={() => setDispatchedDetails(prev => [...prev, { variant: "", vehicleNo: "", qty: "", fat: "", snf: "" }])}
+                className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1.5 rounded-lg transition-all"
+              >
+                + Add Row
+              </button>
+            </div>
           </div>
 
         </div>
@@ -3172,7 +3716,7 @@ export default function ShiftReportCalc() {
               <span className="text-[10px] text-slate-400 font-bold uppercase block mb-1">Left Signature Title</span>
               <Input 
                 type="text" 
-                placeholder="e.g. Banas Officer, Quality Incharge"
+                placeholder="e.g. Quality Officer, Plant Officer"
                 value={leftOfficerLabel}
                 onChange={(e) => setLeftOfficerLabel(e.target.value)}
                 className="text-center font-bold text-slate-700 bg-transparent border-slate-200 focus:ring-teal-500 h-8 text-xs"
@@ -3202,9 +3746,9 @@ export default function ShiftReportCalc() {
                   <SelectValue placeholder="Select Title" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="VSA Shift Incharge" className="text-xs font-semibold text-slate-700">VSA Shift Incharge</SelectItem>
-                  <SelectItem value="Production Manager" className="text-xs font-semibold text-slate-700">Production Manager</SelectItem>
+                  <SelectItem value="Incharge" className="text-xs font-semibold text-slate-700">Incharge</SelectItem>
                   <SelectItem value="Shift Incharge" className="text-xs font-semibold text-slate-700">Shift Incharge</SelectItem>
+                  <SelectItem value="Production Manager" className="text-xs font-semibold text-slate-700">Production Manager</SelectItem>
                   <SelectItem value="Custom" className="text-xs font-semibold text-slate-700">Custom Title...</SelectItem>
                 </SelectContent>
               </Select>
@@ -3233,7 +3777,7 @@ export default function ShiftReportCalc() {
         <div className="flex flex-col gap-4">
           {/* Cold Room Company Name */}
           <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1.5 text-center">
-            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Company / Processing Unit (संस्था का नाम)</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Company / Processing Unit</span>
             <input
               type="text"
               placeholder="Enter Company / Processing Unit Name..."
@@ -3388,7 +3932,7 @@ export default function ShiftReportCalc() {
             </div>
 
             {/* Add Row Button */}
-            <div className="p-3 bg-slate-50 border-t border-slate-200">
+            <div className="p-3 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
               <button
                 onClick={() => setClosingStockCB(prev => [...prev, { variant: "", unitsPerCrate: "1", coldCrates: "", coldUbd: "", blastCrates: "", blastUbd: "" }])}
                 className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1.5 rounded-lg transition-all"
@@ -3397,11 +3941,77 @@ export default function ShiftReportCalc() {
               </button>
             </div>
           </div>
+
+          {/* ── SIGNATURES / FOOTER LABELS FOR COLD & BLAST ROOM ── */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-white rounded-xl border border-slate-200 shadow-sm mt-2">
+            {/* Left Signature Block */}
+            <div className="flex flex-col items-center p-4 border border-slate-100 rounded-lg bg-slate-50/50">
+              <div className="w-full max-w-xs border-t-2 border-dashed border-slate-300 pt-3 text-center space-y-2">
+                <div>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block mb-1">Left Signature Title</span>
+                  <Input 
+                    type="text" 
+                    placeholder="e.g. Cold Room Officer, Quality Incharge"
+                    value={leftOfficerLabel}
+                    onChange={(e) => setLeftOfficerLabel(e.target.value)}
+                    className="text-center font-bold text-slate-700 bg-transparent border-slate-200 focus:ring-teal-500 h-8 text-xs"
+                  />
+                </div>
+                <div className="mt-2 text-slate-500 text-xs font-mono">
+                  Name: <span className="font-semibold">{banasOfficer || "_________________"}</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right Signature Block */}
+            <div className="flex flex-col items-center p-4 border border-slate-100 rounded-lg bg-slate-50/50">
+              <div className="w-full max-w-xs border-t-2 border-dashed border-slate-300 pt-3 text-center space-y-2">
+                <div className="text-left w-full">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block mb-1 text-center">Right Signature Title</span>
+                  <Select 
+                    value={rightOfficerLabel} 
+                    onValueChange={(val) => {
+                      setRightOfficerLabel(val);
+                      if (val !== "Custom") {
+                        setCustomRightLabel("");
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="h-8 text-xs font-bold text-slate-700 bg-transparent border-slate-200">
+                      <SelectValue placeholder="Select Title" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Incharge" className="text-xs font-semibold text-slate-700">Incharge</SelectItem>
+                      <SelectItem value="Shift Incharge" className="text-xs font-semibold text-slate-700">Shift Incharge</SelectItem>
+                      <SelectItem value="Cold Room Incharge" className="text-xs font-semibold text-slate-700">Cold Room Incharge</SelectItem>
+                      <SelectItem value="Production Manager" className="text-xs font-semibold text-slate-700">Production Manager</SelectItem>
+                      <SelectItem value="Custom" className="text-xs font-semibold text-slate-700">Custom Title...</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  {rightOfficerLabel === "Custom" && (
+                    <Input
+                      type="text"
+                      placeholder="Enter custom title"
+                      value={customRightLabel}
+                      onChange={(e) => setCustomRightLabel(e.target.value)}
+                      className="h-8 text-xs font-bold text-slate-700 mt-1.5 focus:ring-teal-500 text-center"
+                    />
+                  )}
+                </div>
+                <div className="mt-2 text-slate-500 text-xs font-mono">
+                  Name: <span className="font-semibold">{shiftIncharge || "_________________"}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )} {/* end cold_blast_closing */}
 
+      </>
+      )} {/* end company selection check */} 
       </> 
-      )}
+      )} {/* end activeTab daily */}
 
       {/* ── MONTHLY SUMMARY & CLOSING VIEW ── */}
       {activeTab === "monthly" && (
@@ -3628,9 +4238,11 @@ export default function ShiftReportCalc() {
 
                 {/* Closing Stock Inventory Month-End Table */}
                 <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                  <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
-                    <h4 className="font-bold text-xs text-slate-700 uppercase tracking-wider">Month-End Closing Stock Balance</h4>
-                    <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Physical closing stock balance taken on last recorded day ({mData.lastDateWithData || "no dates entered"})</p>
+                  <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                    <div>
+                      <h4 className="font-bold text-xs text-slate-700 uppercase tracking-wider">Month-End Closing Stock Balance</h4>
+                      <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Physical closing stock balance taken on last recorded day ({mData.lastDateWithData || "no dates entered"})</p>
+                    </div>
                   </div>
                   <div className="p-4">
                     {!isColdRoom ? (
@@ -3649,7 +4261,7 @@ export default function ShiftReportCalc() {
                             mData.monthEndClosingStock
                               .filter((r: any) => r.tank || r.variant || r.qty)
                               .map((r: any, idx: number) => (
-                                <tr key={idx} className="hover:bg-slate-50">
+                                <tr key={`m-stock-${idx}`} className="hover:bg-slate-50">
                                   <td className="px-4 py-2 border border-slate-200 font-bold">{r.tank || "—"}</td>
                                   <td className="px-4 py-2 border border-slate-200 font-medium">{r.variant || "—"}</td>
                                   <td className="px-4 py-2 border border-slate-200 text-right font-semibold">{r.qty || "—"}</td>
@@ -3657,10 +4269,86 @@ export default function ShiftReportCalc() {
                                   <td className="px-4 py-2 border border-slate-200 text-right">{r.snf || "—"}</td>
                                 </tr>
                               ))
-                          ) : (
+                          ) : null}
+
+                          {/* Additional Custom Monthly Stock Rows */}
+                          {customMonthlyClosingStock.map((r, idx) => (
+                            <tr key={`m-custom-${idx}`} className="hover:bg-slate-50 bg-teal-50/10">
+                              <td className="p-1 border border-slate-200">
+                                <input
+                                  type="text"
+                                  placeholder="Tank name..."
+                                  value={r.tank}
+                                  onChange={(e) => {
+                                    const updated = [...customMonthlyClosingStock];
+                                    updated[idx] = { ...updated[idx], tank: e.target.value };
+                                    setCustomMonthlyClosingStock(updated);
+                                  }}
+                                  className="w-full bg-transparent px-2 py-1 text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-bold"
+                                />
+                              </td>
+                              <td className="p-1 border border-slate-200">
+                                <input
+                                  type="text"
+                                  placeholder="Product variant..."
+                                  value={r.variant}
+                                  onChange={(e) => {
+                                    const updated = [...customMonthlyClosingStock];
+                                    updated[idx] = { ...updated[idx], variant: e.target.value };
+                                    setCustomMonthlyClosingStock(updated);
+                                  }}
+                                  className="w-full bg-transparent px-2 py-1 text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-medium"
+                                />
+                              </td>
+                              <td className="p-1 border border-slate-200 text-right">
+                                <input
+                                  type="number"
+                                  step="any"
+                                  placeholder="0.0"
+                                  value={r.qty}
+                                  onChange={(e) => {
+                                    const updated = [...customMonthlyClosingStock];
+                                    updated[idx] = { ...updated[idx], qty: e.target.value };
+                                    setCustomMonthlyClosingStock(updated);
+                                  }}
+                                  className="w-full bg-transparent px-2 py-1 text-right text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-mono font-semibold"
+                                />
+                              </td>
+                              <td className="p-1 border border-slate-200 text-right">
+                                <input
+                                  type="number"
+                                  step="any"
+                                  placeholder="0.0"
+                                  value={r.fat}
+                                  onChange={(e) => {
+                                    const updated = [...customMonthlyClosingStock];
+                                    updated[idx] = { ...updated[idx], fat: e.target.value };
+                                    setCustomMonthlyClosingStock(updated);
+                                  }}
+                                  className="w-full bg-transparent px-2 py-1 text-right text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-mono"
+                                />
+                              </td>
+                              <td className="p-1 border border-slate-200 text-right">
+                                <input
+                                  type="number"
+                                  step="any"
+                                  placeholder="0.0"
+                                  value={r.snf}
+                                  onChange={(e) => {
+                                    const updated = [...customMonthlyClosingStock];
+                                    updated[idx] = { ...updated[idx], snf: e.target.value };
+                                    setCustomMonthlyClosingStock(updated);
+                                  }}
+                                  className="w-full bg-transparent px-2 py-1 text-right text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-mono"
+                                />
+                              </td>
+                            </tr>
+                          ))}
+
+                          {(!mData.monthEndClosingStock || mData.monthEndClosingStock.length === 0) && customMonthlyClosingStock.length === 0 && (
                             <tr>
                               <td colSpan={5} className="px-4 py-6 text-center text-slate-400 font-medium border border-slate-200">
-                                No closing stock records exist in local storage for this month.
+                                No closing stock records exist for this month. Click "+ Add Row" below to add a month-end record.
                               </td>
                             </tr>
                           )}
@@ -3698,7 +4386,7 @@ export default function ShiftReportCalc() {
                                 const bTotal = bc + (bu / packs);
                                 const gTotal = cTotal + bTotal;
                                 return (
-                                  <tr key={idx} className="hover:bg-slate-50 font-medium">
+                                  <tr key={`m-cb-${idx}`} className="hover:bg-slate-50 font-medium">
                                     <td className="px-4 py-2 border border-slate-200 font-bold">{r.variant || "—"}</td>
                                     <td className="px-2 py-2 border border-slate-200 text-right">{r.coldCrates || "—"}</td>
                                     <td className="px-2 py-2 border border-slate-200 text-right">{r.coldUbd || "—"}</td>
@@ -3710,16 +4398,124 @@ export default function ShiftReportCalc() {
                                   </tr>
                                 );
                               })
-                          ) : (
+                          ) : null}
+
+                          {/* Additional Custom Monthly Cold/Blast Stock Rows */}
+                          {customMonthlyClosingStockCB.map((r, idx) => {
+                            const cc = parseFloat(r.coldCrates) || 0;
+                            const cu = parseFloat(r.coldUbd) || 0;
+                            const bc = parseFloat(r.blastCrates) || 0;
+                            const bu = parseFloat(r.blastUbd) || 0;
+                            const packs = parseFloat(r.unitsPerCrate) || 1;
+                            const cTotal = cc + (cu / packs);
+                            const bTotal = bc + (bu / packs);
+                            const gTotal = cTotal + bTotal;
+                            return (
+                              <tr key={`m-cb-custom-${idx}`} className="hover:bg-slate-50 bg-cyan-50/10">
+                                <td className="p-1 border border-slate-200">
+                                  <input
+                                    type="text"
+                                    placeholder="Variant name..."
+                                    value={r.variant}
+                                    onChange={(e) => {
+                                      const updated = [...customMonthlyClosingStockCB];
+                                      updated[idx] = { ...updated[idx], variant: e.target.value };
+                                      setCustomMonthlyClosingStockCB(updated);
+                                    }}
+                                    className="w-full bg-transparent px-2 py-1 text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-bold"
+                                  />
+                                </td>
+                                <td className="p-1 border border-slate-200">
+                                  <input
+                                    type="number"
+                                    step="any"
+                                    value={r.coldCrates}
+                                    onChange={(e) => {
+                                      const updated = [...customMonthlyClosingStockCB];
+                                      updated[idx] = { ...updated[idx], coldCrates: e.target.value };
+                                      setCustomMonthlyClosingStockCB(updated);
+                                    }}
+                                    className="w-full bg-transparent px-1 py-1 text-right text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-mono"
+                                  />
+                                </td>
+                                <td className="p-1 border border-slate-200">
+                                  <input
+                                    type="number"
+                                    step="any"
+                                    value={r.coldUbd}
+                                    onChange={(e) => {
+                                      const updated = [...customMonthlyClosingStockCB];
+                                      updated[idx] = { ...updated[idx], coldUbd: e.target.value };
+                                      setCustomMonthlyClosingStockCB(updated);
+                                    }}
+                                    className="w-full bg-transparent px-1 py-1 text-right text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-mono"
+                                  />
+                                </td>
+                                <td className="px-2 py-2 border border-slate-200 text-right font-bold text-teal-700">
+                                  {cTotal > 0 ? cTotal.toFixed(2) : "—"}
+                                </td>
+                                <td className="p-1 border border-slate-200">
+                                  <input
+                                    type="number"
+                                    step="any"
+                                    value={r.blastCrates}
+                                    onChange={(e) => {
+                                      const updated = [...customMonthlyClosingStockCB];
+                                      updated[idx] = { ...updated[idx], blastCrates: e.target.value };
+                                      setCustomMonthlyClosingStockCB(updated);
+                                    }}
+                                    className="w-full bg-transparent px-1 py-1 text-right text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-mono"
+                                  />
+                                </td>
+                                <td className="p-1 border border-slate-200">
+                                  <input
+                                    type="number"
+                                    step="any"
+                                    value={r.blastUbd}
+                                    onChange={(e) => {
+                                      const updated = [...customMonthlyClosingStockCB];
+                                      updated[idx] = { ...updated[idx], blastUbd: e.target.value };
+                                      setCustomMonthlyClosingStockCB(updated);
+                                    }}
+                                    className="w-full bg-transparent px-1 py-1 text-right text-slate-800 border-0 focus:outline-none focus:ring-1 focus:ring-teal-500 rounded font-mono"
+                                  />
+                                </td>
+                                <td className="px-2 py-2 border border-slate-200 text-right font-bold text-blue-700">
+                                  {bTotal > 0 ? bTotal.toFixed(2) : "—"}
+                                </td>
+                                <td className="px-4 py-2 border border-slate-200 text-right font-black text-amber-700">
+                                  {gTotal > 0 ? gTotal.toFixed(2) : "—"}
+                                </td>
+                              </tr>
+                            );
+                          })}
+
+                          {(!mData.monthEndClosingStockCB || mData.monthEndClosingStockCB.length === 0) && customMonthlyClosingStockCB.length === 0 && (
                             <tr>
                               <td colSpan={8} className="px-4 py-6 text-center text-slate-400 font-medium border border-slate-200">
-                                No closing stock records exist in local storage for this month.
+                                No closing stock records exist for this month. Click "+ Add Row" below to add a month-end record.
                               </td>
                             </tr>
                           )}
                         </tbody>
                       </table>
                     )}
+                  </div>
+
+                  {/* Add Row Button for Month-End Closing Stock */}
+                  <div className="p-3 bg-slate-50 border-t border-slate-200">
+                    <button
+                      onClick={() => {
+                        if (!isColdRoom) {
+                          setCustomMonthlyClosingStock(prev => [...prev, { tank: "", variant: "", qty: "", fat: "", snf: "", acidity: "", temp: "" }]);
+                        } else {
+                          setCustomMonthlyClosingStockCB(prev => [...prev, { variant: "", unitsPerCrate: "1", coldCrates: "", coldUbd: "", blastCrates: "", blastUbd: "" }]);
+                        }
+                      }}
+                      className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1.5 rounded-lg transition-all"
+                    >
+                      + Add Row
+                    </button>
                   </div>
                 </div>
               </>
