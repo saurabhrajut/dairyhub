@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { savePdfFile } from "@/lib/mobile-download";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -394,7 +395,10 @@ export function AdvancedStandardizationCalc() {
       const canvas = await html2canvas(printAreaRef.current, {
         scale: 2,
         useCORS: true,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        windowWidth: printAreaRef.current.scrollWidth || 1000,
+        scrollX: 0,
+        scrollY: 0,
       });
       printAreaRef.current.classList.remove("is-exporting-pdf");
 
@@ -409,7 +413,7 @@ export function AdvancedStandardizationCalc() {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Advanced_Standardization_${selectedPresetId}_${Date.now()}.pdf`);
+      await savePdfFile(pdf, `Advanced_Standardization_${selectedPresetId}_${Date.now()}.pdf`);
 
       toast({
         title: "PDF Saved Successfully!",
