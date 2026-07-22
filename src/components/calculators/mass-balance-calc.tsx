@@ -2,14 +2,18 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { 
-  Scale, FileText, Printer, Download, Trash2, Plus, RefreshCw, Info, Edit3, Calendar
+  Scale, FileText, Printer, Download, Trash2, Plus, RefreshCw, Info, Edit3, Calendar, Beaker, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { snfFormulas } from "@/lib/data";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { savePdfFile, saveFile } from "@/lib/mobile-download";
 
 // Interfaces
 interface MassBalanceRow {
@@ -18,6 +22,7 @@ interface MassBalanceRow {
   liters: string;
   fat: string;
   clr: string;
+  snf?: string;
 }
 
 interface SeparationState {
@@ -91,6 +96,9 @@ export default function MassBalanceCalc() {
 
   // Global settings
   const [overallDensity, setOverallDensity] = useState("1.029");
+  const [snfFormula, setSnfFormula] = useState<string>("new_formula");
+  const [customFatMultiplier, setCustomFatMultiplier] = useState<string>("0.21");
+  const [customConstant, setCustomConstant] = useState<string>("0.29");
 
   // State arrays for selectedDate
   const [sources, setSources] = useState<MassBalanceRow[]>(DEFAULT_SOURCES);
@@ -108,6 +116,9 @@ export default function MassBalanceCalc() {
       const savedVariants = localStorage.getItem(`dairy_mb_variants_${selectedDate}`);
       const savedBalances = localStorage.getItem(`dairy_mb_balances_${selectedDate}`);
       const savedDensity = localStorage.getItem(`dairy_mb_density_${selectedDate}`);
+      const savedFormula = localStorage.getItem(`dairy_mb_snf_formula_${selectedDate}`);
+      const savedCustomMult = localStorage.getItem(`dairy_mb_custom_fat_mult_${selectedDate}`);
+      const savedCustomConst = localStorage.getItem(`dairy_mb_custom_const_${selectedDate}`);
 
       if (savedSources) {
         setSources(JSON.parse(savedSources));
@@ -149,6 +160,27 @@ export default function MassBalanceCalc() {
         const legacyDensity = selectedDate === todayStr ? localStorage.getItem("dairy_mb_density") : null;
         setOverallDensity(legacyDensity || "1.029");
       }
+
+      if (savedFormula) {
+        setSnfFormula(savedFormula);
+      } else {
+        const legacyFormula = localStorage.getItem("dairy_mb_snf_formula");
+        setSnfFormula(legacyFormula || "new_formula");
+      }
+
+      if (savedCustomMult) {
+        setCustomFatMultiplier(savedCustomMult);
+      } else {
+        const legacyMult = localStorage.getItem("dairy_mb_custom_fat_mult");
+        setCustomFatMultiplier(legacyMult || "0.21");
+      }
+
+      if (savedCustomConst) {
+        setCustomConstant(savedCustomConst);
+      } else {
+        const legacyConst = localStorage.getItem("dairy_mb_custom_const");
+        setCustomConstant(legacyConst || "0.29");
+      }
     } catch (e) {
       console.error("Failed to load mass balance draft", e);
     }
@@ -161,7 +193,10 @@ export default function MassBalanceCalc() {
     updatedVariants: MassBalanceRow[],
     updatedBalances: MassBalanceRow[],
     updatedDensity: string,
-    targetDate: string
+    targetDate: string,
+    updatedSnfFormula: string = snfFormula,
+    updatedCustomMult: string = customFatMultiplier,
+    updatedCustomConst: string = customConstant
   ) => {
     try {
       localStorage.setItem(`dairy_mb_sources_${targetDate}`, JSON.stringify(updatedSources));
@@ -169,6 +204,9 @@ export default function MassBalanceCalc() {
       localStorage.setItem(`dairy_mb_variants_${targetDate}`, JSON.stringify(updatedVariants));
       localStorage.setItem(`dairy_mb_balances_${targetDate}`, JSON.stringify(updatedBalances));
       localStorage.setItem(`dairy_mb_density_${targetDate}`, updatedDensity);
+      localStorage.setItem(`dairy_mb_snf_formula_${targetDate}`, updatedSnfFormula);
+      localStorage.setItem(`dairy_mb_custom_fat_mult_${targetDate}`, updatedCustomMult);
+      localStorage.setItem(`dairy_mb_custom_const_${targetDate}`, updatedCustomConst);
 
       // Track saved dates to allow quick lookups in the month summaries
       const savedDates = localStorage.getItem("dairy_mb_saved_dates");
@@ -180,7 +218,7 @@ export default function MassBalanceCalc() {
     } catch (e) {
       console.error("Failed to save draft", e);
     }
-  }, []);
+  }, [snfFormula, customFatMultiplier, customConstant]);
 
   // Row update handlers
   const updateRow = (
@@ -210,7 +248,8 @@ export default function MassBalanceCalc() {
       name: `New ${type === "sources" ? "Source" : type === "variants" ? "Variant" : "Balance"}`,
       liters: "",
       fat: "",
-      clr: ""
+      clr: "",
+      snf: ""
     };
     if (type === "sources") {
       const updated = [...sources, newRow];
@@ -250,12 +289,53 @@ export default function MassBalanceCalc() {
       setVariants(DEFAULT_VARIANTS);
       setBalances(DEFAULT_BALANCES);
       setOverallDensity("1.029");
-      saveDraft(DEFAULT_SOURCES, DEFAULT_SEPARATION, DEFAULT_VARIANTS, DEFAULT_BALANCES, "1.029", selectedDate);
+      setSnfFormula("new_formula");
+      setCustomFatMultiplier("0.21");
+      setCustomConstant("0.29");
+      saveDraft(DEFAULT_SOURCES, DEFAULT_SEPARATION, DEFAULT_VARIANTS, DEFAULT_BALANCES, "1.029", selectedDate, "new_formula", "0.21", "0.29");
       toast({ title: "Reset Successful", description: "Calculator values reset to default." });
     }
   };
 
   // getMonthlyData aggregates daily reports for a given month and year
+  // Automated Math Logic
+  const calcRowStats = useCallback((
+    liters: string,
+    fat: string,
+    clr: string,
+    density: number,
+    directSnf?: string,
+    formulaKey: string = snfFormula,
+    fatMult: string = customFatMultiplier,
+    constVal: string = customConstant
+  ) => {
+    const ltr = parseFloat(liters) || 0;
+    const f = parseFloat(fat) || 0;
+    const c = parseFloat(clr) || 0;
+
+    const mass = ltr * density;
+
+    let snfPct = 0;
+    // Direct SNF override takes priority if entered
+    if (directSnf !== undefined && directSnf.trim() !== "" && !isNaN(parseFloat(directSnf))) {
+      snfPct = parseFloat(directSnf);
+    } else if (ltr > 0 || c > 0 || f > 0) {
+      if (formulaKey === "custom") {
+        const mult = parseFloat(fatMult) || 0.21;
+        const cVal = parseFloat(constVal) || 0.29;
+        snfPct = (c / 4) + (mult * f) + cVal;
+      } else {
+        const formulaObj = snfFormulas[formulaKey as keyof typeof snfFormulas];
+        snfPct = formulaObj ? formulaObj.calc(c, f) : (c / 4) + (0.21 * f) + 0.29;
+      }
+    }
+
+    const fatKg = mass * f / 100;
+    const snfKg = mass * snfPct / 100;
+
+    return { mass, snfPct, fatKg, snfKg, ltr, f, c, snfDirect: directSnf };
+  }, [snfFormula, customFatMultiplier, customConstant]);
+
   const getMonthlyData = useCallback((year: number, month: number) => {
     const daysInMonth = new Date(year, month, 0).getDate();
     const list = [];
@@ -277,6 +357,9 @@ export default function MassBalanceCalc() {
       const savedVariants = localStorage.getItem(`dairy_mb_variants_${dateStr}`);
       const savedBalances = localStorage.getItem(`dairy_mb_balances_${dateStr}`);
       const savedDensity = localStorage.getItem(`dairy_mb_density_${dateStr}`);
+      const savedFormula = localStorage.getItem(`dairy_mb_snf_formula_${dateStr}`) || "new_formula";
+      const savedCustomMult = localStorage.getItem(`dairy_mb_custom_fat_mult_${dateStr}`) || "0.21";
+      const savedCustomConst = localStorage.getItem(`dairy_mb_custom_const_${dateStr}`) || "0.29";
 
       if (savedSources && savedSeparation && savedVariants && savedBalances) {
         try {
@@ -289,7 +372,7 @@ export default function MassBalanceCalc() {
           // Helper row stats
           let daySrcLtr = 0, daySrcFat = 0, daySrcSnf = 0;
           sRows.forEach(r => {
-            const stats = calcRowStats(r.liters, r.fat, r.clr, dens);
+            const stats = calcRowStats(r.liters, r.fat, r.clr, dens, r.snf, savedFormula, savedCustomMult, savedCustomConst);
             daySrcLtr += stats.ltr;
             daySrcFat += stats.fatKg;
             daySrcSnf += stats.snfKg;
@@ -297,7 +380,7 @@ export default function MassBalanceCalc() {
 
           let dayVarLtr = 0, dayVarFat = 0, dayVarSnf = 0;
           vRows.forEach(r => {
-            const stats = calcRowStats(r.liters, r.fat, r.clr, dens);
+            const stats = calcRowStats(r.liters, r.fat, r.clr, dens, r.snf, savedFormula, savedCustomMult, savedCustomConst);
             dayVarLtr += stats.ltr;
             dayVarFat += stats.fatKg;
             dayVarSnf += stats.snfKg;
@@ -305,7 +388,7 @@ export default function MassBalanceCalc() {
 
           let dayBalLtr = 0, dayBalFat = 0, dayBalSnf = 0;
           bRows.forEach(r => {
-            const stats = calcRowStats(r.liters, r.fat, r.clr, dens);
+            const stats = calcRowStats(r.liters, r.fat, r.clr, dens, r.snf, savedFormula, savedCustomMult, savedCustomConst);
             dayBalLtr += stats.ltr;
             dayBalFat += stats.fatKg;
             dayBalSnf += stats.snfKg;
@@ -321,6 +404,7 @@ export default function MassBalanceCalc() {
           const creamSnfKg = creamLiters * creamDensity * (creamSnfPct / 100);
 
           const combinedFatPct = (daySrcLtr * dens) > 0 ? (daySrcFat / (daySrcLtr * dens)) * 100 : 0;
+          const combinedSnfPct = (daySrcLtr * dens) > 0 ? (daySrcSnf / (daySrcLtr * dens)) * 100 : 0;
           const skimmedMilkMassKg = (parseFloat(sep.separatedLiters) || 0) - creamLiters;
           const skimmedFatKg = skimmedMilkMassKg * (combinedFatPct / 100);
           const skimmedSnfKg = skimmedMilkMassKg * (combinedSnfPct / 100);
@@ -382,13 +466,13 @@ export default function MassBalanceCalc() {
         creamKg: totalCreamKg
       }
     };
-  }, []);
+  }, [calcRowStats]);
 
   const handlePrintMonthly = () => {
     window.print();
   };
 
-  const handleExportMonthlyCSV = () => {
+  const handleExportMonthlyCSV = async () => {
     const data = getMonthlyData(selectedYear, selectedMonth);
     const headers = [
       "Date", "Source Liters", "Source Fat (kg)", "Source SNF (kg)",
@@ -430,31 +514,8 @@ export default function MassBalanceCalc() {
       "—"
     ]);
 
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `Mass_Balance_Monthly_Summary_${selectedYear}_${selectedMonth}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // Automated Math Logic
-  const calcRowStats = (liters: string, fat: string, clr: string, density: number) => {
-    const ltr = parseFloat(liters) || 0;
-    const f = parseFloat(fat) || 0;
-    const c = parseFloat(clr) || 0;
-
-    const mass = ltr * density;
-    // Richmond Indian Dairy Formula: SNF % = CLR / 4 + 0.21 * Fat + 0.29
-    const snfPct = ltr > 0 ? (c / 4) + (0.21 * f) + 0.29 : 0;
-    const fatKg = mass * f / 100;
-    const snfKg = mass * snfPct / 100;
-
-    return { mass, snfPct, fatKg, snfKg, ltr, f, c };
+    const csvRawText = [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    await saveFile(csvRawText, `Mass_Balance_Monthly_Summary_${selectedYear}_${selectedMonth}.csv`, "text/csv;charset=utf-8;");
   };
 
   const densityVal = parseFloat(overallDensity) || 1.029;
@@ -466,7 +527,7 @@ export default function MassBalanceCalc() {
   let sourceSnfTotal = 0;
   
   const sourcesCalced = sources.map(row => {
-    const stats = calcRowStats(row.liters, row.fat, row.clr, densityVal);
+    const stats = calcRowStats(row.liters, row.fat, row.clr, densityVal, row.snf);
     sourceLitersTotal += stats.ltr;
     sourceMassTotal += stats.mass;
     sourceFatTotal += stats.fatKg;
@@ -514,7 +575,7 @@ export default function MassBalanceCalc() {
   let variantSnfTotal = 0;
 
   const variantsCalced = variants.map(row => {
-    const stats = calcRowStats(row.liters, row.fat, row.clr, densityVal);
+    const stats = calcRowStats(row.liters, row.fat, row.clr, densityVal, row.snf);
     variantLitersTotal += stats.ltr;
     variantMassTotal += stats.mass;
     variantFatTotal += stats.fatKg;
@@ -529,7 +590,7 @@ export default function MassBalanceCalc() {
   let balanceSnfTotal = 0;
 
   const balancesCalced = balances.map(row => {
-    const stats = calcRowStats(row.liters, row.fat, row.clr, densityVal);
+    const stats = calcRowStats(row.liters, row.fat, row.clr, densityVal, row.snf);
     balanceLitersTotal += stats.ltr;
     balanceMassTotal += stats.mass;
     balanceFatTotal += stats.fatKg;
@@ -574,7 +635,10 @@ export default function MassBalanceCalc() {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        windowWidth: reportRef.current.scrollWidth || 1000,
+        scrollX: 0,
+        scrollY: 0,
       });
 
       const imgData = canvas.toDataURL("image/png");
@@ -600,7 +664,7 @@ export default function MassBalanceCalc() {
         heightLeft -= pageHeight;
       }
 
-      pdf.save(`Mass_Balance_Report_${new Date().toISOString().split("T")[0]}.pdf`);
+      await savePdfFile(pdf, `Mass_Balance_Report_${new Date().toISOString().split("T")[0]}.pdf`);
       toast({ title: "Success", description: "PDF downloaded successfully!" });
     } catch (error) {
       console.error("PDF generation failed:", error);
@@ -735,23 +799,106 @@ export default function MassBalanceCalc() {
       {activeTab === "edit" && (
         <div className="space-y-6 print:hidden">
           {/* Settings Card */}
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 items-end md:items-center justify-between">
-            <div className="space-y-1">
-              <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Info className="w-3.5 h-3.5 text-indigo-500" /> Overall Plant Milk Density (kg/L)
-              </Label>
-              <p className="text-[11px] text-slate-500">Used to convert milk volume (Liters) to mass (kg).</p>
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+              {/* Milk Density */}
+              <div className="lg:col-span-4 space-y-1">
+                <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <Info className="w-3.5 h-3.5 text-indigo-500" /> Overall Milk Density (kg/L)
+                </Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number" step="0.001"
+                    value={overallDensity}
+                    onChange={e => {
+                      setOverallDensity(e.target.value);
+                      saveDraft(sources, separation, variants, balances, e.target.value, selectedDate, snfFormula, customFatMultiplier, customConstant);
+                    }}
+                    className="text-sm font-semibold border-2 h-9"
+                  />
+                </div>
+                <p className="text-[10px] text-slate-500">Converts volume (L) to mass (kg).</p>
+              </div>
+
+              {/* SNF Formula Selector */}
+              <div className="lg:col-span-8 space-y-1">
+                <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <Beaker className="w-3.5 h-3.5 text-indigo-500" /> SNF Formula Selector (एस.एन.एफ. फ़ॉर्मूला चयन)
+                </Label>
+                <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center">
+                  <div className="w-full sm:flex-1 min-w-[220px]">
+                    <Select
+                      value={snfFormula}
+                      onValueChange={(val) => {
+                        setSnfFormula(val);
+                        saveDraft(sources, separation, variants, balances, overallDensity, selectedDate, val, customFatMultiplier, customConstant);
+                      }}
+                    >
+                      <SelectTrigger className="h-9 text-xs font-semibold bg-white border-2">
+                        <SelectValue placeholder="Select SNF Formula" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(snfFormulas).map(([key, { name, formulaText }]) => (
+                          <SelectItem key={key} value={key} className="text-xs">
+                            <span className="font-semibold">{name}</span>
+                            <span className="text-[10px] text-slate-400 block">{formulaText}</span>
+                          </SelectItem>
+                        ))}
+                        <SelectItem value="custom" className="text-xs font-semibold">
+                          ⚙️ Custom Formula (कस्टम फ़ॉर्मूला)
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {snfFormula === "custom" && (
+                    <div className="flex items-center gap-2">
+                      <div>
+                        <span className="text-[9px] font-bold text-slate-500 uppercase block">Fat Mult</span>
+                        <Input
+                          type="number" step="0.01"
+                          value={customFatMultiplier}
+                          onChange={e => {
+                            setCustomFatMultiplier(e.target.value);
+                            saveDraft(sources, separation, variants, balances, overallDensity, selectedDate, snfFormula, e.target.value, customConstant);
+                          }}
+                          className="h-8 text-xs font-semibold w-20 px-2"
+                          placeholder="0.21"
+                        />
+                      </div>
+                      <div>
+                        <span className="text-[9px] font-bold text-slate-500 uppercase block">Const</span>
+                        <Input
+                          type="number" step="0.01"
+                          value={customConstant}
+                          onChange={e => {
+                            setCustomConstant(e.target.value);
+                            saveDraft(sources, separation, variants, balances, overallDensity, selectedDate, snfFormula, customFatMultiplier, e.target.value);
+                          }}
+                          className="h-8 text-xs font-semibold w-20 px-2"
+                          placeholder="0.29"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="w-full md:w-32">
-              <Input
-                type="number" step="0.001"
-                value={overallDensity}
-                onChange={e => {
-                  setOverallDensity(e.target.value);
-                  saveDraft(sources, separation, variants, balances, e.target.value, selectedDate);
-                }}
-                className="text-sm font-semibold border-2"
-              />
+
+            {/* Active Formula Banner */}
+            <div className="text-xs text-indigo-900 bg-indigo-50/80 px-3 py-2 rounded-lg border border-indigo-150 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                <span>
+                  <strong>Active SNF Standard:</strong>{" "}
+                  {snfFormula === "custom"
+                    ? `Custom: SNF % = (CLR / 4) + (${customFatMultiplier || "0.21"} × Fat) + ${customConstant || "0.29"}`
+                    : snfFormulas[snfFormula as keyof typeof snfFormulas]?.name + " — " + snfFormulas[snfFormula as keyof typeof snfFormulas]?.formulaText}
+                </span>
+              </div>
+              <span className="text-[10px] text-indigo-600 font-medium bg-indigo-100/70 px-2 py-0.5 rounded">
+                💡 Tip: Type into SNF % cell in tables to override with direct lab reading
+              </span>
             </div>
           </div>
 
@@ -776,7 +923,7 @@ export default function MassBalanceCalc() {
                       <th className="px-3 py-2 text-right">Fat %</th>
                       <th className="px-3 py-2 text-right">CLR</th>
                       <th className="px-3 py-2 text-right text-slate-500">Mass (kg)</th>
-                      <th className="px-3 py-2 text-right text-slate-500">SNF %</th>
+                      <th className="px-3 py-2 text-right text-slate-700">SNF %</th>
                       <th className="px-3 py-2 text-right text-slate-500">Fat kg</th>
                       <th className="px-3 py-2 text-right text-slate-500">SNF kg</th>
                       <th className="px-2 py-2 text-center w-10"></th>
@@ -784,7 +931,7 @@ export default function MassBalanceCalc() {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {sources.map((row) => {
-                      const calced = calcRowStats(row.liters, row.fat, row.clr, densityVal);
+                      const calced = calcRowStats(row.liters, row.fat, row.clr, densityVal, row.snf);
                       return (
                         <tr key={row.id} className="hover:bg-slate-50/50">
                           <td className="p-2">
@@ -821,8 +968,15 @@ export default function MassBalanceCalc() {
                           <td className="px-3 py-2 text-right font-medium text-slate-600 bg-slate-50/50">
                             {calced.mass.toFixed(1)}
                           </td>
-                          <td className="px-3 py-2 text-right font-medium text-slate-600 bg-slate-50/50">
-                            {calced.snfPct.toFixed(3)}%
+                          <td className="p-2 w-20">
+                            <Input 
+                              type="number" step="0.01" 
+                              placeholder={calced.snfPct > 0 ? calced.snfPct.toFixed(2) : "SNF%"}
+                              value={row.snf || ""} 
+                              onChange={e => updateRow("sources", row.id, "snf", e.target.value)}
+                              className={`h-8 text-xs text-right px-2 font-semibold ${row.snf ? "border-indigo-400 bg-indigo-50/40 text-indigo-900" : ""}`}
+                              title={row.snf ? "Direct SNF entered" : `Calculated using ${snfFormula === 'custom' ? 'Custom Formula' : snfFormulas[snfFormula as keyof typeof snfFormulas]?.name}`}
+                            />
                           </td>
                           <td className="px-3 py-2 text-right font-semibold text-amber-700 bg-amber-50/20">
                             {calced.fatKg.toFixed(2)}
@@ -974,7 +1128,7 @@ export default function MassBalanceCalc() {
                       <th className="px-3 py-2 text-right">Fat %</th>
                       <th className="px-3 py-2 text-right">CLR</th>
                       <th className="px-3 py-2 text-right text-slate-500">Mass (kg)</th>
-                      <th className="px-3 py-2 text-right text-slate-500">SNF %</th>
+                      <th className="px-3 py-2 text-right text-slate-700">SNF %</th>
                       <th className="px-3 py-2 text-right text-slate-500">Fat kg</th>
                       <th className="px-3 py-2 text-right text-slate-500">SNF kg</th>
                       <th className="px-2 py-2 text-center w-10"></th>
@@ -982,7 +1136,7 @@ export default function MassBalanceCalc() {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {variants.map((row) => {
-                      const calced = calcRowStats(row.liters, row.fat, row.clr, densityVal);
+                      const calced = calcRowStats(row.liters, row.fat, row.clr, densityVal, row.snf);
                       return (
                         <tr key={row.id} className="hover:bg-slate-50/50">
                           <td className="p-2">
@@ -1019,8 +1173,15 @@ export default function MassBalanceCalc() {
                           <td className="px-3 py-2 text-right font-medium text-slate-600 bg-slate-50/50">
                             {calced.mass.toFixed(1)}
                           </td>
-                          <td className="px-3 py-2 text-right font-medium text-slate-600 bg-slate-50/50">
-                            {calced.snfPct.toFixed(3)}%
+                          <td className="p-2 w-20">
+                            <Input 
+                              type="number" step="0.01" 
+                              placeholder={calced.snfPct > 0 ? calced.snfPct.toFixed(2) : "SNF%"}
+                              value={row.snf || ""} 
+                              onChange={e => updateRow("variants", row.id, "snf", e.target.value)}
+                              className={`h-8 text-xs text-right px-2 font-semibold ${row.snf ? "border-indigo-400 bg-indigo-50/40 text-indigo-900" : ""}`}
+                              title={row.snf ? "Direct SNF entered" : `Calculated using ${snfFormula === 'custom' ? 'Custom Formula' : snfFormulas[snfFormula as keyof typeof snfFormulas]?.name}`}
+                            />
                           </td>
                           <td className="px-3 py-2 text-right font-semibold text-amber-700 bg-amber-50/20">
                             {calced.fatKg.toFixed(2)}
@@ -1077,7 +1238,7 @@ export default function MassBalanceCalc() {
                       <th className="px-3 py-2 text-right">Fat %</th>
                       <th className="px-3 py-2 text-right">CLR</th>
                       <th className="px-3 py-2 text-right text-slate-500">Mass (kg)</th>
-                      <th className="px-3 py-2 text-right text-slate-500">SNF %</th>
+                      <th className="px-3 py-2 text-right text-slate-700">SNF %</th>
                       <th className="px-3 py-2 text-right text-slate-500">Fat kg</th>
                       <th className="px-3 py-2 text-right text-slate-500">SNF kg</th>
                       <th className="px-2 py-2 text-center w-10"></th>
@@ -1085,7 +1246,7 @@ export default function MassBalanceCalc() {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {balances.map((row) => {
-                      const calced = calcRowStats(row.liters, row.fat, row.clr, densityVal);
+                      const calced = calcRowStats(row.liters, row.fat, row.clr, densityVal, row.snf);
                       return (
                         <tr key={row.id} className="hover:bg-slate-50/50">
                           <td className="p-2">
@@ -1122,8 +1283,15 @@ export default function MassBalanceCalc() {
                           <td className="px-3 py-2 text-right font-medium text-slate-600 bg-slate-50/50">
                             {calced.mass.toFixed(1)}
                           </td>
-                          <td className="px-3 py-2 text-right font-medium text-slate-600 bg-slate-50/50">
-                            {calced.snfPct.toFixed(3)}%
+                          <td className="p-2 w-20">
+                            <Input 
+                              type="number" step="0.01" 
+                              placeholder={calced.snfPct > 0 ? calced.snfPct.toFixed(2) : "SNF%"}
+                              value={row.snf || ""} 
+                              onChange={e => updateRow("balances", row.id, "snf", e.target.value)}
+                              className={`h-8 text-xs text-right px-2 font-semibold ${row.snf ? "border-indigo-400 bg-indigo-50/40 text-indigo-900" : ""}`}
+                              title={row.snf ? "Direct SNF entered" : `Calculated using ${snfFormula === 'custom' ? 'Custom Formula' : snfFormulas[snfFormula as keyof typeof snfFormulas]?.name}`}
+                            />
                           </td>
                           <td className="px-3 py-2 text-right font-semibold text-amber-700 bg-amber-50/20">
                             {calced.fatKg.toFixed(2)}
@@ -1230,7 +1398,7 @@ export default function MassBalanceCalc() {
             style={{ width: "210mm", minHeight: "297mm", boxSizing: "border-box" }}
           >
             {/* Report Header */}
-            <div className="border-b-2 border-indigo-600 pb-4 mb-6 flex justify-between items-end">
+            <div className="border-b-2 border-indigo-600 pb-4 mb-4 flex justify-between items-end">
               <div>
                 <h1 className="text-xl font-black text-indigo-950 uppercase tracking-tight">Dairy Plant Mass Balance Report</h1>
                 <p className="text-[11px] text-slate-500 font-semibold mt-0.5">Automated Yield, Fat & SNF Mass Balancing Sheet</p>
@@ -1241,6 +1409,17 @@ export default function MassBalanceCalc() {
                 </span>
                 <p className="text-[10px] text-slate-400 mt-1 font-semibold">Date: {selectedDate}</p>
               </div>
+            </div>
+
+            {/* Active SNF Standard Banner in Report */}
+            <div className="text-[10px] text-indigo-900 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-md mb-4 flex justify-between items-center">
+              <span>
+                <strong>SNF Standard Formula:</strong>{" "}
+                {snfFormula === "custom"
+                  ? `Custom Formula: SNF% = (CLR/4) + (${customFatMultiplier}*Fat) + ${customConstant}`
+                  : `${snfFormulas[snfFormula as keyof typeof snfFormulas]?.name || "New Formula"} (${snfFormulas[snfFormula as keyof typeof snfFormulas]?.formulaText || ""})`}
+              </span>
+              <span className="text-[9px] text-indigo-700 font-semibold uppercase tracking-wider">High Accuracy Mode</span>
             </div>
 
             {/* Quick Metrics */}
@@ -1671,7 +1850,8 @@ export default function MassBalanceCalc() {
       })()}
 
       {/* Global CSS overrides for A4 Printing layout */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @media print {
           body * {
             visibility: hidden;
@@ -1695,7 +1875,7 @@ export default function MassBalanceCalc() {
             display: none !important;
           }
         }
-      `}</style>
+      `}} />
     </div>
   );
 }
