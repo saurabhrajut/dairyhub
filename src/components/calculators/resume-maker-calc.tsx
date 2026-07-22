@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { savePdfFile } from "@/lib/mobile-download";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1391,6 +1392,7 @@ Location: ${loc}`;
         allowTaint: true,
         logging: false,
         backgroundColor: "#ffffff",
+        windowWidth: element.scrollWidth || 800,
         scrollX: 0,
         scrollY: 0,
         onclone: (clonedDoc) => {
@@ -1440,7 +1442,7 @@ Location: ${loc}`;
       }
 
       const fileName = `${resumeData.personal.fullName || "Resume"}_CV.pdf`.replace(/\s+/g, "_");
-      pdf.save(fileName);
+      await savePdfFile(pdf, fileName);
 
       toast({
         title: "A4 PDF Saved Successfully!",
