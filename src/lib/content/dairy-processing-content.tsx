@@ -25,6 +25,7 @@ import { evaporationContent } from "@/lib/content/dairy-processing/evaporation";
 import { uhtContent } from "@/lib/content/dairy-processing/uht";
 import { sprayDryingContent } from "@/lib/content/dairy-processing/spray-drying";
 import { fermentationContent } from "@/lib/content/dairy-processing/fermentation";
+import { thermanizationContent } from "@/lib/content/dairy-processing/thermanization";
 import { churningContent } from "@/lib/content/dairy-processing/churning";
 import { boilerContent } from "@/lib/content/dairy-processing/boiler";
 
@@ -63,6 +64,7 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
     "uht": t(uhtContent),
     "spray-drying": t(sprayDryingContent),
     "fermentation": t(fermentationContent),
+    "thermanization": t(thermanizationContent),
     "churning": t(churningContent),
     "boiler": t(boilerContent),
   }), [t]);
@@ -71,7 +73,7 @@ export function DairyProcessingModal({ isOpen, setIsOpen }: { isOpen: boolean; s
     const topic = topicMap[key as keyof typeof topicMap];
     // Assign a default icon or a specific one based on the key
     let icon = Settings;
-    if (key.includes('pasteurization') || key.includes('sterilization') || key.includes('uht')) icon = Thermometer;
+    if (key.includes('pasteurization') || key.includes('sterilization') || key.includes('uht') || key.includes('thermanization')) icon = Thermometer;
     if (key.includes('separation') || key.includes('clarification')) icon = Droplet;
     if (key.includes('boiler')) icon = Factory;
     return {
