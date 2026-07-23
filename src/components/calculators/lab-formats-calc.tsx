@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
@@ -205,6 +206,9 @@ export function LabFormatsCalc() {
   
   const [selectedFormatId, setSelectedFormatId] = useState<FormatType>("raw-milk-tanker");
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isContentOn, setIsContentOn] = useState(true);
+
+  const cellVal = (v: any) => (isContentOn ? (v !== null && v !== undefined ? String(v) : "") : "");
 
   // Initial States for Lab Formats Data
   const [rawMilkTankerRows, setRawMilkTankerRows] = useState([
@@ -402,7 +406,7 @@ export function LabFormatsCalc() {
       <td key={`custom-col-cell-${cIdx}`} className="border border-black p-0.5 text-center min-w-[80px]">
         <input
           type="text"
-          value={getCustomCell(rowId, colName)}
+          value={cellVal(getCustomCell(rowId, colName))}
           onChange={(e) => updateCustomCell(rowId, colName, e.target.value)}
           className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 focus:outline-none"
           placeholder="-"
@@ -745,6 +749,24 @@ export function LabFormatsCalc() {
                   />
                 </div>
               </div>
+
+              <div className="pt-2 border-t">
+                <div className="flex items-center justify-between p-2 rounded-lg border border-slate-200 bg-slate-50">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="content-toggle-lab-side" className="text-xs font-bold text-slate-800 cursor-pointer block">
+                      Format Data
+                    </Label>
+                    <p className="text-[10px] text-slate-500 font-semibold">
+                      {isContentOn ? "ON (Filled Data)" : "OFF (Blank Sheet)"}
+                    </p>
+                  </div>
+                  <Switch
+                    id="content-toggle-lab-side"
+                    checked={isContentOn}
+                    onCheckedChange={setIsContentOn}
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
 
@@ -784,7 +806,7 @@ export function LabFormatsCalc() {
               <Info className="w-4 h-4 text-indigo-600" /> Print Guidelines
             </h4>
             <p className="text-[10px] text-slate-600 leading-relaxed">
-              These formats match physical quality registers. Landscape layouts automatically export horizontally on A4 sheets for wide analytical logs.
+              These formats match physical quality registers. Turn Content OFF for blank templates or ON for filled sample logs.
             </p>
           </Card>
         </div>
@@ -794,11 +816,23 @@ export function LabFormatsCalc() {
           
           {/* Print Controls Header */}
           <div className="flex flex-wrap justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200 gap-2 print:hidden">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Badge variant="secondary" className="bg-teal-100 text-teal-850 font-bold text-[10px] uppercase">
                 {currentOrientation} A4
               </Badge>
-              <span className="hidden sm:inline text-[11px] text-slate-500 font-semibold italic">Edit values directly in the tables below!</span>
+              <div className="flex items-center gap-2 bg-white px-2.5 py-1 rounded-md border border-slate-200">
+                <Label htmlFor="content-toggle-top-lab" className="text-xs font-bold text-slate-700 cursor-pointer">
+                  Content:
+                </Label>
+                <Switch
+                  id="content-toggle-top-lab"
+                  checked={isContentOn}
+                  onCheckedChange={setIsContentOn}
+                />
+                <span className={cn("text-xs font-bold", isContentOn ? "text-teal-700" : "text-slate-500")}>
+                  {isContentOn ? "ON (Filled Data)" : "OFF (Blank Sheet)"}
+                </span>
+              </div>
             </div>
             
             <div className="flex flex-wrap gap-2">
@@ -891,40 +925,40 @@ export function LabFormatsCalc() {
                           {rawMilkTankerRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.tankerNo} onChange={(e) => updateRawMilkTankerRow(row.id, "tankerNo", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.tankerNo)} onChange={(e) => updateRawMilkTankerRow(row.id, "tankerNo", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5">
-                                <input value={row.source} onChange={(e) => updateRawMilkTankerRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.source)} onChange={(e) => updateRawMilkTankerRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-right font-mono">
-                                <input type="number" value={row.qty} onChange={(e) => updateRawMilkTankerRow(row.id, "qty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="number" value={cellVal(row.qty)} onChange={(e) => updateRawMilkTankerRow(row.id, "qty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="number" step="0.1" value={row.temp} onChange={(e) => updateRawMilkTankerRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="number" step="0.1" value={cellVal(row.temp)} onChange={(e) => updateRawMilkTankerRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="number" step="0.005" value={row.acidity} onChange={(e) => updateRawMilkTankerRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="number" step="0.005" value={cellVal(row.acidity)} onChange={(e) => updateRawMilkTankerRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input type="number" step="0.1" value={row.fat} onChange={(e) => updateRawMilkTankerRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input type="number" step="0.1" value={cellVal(row.fat)} onChange={(e) => updateRawMilkTankerRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input type="number" step="0.1" value={row.snf} onChange={(e) => updateRawMilkTankerRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input type="number" step="0.1" value={cellVal(row.snf)} onChange={(e) => updateRawMilkTankerRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.cob} onChange={(e) => updateRawMilkTankerRow(row.id, "cob", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.cob.toLowerCase().includes("positive") ? "text-red-700" : "text-slate-800")} />
+                                <input value={cellVal(row.cob)} onChange={(e) => updateRawMilkTankerRow(row.id, "cob", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.cob.toLowerCase().includes("positive") ? "text-red-700" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.mbrt} onChange={(e) => updateRawMilkTankerRow(row.id, "mbrt", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.mbrt)} onChange={(e) => updateRawMilkTankerRow(row.id, "mbrt", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.adulteration} onChange={(e) => updateRawMilkTankerRow(row.id, "adulteration", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.adulteration !== "Nil" && row.adulteration !== "" ? "text-orange-700 font-bold" : "")} />
+                                <input value={cellVal(row.adulteration)} onChange={(e) => updateRawMilkTankerRow(row.id, "adulteration", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.adulteration !== "Nil" && row.adulteration !== "" ? "text-orange-700 font-bold" : "")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateRawMilkTankerRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateRawMilkTankerRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateRawMilkTankerRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateRawMilkTankerRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
@@ -934,11 +968,11 @@ export function LabFormatsCalc() {
                           ))}
                           <tr className="bg-slate-50 font-bold text-black border-t-2 border-black">
                             <td colSpan={2} className="border border-black px-1.5 py-1 text-left uppercase">Total Received (Tankers)</td>
-                            <td className="border border-black px-1.5 py-1 text-right font-black">{rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.qty) || 0), 0).toLocaleString()} L</td>
-                            <td className="border border-black px-1.5 py-1 text-center font-mono">{(rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.temp) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(1)}°C</td>
-                            <td className="border border-black px-1.5 py-1 text-center font-mono">{(rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.acidity) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(3)}%</td>
-                            <td className="border border-black px-1.5 py-1 text-center font-mono">{(rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.fat) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(2)}%</td>
-                            <td className="border border-black px-1.5 py-1 text-center font-mono">{(rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.snf) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(2)}%</td>
+                            <td className="border border-black px-1.5 py-1 text-right font-black">{isContentOn ? rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.qty) || 0), 0).toLocaleString() + " L" : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-mono">{isContentOn ? (rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.temp) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(1) + "°C" : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-mono">{isContentOn ? (rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.acidity) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(3) + "%" : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-mono">{isContentOn ? (rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.fat) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(2) + "%" : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-mono">{isContentOn ? (rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.snf) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(2) + "%" : ""}</td>
                             <td colSpan={6} className="border border-black px-1.5 py-1 bg-slate-100"></td>
                           </tr>
                         </tbody>
@@ -972,40 +1006,40 @@ export function LabFormatsCalc() {
                           {rawMilkCanRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.route} onChange={(e) => updateRawMilkCanRow(row.id, "route", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.route)} onChange={(e) => updateRawMilkCanRow(row.id, "route", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.totalCans} onChange={(e) => updateRawMilkCanRow(row.id, "totalCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.totalCans)} onChange={(e) => updateRawMilkCanRow(row.id, "totalCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono text-green-700">
-                                <input value={row.acceptedCans} onChange={(e) => updateRawMilkCanRow(row.id, "acceptedCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-green-700 font-bold" />
+                                <input value={cellVal(row.acceptedCans)} onChange={(e) => updateRawMilkCanRow(row.id, "acceptedCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-green-700 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono text-red-700">
-                                <input value={row.rejectedCans} onChange={(e) => updateRawMilkCanRow(row.id, "rejectedCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700 font-bold" />
+                                <input value={cellVal(row.rejectedCans)} onChange={(e) => updateRawMilkCanRow(row.id, "rejectedCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="number" step="0.1" value={row.temp} onChange={(e) => updateRawMilkCanRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="number" step="0.1" value={cellVal(row.temp)} onChange={(e) => updateRawMilkCanRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="number" step="0.005" value={row.acidity} onChange={(e) => updateRawMilkCanRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="number" step="0.005" value={cellVal(row.acidity)} onChange={(e) => updateRawMilkCanRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input type="number" step="0.1" value={row.fat} onChange={(e) => updateRawMilkCanRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input type="number" step="0.1" value={cellVal(row.fat)} onChange={(e) => updateRawMilkCanRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input type="number" step="0.1" value={row.snf} onChange={(e) => updateRawMilkCanRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input type="number" step="0.1" value={cellVal(row.snf)} onChange={(e) => updateRawMilkCanRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.cob} onChange={(e) => updateRawMilkCanRow(row.id, "cob", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.cob.toLowerCase().includes("positive") ? "text-red-700" : "text-slate-800")} />
+                                <input value={cellVal(row.cob)} onChange={(e) => updateRawMilkCanRow(row.id, "cob", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.cob.toLowerCase().includes("positive") ? "text-red-700" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.adulteration} onChange={(e) => updateRawMilkCanRow(row.id, "adulteration", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.adulteration !== "Nil" && row.adulteration !== "" ? "text-orange-700 font-bold" : "")} />
+                                <input value={cellVal(row.adulteration)} onChange={(e) => updateRawMilkCanRow(row.id, "adulteration", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.adulteration !== "Nil" && row.adulteration !== "" ? "text-orange-700 font-bold" : "")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateRawMilkCanRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateRawMilkCanRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateRawMilkCanRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateRawMilkCanRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
@@ -1050,37 +1084,37 @@ export function LabFormatsCalc() {
                           {rawMilkSiloRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input value={row.siloNo} onChange={(e) => updateRawMilkSiloRow(row.id, "siloNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.siloNo)} onChange={(e) => updateRawMilkSiloRow(row.id, "siloNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center text-slate-700">
-                                <input value={row.siloPosition ?? ""} onChange={(e) => updateRawMilkSiloRow(row.id, "siloPosition", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.siloPosition ?? "")} onChange={(e) => updateRawMilkSiloRow(row.id, "siloPosition", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-right font-mono">
-                                <input value={row.openingBal} onChange={(e) => updateRawMilkSiloRow(row.id, "openingBal", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.openingBal)} onChange={(e) => updateRawMilkSiloRow(row.id, "openingBal", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-right font-mono text-teal-800 font-bold">
-                                <input value={row.receivedQty} onChange={(e) => updateRawMilkSiloRow(row.id, "receivedQty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-teal-800 font-bold" />
+                                <input value={cellVal(row.receivedQty)} onChange={(e) => updateRawMilkSiloRow(row.id, "receivedQty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-teal-800 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.source} onChange={(e) => updateRawMilkSiloRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.source)} onChange={(e) => updateRawMilkSiloRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="number" step="0.1" value={row.temp} onChange={(e) => updateRawMilkSiloRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="number" step="0.1" value={cellVal(row.temp)} onChange={(e) => updateRawMilkSiloRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="number" step="0.005" value={row.acidity} onChange={(e) => updateRawMilkSiloRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="number" step="0.005" value={cellVal(row.acidity)} onChange={(e) => updateRawMilkSiloRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input type="number" step="0.1" value={row.fat} onChange={(e) => updateRawMilkSiloRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input type="number" step="0.1" value={cellVal(row.fat)} onChange={(e) => updateRawMilkSiloRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input type="number" step="0.1" value={row.snf} onChange={(e) => updateRawMilkSiloRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input type="number" step="0.1" value={cellVal(row.snf)} onChange={(e) => updateRawMilkSiloRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-right font-mono font-black">
-                                <input value={row.closingBal} onChange={(e) => updateRawMilkSiloRow(row.id, "closingBal", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-black" />
+                                <input value={cellVal(row.closingBal)} onChange={(e) => updateRawMilkSiloRow(row.id, "closingBal", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-black" />
                               </td>
                               <td className="border border-black p-0.5 text-left text-slate-600">
-                                <input value={row.remarks} onChange={(e) => updateRawMilkSiloRow(row.id, "remarks", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.remarks)} onChange={(e) => updateRawMilkSiloRow(row.id, "remarks", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1117,37 +1151,37 @@ export function LabFormatsCalc() {
                           {productRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.batchNo} onChange={(e) => updateProductRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateProductRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.productName} onChange={(e) => updateProductRow(row.id, "productName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.productName)} onChange={(e) => updateProductRow(row.id, "productName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.packSize} onChange={(e) => updateProductRow(row.id, "packSize", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.packSize)} onChange={(e) => updateProductRow(row.id, "packSize", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.fat} onChange={(e) => updateProductRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.fat)} onChange={(e) => updateProductRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.snf} onChange={(e) => updateProductRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.snf)} onChange={(e) => updateProductRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.moisture} onChange={(e) => updateProductRow(row.id, "moisture", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.moisture)} onChange={(e) => updateProductRow(row.id, "moisture", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.acidity} onChange={(e) => updateProductRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.acidity)} onChange={(e) => updateProductRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.phosphatase} onChange={(e) => updateProductRow(row.id, "phosphatase", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.phosphatase.toLowerCase().includes("positive") ? "text-red-700 font-bold" : "text-green-700")} />
+                                <input value={cellVal(row.phosphatase)} onChange={(e) => updateProductRow(row.id, "phosphatase", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.phosphatase.toLowerCase().includes("positive") ? "text-red-700 font-bold" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.coliform} onChange={(e) => updateProductRow(row.id, "coliform", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.coliform)} onChange={(e) => updateProductRow(row.id, "coliform", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.organoleptic} onChange={(e) => updateProductRow(row.id, "organoleptic", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.organoleptic)} onChange={(e) => updateProductRow(row.id, "organoleptic", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateProductRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateProductRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1185,31 +1219,31 @@ export function LabFormatsCalc() {
                                 <input value={row.equipId ?? (row as any).glasswareId ?? ""} onChange={(e) => updateLabCalibrationRow(row.id, "equipId", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.type} onChange={(e) => updateLabCalibrationRow(row.id, "type", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.type)} onChange={(e) => updateLabCalibrationRow(row.id, "type", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.nominalVol} onChange={(e) => updateLabCalibrationRow(row.id, "nominalVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-semibold" />
+                                <input value={cellVal(row.nominalVol)} onChange={(e) => updateLabCalibrationRow(row.id, "nominalVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-semibold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.waterTemp} onChange={(e) => updateLabCalibrationRow(row.id, "waterTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.waterTemp)} onChange={(e) => updateLabCalibrationRow(row.id, "waterTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-right font-mono">
-                                <input value={row.emptyWt} onChange={(e) => updateLabCalibrationRow(row.id, "emptyWt", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono pr-1" />
+                                <input value={cellVal(row.emptyWt)} onChange={(e) => updateLabCalibrationRow(row.id, "emptyWt", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono pr-1" />
                               </td>
                               <td className="border border-black p-0.5 text-right font-mono">
-                                <input value={row.filledWt} onChange={(e) => updateLabCalibrationRow(row.id, "filledWt", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono pr-1" />
+                                <input value={cellVal(row.filledWt)} onChange={(e) => updateLabCalibrationRow(row.id, "filledWt", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono pr-1" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.netVol} onChange={(e) => updateLabCalibrationRow(row.id, "netVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.netVol)} onChange={(e) => updateLabCalibrationRow(row.id, "netVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono text-red-700">
-                                <input value={row.error} onChange={(e) => updateLabCalibrationRow(row.id, "error", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700 font-bold" />
+                                <input value={cellVal(row.error)} onChange={(e) => updateLabCalibrationRow(row.id, "error", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.accepted} onChange={(e) => updateLabCalibrationRow(row.id, "accepted", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.accepted.toLowerCase() === "no" || row.accepted.toLowerCase() === "fail" ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.accepted)} onChange={(e) => updateLabCalibrationRow(row.id, "accepted", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.accepted.toLowerCase() === "no" || row.accepted.toLowerCase() === "fail" ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.operator} onChange={(e) => updateLabCalibrationRow(row.id, "operator", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.operator)} onChange={(e) => updateLabCalibrationRow(row.id, "operator", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1243,31 +1277,31 @@ export function LabFormatsCalc() {
                           {chemicalReagentRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.serial} onChange={(e) => updateChemicalReagentRow(row.id, "serial", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.serial)} onChange={(e) => updateChemicalReagentRow(row.id, "serial", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.reagentName} onChange={(e) => updateChemicalReagentRow(row.id, "reagentName", e.target.value)} className="w-full bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.reagentName)} onChange={(e) => updateChemicalReagentRow(row.id, "reagentName", e.target.value)} className="w-full bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.normality} onChange={(e) => updateChemicalReagentRow(row.id, "normality", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.normality)} onChange={(e) => updateChemicalReagentRow(row.id, "normality", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.factor} onChange={(e) => updateChemicalReagentRow(row.id, "factor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.factor)} onChange={(e) => updateChemicalReagentRow(row.id, "factor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="date" value={row.prepDate} onChange={(e) => updateChemicalReagentRow(row.id, "prepDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
+                                <input type="date" value={cellVal(row.prepDate)} onChange={(e) => updateChemicalReagentRow(row.id, "prepDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="date" value={row.expDate} onChange={(e) => updateChemicalReagentRow(row.id, "expDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono text-red-700" />
+                                <input type="date" value={cellVal(row.expDate)} onChange={(e) => updateChemicalReagentRow(row.id, "expDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono text-red-700" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.preparedBy} onChange={(e) => updateChemicalReagentRow(row.id, "preparedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.preparedBy)} onChange={(e) => updateChemicalReagentRow(row.id, "preparedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.standardizedBy} onChange={(e) => updateChemicalReagentRow(row.id, "standardizedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-semibold" />
+                                <input value={cellVal(row.standardizedBy)} onChange={(e) => updateChemicalReagentRow(row.id, "standardizedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-semibold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono text-teal-800 font-semibold">
-                                <input value={row.stock} onChange={(e) => updateChemicalReagentRow(row.id, "stock", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono text-teal-800 font-semibold" />
+                                <input value={cellVal(row.stock)} onChange={(e) => updateChemicalReagentRow(row.id, "stock", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono text-teal-800 font-semibold" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1302,34 +1336,34 @@ export function LabFormatsCalc() {
                           {mediaLogRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="date" value={row.date} onChange={(e) => updateMediaLogRow(row.id, "date", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="date" value={cellVal(row.date)} onChange={(e) => updateMediaLogRow(row.id, "date", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.mediaName} onChange={(e) => updateMediaLogRow(row.id, "mediaName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.mediaName)} onChange={(e) => updateMediaLogRow(row.id, "mediaName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.batchNo} onChange={(e) => updateMediaLogRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateMediaLogRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.qty} onChange={(e) => updateMediaLogRow(row.id, "qty", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.qty)} onChange={(e) => updateMediaLogRow(row.id, "qty", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold text-teal-800">
-                                <input value={row.temp} onChange={(e) => updateMediaLogRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-teal-800 font-bold" />
+                                <input value={cellVal(row.temp)} onChange={(e) => updateMediaLogRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-teal-800 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.pressure} onChange={(e) => updateMediaLogRow(row.id, "pressure", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.pressure)} onChange={(e) => updateMediaLogRow(row.id, "pressure", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.sterility} onChange={(e) => updateMediaLogRow(row.id, "sterility", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.sterility.toLowerCase().includes("growth") && !row.sterility.toLowerCase().includes("no") ? "text-red-700 font-bold" : "text-green-700")} />
+                                <input value={cellVal(row.sterility)} onChange={(e) => updateMediaLogRow(row.id, "sterility", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.sterility.toLowerCase().includes("growth") && !row.sterility.toLowerCase().includes("no") ? "text-red-700 font-bold" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.ph} onChange={(e) => updateMediaLogRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.ph)} onChange={(e) => updateMediaLogRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="date" value={row.expDate} onChange={(e) => updateMediaLogRow(row.id, "expDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700" />
+                                <input type="date" value={cellVal(row.expDate)} onChange={(e) => updateMediaLogRow(row.id, "expDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.preparedBy} onChange={(e) => updateMediaLogRow(row.id, "preparedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.preparedBy)} onChange={(e) => updateMediaLogRow(row.id, "preparedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1364,31 +1398,31 @@ export function LabFormatsCalc() {
                           {sampleRegisterRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input value={row.sampleId} onChange={(e) => updateSampleRegisterRow(row.id, "sampleId", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.sampleId)} onChange={(e) => updateSampleRegisterRow(row.id, "sampleId", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.dateTime} onChange={(e) => updateSampleRegisterRow(row.id, "dateTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.dateTime)} onChange={(e) => updateSampleRegisterRow(row.id, "dateTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.sampleName} onChange={(e) => updateSampleRegisterRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.sampleName)} onChange={(e) => updateSampleRegisterRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.source} onChange={(e) => updateSampleRegisterRow(row.id, "source", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.source)} onChange={(e) => updateSampleRegisterRow(row.id, "source", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-mono text-[8.5px]">
-                                <input value={row.chemical} onChange={(e) => updateSampleRegisterRow(row.id, "chemical", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.chemical)} onChange={(e) => updateSampleRegisterRow(row.id, "chemical", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-mono text-[8.5px]">
-                                <input value={row.micro} onChange={(e) => updateSampleRegisterRow(row.id, "micro", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.micro)} onChange={(e) => updateSampleRegisterRow(row.id, "micro", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateSampleRegisterRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateSampleRegisterRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.coaRef} onChange={(e) => updateSampleRegisterRow(row.id, "coaRef", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.coaRef)} onChange={(e) => updateSampleRegisterRow(row.id, "coaRef", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateSampleRegisterRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateSampleRegisterRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1424,34 +1458,34 @@ export function LabFormatsCalc() {
                           {productReleaseRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="date" value={row.date} onChange={(e) => updateProductReleaseRow(row.id, "date", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="date" value={cellVal(row.date)} onChange={(e) => updateProductReleaseRow(row.id, "date", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.productName} onChange={(e) => updateProductReleaseRow(row.id, "productName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.productName)} onChange={(e) => updateProductReleaseRow(row.id, "productName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.batchNo} onChange={(e) => updateProductReleaseRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateProductReleaseRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input type="date" value={row.mfgDate} onChange={(e) => updateProductReleaseRow(row.id, "mfgDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input type="date" value={cellVal(row.mfgDate)} onChange={(e) => updateProductReleaseRow(row.id, "mfgDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-right font-mono font-bold">
-                                <input value={row.qty} onChange={(e) => updateProductReleaseRow(row.id, "qty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.qty)} onChange={(e) => updateProductReleaseRow(row.id, "qty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.chemical} onChange={(e) => updateProductReleaseRow(row.id, "chemical", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.chemical.toLowerCase().includes("hold") || row.chemical.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.chemical)} onChange={(e) => updateProductReleaseRow(row.id, "chemical", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.chemical.toLowerCase().includes("hold") || row.chemical.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.micro} onChange={(e) => updateProductReleaseRow(row.id, "micro", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.micro.toLowerCase().includes("hold") || row.micro.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.micro)} onChange={(e) => updateProductReleaseRow(row.id, "micro", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.micro.toLowerCase().includes("hold") || row.micro.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.packing} onChange={(e) => updateProductReleaseRow(row.id, "packing", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.packing.toLowerCase() !== "ok" && row.packing !== "" ? "text-orange-700" : "text-green-700")} />
+                                <input value={cellVal(row.packing)} onChange={(e) => updateProductReleaseRow(row.id, "packing", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.packing.toLowerCase() !== "ok" && row.packing !== "" ? "text-orange-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateProductReleaseRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-black text-[10px]", row.status.toLowerCase().includes("hold") || row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateProductReleaseRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-black text-[10px]", row.status.toLowerCase().includes("hold") || row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateProductReleaseRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateProductReleaseRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1484,28 +1518,28 @@ export function LabFormatsCalc() {
                           {waterRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.source} onChange={(e) => updateWaterRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.source)} onChange={(e) => updateWaterRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.ph} onChange={(e) => updateWaterRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.ph)} onChange={(e) => updateWaterRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.hardness} onChange={(e) => updateWaterRow(row.id, "hardness", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.hardness)} onChange={(e) => updateWaterRow(row.id, "hardness", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.tds} onChange={(e) => updateWaterRow(row.id, "tds", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.tds)} onChange={(e) => updateWaterRow(row.id, "tds", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.chlorine} onChange={(e) => updateWaterRow(row.id, "chlorine", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold text-teal-800" />
+                                <input value={cellVal(row.chlorine)} onChange={(e) => updateWaterRow(row.id, "chlorine", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold text-teal-800" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.alkalinity} onChange={(e) => updateWaterRow(row.id, "alkalinity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.alkalinity)} onChange={(e) => updateWaterRow(row.id, "alkalinity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.coliform} onChange={(e) => updateWaterRow(row.id, "coliform", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.coliform.toLowerCase().includes("present") ? "text-red-700 font-bold" : "text-green-700")} />
+                                <input value={cellVal(row.coliform)} onChange={(e) => updateWaterRow(row.id, "coliform", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.coliform.toLowerCase().includes("present") ? "text-red-700 font-bold" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.remarks} onChange={(e) => updateWaterRow(row.id, "remarks", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
+                                <input value={cellVal(row.remarks)} onChange={(e) => updateWaterRow(row.id, "remarks", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1539,28 +1573,28 @@ export function LabFormatsCalc() {
                           {swabRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.dateShift} onChange={(e) => updateSwabRow(row.id, "dateShift", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.dateShift)} onChange={(e) => updateSwabRow(row.id, "dateShift", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.area} onChange={(e) => updateSwabRow(row.id, "area", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.area)} onChange={(e) => updateSwabRow(row.id, "area", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5">
-                                <input value={row.sanitizer} onChange={(e) => updateSwabRow(row.id, "sanitizer", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
+                                <input value={cellVal(row.sanitizer)} onChange={(e) => updateSwabRow(row.id, "sanitizer", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.spc} onChange={(e) => updateSwabRow(row.id, "spc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.spc)} onChange={(e) => updateSwabRow(row.id, "spc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.coliform} onChange={(e) => updateSwabRow(row.id, "coliform", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono", row.coliform.toLowerCase().includes("present") ? "text-red-700 font-bold" : "text-green-700")} />
+                                <input value={cellVal(row.coliform)} onChange={(e) => updateSwabRow(row.id, "coliform", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono", row.coliform.toLowerCase().includes("present") ? "text-red-700 font-bold" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.yeastMold} onChange={(e) => updateSwabRow(row.id, "yeastMold", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.yeastMold)} onChange={(e) => updateSwabRow(row.id, "yeastMold", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateSwabRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("alert") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateSwabRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("alert") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateSwabRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateSwabRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1597,37 +1631,37 @@ export function LabFormatsCalc() {
                           {cipValidationRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.circuit} onChange={(e) => updateCipValidationRow(row.id, "circuit", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.circuit)} onChange={(e) => updateCipValidationRow(row.id, "circuit", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.washTime} onChange={(e) => updateCipValidationRow(row.id, "washTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.washTime)} onChange={(e) => updateCipValidationRow(row.id, "washTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold text-blue-900">
-                                <input value={row.lyeConc} onChange={(e) => updateCipValidationRow(row.id, "lyeConc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.lyeConc)} onChange={(e) => updateCipValidationRow(row.id, "lyeConc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.lyeTemp} onChange={(e) => updateCipValidationRow(row.id, "lyeTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.lyeTemp)} onChange={(e) => updateCipValidationRow(row.id, "lyeTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold text-amber-900">
-                                <input value={row.acidConc} onChange={(e) => updateCipValidationRow(row.id, "acidConc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.acidConc)} onChange={(e) => updateCipValidationRow(row.id, "acidConc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.acidTemp} onChange={(e) => updateCipValidationRow(row.id, "acidTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.acidTemp)} onChange={(e) => updateCipValidationRow(row.id, "acidTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.flowRate} onChange={(e) => updateCipValidationRow(row.id, "flowRate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.flowRate)} onChange={(e) => updateCipValidationRow(row.id, "flowRate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.titrationVol} onChange={(e) => updateCipValidationRow(row.id, "titrationVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.titrationVol)} onChange={(e) => updateCipValidationRow(row.id, "titrationVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.finalPh} onChange={(e) => updateCipValidationRow(row.id, "finalPh", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold text-emerald-800" />
+                                <input value={cellVal(row.finalPh)} onChange={(e) => updateCipValidationRow(row.id, "finalPh", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold text-emerald-800" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateCipValidationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateCipValidationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateCipValidationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateCipValidationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
@@ -1666,40 +1700,40 @@ export function LabFormatsCalc() {
                           {adulterationRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.sampleSource} onChange={(e) => updateAdulterationRow(row.id, "sampleSource", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.sampleSource)} onChange={(e) => updateAdulterationRow(row.id, "sampleSource", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.urea} onChange={(e) => updateAdulterationRow(row.id, "urea", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.urea.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.urea)} onChange={(e) => updateAdulterationRow(row.id, "urea", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.urea.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.starch} onChange={(e) => updateAdulterationRow(row.id, "starch", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.starch.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.starch)} onChange={(e) => updateAdulterationRow(row.id, "starch", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.starch.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.glucose} onChange={(e) => updateAdulterationRow(row.id, "glucose", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.glucose.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.glucose)} onChange={(e) => updateAdulterationRow(row.id, "glucose", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.glucose.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.detergent} onChange={(e) => updateAdulterationRow(row.id, "detergent", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.detergent.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.detergent)} onChange={(e) => updateAdulterationRow(row.id, "detergent", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.detergent.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.neutralizer} onChange={(e) => updateAdulterationRow(row.id, "neutralizer", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.neutralizer.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.neutralizer)} onChange={(e) => updateAdulterationRow(row.id, "neutralizer", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.neutralizer.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.h2o2} onChange={(e) => updateAdulterationRow(row.id, "h2o2", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.h2o2.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.h2o2)} onChange={(e) => updateAdulterationRow(row.id, "h2o2", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.h2o2.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.nitrate} onChange={(e) => updateAdulterationRow(row.id, "nitrate", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.nitrate.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.nitrate)} onChange={(e) => updateAdulterationRow(row.id, "nitrate", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.nitrate.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.salt} onChange={(e) => updateAdulterationRow(row.id, "salt", e.target.value)} className="w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.salt)} onChange={(e) => updateAdulterationRow(row.id, "salt", e.target.value)} className="w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.antibiotic} onChange={(e) => updateAdulterationRow(row.id, "antibiotic", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.antibiotic.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.antibiotic)} onChange={(e) => updateAdulterationRow(row.id, "antibiotic", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.antibiotic.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateAdulterationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateAdulterationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateAdulterationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateAdulterationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0" />
                               </td>
                               {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
@@ -1736,34 +1770,34 @@ export function LabFormatsCalc() {
                           {sensoryRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.sampleName} onChange={(e) => updateSensoryRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.sampleName)} onChange={(e) => updateSensoryRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.batchNo} onChange={(e) => updateSensoryRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateSensoryRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.temp} onChange={(e) => updateSensoryRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.temp)} onChange={(e) => updateSensoryRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.flavor} onChange={(e) => updateSensoryRow(row.id, "flavor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.flavor)} onChange={(e) => updateSensoryRow(row.id, "flavor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.odor} onChange={(e) => updateSensoryRow(row.id, "odor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.odor)} onChange={(e) => updateSensoryRow(row.id, "odor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.color} onChange={(e) => updateSensoryRow(row.id, "color", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.color)} onChange={(e) => updateSensoryRow(row.id, "color", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.texture} onChange={(e) => updateSensoryRow(row.id, "texture", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.texture)} onChange={(e) => updateSensoryRow(row.id, "texture", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-bold font-mono text-blue-900">
-                                <input value={row.overallScore} onChange={(e) => updateSensoryRow(row.id, "overallScore", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.overallScore)} onChange={(e) => updateSensoryRow(row.id, "overallScore", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.decision} onChange={(e) => updateSensoryRow(row.id, "decision", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.decision.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.decision)} onChange={(e) => updateSensoryRow(row.id, "decision", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.decision.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.panelist} onChange={(e) => updateSensoryRow(row.id, "panelist", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.panelist)} onChange={(e) => updateSensoryRow(row.id, "panelist", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
@@ -1800,34 +1834,34 @@ export function LabFormatsCalc() {
                           {etpRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.dateShift} onChange={(e) => updateEtpRow(row.id, "dateShift", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.dateShift)} onChange={(e) => updateEtpRow(row.id, "dateShift", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.sampleLocation} onChange={(e) => updateEtpRow(row.id, "sampleLocation", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.sampleLocation)} onChange={(e) => updateEtpRow(row.id, "sampleLocation", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.ph} onChange={(e) => updateEtpRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.ph)} onChange={(e) => updateEtpRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input value={row.bod} onChange={(e) => updateEtpRow(row.id, "bod", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.bod)} onChange={(e) => updateEtpRow(row.id, "bod", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold">
-                                <input value={row.cod} onChange={(e) => updateEtpRow(row.id, "cod", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.cod)} onChange={(e) => updateEtpRow(row.id, "cod", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.tss} onChange={(e) => updateEtpRow(row.id, "tss", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.tss)} onChange={(e) => updateEtpRow(row.id, "tss", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.oilGrease} onChange={(e) => updateEtpRow(row.id, "oilGrease", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.oilGrease)} onChange={(e) => updateEtpRow(row.id, "oilGrease", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.svi} onChange={(e) => updateEtpRow(row.id, "svi", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.svi)} onChange={(e) => updateEtpRow(row.id, "svi", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.dischargeStatus} onChange={(e) => updateEtpRow(row.id, "dischargeStatus", e.target.value)} className={cn("w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.dischargeStatus.toLowerCase().includes("non") ? "text-red-700" : "text-green-800")} />
+                                <input value={cellVal(row.dischargeStatus)} onChange={(e) => updateEtpRow(row.id, "dischargeStatus", e.target.value)} className={cn("w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.dischargeStatus.toLowerCase().includes("non") ? "text-red-700" : "text-green-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateEtpRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateEtpRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
@@ -1861,28 +1895,28 @@ export function LabFormatsCalc() {
                           {packingRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.lineNo} onChange={(e) => updatePackingRow(row.id, "lineNo", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.lineNo)} onChange={(e) => updatePackingRow(row.id, "lineNo", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.product} onChange={(e) => updatePackingRow(row.id, "product", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.product)} onChange={(e) => updatePackingRow(row.id, "product", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.leakTest} onChange={(e) => updatePackingRow(row.id, "leakTest", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.leakTest.toLowerCase().includes("fail") ? "text-red-700 font-bold" : "text-green-700")} />
+                                <input value={cellVal(row.leakTest)} onChange={(e) => updatePackingRow(row.id, "leakTest", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.leakTest.toLowerCase().includes("fail") ? "text-red-700 font-bold" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.sealStrength} onChange={(e) => updatePackingRow(row.id, "sealStrength", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.sealStrength)} onChange={(e) => updatePackingRow(row.id, "sealStrength", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.weightVar} onChange={(e) => updatePackingRow(row.id, "weightVar", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.weightVar)} onChange={(e) => updatePackingRow(row.id, "weightVar", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.codePrint} onChange={(e) => updatePackingRow(row.id, "codePrint", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.codePrint)} onChange={(e) => updatePackingRow(row.id, "codePrint", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updatePackingRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updatePackingRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.inspector} onChange={(e) => updatePackingRow(row.id, "inspector", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.inspector)} onChange={(e) => updatePackingRow(row.id, "inspector", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1916,31 +1950,31 @@ export function LabFormatsCalc() {
                           {incubationRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.sampleName} onChange={(e) => updateIncubationRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.sampleName)} onChange={(e) => updateIncubationRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.batchNo} onChange={(e) => updateIncubationRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateIncubationRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.storeTemp} onChange={(e) => updateIncubationRow(row.id, "storeTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.storeTemp)} onChange={(e) => updateIncubationRow(row.id, "storeTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.incubationDays} onChange={(e) => updateIncubationRow(row.id, "incubationDays", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.incubationDays)} onChange={(e) => updateIncubationRow(row.id, "incubationDays", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.phDrop} onChange={(e) => updateIncubationRow(row.id, "phDrop", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.phDrop)} onChange={(e) => updateIncubationRow(row.id, "phDrop", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.gasCurd} onChange={(e) => updateIncubationRow(row.id, "gasCurd", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.gasCurd.toLowerCase().includes("curd") || row.gasCurd.toLowerCase().includes("gas") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.gasCurd)} onChange={(e) => updateIncubationRow(row.id, "gasCurd", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.gasCurd.toLowerCase().includes("curd") || row.gasCurd.toLowerCase().includes("gas") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.tasteOdor} onChange={(e) => updateIncubationRow(row.id, "tasteOdor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.tasteOdor)} onChange={(e) => updateIncubationRow(row.id, "tasteOdor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.shelfLifeStatus} onChange={(e) => updateIncubationRow(row.id, "shelfLifeStatus", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.shelfLifeStatus.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.shelfLifeStatus)} onChange={(e) => updateIncubationRow(row.id, "shelfLifeStatus", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.shelfLifeStatus.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateIncubationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateIncubationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -1972,25 +2006,25 @@ export function LabFormatsCalc() {
                           {glassAuditRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.area} onChange={(e) => updateGlassAuditRow(row.id, "area", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.area)} onChange={(e) => updateGlassAuditRow(row.id, "area", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.item} onChange={(e) => updateGlassAuditRow(row.id, "item", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.item)} onChange={(e) => updateGlassAuditRow(row.id, "item", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.condition} onChange={(e) => updateGlassAuditRow(row.id, "condition", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.condition.toLowerCase().includes("broken") || row.condition.toLowerCase().includes("crack") ? "text-red-700 font-bold" : "text-slate-800")} />
+                                <input value={cellVal(row.condition)} onChange={(e) => updateGlassAuditRow(row.id, "condition", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.condition.toLowerCase().includes("broken") || row.condition.toLowerCase().includes("crack") ? "text-red-700 font-bold" : "text-slate-800")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.protectiveShield} onChange={(e) => updateGlassAuditRow(row.id, "protectiveShield", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.protectiveShield)} onChange={(e) => updateGlassAuditRow(row.id, "protectiveShield", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.actionRequired} onChange={(e) => updateGlassAuditRow(row.id, "actionRequired", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
+                                <input value={cellVal(row.actionRequired)} onChange={(e) => updateGlassAuditRow(row.id, "actionRequired", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateGlassAuditRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateGlassAuditRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.auditor} onChange={(e) => updateGlassAuditRow(row.id, "auditor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.auditor)} onChange={(e) => updateGlassAuditRow(row.id, "auditor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -2022,25 +2056,25 @@ export function LabFormatsCalc() {
                           {pestControlRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.location} onChange={(e) => updatePestControlRow(row.id, "location", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.location)} onChange={(e) => updatePestControlRow(row.id, "location", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.trapType} onChange={(e) => updatePestControlRow(row.id, "trapType", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.trapType)} onChange={(e) => updatePestControlRow(row.id, "trapType", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.inspectionResult} onChange={(e) => updatePestControlRow(row.id, "inspectionResult", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.inspectionResult)} onChange={(e) => updatePestControlRow(row.id, "inspectionResult", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.fliesCount} onChange={(e) => updatePestControlRow(row.id, "fliesCount", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.fliesCount)} onChange={(e) => updatePestControlRow(row.id, "fliesCount", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.actionTaken} onChange={(e) => updatePestControlRow(row.id, "actionTaken", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
+                                <input value={cellVal(row.actionTaken)} onChange={(e) => updatePestControlRow(row.id, "actionTaken", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updatePestControlRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("unsat") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updatePestControlRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("unsat") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.auditor} onChange={(e) => updatePestControlRow(row.id, "auditor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.auditor)} onChange={(e) => updatePestControlRow(row.id, "auditor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center print:hidden">
                                 <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
@@ -2073,25 +2107,25 @@ export function LabFormatsCalc() {
                           {cipSanitationRows.map((row) => (
                             <tr key={row.id}>
                               <td className="border border-black p-0.5 text-left font-bold">
-                                <input value={row.equipment} onChange={(e) => updateCipSanitationRow(row.id, "equipment", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                                <input value={cellVal(row.equipment)} onChange={(e) => updateCipSanitationRow(row.id, "equipment", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-left">
-                                <input value={row.sanitizerType} onChange={(e) => updateCipSanitationRow(row.id, "sanitizerType", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.sanitizerType)} onChange={(e) => updateCipSanitationRow(row.id, "sanitizerType", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.contactTime} onChange={(e) => updateCipSanitationRow(row.id, "contactTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.contactTime)} onChange={(e) => updateCipSanitationRow(row.id, "contactTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono font-bold text-teal-900">
-                                <input value={row.concPpm} onChange={(e) => updateCipSanitationRow(row.id, "concPpm", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                                <input value={cellVal(row.concPpm)} onChange={(e) => updateCipSanitationRow(row.id, "concPpm", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
                               </td>
                               <td className="border border-black p-0.5 text-center font-mono">
-                                <input value={row.swabRes} onChange={(e) => updateCipSanitationRow(row.id, "swabRes", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                                <input value={cellVal(row.swabRes)} onChange={(e) => updateCipSanitationRow(row.id, "swabRes", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.status} onChange={(e) => updateCipSanitationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                                <input value={cellVal(row.status)} onChange={(e) => updateCipSanitationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
                               </td>
                               <td className="border border-black p-0.5 text-center">
-                                <input value={row.analyst} onChange={(e) => updateCipSanitationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateCipSanitationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">
