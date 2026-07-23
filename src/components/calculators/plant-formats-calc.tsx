@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
@@ -98,6 +99,9 @@ export default function PlantFormatsCalc() {
   const [currentDate, setCurrentDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [selectedFormatId, setSelectedFormatId] = useState<FormatType>("rm-reception");
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isContentOn, setIsContentOn] = useState(true);
+
+  const cellVal = (v: any) => (isContentOn ? (v !== null && v !== undefined ? String(v) : "") : "");
 
   // ════════════════════════════════════════════════════
   //  STATE — PLANT OPERATIONS (7 formats)
@@ -350,7 +354,7 @@ export default function PlantFormatsCalc() {
       <td key={`custom-col-cell-${cIdx}`} className="border border-black p-0.5 text-center min-w-[80px]">
         <input
           type="text"
-          value={getCustomCell(rowId, colName)}
+          value={cellVal(getCustomCell(rowId, colName))}
           onChange={(e) => updateCustomCell(rowId, colName, e.target.value)}
           className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 focus:outline-none"
           placeholder="-"
@@ -576,9 +580,24 @@ export default function PlantFormatsCalc() {
           {/* Actions */}
           <Card className="border border-slate-200 shadow-sm">
             <CardHeader className="bg-slate-100 p-4 border-b">
-              <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">3. Actions</CardTitle>
+              <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">3. Actions & Mode</CardTitle>
             </CardHeader>
             <CardContent className="p-3 space-y-2">
+              <div className="flex items-center justify-between p-2 rounded-lg border border-slate-200 bg-slate-50 mb-2">
+                <div className="space-y-0.5">
+                  <Label htmlFor="content-toggle-plant-side" className="text-xs font-bold text-slate-800 cursor-pointer block">
+                    Format Data
+                  </Label>
+                  <p className="text-[10px] text-slate-500 font-semibold">
+                    {isContentOn ? "ON (Filled Data)" : "OFF (Blank Sheet)"}
+                  </p>
+                </div>
+                <Switch
+                  id="content-toggle-plant-side"
+                  checked={isContentOn}
+                  onCheckedChange={setIsContentOn}
+                />
+              </div>
               <Button onClick={addRow} variant="outline" size="sm" className="w-full text-xs border-emerald-600 text-emerald-700 hover:bg-emerald-50 font-bold">
                 <Plus className="w-3.5 h-3.5 mr-2" /> Add Row
               </Button>
@@ -604,8 +623,21 @@ export default function PlantFormatsCalc() {
 
           {/* Print Controls Top Bar */}
           <div className="flex flex-wrap justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200 gap-2 print:hidden">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <span className="text-xs font-bold text-slate-700 uppercase">Layout: {currentOrientation} A4</span>
+              <div className="flex items-center gap-2 bg-white px-2.5 py-1 rounded-md border border-slate-200">
+                <Label htmlFor="content-toggle-top-plant" className="text-xs font-bold text-slate-700 cursor-pointer">
+                  Content:
+                </Label>
+                <Switch
+                  id="content-toggle-top-plant"
+                  checked={isContentOn}
+                  onCheckedChange={setIsContentOn}
+                />
+                <span className={cn("text-xs font-bold", isContentOn ? "text-emerald-700" : "text-slate-500")}>
+                  {isContentOn ? "ON (Filled Data)" : "OFF (Blank Sheet)"}
+                </span>
+              </div>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button size="sm" onClick={addRow} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex gap-1">
@@ -689,25 +721,25 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {rmReceptionRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.tankerNo} onChange={e=>updateRmReceptionRow(r.id,"tankerNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.supplier} onChange={e=>updateRmReceptionRow(r.id,"supplier",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.arrivalTime} onChange={e=>updateRmReceptionRow(r.id,"arrivalTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.qty} onChange={e=>updateRmReceptionRow(r.id,"qty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateRmReceptionRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.acidity} onChange={e=>updateRmReceptionRow(r.id,"acidity",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.fat} onChange={e=>updateRmReceptionRow(r.id,"fat",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.snf} onChange={e=>updateRmReceptionRow(r.id,"snf",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.cob} onChange={e=>updateRmReceptionRow(r.id,"cob",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold",r.cob.toLowerCase().includes("positive")?"text-red-700":"text-slate-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateRmReceptionRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase().includes("reject")?"text-red-700":"text-green-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.siloAllotted} onChange={e=>updateRmReceptionRow(r.id,"siloAllotted",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateRmReceptionRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.tankerNo)} onChange={e=>updateRmReceptionRow(r.id,"tankerNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.supplier)} onChange={e=>updateRmReceptionRow(r.id,"supplier",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.arrivalTime)} onChange={e=>updateRmReceptionRow(r.id,"arrivalTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.qty)} onChange={e=>updateRmReceptionRow(r.id,"qty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.temp)} onChange={e=>updateRmReceptionRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.acidity)} onChange={e=>updateRmReceptionRow(r.id,"acidity",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.fat)} onChange={e=>updateRmReceptionRow(r.id,"fat",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.snf)} onChange={e=>updateRmReceptionRow(r.id,"snf",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.cob)} onChange={e=>updateRmReceptionRow(r.id,"cob",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold",r.cob.toLowerCase().includes("positive")?"text-red-700":"text-slate-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.status)} onChange={e=>updateRmReceptionRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase().includes("reject")?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.siloAllotted)} onChange={e=>updateRmReceptionRow(r.id,"siloAllotted",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateRmReceptionRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
                       <tr className="bg-slate-50 font-bold border-t-2 border-black">
                         <td colSpan={3} className="border border-black px-1.5 py-1 text-[9px] uppercase">Total Received</td>
-                        <td className="border border-black px-1.5 py-1 text-right font-black font-mono text-[9px]">{rmReceptionRows.reduce((s,r)=>s+(parseFloat(r.qty)||0),0).toLocaleString()} L</td>
+                        <td className="border border-black px-1.5 py-1 text-right font-black font-mono text-[9px]">{isContentOn ? rmReceptionRows.reduce((s,r)=>s+(parseFloat(r.qty)||0),0).toLocaleString() + " L" : ""}</td>
                         <td colSpan={9} className="border border-black px-1.5 py-1 bg-slate-100"></td>
                       </tr>
                     </tbody>
@@ -735,15 +767,15 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {bmrRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.step} onChange={e=>updateBmrRow(r.id,"step",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operation} onChange={e=>updateBmrRow(r.id,"operation",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateBmrRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.endTime} onChange={e=>updateBmrRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.milkQty} onChange={e=>updateBmrRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateBmrRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateBmrRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updateBmrRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updateBmrRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.step)} onChange={e=>updateBmrRow(r.id,"step",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operation)} onChange={e=>updateBmrRow(r.id,"operation",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.startTime)} onChange={e=>updateBmrRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.endTime)} onChange={e=>updateBmrRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.milkQty)} onChange={e=>updateBmrRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.temp)} onChange={e=>updateBmrRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.remarks)} onChange={e=>updateBmrRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.doneBy)} onChange={e=>updateBmrRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.verified)} onChange={e=>updateBmrRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -773,15 +805,15 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {processRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateProcessRow(r.id,"time",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.equipment} onChange={e=>updateProcessRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.inletTemp} onChange={e=>updateProcessRow(r.id,"inletTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.htTemp} onChange={e=>updateProcessRow(r.id,"htTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold",parseFloat(r.htTemp)<72?"text-red-700":"text-green-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.outTemp} onChange={e=>updateProcessRow(r.id,"outTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.pressure} onChange={e=>updateProcessRow(r.id,"pressure",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.flowRate} onChange={e=>updateProcessRow(r.id,"flowRate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.phpStatus} onChange={e=>updateProcessRow(r.id,"phpStatus",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.phpStatus.toLowerCase()==="alert"||r.phpStatus.toLowerCase()==="fail"?"text-red-700":"text-green-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateProcessRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.time)} onChange={e=>updateProcessRow(r.id,"time",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.equipment)} onChange={e=>updateProcessRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.inletTemp)} onChange={e=>updateProcessRow(r.id,"inletTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.htTemp)} onChange={e=>updateProcessRow(r.id,"htTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold",parseFloat(r.htTemp)<72?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.outTemp)} onChange={e=>updateProcessRow(r.id,"outTemp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.pressure)} onChange={e=>updateProcessRow(r.id,"pressure",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.flowRate)} onChange={e=>updateProcessRow(r.id,"flowRate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.phpStatus)} onChange={e=>updateProcessRow(r.id,"phpStatus",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.phpStatus.toLowerCase()==="alert"||r.phpStatus.toLowerCase()==="fail"?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateProcessRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -812,16 +844,16 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {packingRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.batchNo} onChange={e=>updatePackingRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updatePackingRow(r.id,"product",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.shift} onChange={e=>updatePackingRow(r.id,"shift",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.packedQty} onChange={e=>updatePackingRow(r.id,"packedQty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.vehicle} onChange={e=>updatePackingRow(r.id,"vehicle",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.destination} onChange={e=>updatePackingRow(r.id,"destination",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.dispatchTime} onChange={e=>updatePackingRow(r.id,"dispatchTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.tempAtDispatch} onChange={e=>updatePackingRow(r.id,"tempAtDispatch",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updatePackingRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase()==="dispatched"?"text-green-700":"text-orange-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updatePackingRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.batchNo)} onChange={e=>updatePackingRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.product)} onChange={e=>updatePackingRow(r.id,"product",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.shift)} onChange={e=>updatePackingRow(r.id,"shift",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.packedQty)} onChange={e=>updatePackingRow(r.id,"packedQty",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.vehicle)} onChange={e=>updatePackingRow(r.id,"vehicle",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.destination)} onChange={e=>updatePackingRow(r.id,"destination",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.dispatchTime)} onChange={e=>updatePackingRow(r.id,"dispatchTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.tempAtDispatch)} onChange={e=>updatePackingRow(r.id,"tempAtDispatch",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.status)} onChange={e=>updatePackingRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase()==="dispatched"?"text-green-700":"text-orange-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updatePackingRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -852,16 +884,16 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {cipRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.equipment} onChange={e=>updateCipRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.cipType} onChange={e=>updateCipRow(r.id,"cipType",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateCipRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.endTime} onChange={e=>updateCipRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateCipRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold text-red-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.causticConc} onChange={e=>updateCipRow(r.id,"causticConc",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.acidConc} onChange={e=>updateCipRow(r.id,"acidConc",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.duration} onChange={e=>updateCipRow(r.id,"duration",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCipRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.qaStatus} onChange={e=>updateCipRow(r.id,"qaStatus",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.qaStatus.toLowerCase()!=="ok"?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.equipment)} onChange={e=>updateCipRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.cipType)} onChange={e=>updateCipRow(r.id,"cipType",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.startTime)} onChange={e=>updateCipRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.endTime)} onChange={e=>updateCipRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.temp)} onChange={e=>updateCipRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.causticConc)} onChange={e=>updateCipRow(r.id,"causticConc",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.acidConc)} onChange={e=>updateCipRow(r.id,"acidConc",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.duration)} onChange={e=>updateCipRow(r.id,"duration",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateCipRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.qaStatus)} onChange={e=>updateCipRow(r.id,"qaStatus",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.qaStatus.toLowerCase()!=="ok"?"text-red-700":"text-green-700")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -891,16 +923,16 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {breakdownMaintRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input type="date" value={r.date} onChange={e=>updateBreakdownMaintRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.machine} onChange={e=>updateBreakdownMaintRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.breakdownTime} onChange={e=>updateBreakdownMaintRow(r.id,"breakdownTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-red-700 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.rootCause} onChange={e=>updateBreakdownMaintRow(r.id,"rootCause",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.action} onChange={e=>updateBreakdownMaintRow(r.id,"action",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.resumedTime} onChange={e=>updateBreakdownMaintRow(r.id,"resumedTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-green-700 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.downtime} onChange={e=>updateBreakdownMaintRow(r.id,"downtime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.spareUsed} onChange={e=>updateBreakdownMaintRow(r.id,"spareUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.engineer} onChange={e=>updateBreakdownMaintRow(r.id,"engineer",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateBreakdownMaintRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="resolved"?"text-green-700":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.date)} onChange={e=>updateBreakdownMaintRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.machine)} onChange={e=>updateBreakdownMaintRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.breakdownTime)} onChange={e=>updateBreakdownMaintRow(r.id,"breakdownTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-red-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.rootCause)} onChange={e=>updateBreakdownMaintRow(r.id,"rootCause",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.action)} onChange={e=>updateBreakdownMaintRow(r.id,"action",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.resumedTime)} onChange={e=>updateBreakdownMaintRow(r.id,"resumedTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-green-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.downtime)} onChange={e=>updateBreakdownMaintRow(r.id,"downtime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.spareUsed)} onChange={e=>updateBreakdownMaintRow(r.id,"spareUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.engineer)} onChange={e=>updateBreakdownMaintRow(r.id,"engineer",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.status)} onChange={e=>updateBreakdownMaintRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="resolved"?"text-green-700":"text-red-700")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -929,21 +961,21 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {yieldRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.shift} onChange={e=>updateYieldRow(r.id,"shift",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updateYieldRow(r.id,"product",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.milkInput} onChange={e=>updateYieldRow(r.id,"milkInput",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.output} onChange={e=>updateYieldRow(r.id,"output",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.yieldPct} onChange={e=>updateYieldRow(r.id,"yieldPct",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold",parseFloat(r.yieldPct)<98?"text-orange-700":"text-green-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.rejections} onChange={e=>updateYieldRow(r.id,"rejections",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center",r.rejections==="0"||r.rejections.toLowerCase()==="nil"?"text-green-700":"text-red-700 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.pendingBatches} onChange={e=>updateYieldRow(r.id,"pendingBatches",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center text-slate-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateYieldRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.shift)} onChange={e=>updateYieldRow(r.id,"shift",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.product)} onChange={e=>updateYieldRow(r.id,"product",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.milkInput)} onChange={e=>updateYieldRow(r.id,"milkInput",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.output)} onChange={e=>updateYieldRow(r.id,"output",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.yieldPct)} onChange={e=>updateYieldRow(r.id,"yieldPct",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold",parseFloat(r.yieldPct)<98?"text-orange-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.rejections)} onChange={e=>updateYieldRow(r.id,"rejections",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center",r.rejections==="0"||r.rejections.toLowerCase()==="nil"?"text-green-700":"text-red-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.pendingBatches)} onChange={e=>updateYieldRow(r.id,"pendingBatches",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateYieldRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
                       ))}
                       <tr className="bg-slate-50 font-bold border-t-2 border-black">
                         <td colSpan={2} className="border border-black px-1.5 py-1 text-[9px] uppercase">Total Milk Processed</td>
-                        <td className="border border-black px-1.5 py-1 text-right font-black font-mono text-[9px]">{yieldRows.reduce((s,r)=>s+(parseFloat(r.milkInput)||0),0).toLocaleString()} L</td>
+                        <td className="border border-black px-1.5 py-1 text-right font-black font-mono text-[9px]">{isContentOn ? yieldRows.reduce((s,r)=>s+(parseFloat(r.milkInput)||0),0).toLocaleString() + " L" : ""}</td>
                         <td colSpan={5} className="border border-black px-1.5 py-1 bg-slate-100"></td>
                       </tr>
                     </tbody>
@@ -974,16 +1006,16 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {pmLogRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.srNo} onChange={e=>updatePmLogRow(r.id,"srNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.equipment} onChange={e=>updatePmLogRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.pmTask} onChange={e=>updatePmLogRow(r.id,"pmTask",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.frequency} onChange={e=>updatePmLogRow(r.id,"frequency",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input type="date" value={r.scheduledDate} onChange={e=>updatePmLogRow(r.id,"scheduledDate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.doneDate} onChange={e=>updatePmLogRow(r.id,"doneDate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.parametersChecked} onChange={e=>updatePmLogRow(r.id,"parametersChecked",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updatePmLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase()==="done"?"text-green-700":r.status.toLowerCase()==="pending"?"text-orange-600":"text-red-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updatePmLogRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updatePmLogRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.srNo)} onChange={e=>updatePmLogRow(r.id,"srNo",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.equipment)} onChange={e=>updatePmLogRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.pmTask)} onChange={e=>updatePmLogRow(r.id,"pmTask",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.frequency)} onChange={e=>updatePmLogRow(r.id,"frequency",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.scheduledDate)} onChange={e=>updatePmLogRow(r.id,"scheduledDate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.doneDate)} onChange={e=>updatePmLogRow(r.id,"doneDate",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.parametersChecked)} onChange={e=>updatePmLogRow(r.id,"parametersChecked",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.status)} onChange={e=>updatePmLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.status.toLowerCase()==="done"?"text-green-700":r.status.toLowerCase()==="pending"?"text-orange-600":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.doneBy)} onChange={e=>updatePmLogRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.verified)} onChange={e=>updatePmLogRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1015,18 +1047,18 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {breakdownLogRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.reportNo} onChange={e=>updateBreakdownLogRow(r.id,"reportNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input type="date" value={r.date} onChange={e=>updateBreakdownLogRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.machine} onChange={e=>updateBreakdownLogRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.breakdownTime} onChange={e=>updateBreakdownLogRow(r.id,"breakdownTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-red-700 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.resumedTime} onChange={e=>updateBreakdownLogRow(r.id,"resumedTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-green-700 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.downtime} onChange={e=>updateBreakdownLogRow(r.id,"downtime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.rootCause} onChange={e=>updateBreakdownLogRow(r.id,"rootCause",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.correctiveAction} onChange={e=>updateBreakdownLogRow(r.id,"correctiveAction",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.preventiveAction} onChange={e=>updateBreakdownLogRow(r.id,"preventiveAction",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-600")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.spareUsed} onChange={e=>updateBreakdownLogRow(r.id,"spareUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.engineer} onChange={e=>updateBreakdownLogRow(r.id,"engineer",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateBreakdownLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.reportNo)} onChange={e=>updateBreakdownLogRow(r.id,"reportNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.date)} onChange={e=>updateBreakdownLogRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.machine)} onChange={e=>updateBreakdownLogRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.breakdownTime)} onChange={e=>updateBreakdownLogRow(r.id,"breakdownTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-red-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.resumedTime)} onChange={e=>updateBreakdownLogRow(r.id,"resumedTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-green-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.downtime)} onChange={e=>updateBreakdownLogRow(r.id,"downtime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.rootCause)} onChange={e=>updateBreakdownLogRow(r.id,"rootCause",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.correctiveAction)} onChange={e=>updateBreakdownLogRow(r.id,"correctiveAction",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.preventiveAction)} onChange={e=>updateBreakdownLogRow(r.id,"preventiveAction",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-600")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.spareUsed)} onChange={e=>updateBreakdownLogRow(r.id,"spareUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.engineer)} onChange={e=>updateBreakdownLogRow(r.id,"engineer",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.status)} onChange={e=>updateBreakdownLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-red-700")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1056,15 +1088,15 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {equipHistoryRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input type="date" value={r.date} onChange={e=>updateEquipHistoryRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.equipId} onChange={e=>updateEquipHistoryRow(r.id,"equipId",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.eventType} onChange={e=>updateEquipHistoryRow(r.id,"eventType",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.eventType==="Breakdown"?"text-red-700":r.eventType==="PM"?"text-teal-700":"text-blue-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.description} onChange={e=>updateEquipHistoryRow(r.id,"description",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.techName} onChange={e=>updateEquipHistoryRow(r.id,"techName",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.sparesUsed} onChange={e=>updateEquipHistoryRow(r.id,"sparesUsed",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.cost} onChange={e=>updateEquipHistoryRow(r.id,"cost",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input type="date" value={r.nextDueDate} onChange={e=>updateEquipHistoryRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateEquipHistoryRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-600")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.date)} onChange={e=>updateEquipHistoryRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.equipId)} onChange={e=>updateEquipHistoryRow(r.id,"equipId",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.eventType)} onChange={e=>updateEquipHistoryRow(r.id,"eventType",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-bold",r.eventType==="Breakdown"?"text-red-700":r.eventType==="PM"?"text-teal-700":"text-blue-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.description)} onChange={e=>updateEquipHistoryRow(r.id,"description",e.target.value)} className={cn(inp,"text-[9px] p-1 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.techName)} onChange={e=>updateEquipHistoryRow(r.id,"techName",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.sparesUsed)} onChange={e=>updateEquipHistoryRow(r.id,"sparesUsed",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.cost)} onChange={e=>updateEquipHistoryRow(r.id,"cost",e.target.value)} className={cn(inp,"text-[9px] p-1 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.nextDueDate)} onChange={e=>updateEquipHistoryRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.remarks)} onChange={e=>updateEquipHistoryRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-600")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1096,18 +1128,18 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {sparePartsRows.map(r => (
                         <tr key={r.id} className={cn((parseInt(r.closingStock)||0)<=(parseInt(r.minLevel)||0)?"bg-red-50":"")}>
-                          <td className="border border-black p-0.5"><input value={r.partCode} onChange={e=>updateSparePartsRow(r.id,"partCode",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.partName} onChange={e=>updateSparePartsRow(r.id,"partName",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-semibold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.equipUsedFor} onChange={e=>updateSparePartsRow(r.id,"equipUsedFor",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.uom} onChange={e=>updateSparePartsRow(r.id,"uom",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.openingStock} onChange={e=>updateSparePartsRow(r.id,"openingStock",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.received} onChange={e=>updateSparePartsRow(r.id,"received",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono text-teal-700 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.issued} onChange={e=>updateSparePartsRow(r.id,"issued",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono text-orange-700 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.closingStock} onChange={e=>updateSparePartsRow(r.id,"closingStock",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-black",parseInt(r.closingStock)<=parseInt(r.minLevel)?"text-red-700":"")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.minLevel} onChange={e=>updateSparePartsRow(r.id,"minLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.reorderQty} onChange={e=>updateSparePartsRow(r.id,"reorderQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.supplier} onChange={e=>updateSparePartsRow(r.id,"supplier",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateSparePartsRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-600")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.partCode)} onChange={e=>updateSparePartsRow(r.id,"partCode",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.partName)} onChange={e=>updateSparePartsRow(r.id,"partName",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.equipUsedFor)} onChange={e=>updateSparePartsRow(r.id,"equipUsedFor",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.uom)} onChange={e=>updateSparePartsRow(r.id,"uom",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.openingStock)} onChange={e=>updateSparePartsRow(r.id,"openingStock",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.received)} onChange={e=>updateSparePartsRow(r.id,"received",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono text-teal-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.issued)} onChange={e=>updateSparePartsRow(r.id,"issued",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono text-orange-700 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.closingStock)} onChange={e=>updateSparePartsRow(r.id,"closingStock",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-black",parseInt(r.closingStock)<=parseInt(r.minLevel)?"text-red-700":"")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.minLevel)} onChange={e=>updateSparePartsRow(r.id,"minLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.reorderQty)} onChange={e=>updateSparePartsRow(r.id,"reorderQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.supplier)} onChange={e=>updateSparePartsRow(r.id,"supplier",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.remarks)} onChange={e=>updateSparePartsRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-slate-600")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1140,18 +1172,18 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {utilityLogRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.dateTime} onChange={e=>updateUtilityLogRow(r.id,"dateTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.utility} onChange={e=>updateUtilityLogRow(r.id,"utility",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.param1Label} onChange={e=>updateUtilityLogRow(r.id,"param1Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.param1} onChange={e=>updateUtilityLogRow(r.id,"param1",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.param2Label} onChange={e=>updateUtilityLogRow(r.id,"param2Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.param2} onChange={e=>updateUtilityLogRow(r.id,"param2",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.param3Label} onChange={e=>updateUtilityLogRow(r.id,"param3Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.param3} onChange={e=>updateUtilityLogRow(r.id,"param3",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.param4Label} onChange={e=>updateUtilityLogRow(r.id,"param4Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.param4} onChange={e=>updateUtilityLogRow(r.id,"param4",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateUtilityLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="normal"?"text-green-700":"text-red-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateUtilityLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.dateTime)} onChange={e=>updateUtilityLogRow(r.id,"dateTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.utility)} onChange={e=>updateUtilityLogRow(r.id,"utility",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.param1Label)} onChange={e=>updateUtilityLogRow(r.id,"param1Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.param1)} onChange={e=>updateUtilityLogRow(r.id,"param1",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.param2Label)} onChange={e=>updateUtilityLogRow(r.id,"param2Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.param2)} onChange={e=>updateUtilityLogRow(r.id,"param2",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.param3Label)} onChange={e=>updateUtilityLogRow(r.id,"param3Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.param3)} onChange={e=>updateUtilityLogRow(r.id,"param3",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.param4Label)} onChange={e=>updateUtilityLogRow(r.id,"param4Label",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-slate-600 italic")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.param4)} onChange={e=>updateUtilityLogRow(r.id,"param4",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.status)} onChange={e=>updateUtilityLogRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="normal"?"text-green-700":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateUtilityLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1183,17 +1215,17 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {lubricationRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.equipId} onChange={e=>updateLubricationRow(r.id,"equipId",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.machine} onChange={e=>updateLubricationRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.lubricationPoint} onChange={e=>updateLubricationRow(r.id,"lubricationPoint",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.lubricantGrade} onChange={e=>updateLubricationRow(r.id,"lubricantGrade",e.target.value)} className={cn(inp,"text-[9px] p-1 font-mono text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.frequency} onChange={e=>updateLubricationRow(r.id,"frequency",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input type="date" value={r.lastDoneDate} onChange={e=>updateLubricationRow(r.id,"lastDoneDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input type="date" value={r.nextDueDate} onChange={e=>updateLubricationRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.qtyUsed} onChange={e=>updateLubricationRow(r.id,"qtyUsed",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.doneBy} onChange={e=>updateLubricationRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.verified} onChange={e=>updateLubricationRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.remarks} onChange={e=>updateLubricationRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-600")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.equipId)} onChange={e=>updateLubricationRow(r.id,"equipId",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.machine)} onChange={e=>updateLubricationRow(r.id,"machine",e.target.value)} className={cn(inp,"text-[9px] p-1 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.lubricationPoint)} onChange={e=>updateLubricationRow(r.id,"lubricationPoint",e.target.value)} className={cn(inp,"text-[9px] p-1")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.lubricantGrade)} onChange={e=>updateLubricationRow(r.id,"lubricantGrade",e.target.value)} className={cn(inp,"text-[9px] p-1 font-mono text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.frequency)} onChange={e=>updateLubricationRow(r.id,"frequency",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.lastDoneDate)} onChange={e=>updateLubricationRow(r.id,"lastDoneDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.nextDueDate)} onChange={e=>updateLubricationRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.qtyUsed)} onChange={e=>updateLubricationRow(r.id,"qtyUsed",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.doneBy)} onChange={e=>updateLubricationRow(r.id,"doneBy",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.verified)} onChange={e=>updateLubricationRow(r.id,"verified",e.target.value)} className={cn(inp,"text-[9px] p-1 text-center font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.remarks)} onChange={e=>updateLubricationRow(r.id,"remarks",e.target.value)} className={cn(inp,"text-[9px] p-1 text-slate-600")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1226,18 +1258,18 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {workPermitRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.permitNo} onChange={e=>updateWorkPermitRow(r.id,"permitNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input type="date" value={r.date} onChange={e=>updateWorkPermitRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.workDescription} onChange={e=>updateWorkPermitRow(r.id,"workDescription",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.equipment} onChange={e=>updateWorkPermitRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.workType} onChange={e=>updateWorkPermitRow(r.id,"workType",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.workType==="Hot Work"?"text-red-700":r.workType==="Electrical"?"text-orange-700":"text-slate-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.hazard} onChange={e=>updateWorkPermitRow(r.id,"hazard",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-red-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.precautions} onChange={e=>updateWorkPermitRow(r.id,"precautions",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.issuedBy} onChange={e=>updateWorkPermitRow(r.id,"issuedBy",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateWorkPermitRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.endTime} onChange={e=>updateWorkPermitRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.status} onChange={e=>updateWorkPermitRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-orange-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.closedBy} onChange={e=>updateWorkPermitRow(r.id,"closedBy",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.permitNo)} onChange={e=>updateWorkPermitRow(r.id,"permitNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.date)} onChange={e=>updateWorkPermitRow(r.id,"date",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.workDescription)} onChange={e=>updateWorkPermitRow(r.id,"workDescription",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.equipment)} onChange={e=>updateWorkPermitRow(r.id,"equipment",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.workType)} onChange={e=>updateWorkPermitRow(r.id,"workType",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.workType==="Hot Work"?"text-red-700":r.workType==="Electrical"?"text-orange-700":"text-slate-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.hazard)} onChange={e=>updateWorkPermitRow(r.id,"hazard",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.precautions)} onChange={e=>updateWorkPermitRow(r.id,"precautions",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.issuedBy)} onChange={e=>updateWorkPermitRow(r.id,"issuedBy",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.startTime)} onChange={e=>updateWorkPermitRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.endTime)} onChange={e=>updateWorkPermitRow(r.id,"endTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.status)} onChange={e=>updateWorkPermitRow(r.id,"status",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.status.toLowerCase()==="closed"?"text-green-700":"text-orange-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.closedBy)} onChange={e=>updateWorkPermitRow(r.id,"closedBy",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1269,17 +1301,17 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {processingRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.silo} onChange={e=>updateProcessingRow(r.id,"silo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.milkQty} onChange={e=>updateProcessingRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.rawFat} onChange={e=>updateProcessingRow(r.id,"rawFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.rawSnf} onChange={e=>updateProcessingRow(r.id,"rawSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.targetFat} onChange={e=>updateProcessingRow(r.id,"targetFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.targetSnf} onChange={e=>updateProcessingRow(r.id,"targetSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.skimAdded} onChange={e=>updateProcessingRow(r.id,"skimAdded",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.creamAdded} onChange={e=>updateProcessingRow(r.id,"creamAdded",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.finalFat} onChange={e=>updateProcessingRow(r.id,"finalFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-black text-blue-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.finalSnf} onChange={e=>updateProcessingRow(r.id,"finalSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-black text-blue-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateProcessingRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.silo)} onChange={e=>updateProcessingRow(r.id,"silo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.milkQty)} onChange={e=>updateProcessingRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.rawFat)} onChange={e=>updateProcessingRow(r.id,"rawFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.rawSnf)} onChange={e=>updateProcessingRow(r.id,"rawSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.targetFat)} onChange={e=>updateProcessingRow(r.id,"targetFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.targetSnf)} onChange={e=>updateProcessingRow(r.id,"targetSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.skimAdded)} onChange={e=>updateProcessingRow(r.id,"skimAdded",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.creamAdded)} onChange={e=>updateProcessingRow(r.id,"creamAdded",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.finalFat)} onChange={e=>updateProcessingRow(r.id,"finalFat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-black text-blue-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.finalSnf)} onChange={e=>updateProcessingRow(r.id,"finalSnf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-black text-blue-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateProcessingRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1310,16 +1342,16 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {qaLabRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.source} onChange={e=>updateQaLabRow(r.id,"source",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.batchNo} onChange={e=>updateQaLabRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateQaLabRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.acidity} onChange={e=>updateQaLabRow(r.id,"acidity",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.mbrt} onChange={e=>updateQaLabRow(r.id,"mbrt",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-semibold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.alcoholTest} onChange={e=>updateQaLabRow(r.id,"alcoholTest",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.cob} onChange={e=>updateQaLabRow(r.id,"cob",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.cob.toLowerCase().includes("positive")?"text-red-700":"text-green-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.fat} onChange={e=>updateQaLabRow(r.id,"fat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.snf} onChange={e=>updateQaLabRow(r.id,"snf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.analyst} onChange={e=>updateQaLabRow(r.id,"analyst",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.source)} onChange={e=>updateQaLabRow(r.id,"source",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.batchNo)} onChange={e=>updateQaLabRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.temp)} onChange={e=>updateQaLabRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.acidity)} onChange={e=>updateQaLabRow(r.id,"acidity",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.mbrt)} onChange={e=>updateQaLabRow(r.id,"mbrt",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-semibold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.alcoholTest)} onChange={e=>updateQaLabRow(r.id,"alcoholTest",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.cob)} onChange={e=>updateQaLabRow(r.id,"cob",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.cob.toLowerCase().includes("positive")?"text-red-700":"text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.fat)} onChange={e=>updateQaLabRow(r.id,"fat",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.snf)} onChange={e=>updateQaLabRow(r.id,"snf",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.analyst)} onChange={e=>updateQaLabRow(r.id,"analyst",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1349,15 +1381,15 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {packagingQcRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.machineNo} onChange={e=>updatePackagingQcRow(r.id,"machineNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updatePackagingQcRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updatePackagingQcRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.targetWeight} onChange={e=>updatePackagingQcRow(r.id,"targetWeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.actualWeight} onChange={e=>updatePackagingQcRow(r.id,"actualWeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.sealingTemp} onChange={e=>updatePackagingQcRow(r.id,"sealingTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.leakCheck} onChange={e=>updatePackagingQcRow(r.id,"leakCheck",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.leakCheck.toLowerCase()==="pass"?"text-green-700":"text-red-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.printCheck} onChange={e=>updatePackagingQcRow(r.id,"printCheck",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.inspector} onChange={e=>updatePackagingQcRow(r.id,"inspector",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.machineNo)} onChange={e=>updatePackagingQcRow(r.id,"machineNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.product)} onChange={e=>updatePackagingQcRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.time)} onChange={e=>updatePackagingQcRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.targetWeight)} onChange={e=>updatePackagingQcRow(r.id,"targetWeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.actualWeight)} onChange={e=>updatePackagingQcRow(r.id,"actualWeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.sealingTemp)} onChange={e=>updatePackagingQcRow(r.id,"sealingTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.leakCheck)} onChange={e=>updatePackagingQcRow(r.id,"leakCheck",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold",r.leakCheck.toLowerCase()==="pass"?"text-green-700":"text-red-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.printCheck)} onChange={e=>updatePackagingQcRow(r.id,"printCheck",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.inspector)} onChange={e=>updatePackagingQcRow(r.id,"inspector",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1387,15 +1419,15 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {coldRoomRegRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.coldRoomNo} onChange={e=>updateColdRoomRegRow(r.id,"coldRoomNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateColdRoomRegRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.temp} onChange={e=>updateColdRoomRegRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-cyan-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updateColdRoomRegRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.crateCount} onChange={e=>updateColdRoomRegRow(r.id,"crateCount",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.stackHeight} onChange={e=>updateColdRoomRegRow(r.id,"stackHeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.fifoStatus} onChange={e=>updateColdRoomRegRow(r.id,"fifoStatus",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold text-green-700")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.defrostStatus} onChange={e=>updateColdRoomRegRow(r.id,"defrostStatus",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.incharge} onChange={e=>updateColdRoomRegRow(r.id,"incharge",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.coldRoomNo)} onChange={e=>updateColdRoomRegRow(r.id,"coldRoomNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.time)} onChange={e=>updateColdRoomRegRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.temp)} onChange={e=>updateColdRoomRegRow(r.id,"temp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-cyan-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.product)} onChange={e=>updateColdRoomRegRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.crateCount)} onChange={e=>updateColdRoomRegRow(r.id,"crateCount",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.stackHeight)} onChange={e=>updateColdRoomRegRow(r.id,"stackHeight",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.fifoStatus)} onChange={e=>updateColdRoomRegRow(r.id,"fifoStatus",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold text-green-700")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.defrostStatus)} onChange={e=>updateColdRoomRegRow(r.id,"defrostStatus",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.incharge)} onChange={e=>updateColdRoomRegRow(r.id,"incharge",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1425,15 +1457,15 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {curdDahiRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.batchNo} onChange={e=>updateCurdDahiRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.product} onChange={e=>updateCurdDahiRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.milkQty} onChange={e=>updateCurdDahiRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.cultureCode} onChange={e=>updateCurdDahiRow(r.id,"cultureCode",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.inocTemp} onChange={e=>updateCurdDahiRow(r.id,"inocTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.startTime} onChange={e=>updateCurdDahiRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.setTime} onChange={e=>updateCurdDahiRow(r.id,"setTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.finalAcidity} onChange={e=>updateCurdDahiRow(r.id,"finalAcidity",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-amber-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCurdDahiRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.batchNo)} onChange={e=>updateCurdDahiRow(r.id,"batchNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.product)} onChange={e=>updateCurdDahiRow(r.id,"product",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.milkQty)} onChange={e=>updateCurdDahiRow(r.id,"milkQty",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.cultureCode)} onChange={e=>updateCurdDahiRow(r.id,"cultureCode",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.inocTemp)} onChange={e=>updateCurdDahiRow(r.id,"inocTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.startTime)} onChange={e=>updateCurdDahiRow(r.id,"startTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.setTime)} onChange={e=>updateCurdDahiRow(r.id,"setTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.finalAcidity)} onChange={e=>updateCurdDahiRow(r.id,"finalAcidity",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-amber-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateCurdDahiRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1462,14 +1494,14 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {boilerLogRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.shiftTime} onChange={e=>updateBoilerLogRow(r.id,"shiftTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.steamPress} onChange={e=>updateBoilerLogRow(r.id,"steamPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-red-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.feedTemp} onChange={e=>updateBoilerLogRow(r.id,"feedTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.softenerHardness} onChange={e=>updateBoilerLogRow(r.id,"softenerHardness",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.blowdown} onChange={e=>updateBoilerLogRow(r.id,"blowdown",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.fuelCons} onChange={e=>updateBoilerLogRow(r.id,"fuelCons",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.flueTemp} onChange={e=>updateBoilerLogRow(r.id,"flueTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateBoilerLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.shiftTime)} onChange={e=>updateBoilerLogRow(r.id,"shiftTime",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.steamPress)} onChange={e=>updateBoilerLogRow(r.id,"steamPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-red-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.feedTemp)} onChange={e=>updateBoilerLogRow(r.id,"feedTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.softenerHardness)} onChange={e=>updateBoilerLogRow(r.id,"softenerHardness",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.blowdown)} onChange={e=>updateBoilerLogRow(r.id,"blowdown",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-semibold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.fuelCons)} onChange={e=>updateBoilerLogRow(r.id,"fuelCons",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.flueTemp)} onChange={e=>updateBoilerLogRow(r.id,"flueTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateBoilerLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1498,14 +1530,14 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {refrigerationLogRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.compNo} onChange={e=>updateRefrigerationLogRow(r.id,"compNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.suctionPress} onChange={e=>updateRefrigerationLogRow(r.id,"suctionPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.dischargePress} onChange={e=>updateRefrigerationLogRow(r.id,"dischargePress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.oilPress} onChange={e=>updateRefrigerationLogRow(r.id,"oilPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.glycolTemp} onChange={e=>updateRefrigerationLogRow(r.id,"glycolTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-cyan-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.condenserWaterTemp} onChange={e=>updateRefrigerationLogRow(r.id,"condenserWaterTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.ampDraw} onChange={e=>updateRefrigerationLogRow(r.id,"ampDraw",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateRefrigerationLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.compNo)} onChange={e=>updateRefrigerationLogRow(r.id,"compNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.suctionPress)} onChange={e=>updateRefrigerationLogRow(r.id,"suctionPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.dischargePress)} onChange={e=>updateRefrigerationLogRow(r.id,"dischargePress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.oilPress)} onChange={e=>updateRefrigerationLogRow(r.id,"oilPress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.glycolTemp)} onChange={e=>updateRefrigerationLogRow(r.id,"glycolTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-cyan-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.condenserWaterTemp)} onChange={e=>updateRefrigerationLogRow(r.id,"condenserWaterTemp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.ampDraw)} onChange={e=>updateRefrigerationLogRow(r.id,"ampDraw",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateRefrigerationLogRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1534,14 +1566,14 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {electricalDgRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateElectricalDgRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.ebMeterKwh} onChange={e=>updateElectricalDgRow(r.id,"ebMeterKwh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.powerFactor} onChange={e=>updateElectricalDgRow(r.id,"powerFactor",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.dgRunHrs} onChange={e=>updateElectricalDgRow(r.id,"dgRunHrs",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.dieselLevel} onChange={e=>updateElectricalDgRow(r.id,"dieselLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.phaseAmp} onChange={e=>updateElectricalDgRow(r.id,"phaseAmp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.voltage} onChange={e=>updateElectricalDgRow(r.id,"voltage",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.electrician} onChange={e=>updateElectricalDgRow(r.id,"electrician",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.time)} onChange={e=>updateElectricalDgRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.ebMeterKwh)} onChange={e=>updateElectricalDgRow(r.id,"ebMeterKwh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.powerFactor)} onChange={e=>updateElectricalDgRow(r.id,"powerFactor",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.dgRunHrs)} onChange={e=>updateElectricalDgRow(r.id,"dgRunHrs",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.dieselLevel)} onChange={e=>updateElectricalDgRow(r.id,"dieselLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.phaseAmp)} onChange={e=>updateElectricalDgRow(r.id,"phaseAmp",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.voltage)} onChange={e=>updateElectricalDgRow(r.id,"voltage",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.electrician)} onChange={e=>updateElectricalDgRow(r.id,"electrician",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1570,14 +1602,14 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {compressorRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.compId} onChange={e=>updateCompressorRow(r.id,"compId",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateCompressorRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.linePress} onChange={e=>updateCompressorRow(r.id,"linePress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.dewPoint} onChange={e=>updateCompressorRow(r.id,"dewPoint",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.oilLevel} onChange={e=>updateCompressorRow(r.id,"oilLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.moistureDrain} onChange={e=>updateCompressorRow(r.id,"moistureDrain",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.totalRunHrs} onChange={e=>updateCompressorRow(r.id,"totalRunHrs",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateCompressorRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.compId)} onChange={e=>updateCompressorRow(r.id,"compId",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.time)} onChange={e=>updateCompressorRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.linePress)} onChange={e=>updateCompressorRow(r.id,"linePress",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.dewPoint)} onChange={e=>updateCompressorRow(r.id,"dewPoint",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.oilLevel)} onChange={e=>updateCompressorRow(r.id,"oilLevel",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.moistureDrain)} onChange={e=>updateCompressorRow(r.id,"moistureDrain",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.totalRunHrs)} onChange={e=>updateCompressorRow(r.id,"totalRunHrs",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateCompressorRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1608,16 +1640,16 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {calibrationRegRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.tagNo} onChange={e=>updateCalibrationRegRow(r.id,"tagNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.instName} onChange={e=>updateCalibrationRegRow(r.id,"instName",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.location} onChange={e=>updateCalibrationRegRow(r.id,"location",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.range} onChange={e=>updateCalibrationRegRow(r.id,"range",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input type="date" value={r.lastCalibDate} onChange={e=>updateCalibrationRegRow(r.id,"lastCalibDate",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input type="date" value={r.nextDueDate} onChange={e=>updateCalibrationRegRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.standardUsed} onChange={e=>updateCalibrationRegRow(r.id,"standardUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.errorDeviation} onChange={e=>updateCalibrationRegRow(r.id,"errorDeviation",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.technician} onChange={e=>updateCalibrationRegRow(r.id,"technician",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.certNo} onChange={e=>updateCalibrationRegRow(r.id,"certNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.tagNo)} onChange={e=>updateCalibrationRegRow(r.id,"tagNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.instName)} onChange={e=>updateCalibrationRegRow(r.id,"instName",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.location)} onChange={e=>updateCalibrationRegRow(r.id,"location",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.range)} onChange={e=>updateCalibrationRegRow(r.id,"range",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.lastCalibDate)} onChange={e=>updateCalibrationRegRow(r.id,"lastCalibDate",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input type="date" value={cellVal(r.nextDueDate)} onChange={e=>updateCalibrationRegRow(r.id,"nextDueDate",e.target.value)} className={cn(inp,"text-[8px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.standardUsed)} onChange={e=>updateCalibrationRegRow(r.id,"standardUsed",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.errorDeviation)} onChange={e=>updateCalibrationRegRow(r.id,"errorDeviation",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.technician)} onChange={e=>updateCalibrationRegRow(r.id,"technician",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.certNo)} onChange={e=>updateCalibrationRegRow(r.id,"certNo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono text-teal-800")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
@@ -1646,14 +1678,14 @@ export default function PlantFormatsCalc() {
                     <tbody>
                       {etpWtpRows.map(r => (
                         <tr key={r.id}>
-                          <td className="border border-black p-0.5"><input value={r.time} onChange={e=>updateEtpWtpRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.rawWaterFlow} onChange={e=>updateEtpWtpRow(r.id,"rawWaterFlow",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.treatedWaterPh} onChange={e=>updateEtpWtpRow(r.id,"treatedWaterPh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.etpInletPh} onChange={e=>updateEtpWtpRow(r.id,"etpInletPh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.aerationDo} onChange={e=>updateEtpWtpRow(r.id,"aerationDo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.sludgeDischarge} onChange={e=>updateEtpWtpRow(r.id,"sludgeDischarge",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.dosingChem} onChange={e=>updateEtpWtpRow(r.id,"dosingChem",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
-                          <td className="border border-black p-0.5"><input value={r.operator} onChange={e=>updateEtpWtpRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.time)} onChange={e=>updateEtpWtpRow(r.id,"time",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.rawWaterFlow)} onChange={e=>updateEtpWtpRow(r.id,"rawWaterFlow",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-right font-mono font-bold")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.treatedWaterPh)} onChange={e=>updateEtpWtpRow(r.id,"treatedWaterPh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono font-bold text-teal-800")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.etpInletPh)} onChange={e=>updateEtpWtpRow(r.id,"etpInletPh",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.aerationDo)} onChange={e=>updateEtpWtpRow(r.id,"aerationDo",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.sludgeDischarge)} onChange={e=>updateEtpWtpRow(r.id,"sludgeDischarge",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center font-mono")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.dosingChem)} onChange={e=>updateEtpWtpRow(r.id,"dosingChem",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5")} /></td>
+                          <td className="border border-black p-0.5"><input value={cellVal(r.operator)} onChange={e=>updateEtpWtpRow(r.id,"operator",e.target.value)} className={cn(inp,"text-[8.5px] p-0.5 text-center")} /></td>
                           {renderCustomBodyCells(r.id)}
                           <td className="border border-black p-0.5 text-center print:hidden"><button onClick={()=>deleteRow(r.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto"/></button></td>
                         </tr>
