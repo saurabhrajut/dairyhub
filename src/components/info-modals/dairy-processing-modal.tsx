@@ -48,6 +48,7 @@ import { evaporationContent } from "@/lib/content/dairy-processing/evaporation";
 import { uhtContent } from "@/lib/content/dairy-processing/uht";
 import { sprayDryingContent } from "@/lib/content/dairy-processing/spray-drying";
 import { fermentationContent } from "@/lib/content/dairy-processing/fermentation";
+import { thermanizationContent } from "@/lib/content/dairy-processing/thermanization";
 import { churningContent } from "@/lib/content/dairy-processing/churning";
 import { boilerContent } from "@/lib/content/dairy-processing/boiler";
 
@@ -86,6 +87,7 @@ const processingConfig: Record<string, { icon: any; color: string; bgLight: stri
   uht: { icon: Zap, color: "text-amber-600", bgLight: "bg-amber-50 hover:bg-amber-100", borderColor: "border-amber-200 hover:border-amber-400" },
   "spray-drying": { icon: Wind, color: "text-yellow-600", bgLight: "bg-yellow-50 hover:bg-yellow-100", borderColor: "border-yellow-200 hover:border-yellow-400" },
   fermentation: { icon: FlaskConical, color: "text-emerald-600", bgLight: "bg-emerald-50 hover:bg-emerald-100", borderColor: "border-emerald-200 hover:border-emerald-400" },
+  thermanization: { icon: Thermometer, color: "text-rose-600", bgLight: "bg-rose-50 hover:bg-rose-100", borderColor: "border-rose-200 hover:border-rose-400" },
   churning: { icon: RotateCw, color: "text-amber-500", bgLight: "bg-amber-50 hover:bg-amber-100", borderColor: "border-amber-200 hover:border-amber-400" },
   boiler: { icon: Factory, color: "text-gray-600", bgLight: "bg-gray-50 hover:bg-gray-100", borderColor: "border-gray-200 hover:border-gray-400" },
 };
@@ -261,6 +263,7 @@ const getTopicGroups = (topicMap: any, lang: "hi" | "en") => {
         build("pasteurization", "Controlled heat treatment", "Core"),
         build("sterilization", "Complete microbial elimination", "Heat", "destructive"),
         build("uht", "Ultra-High Temp processing", "Advanced"),
+        build("thermanization", "Post-fermentation heat stabilization", "Thermal"),
       ],
     },
     {
@@ -325,6 +328,7 @@ export function DairyProcessingModal({
       uht: t(uhtContent),
       "spray-drying": t(sprayDryingContent),
       fermentation: t(fermentationContent),
+      thermanization: t(thermanizationContent),
       churning: t(churningContent),
       boiler: t(boilerContent),
     }),
