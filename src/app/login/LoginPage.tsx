@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Mail, Lock, Loader2, UserCheck, ArrowLeft, Milk } from 'lucide-react';
+import { Mail, Lock, Loader2, UserCheck, ArrowLeft, Milk, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
@@ -20,6 +20,7 @@ const BG_VIDEO = '/Grok-Video-7F6A1000-EF08-4491-A4E4-8EFC91E61178.MOV';
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [isEmailLoading, setIsEmailLoading] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [isGuestLoading, setIsGuestLoading] = useState(false);
@@ -146,14 +147,23 @@ export default function LoginPage() {
                             <div className="relative mt-1">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-300/40 w-4 h-4" />
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     id="password"
                                     placeholder="••••••••"
-                                    className="w-full pl-9 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:bg-white/25 focus:border-teal-400 focus:ring-1 focus:ring-teal-400 outline-none transition-all text-xs"
+                                    className="w-full pl-9 pr-10 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:bg-white/25 focus:border-teal-400 focus:ring-1 focus:ring-teal-400 outline-none transition-all text-xs"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-300/60 hover:text-teal-200 p-1 transition-colors"
+                                    tabIndex={-1}
+                                    aria-label="Toggle password visibility"
+                                >
+                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
                             </div>
                         </div>
                         
