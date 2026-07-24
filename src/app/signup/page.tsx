@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Mail, Lock, User, UserCheck, Loader2, ArrowLeft, Phone, DollarSign, Briefcase, Milk } from 'lucide-react';
+import { Mail, Lock, User, UserCheck, Loader2, ArrowLeft, Phone, DollarSign, Briefcase, Milk, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth, type Department } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -36,6 +36,7 @@ const BG_VIDEO = '/Grok-Video-7F6A1000-EF08-4491-A4E4-8EFC91E61178.MOV';
 
 export default function SignupPage() {
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const { signup } = useAuth();
     const { toast } = useToast();
     const router = useRouter();
@@ -192,7 +193,21 @@ export default function SignupPage() {
                                         <FormControl>
                                             <div className="relative">
                                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-300/40 w-4 h-4" />
-                                                <Input type="password" placeholder="••••••••" {...field} className="pl-9 text-xs h-10 bg-white/10 border-white/20 text-white placeholder-white/40 focus:bg-white/25 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all" />
+                                                <Input
+                                                    type={showPassword ? "text" : "password"}
+                                                    placeholder="••••••••"
+                                                    {...field}
+                                                    className="pl-9 pr-10 text-xs h-10 bg-white/10 border-white/20 text-white placeholder-white/40 focus:bg-white/25 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-300/60 hover:text-indigo-200 p-1 transition-colors"
+                                                    tabIndex={-1}
+                                                    aria-label="Toggle password visibility"
+                                                >
+                                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
                                             </div>
                                         </FormControl>
                                         <FormMessage className="text-[10px]" />
