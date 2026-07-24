@@ -84,6 +84,7 @@ const ShiftReportCalc = dynamic(() => import("./shift-report-calc"), { ssr: fals
 const MassBalanceCalc = dynamic(() => import("./mass-balance-calc"), { ssr: false, loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> });
 const PlantCostCalc = dynamic(() => import("./plant-cost-calc"), { ssr: false, loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> });
 const PlantFormatsCalc = dynamic(() => import("./plant-formats-calc"), { ssr: false, loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> });
+const ProductionReportsCalc = dynamic(() => import("./production-reports-calc"), { ssr: false, loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> });
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -162,8 +163,9 @@ interface ValidationResult {
     closingSnf: string;
   }
   
-  // ✅ UPDATED: Added mass-balance, production-process, utility-infra, and shift-report
+  // ✅ UPDATED: Added running-reports, mass-balance, production-process, utility-infra, and shift-report
   type CalculatorType =
+    | "running-reports"
     | "yields"
     | "paneer-yield"
     | "ice-cream"
@@ -541,6 +543,12 @@ function UtilityInfraCalc() {
 
 // ==================== MAIN CALCULATOR MODAL ====================
 const calculatorsInfo = {
+    "running-reports": {
+      title: "Packaging Reports & Reconciliation",
+      icon: FileSpreadsheet,
+      component: ProductionReportsCalc,
+      color: "from-emerald-600 to-teal-700", // ✅ Gradient Emerald
+    },
     "shift-report": {
       title: "Shift Report",
       icon: FileSpreadsheet,
@@ -9689,7 +9697,7 @@ function DispatchCalc() {
         <CardHeader className="p-3 pb-2 bg-indigo-50/50 border-b border-indigo-100 flex flex-row justify-between items-center">
           <CardTitle className="text-xs font-bold text-indigo-800 uppercase">📦 डिस्पैच उत्पाद सूची (Dispatch Product List)</CardTitle>
           <Button variant="outline" size="sm" onClick={addItem} className="h-7 text-xs border-indigo-300 text-indigo-700 hover:bg-indigo-50">
-            + उत्पाद जोड़ें (Add Item)
+            + उत्पाद जोड़ें (Add Item)
           </Button>
         </CardHeader>
         <CardContent className="p-3 space-y-2.5">
