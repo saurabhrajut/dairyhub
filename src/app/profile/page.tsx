@@ -10,13 +10,14 @@ import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
-import { Heart, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift, Sparkles, Shield, CheckCircle2 } from 'lucide-react';
+import { Heart, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift, Sparkles, Shield, CheckCircle2, Star, Play } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
 import { useReadingMode } from '@/context/reading-mode-context';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { OnboardingTourModal } from '@/components/onboarding-tour-modal';
 
 // ============================================================
 // 🔑 RAZORPAY CONFIG
@@ -85,6 +86,7 @@ export default function ProfilePage() {
     const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen]           = useState(false);
     const [isHelpOpen, setIsHelpOpen]                   = useState(false);
+    const [isTourOpen, setIsTourOpen]                   = useState(false);
     const [isEditingName, setIsEditingName]             = useState(false);
     const [tempName, setTempName]                       = useState('');
 
@@ -620,6 +622,20 @@ export default function ProfilePage() {
                             </span>
                             <ChevronRight className="h-5 w-5 text-gray-400"/>
                         </li>
+                        <li onClick={() => window.open('https://play.google.com/store/apps/details?id=in.co.dairyhub', '_blank')} className="flex justify-between items-center p-4 hover:bg-amber-50 cursor-pointer transition-all">
+                            <span className="flex items-center gap-3 text-amber-800 font-bold">
+                                <div className="bg-gradient-to-br from-amber-400 to-yellow-500 p-2 rounded-lg shadow-lg"><Star className="w-5 h-5 text-white fill-white"/></div>
+                                Rate Dairy Hub on Play Store ⭐
+                            </span>
+                            <ChevronRight className="h-5 w-5 text-amber-500"/>
+                        </li>
+                        <li onClick={() => setIsTourOpen(true)} className="flex justify-between items-center p-4 hover:bg-purple-50 cursor-pointer transition-all">
+                            <span className="flex items-center gap-3 text-purple-700 font-semibold">
+                                <div className="bg-gradient-to-br from-purple-400 to-indigo-500 p-2 rounded-lg shadow-lg"><Sparkles className="w-5 h-5 text-white"/></div>
+                                App Walkthrough & Guide
+                            </span>
+                            <ChevronRight className="h-5 w-5 text-purple-400"/>
+                        </li>
                         <li onClick={() => setIsHelpOpen(true)} className="flex justify-between items-center p-4 hover:bg-white/50 cursor-pointer transition-all">
                             <span className="flex items-center gap-3 text-gray-700 font-medium">
                                 <div className="bg-gradient-to-br from-blue-300 to-blue-500 p-2 rounded-lg shadow-lg"><HelpCircle className="w-5 h-5 text-white"/></div>
@@ -658,7 +674,7 @@ export default function ProfilePage() {
                         </div>
 
                         <div>
-                            <Label className="block text-sm font-medium text-gray-700 mb-2">Reading Mode</Label>
+                            <Label className="block text-sm font-medium text-gray-700 mb-2">Reading Mode & Eye Protection</Label>
                             <div className="flex items-center space-x-2 mb-4">
                                 <Switch id="reading-mode-switch" checked={isEnabled} onCheckedChange={setIsEnabled}/>
                                 <Label htmlFor="reading-mode-switch">Enable eye-friendly themes</Label>
@@ -684,9 +700,30 @@ export default function ProfilePage() {
                                 </TooltipProvider>
                             )}
                         </div>
+
+                        {/* Quick Actions in Settings */}
+                        <div className="pt-2 border-t space-y-2">
+                            <Button
+                                onClick={() => window.open('https://play.google.com/store/apps/details?id=in.co.dairyhub', '_blank')}
+                                className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs h-10 rounded-xl"
+                            >
+                                <Star className="w-4 h-4 mr-2 fill-white" /> Rate Us on Google Play Store ⭐
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                onClick={() => { setIsSettingsOpen(false); setIsTourOpen(true); }}
+                                className="w-full text-xs h-10 border-purple-300 text-purple-700 hover:bg-purple-50 font-semibold rounded-xl"
+                            >
+                                <Sparkles className="w-4 h-4 mr-2 text-purple-600" /> Restart Interactive Walkthrough Tour
+                            </Button>
+                        </div>
                     </div>
                 </DialogContent>
             </Dialog>
+
+            {/* Interactive Tour Modal */}
+            <OnboardingTourModal isOpen={isTourOpen} onClose={() => setIsTourOpen(false)} />
 
             {/* Help Dialog */}
             <Dialog open={isHelpOpen} onOpenChange={setIsHelpOpen}>
