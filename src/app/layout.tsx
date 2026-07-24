@@ -27,13 +27,13 @@ const notoDevanagari = Noto_Sans_Devanagari({
 });
 
 export const metadata = {
-  title: 'DairyHub - Dairy Management System',
+  title: 'Dairy Hub',
   description: 'Your digital dairy guide for science, processing, and quality',
-  applicationName: 'DairyHub',
+  applicationName: 'Dairy Hub',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'DairyHub',
+    title: 'Dairy Hub',
   },
   formatDetection: {
     telephone: false,
@@ -42,6 +42,8 @@ export const metadata = {
     'google-adsense-account': 'ca-pub-1786473188592937',
   },
 };
+
+import { AppBackButtonHandler } from '@/components/mobile/app-back-button-handler';
 
 export default function RootLayout({
   children,
@@ -58,7 +60,7 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="DairyHub" />
+        <meta name="apple-mobile-web-app-title" content="Dairy Hub" />
         
         <Script
           async
@@ -85,6 +87,7 @@ export default function RootLayout({
         </SplashScreenProvider>
         
         <Toaster />
+        <AppBackButtonHandler />
         
         <Script id="chunk-error-handler">
           {`
