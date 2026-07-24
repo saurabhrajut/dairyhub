@@ -823,14 +823,14 @@ const MemoizedMilkInputGroup = memo(function MilkInputGroup({
                 <MemoizedInputField label="Fat %" value={initialValues.fat} name="fat" setter={(name, val) => onInputChange(milkNum, name, val)} />
                 
                 <div>
-                    <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                    <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                     <Select value={initialValues.basis} onValueChange={(val) => onInputChange(milkNum, 'basis', val)}>
                         <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                            <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                            <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                            <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -1168,12 +1168,15 @@ function FatSnfAdjustmentCalc() {
     // ✅ NEW: Tab State
     const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
 
+    const [targetBasis, setTargetBasis] = useState<'clr' | 'snf'>('clr');
+
     const [inputs, setInputs] = useState({
         baseQty: '1000',
         baseFat: '3.5',
         baseClr: '28',
         baseSnf: '8.5',
         targetFat: '4.5',
+        targetClr: '28.5',
         targetSnf: '8.7',
         creamFat: '40',
         creamClr: '15',
@@ -1246,6 +1249,31 @@ function FatSnfAdjustmentCalc() {
         const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
         return formula.inverse(snf, fat);
     }, [baseBasis, inputs.baseFat, inputs.baseSnf, snfFormula, customConstants]);
+
+    const targetSnf = useMemo(() => {
+        if (targetBasis === 'snf') {
+            return parseFloat(inputs.targetSnf) || 0;
+        }
+        const fat = parseFloat(inputs.targetFat);
+        const clr = parseFloat(inputs.targetClr);
+        return !isNaN(fat) && !isNaN(clr) ? calculateSnf(clr, fat) : 0;
+    }, [targetBasis, inputs.targetFat, inputs.targetClr, inputs.targetSnf, calculateSnf]);
+
+    const targetClrCalculated = useMemo(() => {
+        if (targetBasis === 'clr') {
+            return parseFloat(inputs.targetClr) || 0;
+        }
+        const fat = parseFloat(inputs.targetFat);
+        const snf = parseFloat(inputs.targetSnf);
+        if (isNaN(fat) || isNaN(snf)) return 0;
+        if (snfFormula === 'custom') {
+            const multi = parseFloat(customConstants.fatMultiplier) || 0;
+            const constFactor = parseFloat(customConstants.constant) || 0;
+            return (snf - fat * multi - constFactor) * 4;
+        }
+        const formula = snfFormulas[snfFormula as keyof typeof snfFormulas] || snfFormulas.isi;
+        return formula.inverse(snf, fat);
+    }, [targetBasis, inputs.targetFat, inputs.targetSnf, snfFormula, customConstants]);
     
     const adjustmentCompSnf = useMemo(() => {
         if (adjustmentComponent === 'water') return 0;
@@ -1270,7 +1298,7 @@ function FatSnfAdjustmentCalc() {
         const Fm_percent = parseFloat(inputs.baseFat);
         const Sm_percent = baseSnf;
         const Ft_percent = parseFloat(inputs.targetFat);
-        const St_percent = parseFloat(inputs.targetSnf);
+        const St_percent = targetSnf;
 
         if ([Qm, Fm_percent, Sm_percent, Ft_percent, St_percent].some(isNaN) || Qm <= 0 || Sm_percent <= 0) {
             setError("⚠️ Please fill all base and target fields with valid numbers.");
@@ -1320,36 +1348,81 @@ function FatSnfAdjustmentCalc() {
         steps.push(`   Target SNF: ${St_percent}%`);
         steps.push(`   Adjustment Component: ${mainComp.name} (Fat: ${mainComp.F_percent}%, SNF: ${mainComp.S_percent.toFixed(4)}%)`);
 
-        // Solve Linear Equations (Simulated logic for display)
-        let comp2: { name: string; F: number; S: number; };
+        // Helper matrix solver for 2 ingredients
+        const solveSystem = (
+            i1: { F: number; S: number; name: string },
+            i2: { F: number; S: number; name: string }
+        ) => {
+            const A = i1.F - F_t;
+            const B = i2.F - F_t;
+            const C = i1.S - S_t;
+            const D = i2.S - S_t;
+            const det = A * D - B * C;
+
+            if (Math.abs(det) < 1e-9) {
+                return { valid: false, m1: 0, m2: 0 };
+            }
+
+            const R1 = Qm * (F_t - F_m);
+            const R2 = Qm * (S_t - S_m);
+            const m1 = (R1 * D - B * R2) / det;
+            const m2 = (A * R2 - R1 * C) / det;
+
+            if (!isFinite(m1) || !isFinite(m2) || m1 < -1e-5 || m2 < -1e-5) {
+                return { valid: false, m1: 0, m2: 0 };
+            }
+
+            return { valid: true, m1: Math.max(0, m1), m2: Math.max(0, m2) };
+        };
+
+        let comp2: { name: string; F: number; S: number; } = { name: "Water", F: F_w, S: S_w };
         let mainCompNeeded = 0, comp2Needed = 0;
+        let solutionFound = false;
 
-        // Try SMP
-        let determinant = (F_adj - F_t) * (S_smp - S_t) - (F_smp - F_t) * (S_adj - S_t);
-        if (Math.abs(determinant) > 1e-9) {
-            mainCompNeeded = (Qm * (fatDifference * (S_smp - S_t) - snfDifference * (F_smp - F_t))) / determinant;
-            comp2Needed = (Qm * (snfDifference * (F_adj - F_t) - fatDifference * (S_adj - S_t))) / determinant;
-            comp2 = { name: "SMP", F: F_smp, S: S_smp };
+        const waterObj = { name: "Water", F: F_w, S: S_w };
+        const smpObj = { name: "SMP", F: F_smp, S: S_smp };
+        const mainCompStruct = { name: mainComp.name, F: F_adj, S: S_adj };
 
-            if (mainCompNeeded < -1e-6 || comp2Needed < -1e-6) {
-                // Try Water
-                determinant = (F_adj - F_t) * (S_w - S_t) - (F_w - F_t) * (S_adj - S_t);
-                mainCompNeeded = (Qm * (fatDifference * (S_w - S_t) - snfDifference * (F_w - F_t))) / determinant;
-                comp2Needed = (Qm * (snfDifference * (F_adj - F_t) - fatDifference * (S_adj - S_t))) / determinant;
-                comp2 = { name: "Water", F: F_w, S: S_w };
+        if (adjustmentComponent === 'water') {
+            const sysA = solveSystem(waterObj, smpObj);
+            if (sysA.valid) {
+                mainCompNeeded = sysA.m1; // Water
+                comp2Needed = sysA.m2;    // SMP
+                comp2 = smpObj;
+                solutionFound = true;
+            } else if (F_m < F_t) {
+                const creamFatVal = parseFloat(inputs.creamFat) > 0 ? parseFloat(inputs.creamFat)/100 : 0.40;
+                const creamObj = { name: "Cream", F: creamFatVal, S: adjustmentCompSnf > 0 ? adjustmentCompSnf/100 : 0.0544 };
+                const sysB = solveSystem(creamObj, waterObj);
+                if (sysB.valid) {
+                    mainCompNeeded = sysB.m2; // Water
+                    comp2Needed = sysB.m1;    // Cream
+                    comp2 = creamObj;
+                    solutionFound = true;
+                    steps.push(`⚠️ Note: Base Fat (${Fm_percent}%) < Target Fat (${Ft_percent}%). Cream is added along with Water.`);
+                }
             }
         } else {
-             setError("❌ Cannot calculate: Components may be too similar.");
-             return;
+            const sys1 = solveSystem(mainCompStruct, smpObj);
+            const sys2 = solveSystem(mainCompStruct, waterObj);
+
+            if (sys1.valid) {
+                mainCompNeeded = sys1.m1;
+                comp2Needed = sys1.m2;
+                comp2 = smpObj;
+                solutionFound = true;
+            } else if (sys2.valid) {
+                mainCompNeeded = sys2.m1;
+                comp2Needed = sys2.m2;
+                comp2 = waterObj;
+                solutionFound = true;
+            }
         }
 
-        if (mainCompNeeded < -1e-6 || comp2Needed < -1e-6) {
-            setError(`❌ Target not achievable with selected components.`);
+        if (!solutionFound) {
+            setError("❌ Target not achievable with selected components. Please check your target Fat/SNF values.");
             return;
         }
-
-        mainCompNeeded = Math.max(0, mainCompNeeded);
-        comp2Needed = Math.max(0, comp2Needed);
 
         steps.push(`\n✅ **SOLUTION**`);
         steps.push(`   Add ${mainComp.name}: ${mainCompNeeded.toFixed(4)} kg`);
@@ -1463,14 +1536,14 @@ function FatSnfAdjustmentCalc() {
                         <MemoizedInputField label="Fat %" value={inputs.baseFat} name="baseFat" setter={handleInputChange} />
                         
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={baseBasis} onValueChange={(val) => setBaseBasis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -1501,7 +1574,35 @@ function FatSnfAdjustmentCalc() {
                     </h3>
                     <div className="space-y-4">
                         <MemoizedInputField label="Target Fat %" value={inputs.targetFat} name="targetFat" setter={handleInputChange} />
-                        <MemoizedInputField label="Target SNF %" value={inputs.targetSnf} name="targetSnf" setter={handleInputChange} />
+                        
+                        <div>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
+                            <Select value={targetBasis} onValueChange={(val) => setTargetBasis(val as 'clr' | 'snf')}>
+                                <SelectTrigger className="h-10 border-2 border-green-300 font-semibold text-sm bg-white">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {targetBasis === 'clr' ? (
+                            <MemoizedInputField label="Target CLR" value={inputs.targetClr} name="targetClr" setter={handleInputChange} />
+                        ) : (
+                            <MemoizedInputField label="Target SNF %" value={inputs.targetSnf} name="targetSnf" setter={handleInputChange} />
+                        )}
+
+                        <Alert className="bg-green-200 border-2 border-green-400 p-2">
+                            <Info className="h-4 w-4" />
+                            <AlertDescription className="font-bold text-green-900 text-xs">
+                                {targetBasis === 'clr'
+                                    ? `Calculated Target SNF: ${targetSnf > 0 ? targetSnf.toFixed(4) + '%' : '...'}`
+                                    : `Calculated Target CLR: ${targetClrCalculated > 0 ? targetClrCalculated.toFixed(2) : '...'}`
+                                }
+                            </AlertDescription>
+                        </Alert>
                     </div>
                 </div>
             </div>
@@ -1521,7 +1622,7 @@ function FatSnfAdjustmentCalc() {
                             <SelectItem value="cream" className="text-base font-medium">Cream</SelectItem>
                             <SelectItem value="rich_milk" className="text-base font-medium">Rich Milk</SelectItem>
                             <SelectItem value="skim_milk" className="text-base font-medium">Skim Milk</SelectItem>
-                            <SelectItem value="water" className="text-base font-medium">Water (पानी)</SelectItem>
+                            <SelectItem value="water" className="text-base font-medium">Water</SelectItem>
                         </SelectContent>
                     </Select>
                     
@@ -1540,7 +1641,7 @@ function FatSnfAdjustmentCalc() {
                         </>)}
                         {adjustmentComponent === 'water' && (
                             <div className="col-span-2 text-xs font-semibold text-orange-700 bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
-                                ℹ️ Water (पानी) has 0% Fat and 0% SNF by default. No composition inputs needed.
+                                ℹ️ Water has 0% Fat and 0% SNF by default. No composition inputs needed.
                             </div>
                         )}
                     </div>
@@ -1792,9 +1893,6 @@ function TwoMilkBlendingToTargetCalc() {
     } | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [calculationSteps, setCalculationSteps] = useState<string[]>([]);
-    
-    const componentProps = { milkDensity: 1.03 };
-
     const handleInputChange = useCallback((name: string, value: string) => {
         setInputs(prev => ({...prev, [name]: value }));
     }, []);
@@ -1869,6 +1967,8 @@ function TwoMilkBlendingToTargetCalc() {
         return !isNaN(fat) && !isNaN(snf) ? formula.inverse(snf, fat) : 0;
     }, [targetBasis, inputs.fTarget, inputs.sTarget, snfFormula, customConstants]);
 
+    const getMilkDensity = (clr?: number) => (clr && clr > 0 ? 1 + clr / 1000 : 1.03);
+
     const calculate = useCallback(() => {
         setResult(null);
         setError(null);
@@ -1883,7 +1983,8 @@ function TwoMilkBlendingToTargetCalc() {
         const CT = targetClrCalculated;
         const qTotalVal = parseFloat(inputs.qTotal);
 
-        const QT = totalQtyUnit === 'liters' ? qTotalVal * componentProps.milkDensity : qTotalVal;
+        const targetDensity = getMilkDensity(CT);
+        const QT = totalQtyUnit === 'liters' ? qTotalVal * targetDensity : qTotalVal;
 
         if ([F1, C1, F2, C2, FT, CT, qTotalVal].some(isNaN)) {
             setError("⚠️ Please fill all fields with valid numbers.");
@@ -1955,31 +2056,40 @@ function TwoMilkBlendingToTargetCalc() {
         // SNF Calcs
         const finalSnf = calculateSnf(finalClr, finalFat);
 
-        // Adjustment Logic
+        // Adjustment Logic using Exact Mass Balance
         let adjustment: { type: 'none' | 'smp' | 'water'; amount: number; amountLiters: number } = { type: 'none', amount: 0, amountLiters: 0 };
         
         steps.push(`\n⚙️ **ADJUSTMENT STEP**`);
         if (Math.abs(clrDifference) < 0.05) {
             steps.push(`   ✅ No Adjustment Needed (CLR Match)`);
         } else if (clrDifference > 0) {
-            // Add SMP
-            const smpSolidsPercent = 96;
-            const smpNeeded = (QT * clrDifference * 0.25) / smpSolidsPercent;
-            adjustment = { type: 'smp', amount: smpNeeded, amountLiters: smpNeeded / componentProps.milkDensity };
-            steps.push(`   ⚠️ CLR Low -> Add SMP: ${smpNeeded.toFixed(4)} kg`);
+            // Add SMP via Exact Mass Balance Equation:
+            // S = QT * (targetSnf - finalSnf) / (0.96*100 - targetSnf)
+            const smpSolidsPct = 96;
+            const targetSnfFrac = targetSnf;
+            const finalSnfFrac = finalSnf;
+            const smpNeeded = (smpSolidsPct > targetSnfFrac && targetSnf > finalSnf)
+                ? (QT * (targetSnfFrac - finalSnfFrac)) / (smpSolidsPct - targetSnfFrac)
+                : (QT * clrDifference * 0.25) / smpSolidsPct;
+
+            adjustment = { type: 'smp', amount: smpNeeded, amountLiters: smpNeeded / getMilkDensity(CT) };
+            steps.push(`   ⚠️ CLR Low -> Add SMP: ${smpNeeded.toFixed(4)} kg (Exact Mass Balance)`);
         } else {
-            // Add Water
-            const clrToDecrease = Math.abs(clrDifference);
-            const waterNeeded = (clrToDecrease * QT) / 50; 
+            // Add Water via Exact Mass Balance Equation:
+            // W = QT * (finalClr - CT) / CT
+            const waterNeeded = CT > 0 ? (QT * (finalClr - CT)) / CT : 0;
             adjustment = { type: 'water', amount: waterNeeded, amountLiters: waterNeeded };
-            steps.push(`   ⚠️ CLR High -> Add Water: ${waterNeeded.toFixed(4)} kg`);
+            steps.push(`   ⚠️ CLR High -> Add Water: ${waterNeeded.toFixed(4)} kg (Exact Mass Balance)`);
         }
+
+        const d1 = getMilkDensity(C1);
+        const d2 = getMilkDensity(C2);
 
         setCalculationSteps(steps);
         setResult({
             q1, q2,
-            q1Liters: q1 / componentProps.milkDensity,
-            q2Liters: q2 / componentProps.milkDensity,
+            q1Liters: q1 / d1,
+            q2Liters: q2 / d2,
             totalQtyKg: QT,
             finalFat, finalClr, finalSnf, targetSnf, clrDifference,
             adjustment
@@ -2052,14 +2162,14 @@ function TwoMilkBlendingToTargetCalc() {
                         <MemoizedInputField label="Fat % (F₁)" value={inputs.f1} name="f1" setter={handleInputChange} />
                         
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={m1Basis} onValueChange={(val) => setM1Basis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -2092,14 +2202,14 @@ function TwoMilkBlendingToTargetCalc() {
                         <MemoizedInputField label="Fat % (F₂)" value={inputs.f2} name="f2" setter={handleInputChange} />
                         
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={m2Basis} onValueChange={(val) => setM2Basis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-green-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -2160,8 +2270,8 @@ function TwoMilkBlendingToTargetCalc() {
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                        <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                        <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                        <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -2586,36 +2696,100 @@ function TwoComponentStandardizationCalc() {
         const water = { F: 0, SNF: 0, name: "Water", CLR: 0 };
         const smp = { F: smpFat, SNF: smpSnf, name: "SMP", CLR: 380 };
 
-        // Solve Equations
-        const deltaF = V0 * (Ft - Fi);
-        const deltaSNF = V0 * (SNFt - SNFi);
-        const C = [deltaF, deltaSNF];
+        // Helper matrix solver for 2 ingredients
+        const solveSystem = (
+            i1: { F: number; SNF: number; name: string },
+            i2: { F: number; SNF: number; name: string }
+        ) => {
+            const A = i1.F - Ft;
+            const B = i2.F - Ft;
+            const C = i1.SNF - SNFt;
+            const D = i2.SNF - SNFt;
+            const det = A * D - B * C;
 
-        // System 1: Ingredient + Water
-        const det1 = (mainIng.F - Ft) * (water.SNF - SNFt) - (water.F - Ft) * (mainIng.SNF - SNFt);
-        let X1 = Infinity, Y1 = Infinity;
-        if (Math.abs(det1) > 1e-9) {
-            X1 = (C[0] * (water.SNF - SNFt) - (water.F - Ft) * C[1]) / det1;
-            Y1 = ((mainIng.F - Ft) * C[1] - C[0] * (mainIng.SNF - SNFt)) / det1;
-        }
+            if (Math.abs(det) < 1e-9) {
+                return { valid: false, m1: 0, m2: 0 };
+            }
 
-        // System 2: Ingredient + SMP
-        const det2 = (mainIng.F - Ft) * (smp.SNF - SNFt) - (smp.F - Ft) * (mainIng.SNF - SNFt);
-        let X2 = Infinity, Z2 = Infinity;
-        if (Math.abs(det2) > 1e-9) {
-            X2 = (C[0] * (smp.SNF - SNFt) - (smp.F - Ft) * C[1]) / det2;
-            Z2 = ((mainIng.F - Ft) * C[1] - C[0] * (mainIng.SNF - SNFt)) / det2;
-        }
+            const R1 = V0 * (Ft - Fi);
+            const R2 = V0 * (SNFt - SNFi);
+            const m1 = (R1 * D - B * R2) / det;
+            const m2 = (A * R2 - R1 * C) / det;
+
+            if (!isFinite(m1) || !isFinite(m2) || m1 < -1e-5 || m2 < -1e-5) {
+                return { valid: false, m1: 0, m2: 0 };
+            }
+
+            return { valid: true, m1: Math.max(0, m1), m2: Math.max(0, m2) };
+        };
 
         let X = 0, Y = 0, Z = 0;
-        if (X1 >= -1e-6 && Y1 >= -1e-6) {
-            X = Math.max(0, X1); Y = Math.max(0, Y1);
-            steps.push(`✅ Solution Found: Add ${mainIng.name} & Water`);
-        } else if (X2 >= -1e-6 && Z2 >= -1e-6) {
-            X = Math.max(0, X2); Z = Math.max(0, Z2);
-            steps.push(`✅ Solution Found: Add ${mainIng.name} & SMP`);
+        let solutionFound = false;
+
+        if (correctionType === 'water') {
+            const sysA = solveSystem(water, smp);
+            if (sysA.valid) {
+                X = 0;
+                Y = sysA.m1; // Water
+                Z = sysA.m2; // SMP
+                solutionFound = true;
+                if (Z > 0.0001) {
+                    steps.push(`✅ Solution Found: Add Water (${Y.toFixed(4)} kg) & SMP (${Z.toFixed(4)} kg)`);
+                } else {
+                    steps.push(`✅ Solution Found: Add Water (${Y.toFixed(4)} kg)`);
+                }
+            } else if (Fi < Ft) {
+                const Fc = parseFloat(inputs.Fc) > 0 ? parseFloat(inputs.Fc)/100 : 0.40;
+                const creamIng = { F: Fc, SNF: creamSnf > 0 ? creamSnf/100 : 0.0544, name: "Cream" };
+                const sysB = solveSystem(creamIng, water);
+                const sysC = solveSystem(creamIng, smp);
+
+                if (sysB.valid) {
+                    X = sysB.m1; // Cream
+                    Y = sysB.m2; // Water
+                    Z = 0;
+                    solutionFound = true;
+                    steps.push(`⚠️ Note: Initial Fat (${inputs.Fi}%) < Target Fat (${inputs.Ft}%). Cream is added along with Water.`);
+                    steps.push(`✅ Solution Found: Add Cream (${X.toFixed(4)} kg) & Water (${Y.toFixed(4)} kg)`);
+                } else if (sysC.valid) {
+                    X = sysC.m1; // Cream
+                    Y = 0;
+                    Z = sysC.m2; // SMP
+                    solutionFound = true;
+                    steps.push(`⚠️ Note: Initial Fat (${inputs.Fi}%) < Target Fat (${inputs.Ft}%). Cream is added along with SMP.`);
+                    steps.push(`✅ Solution Found: Add Cream (${X.toFixed(4)} kg) & SMP (${Z.toFixed(4)} kg)`);
+                }
+            }
         } else {
-            setError("❌ Cannot find valid solution. Target impossible with given components.");
+            const sys1 = solveSystem(mainIng, water);
+            const sys2 = solveSystem(mainIng, smp);
+
+            if (sys1.valid) {
+                X = sys1.m1;
+                Y = sys1.m2;
+                Z = 0;
+                solutionFound = true;
+                steps.push(`✅ Solution Found: Add ${mainIng.name} (${X.toFixed(4)} kg) & Water (${Y.toFixed(4)} kg)`);
+            } else if (sys2.valid) {
+                X = sys2.m1;
+                Y = 0;
+                Z = sys2.m2;
+                solutionFound = true;
+                steps.push(`✅ Solution Found: Add ${mainIng.name} (${X.toFixed(4)} kg) & SMP (${Z.toFixed(4)} kg)`);
+            } else {
+                const sys3 = solveSystem(water, smp);
+                if (sys3.valid) {
+                    X = 0;
+                    Y = sys3.m1;
+                    Z = sys3.m2;
+                    solutionFound = true;
+                    steps.push(`✅ Solution Found: Add Water (${Y.toFixed(4)} kg) & SMP (${Z.toFixed(4)} kg)`);
+                }
+            }
+        }
+
+        if (!solutionFound) {
+            setError("❌ Cannot find valid solution with given parameters. Please check your target Fat/CLR values.");
             return;
         }
 
@@ -2743,14 +2917,14 @@ function TwoComponentStandardizationCalc() {
                         <MemoizedInputField label="Fat (Fᵢ) %" value={inputs.Fi} name="Fi" setter={handleInputChange} />
                         
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={initialBasis} onValueChange={(val) => setInitialBasis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -2783,14 +2957,14 @@ function TwoComponentStandardizationCalc() {
                         <MemoizedInputField label="Target Fat (F\u209c) %" value={inputs.Ft} name="Ft" setter={handleInputChange} />
                         
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={targetBasis} onValueChange={(val) => setTargetBasis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-green-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -2831,7 +3005,7 @@ function TwoComponentStandardizationCalc() {
                                 <SelectItem value="cream" className="text-base font-medium">Cream</SelectItem>
                                 <SelectItem value="rich_milk" className="text-base font-medium">Rich Milk</SelectItem>
                                 <SelectItem value="skim_milk" className="text-base font-medium">Skimmed Milk</SelectItem>
-                                <SelectItem value="water" className="text-base font-medium">Water (पानी)</SelectItem>
+                                <SelectItem value="water" className="text-base font-medium">Water</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -2879,7 +3053,7 @@ function TwoComponentStandardizationCalc() {
                     ) : (
                         <div className="md:col-span-3 flex items-center justify-center p-3 bg-blue-50 border border-blue-200 rounded-lg">
                             <span className="text-sm font-semibold text-blue-800">
-                                Water: 0% Fat, 0% SNF. No additional input parameters needed. (पानी: 0% फैट, 0% SNF)
+                                Water: 0% Fat, 0% SNF. No additional input parameters needed.
                             </span>
                         </div>
                     )}
@@ -4064,7 +4238,7 @@ function RecombinedMilkCalc() {
                     <SelectContent>
                         <SelectItem value="custom" className="text-base py-3">
                             <div className="flex flex-col">
-                                <span className="font-bold text-gray-800">Custom Formula (कस्टम फ़ॉर्मूला)</span>
+                                <span className="font-bold text-gray-800">Custom Formula</span>
                                 <span className="text-xs text-muted-foreground mt-1">SNF % = (CLR/4) + (Fat * Multiplier) + Constant</span>
                             </div>
                         </SelectItem>
@@ -4108,7 +4282,7 @@ function RecombinedMilkCalc() {
                 <div className="bg-gradient-to-br from-green-100 via-emerald-50 to-teal-100 p-4 md:p-6 rounded-xl border-2 border-green-400 shadow-lg">
                     <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-green-800">
                         <Target className="w-5 h-5" />
-                        Target Composition (टारगेट कम्पोजिशन)
+                        Target Composition
                     </h3>
                     <div className="space-y-4">
                         <div>
@@ -4143,14 +4317,14 @@ function RecombinedMilkCalc() {
                             />
 
                             <div>
-                                <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                                <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                                 <Select value={targetBasis} onValueChange={(val) => setTargetBasis(val as 'clr' | 'snf')}>
                                     <SelectTrigger className="h-10 border-2 border-green-300 font-semibold text-sm bg-white">
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                        <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                        <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                        <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -4190,7 +4364,7 @@ function RecombinedMilkCalc() {
                 <div className="bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-4 md:p-6 rounded-xl border-2 border-amber-400 shadow-lg">
                     <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-amber-800">
                         <Beaker className="w-5 h-5" />
-                        Ingredient Specs (सामग्री विशिष्टता)
+                        Ingredient Specs
                     </h3>
                     <div className="space-y-4">
                         <MemoizedInputField 
@@ -4382,6 +4556,7 @@ function RecombinedMilkCalc() {
 function ClrCorrectionCalc() {
     const [olr, setOlr] = useState("28.5");
     const [temp, setTemp] = useState("29");
+    const [standardTempSelect, setStandardTempSelect] = useState("27");
     
     // ✅ NEW: Tab State
     const [activeTab, setActiveTab] = useState<'summary' | 'verification'>('summary');
@@ -4404,6 +4579,7 @@ function ClrCorrectionCalc() {
         
         const olrNum = parseFloat(olr);
         const tempNum = parseFloat(temp);
+        const stdTempNum = parseFloat(standardTempSelect) || 27;
         
         if (isNaN(olrNum) || isNaN(tempNum)) {
             setError('⚠️ Please enter valid numbers for both fields.');
@@ -4411,13 +4587,13 @@ function ClrCorrectionCalc() {
         }
 
         const steps: string[] = [];
-        const standardTemp = 27;
+        const standardTemp = stdTempNum;
         const correctionFactor = 0.2;
         
         steps.push(`📊 **═══════════ STEP 1: INPUT VALUES ═══════════**`);
         steps.push(`\n   Observed Reading (OLR): ${olrNum}`);
         steps.push(`   Temperature: ${tempNum}°C`);
-        steps.push(`   Standard Temp: ${standardTemp}°C`);
+        steps.push(`   Standard Calibration Temp: ${standardTemp}°C`);
 
         const tempDiff = tempNum - standardTemp;
         steps.push(`\n🌡️ **TEMP DIFFERENCE**`);
@@ -4439,15 +4615,15 @@ function ClrCorrectionCalc() {
             correction,
             standardTemp
         });
-    }, [olr, temp]);
+    }, [olr, temp, standardTempSelect]);
 
     return (
         <CalculatorCard 
             title="CLR Temperature Correction Calculator" 
-            description="Correct Lactometer Reading (CLR) based on milk temperature deviation from standard 27°C"
+            description="Correct Lactometer Reading (CLR) based on milk temperature deviation from standard calibration temperature"
         >
             {/* Input Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
                 <div className="bg-gradient-to-br from-blue-100 via-cyan-50 to-sky-100 p-4 md:p-6 rounded-xl border-2 border-blue-400 shadow-lg">
                     <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-blue-800">
                         <Thermometer className="w-5 h-5" />
@@ -4459,10 +4635,30 @@ function ClrCorrectionCalc() {
                             type="number" 
                             value={olr} 
                             onChange={e => setOlr(e.target.value)} 
-                            className="h-11 text-base font-medium border-2 border-blue-300"
+                            className="h-11 text-base font-medium border-2 border-blue-300 bg-white"
                             placeholder="28.5"
                             step="0.1"
                         />
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-purple-100 via-purple-50 to-indigo-100 p-4 md:p-6 rounded-xl border-2 border-purple-400 shadow-lg">
+                    <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-purple-800">
+                        <Settings className="w-5 h-5" />
+                        Standard Temp Calibration
+                    </h3>
+                    <div>
+                        <Label className="text-sm font-semibold mb-2 block">Standard Calibration (°C)</Label>
+                        <Select value={standardTempSelect} onValueChange={setStandardTempSelect}>
+                            <SelectTrigger className="h-11 text-base font-medium border-2 border-purple-300 bg-white">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="27">27°C (ISI / BIS Standard)</SelectItem>
+                                <SelectItem value="20">20°C (ISO Standard)</SelectItem>
+                                <SelectItem value="15.5">15.5°C / 60°F (British Standard)</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
 
@@ -4472,17 +4668,17 @@ function ClrCorrectionCalc() {
                         Milk Temperature
                     </h3>
                     <div>
-                        <Label className="text-sm font-semibold mb-2 block">Temperature (°C)</Label>
+                        <Label className="text-sm font-semibold mb-2 block">Sample Temperature (°C)</Label>
                         <Input 
                             type="number" 
                             value={temp} 
                             onChange={e => setTemp(e.target.value)} 
-                            className="h-11 text-base font-medium border-2 border-orange-300"
+                            className="h-11 text-base font-medium border-2 border-orange-300 bg-white"
                             placeholder="29"
                             step="0.1"
                         />
                         <p className="text-xs text-orange-700 mt-2 font-semibold">
-                            Standard calibration: 27°C
+                            Correction: ±0.2 CLR per 1°C deviation
                         </p>
                     </div>
                 </div>
@@ -5234,14 +5430,14 @@ function ClrIncreaseCalc() {
                         />
 
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={initialBasis} onValueChange={(val) => setInitialBasis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -5282,14 +5478,14 @@ function ClrIncreaseCalc() {
                     </h3>
                     <div className="space-y-4">
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={targetBasis} onValueChange={(val) => setTargetBasis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-green-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -5730,7 +5926,7 @@ function ClrBlendingCalc() {
                 <div className="bg-gradient-to-br from-green-100 via-emerald-50 to-teal-100 p-4 md:p-6 rounded-xl border-2 border-green-400 shadow-lg">
                     <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-green-800">
                         <TrendingUp className="w-5 h-5" />
-                        High CLR Milk (उच्च CLR दूध)
+                        High CLR Milk
                     </h3>
                     <div className="space-y-4">
                         <MemoizedInputField 
@@ -5742,14 +5938,14 @@ function ClrBlendingCalc() {
                         />
 
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={highBasis} onValueChange={(val) => setHighBasis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-green-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -5788,7 +5984,7 @@ function ClrBlendingCalc() {
                 <div className="bg-gradient-to-br from-blue-100 via-cyan-50 to-sky-100 p-4 md:p-6 rounded-xl border-2 border-blue-400 shadow-lg">
                     <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-blue-800">
                         <TrendingDown className="w-5 h-5" />
-                        Low CLR Milk (कम CLR दूध)
+                        Low CLR Milk
                     </h3>
                     <div className="space-y-4">
                         <MemoizedInputField 
@@ -5800,14 +5996,14 @@ function ClrBlendingCalc() {
                         />
 
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={lowBasis} onValueChange={(val) => setLowBasis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-blue-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -5846,7 +6042,7 @@ function ClrBlendingCalc() {
                 <div className="bg-gradient-to-br from-purple-100 via-pink-50 to-rose-100 p-4 md:p-6 rounded-xl border-2 border-purple-400 shadow-lg">
                     <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-purple-800">
                         <Target className="w-5 h-5" />
-                        Target CLR (टारगेट CLR)
+                        Target CLR
                     </h3>
                     <div className="space-y-4">
                         <MemoizedInputField 
@@ -5858,14 +6054,14 @@ function ClrBlendingCalc() {
                         />
 
                         <div>
-                            <Label className="text-xs font-semibold mb-1 block">Input Mode (इनपुट मोड चुनें)</Label>
+                            <Label className="text-xs font-semibold mb-1 block">Input Mode</Label>
                             <Select value={targetBasis} onValueChange={(val) => setTargetBasis(val as 'clr' | 'snf')}>
                                 <SelectTrigger className="h-10 border-2 border-purple-300 font-semibold text-sm bg-white">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading (CLR दर्ज करें)</SelectItem>
-                                    <SelectItem value="snf" className="text-sm py-2">SNF % (SNF % दर्ज करें)</SelectItem>
+                                    <SelectItem value="clr" className="text-sm py-2">CLR Reading</SelectItem>
+                                    <SelectItem value="snf" className="text-sm py-2">SNF %</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -5904,7 +6100,7 @@ function ClrBlendingCalc() {
                 <div className="bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-4 md:p-6 rounded-xl border-2 border-amber-400 shadow-lg">
                     <h3 className="font-bold text-base md:text-lg mb-4 flex items-center gap-2 text-amber-800">
                         <Scale className="w-5 h-5" />
-                        Batch Size (बैच साइज़)
+                        Batch Size
                     </h3>
                     <div className="space-y-4">
                         <div>
