@@ -33,10 +33,10 @@ const TUTORIAL_VIDEOS: VideoTutorial[] = [
   {
     id: "std-calc",
     title: "Milk Standardization & Pearson Square",
-    duration: "4:45",
+    duration: "1:00",
     category: "calculators",
     description: "Learn how to accurately standardise Fat and SNF percentages in raw milk batches using Pearson Square and blending calculations.",
-    youtubeId: "L_LUpnjgPso", // Dairy Milk Standardization & Pearson Square
+    youtubeId: "dyuTFg28TO0", // Milk Standardization Shorts Tutorial
     thumbnailBg: "from-blue-600 to-indigo-700",
     bullets: [
       "Target Fat & SNF calculation methodology",
