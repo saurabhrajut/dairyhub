@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage } from '@/context/language-context';
-import { Heart, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift, Sparkles, Shield, CheckCircle2, Star, Play } from 'lucide-react';
+import { Heart, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift, Sparkles, Shield, CheckCircle2, Star, Play, Bookmark, MessageSquarePlus, Video, Trash2 } from 'lucide-react';
 import type { Department } from '@/context/auth-context';
 import { useReadingMode } from '@/context/reading-mode-context';
 import { Switch } from '@/components/ui/switch';
@@ -18,6 +18,9 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { OnboardingTourModal } from '@/components/onboarding-tour-modal';
+import { useFavorites } from '@/context/favorites-context';
+import { UserFeedbackModal } from '@/components/user-feedback-modal';
+import { TutorialVideosModal } from '@/components/tutorial-videos-modal';
 
 // ============================================================
 // 🔑 RAZORPAY CONFIG
@@ -82,11 +85,14 @@ export default function ProfilePage() {
     const { toast } = useToast();
     const router = useRouter();
     const { theme, setTheme, isEnabled, setIsEnabled } = useReadingMode();
+    const { favorites, removeFavorite } = useFavorites();
 
     const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen]           = useState(false);
     const [isHelpOpen, setIsHelpOpen]                   = useState(false);
     const [isTourOpen, setIsTourOpen]                   = useState(false);
+    const [isFeedbackOpen, setIsFeedbackOpen]           = useState(false);
+    const [isTutorialsOpen, setIsTutorialsOpen]         = useState(false);
     const [isEditingName, setIsEditingName]             = useState(false);
     const [tempName, setTempName]                       = useState('');
 
@@ -612,9 +618,67 @@ export default function ProfilePage() {
                     </div>
                 </div>
 
+                {/* ⭐ Saved Favorites & Quick Access */}
+                <div className="glass-card p-6 rounded-2xl neon-border space-y-4">
+                    <div className="flex items-center justify-between">
+                        <h3 className="font-bold text-gray-700 flex items-center gap-2">
+                            <Bookmark className="w-5 h-5 text-amber-500 fill-amber-400" /> Saved Favorites & Quick Access
+                        </h3>
+                        <span className="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full">
+                            {favorites.length} saved
+                        </span>
+                    </div>
+
+                    {favorites.length === 0 ? (
+                        <div className="text-center py-5 text-xs text-gray-400 border border-dashed border-gray-200 rounded-xl">
+                            No favorite calculators or notes saved yet. Tap the bookmark icon on any topic to save it for quick access!
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {favorites.map((fav) => (
+                                <div
+                                    key={fav.id}
+                                    className="p-3 bg-white/80 border border-gray-100 rounded-xl flex items-center justify-between gap-2 shadow-sm hover:shadow-md transition-all group"
+                                >
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                        <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
+                                            <Bookmark className="w-4 h-4 fill-amber-500" />
+                                        </div>
+                                        <div className="truncate">
+                                            <p className="text-xs font-bold text-gray-800 truncate">{fav.title}</p>
+                                            <p className="text-[10px] text-gray-400 capitalize">{fav.category}</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => removeFavorite(fav.id)}
+                                        className="p-1 text-gray-300 hover:text-rose-500 transition-colors"
+                                        title="Remove favorite"
+                                    >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
                 {/* Menu */}
                 <div className="glass-card rounded-2xl overflow-hidden neon-border">
                     <ul className="divide-y divide-gray-200">
+                        <li onClick={() => setIsTutorialsOpen(true)} className="flex justify-between items-center p-4 hover:bg-blue-50 cursor-pointer transition-all">
+                            <span className="flex items-center gap-3 text-blue-900 font-bold">
+                                <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-2 rounded-lg shadow-lg"><Video className="w-5 h-5 text-white"/></div>
+                                Watch Video Tutorials 📺
+                            </span>
+                            <ChevronRight className="h-5 w-5 text-blue-500"/>
+                        </li>
+                        <li onClick={() => setIsFeedbackOpen(true)} className="flex justify-between items-center p-4 hover:bg-indigo-50 cursor-pointer transition-all">
+                            <span className="flex items-center gap-3 text-indigo-900 font-bold">
+                                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg shadow-lg"><MessageSquarePlus className="w-5 h-5 text-white"/></div>
+                                User Feedback & Suggestions 💬
+                            </span>
+                            <ChevronRight className="h-5 w-5 text-indigo-500"/>
+                        </li>
                         <li onClick={() => setIsSettingsOpen(true)} className="flex justify-between items-center p-4 hover:bg-white/50 cursor-pointer transition-all">
                             <span className="flex items-center gap-3 text-gray-700 font-medium">
                                 <div className="bg-gradient-to-br from-orange-300 to-orange-500 p-2 rounded-lg shadow-lg"><Settings className="w-5 h-5 text-white"/></div>
@@ -746,6 +810,12 @@ export default function ProfilePage() {
                     </div>
                 </DialogContent>
             </Dialog>
+
+            {/* User Feedback Modal */}
+            <UserFeedbackModal open={isFeedbackOpen} onOpenChange={setIsFeedbackOpen} />
+
+            {/* Video Tutorials Modal */}
+            <TutorialVideosModal open={isTutorialsOpen} onOpenChange={setIsTutorialsOpen} />
         </div>
         </>
     );
