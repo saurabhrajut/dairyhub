@@ -4,13 +4,26 @@ import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Milk, Calculator, FileSpreadsheet, Bot, ChevronRight, ChevronLeft, Sparkles, CheckCircle2, Star } from "lucide-react";
+import {
+  Milk,
+  Calculator,
+  FileSpreadsheet,
+  Bot,
+  ChevronRight,
+  ChevronLeft,
+  CheckCircle2,
+  Bookmark,
+  Video,
+  ShieldCheck,
+  Recycle,
+  Lightbulb,
+  PackageCheck,
+  Globe,
+} from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 interface TourStep {
   title: string;
@@ -20,44 +33,109 @@ interface TourStep {
   badge: string;
   color: string;
   bgGradient: string;
+  highlights: string[];
 }
 
 const TOUR_STEPS: TourStep[] = [
   {
     title: "Welcome to Dairy Hub! 🥛",
     subtitle: "Your Complete Digital Dairy Engineering & Processing Companion",
-    description: "Access advanced standardization algorithms, dairy science modules, FSSAI quality audit formats, and industrial production calculators in one unified app.",
+    description: "Access advanced milk standardization algorithms, dairy science modules, FSSAI quality audit formats, and industrial production calculators in one unified app.",
     icon: Milk,
-    badge: "Step 1 of 4",
+    badge: "Step 1 of 10",
     color: "text-blue-500",
-    bgGradient: "from-blue-600 via-indigo-600 to-purple-700"
+    bgGradient: "from-blue-600 via-indigo-600 to-purple-700",
+    highlights: ["Complete Dairy Technology Suite", "Offline Capable Calculations", "Industry Standard Formats"]
   },
   {
-    title: "Precision Calculators & Mass Balance 🧮",
+    title: "Precision Standardization & Calculators 🧮",
     subtitle: "Zero-Tolerance Math Calibration",
-    description: "Compute Pearson square standardization, SMP/water blending equations, paneer yields, ice cream mixes, and ETP effluent plant parameters with scientific accuracy.",
+    description: "Compute Pearson Square standardization, SMP/water blending equations, paneer yields, ice cream mixes, and ETP effluent plant parameters with scientific accuracy.",
     icon: Calculator,
-    badge: "Step 2 of 4",
+    badge: "Step 2 of 10",
     color: "text-emerald-500",
-    bgGradient: "from-emerald-600 via-teal-600 to-cyan-700"
+    bgGradient: "from-emerald-600 via-teal-600 to-cyan-700",
+    highlights: ["Pearson Square Fat & SNF Blending", "Lactometer Temp Correction (CLR)", "Chemical Solutions Prep (N/10 NaOH)"]
   },
   {
-    title: "Excel Production Reports & A4 PDF 📦",
-    subtitle: "Pouch Packing & Film Wastage Reconciliation",
-    description: "Create running packaging logs, crate counts, and unaccounted loss reconciliations. Lock your plant templates and export official A4 PDF reports instantly.",
-    icon: FileSpreadsheet,
-    badge: "Step 3 of 4",
+    title: "QA/QC Formats & FSSAI Compliance 📋",
+    subtitle: "Quality Standards & Platform Testing",
+    description: "Instant lookup for FSSAI milk standards across all categories. Complete platform testing guides for MBRT, alcohol test, lactometer reading, and adulteration detection.",
+    icon: ShieldCheck,
+    badge: "Step 3 of 10",
     color: "text-amber-500",
-    bgGradient: "from-amber-600 via-orange-600 to-red-700"
+    bgGradient: "from-amber-600 via-orange-600 to-red-700",
+    highlights: ["FSSAI Regulatory Limits", "Rapid Adulteration Check (Urea, Starch)", "GMP Quality Audit Checklists"]
+  },
+  {
+    title: "CIP Sanitization & Plant Engineering 🧼",
+    subtitle: "Hygiene Compliance & Effluent Management",
+    description: "Master Clean-In-Place chemical dosing calculations for Caustic Soda (NaOH) and Nitric Acid, rinse efficiency, and ETP effluent plant parameter calculations.",
+    icon: Recycle,
+    badge: "Step 4 of 10",
+    color: "text-cyan-500",
+    bgGradient: "from-cyan-600 via-teal-600 to-blue-800",
+    highlights: ["CIP Chemical Strength Dosage", "Time-Temp Sanitization Cycles", "ETP Effluent Treatment Ratios"]
+  },
+  {
+    title: "Packaging & Film Loss Reconciliation 📦",
+    subtitle: "Pouch Packing Logs & Crate Tracking",
+    description: "Create running packaging logs, pouch weight variation charts, film wastage accounting, and unaccounted milk loss reconciliations with A4 PDF export.",
+    icon: PackageCheck,
+    badge: "Step 5 of 10",
+    color: "text-orange-500",
+    bgGradient: "from-orange-600 via-amber-600 to-red-700",
+    highlights: ["Film Wastage % Calculation", "Pouch Weight & Leak Testing Logs", "A4 PDF Exportable Reports"]
+  },
+  {
+    title: "Daily Technical Tips & Insights 💡",
+    subtitle: "Practical Industry Knowledge Feed",
+    description: "Receive daily practical tips on milk reception docks, thermal kinetics, homogenization pressures, seasonal SNF variations, and ghee aroma optimization.",
+    icon: Lightbulb,
+    badge: "Step 6 of 10",
+    color: "text-yellow-500",
+    bgGradient: "from-amber-500 via-yellow-600 to-orange-700",
+    highlights: ["Daily Practical Dairy Tips", "Troubleshooting Homogenization Pressures", "Seasonal Fat & SNF Seasonal Guidance"]
+  },
+  {
+    title: "Saved Favorites & Quick Access ⭐",
+    subtitle: "Personalized Profile & Custom Bookmarks",
+    description: "Bookmark your most-used calculators and quality notes with 1-tap. Access your saved tools anytime from your profile dashboard for instant shift access.",
+    icon: Bookmark,
+    badge: "Step 7 of 10",
+    color: "text-purple-500",
+    bgGradient: "from-purple-600 via-violet-600 to-indigo-800",
+    highlights: ["1-Tap Card Bookmarking", "Saved Favorites Profile List", "Quick Shift Launch Dashboard"]
+  },
+  {
+    title: "Visual Video Tutorials 📺",
+    subtitle: "Step-by-Step Practical Guides",
+    description: "Watch step-by-step HD video tutorials covering milk standardization, platform testing, chemical titrations, and Sarathi AI usage directly inside the app.",
+    icon: Video,
+    badge: "Step 8 of 10",
+    color: "text-pink-500",
+    bgGradient: "from-pink-600 via-rose-600 to-red-700",
+    highlights: ["Interactive HD Video Player", "Practical Lab Testing Demos", "Key Takeaways Summary"]
+  },
+  {
+    title: "Multi-Language & Reading Themes 🌐",
+    subtitle: "Bilingual Experience & Eye Protection",
+    description: "Switch seamlessly between English and Hinglish. Activate eye-friendly reading mode themes (Sepia, Slate, Night, Paper, Mint) for long night shifts.",
+    icon: Globe,
+    badge: "Step 9 of 10",
+    color: "text-blue-500",
+    bgGradient: "from-sky-600 via-blue-600 to-indigo-800",
+    highlights: ["English & Hinglish Support", "Eye Protection Themes (Sepia, Night)", "Custom Profile Options"]
   },
   {
     title: "Sarathi AI Assistant 🤖",
     subtitle: "Real-time Dairy Technology & QA Consultation",
-    description: "Ask Sarathi AI any questions regarding milk microbiology, adulteration testing, CIP cleaning procedures, pasteurization CCPs, or lab equipment troubleshooting.",
+    description: "Ask Sarathi AI any questions regarding milk microbiology, product defects (Dahi, Paneer, Ghee, Butter), CIP procedures, pasteurization CCPs, or lab equipment.",
     icon: Bot,
-    badge: "Step 4 of 4",
-    color: "text-purple-500",
-    bgGradient: "from-purple-600 via-violet-600 to-indigo-800"
+    badge: "Step 10 of 10",
+    color: "text-emerald-500",
+    bgGradient: "from-teal-600 via-emerald-600 to-indigo-800",
+    highlights: ["24/7 Technical Consultation", "Product Defect Troubleshooting", "English & Hinglish Voice/Text Support"]
   }
 ];
 
@@ -68,24 +146,34 @@ export function OnboardingTourModal({
   isOpen?: boolean;
   onClose?: () => void;
 }) {
+  const { user } = useAuth();
   const [internalOpen, setInternalOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+
+  const getStorageKey = () => {
+    return user?.uid ? `dairyhub_onboarding_done_${user.uid}` : "dairyhub_onboarding_completed";
+  };
 
   useEffect(() => {
     if (typeof isOpen === "boolean") {
       setInternalOpen(isOpen);
       if (isOpen) setCurrentStep(0);
     } else {
-      // Auto-trigger for first-time users
-      const hasCompleted = localStorage.getItem("dairyhub_onboarding_completed");
+      // Auto-trigger for new users logging in / signing up for the first time
+      const storageKey = getStorageKey();
+      const hasCompleted = localStorage.getItem(storageKey);
       if (!hasCompleted) {
-        setInternalOpen(true);
+        const timer = setTimeout(() => {
+          setInternalOpen(true);
+        }, 600);
+        return () => clearTimeout(timer);
       }
     }
-  }, [isOpen]);
+  }, [isOpen, user]);
 
   const handleClose = () => {
-    localStorage.setItem("dairyhub_onboarding_completed", "true");
+    const storageKey = getStorageKey();
+    localStorage.setItem(storageKey, "true");
     setInternalOpen(false);
     if (onClose) onClose();
   };
@@ -109,15 +197,15 @@ export function OnboardingTourModal({
 
   return (
     <Dialog open={internalOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
-      <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl bg-slate-950 text-white">
+      <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border border-slate-800 shadow-2xl bg-slate-950 text-white">
         {/* Step Banner */}
-        <div className={`p-8 bg-gradient-to-br ${stepData.bgGradient} relative flex flex-col items-center text-center space-y-3`}>
+        <div className={`p-7 bg-gradient-to-br ${stepData.bgGradient} relative flex flex-col items-center text-center space-y-3`}>
           <div className="absolute top-4 right-4">
             <Button
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              className="text-white/70 hover:text-white hover:bg-white/10 text-xs rounded-full px-3"
+              className="text-white/80 hover:text-white hover:bg-white/10 text-xs rounded-full px-3"
             >
               Skip
             </Button>
@@ -131,7 +219,7 @@ export function OnboardingTourModal({
             <StepIcon className="w-8 h-8 text-white" />
           </div>
 
-          <h2 className="text-xl font-bold text-white tracking-tight">
+          <h2 className="text-lg font-bold text-white tracking-tight leading-snug">
             {stepData.title}
           </h2>
           <p className="text-xs text-white/80 font-medium max-w-xs">
@@ -140,26 +228,39 @@ export function OnboardingTourModal({
         </div>
 
         {/* Step Description & Navigation */}
-        <div className="p-6 space-y-6 bg-slate-900">
+        <div className="p-6 space-y-5 bg-slate-900">
           <p className="text-xs text-slate-300 leading-relaxed text-center">
             {stepData.description}
           </p>
 
+          {/* Highlights List */}
+          <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1.5">
+            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block text-center">Key Highlights</span>
+            <div className="space-y-1">
+              {stepData.highlights.map((h, i) => (
+                <div key={i} className="flex items-center gap-2 text-[11px] text-slate-200">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{h}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Dots Indicator */}
-          <div className="flex justify-center items-center gap-1.5">
+          <div className="flex justify-center items-center gap-1 overflow-x-auto py-1 no-scrollbar max-w-xs mx-auto">
             {TOUR_STEPS.map((_, idx) => (
               <div
                 key={idx}
                 onClick={() => setCurrentStep(idx)}
-                className={`h-2 rounded-full transition-all cursor-pointer ${
-                  idx === currentStep ? "w-6 bg-emerald-400" : "w-2 bg-slate-700 hover:bg-slate-600"
+                className={`h-2 rounded-full transition-all cursor-pointer shrink-0 ${
+                  idx === currentStep ? "w-5 bg-emerald-400" : "w-1.5 bg-slate-700 hover:bg-slate-600"
                 }`}
               />
             ))}
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center justify-between gap-3 pt-2">
+          <div className="flex items-center justify-between gap-3 pt-1">
             <Button
               variant="outline"
               size="sm"
