@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { LogOut, Milk } from "lucide-react";
+import { LogOut, Milk, ShieldAlert } from "lucide-react";
 
 export function AppBackButtonHandler() {
   const router = useRouter();
@@ -27,23 +27,51 @@ export function AppBackButtonHandler() {
         const { Capacitor } = await import("@capacitor/core");
         if (Capacitor.isNativePlatform()) {
           const { App } = await import("@capacitor/app");
-          
+
           listenerHandle = await App.addListener("backButton", ({ canGoBack }) => {
-            // If any modal/dialog is open or exit dialog is visible, don't trigger app close
-            const isAnyModalOpen = document.querySelectorAll('[role="dialog"]').length > 0;
-            if (isAnyModalOpen && !showExitDialog) {
-              // Pressing back when a modal is open will naturally close modals or go back
+            // 1. If exit dialog is already showing, dismiss it
+            if (showExitDialog) {
+              setShowExitDialog(false);
               return;
             }
 
-            if (pathname === "/" || pathname === "/login") {
-              // On home page or login, show exit confirmation dialog instead of instant crash/exit
-              setShowExitDialog(true);
-            } else if (canGoBack) {
-              router.back();
-            } else {
-              setShowExitDialog(true);
+            // 2. Check if any open dialog/modal is visible in DOM
+            const openModals = document.querySelectorAll('[role="dialog"]');
+            if (openModals.length > 0) {
+              // Trigger Escape keyboard event to trigger Radix UI / custom modal dismiss
+              const escapeEvent = new KeyboardEvent("keydown", {
+                key: "Escape",
+                code: "Escape",
+                keyCode: 27,
+                which: 27,
+                bubbles: true,
+                cancelable: true,
+              });
+              document.dispatchEvent(escapeEvent);
+
+              // Also query and click top-most modal close button if available
+              const closeButtons = document.querySelectorAll(
+                '[role="dialog"] button[aria-label="Close"], [role="dialog"] .modal-close-btn, [role="dialog"] button:has(svg)'
+              );
+              if (closeButtons.length > 0) {
+                const topCloseBtn = closeButtons[closeButtons.length - 1] as HTMLElement;
+                if (topCloseBtn) topCloseBtn.click();
+              }
+              return;
             }
+
+            // 3. If user is on a sub-route (e.g. /profile, /login, /signup), go back or go to home
+            if (pathname !== "/" && pathname !== "/login") {
+              if (canGoBack || (typeof window !== "undefined" && window.history.length > 1)) {
+                router.back();
+              } else {
+                router.push("/");
+              }
+              return;
+            }
+
+            // 4. If user is on main home screen with no open modals, display Exit Confirmation Dialog
+            setShowExitDialog(true);
           });
         }
       } catch (err) {
@@ -81,7 +109,7 @@ export function AppBackButtonHandler() {
             Exit Dairy Hub App?
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-xs text-slate-400">
-            Are you sure you want to close the app? All your session data is saved.
+            Are you sure you want to exit? Your calculations and session progress are saved.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex flex-row justify-center gap-2 mt-4 sm:space-x-0">
