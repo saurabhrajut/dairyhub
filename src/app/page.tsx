@@ -1,12 +1,13 @@
-'use client';
+"use client";
 
-import { Header } from '@/components/header';
-import { TopicGrid } from '@/components/topic-grid';
-import { DailyTip } from '@/components/daily-tip';
-import { SarathiChatWidget } from '@/components/sarathi-chat-widget';
+import dynamic from 'next/dynamic';
+const Header = dynamic(() => import('@/components/header').then(m => ({ default: m.Header })), { ssr: false });
+const TopicGrid = dynamic(() => import('@/components/topic-grid').then(m => ({ default: m.TopicGrid })), { ssr: false, loading: () => <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div> });
+const DailyTip = dynamic(() => import('@/components/daily-tip').then(m => ({ default: m.DailyTip })), { ssr: false });
+const SarathiChatWidget = dynamic(() => import('@/components/sarathi-chat-widget').then(m => ({ default: m.SarathiChatWidget })), { ssr: false });
 import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine, Loader2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
-import SplashScreen from '@/components/splash-screen';
+const SplashScreen = dynamic(() => import('@/components/splash-screen'), { ssr: false });
 import { useSplashScreen } from '@/context/splash-screen-context';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
@@ -40,6 +41,8 @@ const AnimatedBackground = () => {
 };
 
 
+const OnboardingTourModal = dynamic(() => import('@/components/onboarding-tour-modal').then(m => ({ default: m.OnboardingTourModal })), { ssr: false });
+
 export default function Home() {
   const { isFinished, setIsFinished } = useSplashScreen();
   const [isBouncing, setIsBouncing] = useState(false);
@@ -61,7 +64,7 @@ export default function Home() {
   };
 
   if (!isFinished) {
-    return <SplashScreen onFinished={() => setIsFinished(true)} />;
+    return <SplashScreen />;
   }
   
   if (loading || !user) {
@@ -117,11 +120,12 @@ export default function Home() {
               Terms of Service
             </a>
           </div>
-          <p className="mt-4 text-xs text-gray-400">© 2025 DairyHub. All rights reserved.</p>
+          <p className="mt-4 text-xs text-gray-400">© 2025 Dairy Hub. All rights reserved.</p>
         </footer>
 
       </div>
       <SarathiChatWidget />
+      <OnboardingTourModal />
     </div>
   );
 }
