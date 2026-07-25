@@ -26,10 +26,24 @@ const notoDevanagari = Noto_Sans_Devanagari({
   weight: ['400', '700'],
 });
 
+import { FavoritesProvider } from '@/context/favorites-context';
+
 export const metadata = {
-  title: 'Dairy Hub',
-  description: 'Your digital dairy guide for science, processing, and quality',
+  title: 'Dairy Hub: Dairy Technology, Milk Standardization & QA Guide',
+  description: 'The ultimate digital companion for dairy technology, milk standardization calculations, SNF & Fat estimation, dairy processing guides, QA/QC formats, and plant quality assurance.',
   applicationName: 'Dairy Hub',
+  keywords: [
+    'Dairy Technology',
+    'Milk Standardization Calculator',
+    'Dairy Processing App',
+    'Pearson Square Milk',
+    'SNF Fat Calculator',
+    'Dairy QA QC Formats',
+    'Dairy Plant Management',
+    'FSSAI Dairy Standards',
+    'Milk Testing Equipment',
+    'Dairy Hub'
+  ],
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -78,7 +92,9 @@ export default function RootLayout({
               <LanguageProvider>
                 <SubscriptionProvider>
                   <AuthProvider>
-                    {children}
+                    <FavoritesProvider>
+                      {children}
+                    </FavoritesProvider>
                   </AuthProvider>
                 </SubscriptionProvider>
               </LanguageProvider>
