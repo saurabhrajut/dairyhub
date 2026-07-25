@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -29,6 +30,7 @@ import {
   Atom,
   Combine,
   ShieldAlert,
+  Bookmark,
 } from "lucide-react";
 import { ReagentIcon, PaneerIcon, IceCreamIcon, HplcIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -37,35 +39,36 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSubscription } from "@/context/subscription-context";
+import { useFavorites } from "@/context/favorites-context";
 
-// All Modals are imported here
-import { DairyIndustryModal } from "./info-modals/dairy-industry-modal";
-import { MilkChemistryModal } from "./info-modals/milk-chemistry-modal";
-import { AdulterationModal } from "./info-modals/adulteration-modal";
-import { StandardizationIModal } from "./calculators/standardization-i-modal";
-import { StandardizationIIModal } from "./calculators/standardization-ii-modal";
-import { SolutionsPrepModal } from "./calculators/solutions-prep-modal";
-import { DairyProcessingModal } from "./info-modals/dairy-processing-modal";
-import { AboutUsModal } from "./info-modals/about-us-modal";
-import { CompositionalAnalysisModal } from "./info-modals/compositional-analysis-modal";
-import { CalibrationStandardizationModal } from "./info-modals/calibration-standardization-modal";
-import { QualityConceptModal } from "./info-modals/quality-concept-modal";
-import { WaterTestingModal } from "./info-modals/water-testing-modal";
-import { PackagingMaterialTestingModal } from "./info-modals/packaging-material-testing-modal";
-import { LabEquipmentsModal } from "./info-modals/lab-equipments-modal";
-import { CipProcessModal } from "./info-modals/cip-process-modal";
-import { MicrobiologyTestingModal } from "./info-modals/microbiology-testing-modal";
-import { MilkHandlingPreservationModal } from "./info-modals/milk-handling-preservation-modal";
-import { FssaiStandardsModal } from "./info-modals/fssai-standards-modal";
-import { VariousCalculatorsModal } from "./calculators/various-calculators-modal";
-import { ProductsProcessingModal } from "./info-modals/products-processing-modal";
-import { AuditsModal } from "./info-modals/audits-modal";
-import { ValidationVerificationModal } from "./info-modals/validation-verification-modal";
-import { EtpModal } from "./info-modals/etp-modal";
-import { ExpertSupportModal } from "./info-modals/expert-support-modal";
-import { ProductionCalculationsModal } from "./calculators/production-calculations-modal";
-import { PestControlModal } from "./info-modals/pest-control-modal";
-import { ChromatographyModal } from "./info-modals/chromatography-modal";
+// All Modals - dynamically imported to prevent compilation hang
+const DairyIndustryModal = dynamic(() => import("./info-modals/dairy-industry-modal").then(m => ({ default: m.DairyIndustryModal })), { ssr: false });
+const MilkChemistryModal = dynamic(() => import("./info-modals/milk-chemistry-modal").then(m => ({ default: m.MilkChemistryModal })), { ssr: false });
+const AdulterationModal = dynamic(() => import("./info-modals/adulteration-modal").then(m => ({ default: m.AdulterationModal })), { ssr: false });
+const StandardizationIModal = dynamic(() => import("./calculators/standardization-i-modal").then(m => ({ default: m.StandardizationIModal })), { ssr: false });
+const StandardizationIIModal = dynamic(() => import("./calculators/standardization-ii-modal").then(m => ({ default: m.StandardizationIIModal })), { ssr: false });
+const SolutionsPrepModal = dynamic(() => import("./calculators/solutions-prep-modal").then(m => ({ default: m.SolutionsPrepModal })), { ssr: false });
+const DairyProcessingModal = dynamic(() => import("./info-modals/dairy-processing-modal").then(m => ({ default: m.DairyProcessingModal })), { ssr: false });
+const AboutUsModal = dynamic(() => import("./info-modals/about-us-modal").then(m => ({ default: m.AboutUsModal })), { ssr: false });
+const CompositionalAnalysisModal = dynamic(() => import("./info-modals/compositional-analysis-modal").then(m => ({ default: m.CompositionalAnalysisModal })), { ssr: false });
+const CalibrationStandardizationModal = dynamic(() => import("./info-modals/calibration-standardization-modal").then(m => ({ default: m.CalibrationStandardizationModal })), { ssr: false });
+const QualityConceptModal = dynamic(() => import("./info-modals/quality-concept-modal").then(m => ({ default: m.QualityConceptModal })), { ssr: false });
+const WaterTestingModal = dynamic(() => import("./info-modals/water-testing-modal").then(m => ({ default: m.WaterTestingModal })), { ssr: false });
+const PackagingMaterialTestingModal = dynamic(() => import("./info-modals/packaging-material-testing-modal").then(m => ({ default: m.PackagingMaterialTestingModal })), { ssr: false });
+const LabEquipmentsModal = dynamic(() => import("./info-modals/lab-equipments-modal").then(m => ({ default: m.LabEquipmentsModal })), { ssr: false });
+const CipProcessModal = dynamic(() => import("./info-modals/cip-process-modal").then(m => ({ default: m.CipProcessModal })), { ssr: false });
+const MicrobiologyTestingModal = dynamic(() => import("./info-modals/microbiology-testing-modal").then(m => ({ default: m.MicrobiologyTestingModal })), { ssr: false });
+const MilkHandlingPreservationModal = dynamic(() => import("./info-modals/milk-handling-preservation-modal").then(m => ({ default: m.MilkHandlingPreservationModal })), { ssr: false });
+const FssaiStandardsModal = dynamic(() => import("./info-modals/fssai-standards-modal").then(m => ({ default: m.FssaiStandardsModal })), { ssr: false });
+const VariousCalculatorsModal = dynamic(() => import("./calculators/various-calculators-modal").then(m => ({ default: m.VariousCalculatorsModal })), { ssr: false });
+const ProductsProcessingModal = dynamic(() => import("./info-modals/products-processing-modal").then(m => ({ default: m.ProductsProcessingModal })), { ssr: false });
+const AuditsModal = dynamic(() => import("./info-modals/audits-modal").then(m => ({ default: m.AuditsModal })), { ssr: false });
+const ValidationVerificationModal = dynamic(() => import("./info-modals/validation-verification-modal").then(m => ({ default: m.ValidationVerificationModal })), { ssr: false });
+const EtpModal = dynamic(() => import("./info-modals/etp-modal").then(m => ({ default: m.EtpModal })), { ssr: false });
+const ExpertSupportModal = dynamic(() => import("./info-modals/expert-support-modal").then(m => ({ default: m.ExpertSupportModal })), { ssr: false });
+const ProductionCalculationsModal = dynamic(() => import("./calculators/production-calculations-modal").then(m => ({ default: m.ProductionCalculationsModal })), { ssr: false });
+const PestControlModal = dynamic(() => import("./info-modals/pest-control-modal").then(m => ({ default: m.PestControlModal })), { ssr: false });
+const ChromatographyModal = dynamic(() => import("./info-modals/chromatography-modal").then(m => ({ default: m.ChromatographyModal })), { ssr: false });
 
 
 type Topic = {
@@ -113,7 +116,7 @@ const topics: Topic[] = [
   { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'quality', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true, color: 'from-purple-500 via-violet-500 to-fuchsia-600', iconColor: 'text-white' },
   { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'quality', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true, color: 'from-rose-500 via-pink-500 to-red-600', iconColor: 'text-white' },
   { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'quality', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true, color: 'from-violet-500 via-purple-500 to-fuchsia-600', iconColor: 'text-white' },
-  { id: 'expert-support', title: 'Expert Support', description: 'AI & Real Expert Advice', category: 'production', icon: GraduationCap, badge: 'AI', modal: ExpertSupportModal, isPro: true, color: 'from-orange-500 via-amber-500 to-yellow-600', iconColor: 'text-white' },
+  { id: 'expert-support', title: 'Expert Support', description: 'Real Expert Advice', category: 'production', icon: GraduationCap, modal: ExpertSupportModal, isPro: true, color: 'from-orange-500 via-amber-500 to-yellow-600', iconColor: 'text-white' },
   { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'quality', icon: ClipboardCheck, modal: CalibrationStandardizationModal, isPro: true, color: 'from-red-500 via-orange-500 to-amber-600', iconColor: 'text-white' },
   { id: 'lab-equipments', title: 'Lab Equipments', description: 'Principles & Working', category: 'quality', icon: Microscope, badge: 'Pro', modal: LabEquipmentsModal, isPro: true, color: 'from-slate-500 via-gray-500 to-zinc-600', iconColor: 'text-white' },
   { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'quality', icon: Atom, modal: MilkChemistryModal, isPro: true, color: 'from-pink-500 via-rose-500 to-red-600', iconColor: 'text-white' },
@@ -124,7 +127,7 @@ const topics: Topic[] = [
   { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'quality', icon: TestTube, modal: CompositionalAnalysisModal, isPro: true, color: 'from-indigo-500 via-blue-500 to-purple-600', iconColor: 'text-white' },
   { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'quality', icon: Droplet, modal: WaterTestingModal, isPro: true, color: 'from-blue-500 via-cyan-500 to-sky-600', iconColor: 'text-white' },
   { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'quality', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true, color: 'from-yellow-500 via-amber-500 to-orange-600', iconColor: 'text-white' },
-  { id: 'chromatography', title: 'Chromatography', description: 'HPLC, GC, TLC & More', category: 'quality', icon: HplcIcon, badge: 'New', modal: ChromatographyModal, isPro: false, color: 'from-pink-100 to-rose-200' },
+  { id: 'chromatography', title: 'Chromatography', description: 'HPLC, GC, TLC & More', category: 'quality', icon: HplcIcon, badge: 'New', modal: ChromatographyModal, isPro: false, color: 'from-pink-100 to-rose-200', iconColor: 'text-white' },
   { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'process', icon: Scale, modal: StandardizationIModal, isPro: true, color: 'from-sky-500 via-blue-500 to-cyan-600', iconColor: 'text-white' },
   { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'process', icon: Calculator, modal: StandardizationIIModal, isPro: true, color: 'from-fuchsia-500 via-pink-500 to-purple-600', iconColor: 'text-white' },
   { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'process', icon: Settings, modal: DairyProcessingModal, isPro: true, color: 'from-gray-500 via-slate-500 to-zinc-600', iconColor: 'text-white' },
@@ -143,6 +146,7 @@ export function TopicGrid() {
   const { user } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const filteredTopics = topics.filter((topic) => {
     const matchesSearch = topic.title.toLowerCase().includes(searchTerm.toLowerCase()) || topic.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -260,14 +264,14 @@ export function TopicGrid() {
         </div>
       </div>
 
-      <div className="relative">
+      <div className="container mx-auto px-4 py-8">
         <div className="mb-8 space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <div className="relative max-w-md mx-auto">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search topics..."
-              className="w-full pl-10 pr-4 py-2 rounded-full shadow-lg bg-white/80 backdrop-blur-sm border-2 border-white/50"
+              placeholder="Search topics, calculators, tests..."
+              className="pl-9 bg-white/80 backdrop-blur-sm border-slate-200"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -277,25 +281,48 @@ export function TopicGrid() {
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
           {filteredTopics.map((topic) => {
             const isLocked = user?.isAnonymous && topic.id !== 'about-us';
+            const favorited = isFavorite(topic.id);
 
             return (
               <div
                 key={topic.id}
                 onClick={() => openModal(topic.id, topic.isPro)}
                 className={cn(
-                  "bg-white/70 backdrop-blur-md p-4 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden group border-2 border-white/50",
+                  "bg-white p-4 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden group border-2 border-slate-200",
                   "cursor-pointer"
                 )}
               >
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite({
+                      id: topic.id,
+                      title: topic.title,
+                      category: topic.category,
+                      description: topic.description,
+                      type: 'topic'
+                    });
+                    toast({
+                      title: favorited ? "Removed from Favorites" : "Saved to Favorites ⭐",
+                      description: `${topic.title} is now in your saved profile list.`
+                    });
+                  }}
+                  className="absolute top-2 right-2 z-20 p-1 rounded-full bg-slate-100/90 hover:bg-amber-100 text-slate-400 hover:text-amber-500 transition-all shadow-sm"
+                  title={favorited ? "Remove from Favorites" : "Save to Favorites"}
+                >
+                  <Bookmark className={cn("w-3.5 h-3.5", favorited && "fill-amber-400 text-amber-500")} />
+                </button>
+
                 {isLocked && (
-                  <div className="absolute top-2 right-2 bg-gradient-to-br from-gray-700 to-gray-900 text-white rounded-full p-1.5 z-20 shadow-lg">
+                  <div className="absolute top-2 left-2 bg-gradient-to-br from-gray-700 to-gray-900 text-white rounded-full p-1 z-20 shadow-lg">
                     <Lock className="w-3 h-3" />
                   </div>
                 )}
-                {topic.badge && (
+                {topic.badge && !isLocked && (
                   <Badge 
                     variant={topic.badge === 'Pro' ? 'default' : 'destructive'} 
-                    className="absolute top-2 left-2 text-xs px-2 py-0.5 h-auto animate-pulse z-10 shadow-md font-semibold"
+                    className="absolute top-2 left-2 text-[10px] px-1.5 py-0.2 h-auto z-10 shadow-md font-semibold"
                   >
                     {topic.badge}
                   </Badge>
