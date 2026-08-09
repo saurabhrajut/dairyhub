@@ -21,6 +21,7 @@ import { OnboardingTourModal } from '@/components/onboarding-tour-modal';
 import { useFavorites } from '@/context/favorites-context';
 import { UserFeedbackModal } from '@/components/user-feedback-modal';
 import { TutorialVideosModal } from '@/components/tutorial-videos-modal';
+import { BottomNav } from '@/components/bottom-nav';
 
 // ============================================================
 // 🔑 RAZORPAY CONFIG
@@ -28,10 +29,10 @@ import { TutorialVideosModal } from '@/components/tutorial-videos-modal';
 const RAZORPAY_KEY_ID = "rzp_live_RaIS0kmA42YM68";
 
 const DONATION_TIERS = [
-  { amount: 50,   label: '₹50',  emoji: '☕', desc: 'Ek chai ki kimat' },
-  { amount: 100,  label: '₹100', emoji: '🌱', desc: 'Ek choti madad' },
-  { amount: 500,  label: '₹500', emoji: '💪', desc: 'Bada support' },
-  { amount: 1000, label: '₹1K',  emoji: '🏆', desc: 'Hero donor' },
+  { amount: 50,   label: '₹50',  emoji: '✨', desc: 'Starter Support' },
+  { amount: 100,  label: '₹100', emoji: '🌱', desc: 'Community Supporter' },
+  { amount: 500,  label: '₹500', emoji: '💪', desc: 'Pro Contributor' },
+  { amount: 1000, label: '₹1K',  emoji: '🏆', desc: 'Champion Sponsor' },
 ];
 
 const EditIcon = () => (
@@ -196,7 +197,7 @@ export default function ProfilePage() {
     // ============================================================
     const handleRazorpayPayment = async () => {
         if (!selectedTier) {
-            toast({ variant: 'destructive', title: 'Koi amount select karo', description: 'Pehle ek donation tier choose karo.' });
+            toast({ variant: 'destructive', title: 'Select an Amount', description: 'Please select a donation tier first.' });
             return;
         }
 
@@ -204,12 +205,11 @@ export default function ProfilePage() {
         const scriptLoaded = await loadRazorpayScript();
 
         if (!scriptLoaded) {
-            toast({ variant: 'destructive', title: 'Payment Error', description: 'Payment gateway load nahi hua. Internet check karo.' });
+            toast({ variant: 'destructive', title: 'Payment Error', description: 'Failed to load payment gateway. Please check your internet connection.' });
             setIsPaymentLoading(false);
             return;
         }
 
-        // ✅ App login naam — yahi Razorpay mein dikhega
         const donorName = user?.displayName?.trim() || 'Dairy Hub User';
 
         const options = {
@@ -217,18 +217,14 @@ export default function ProfilePage() {
             amount:   selectedTier.amount * 100,
             currency: 'INR',
 
-            // ✅ Modal header mein user ka naam
             name: donorName,
-
-            // ✅ Subtitle mein bhi naam + tier
-            description: `${donorName} ka Donation — ${selectedTier.label} ${selectedTier.emoji}`,
+            description: 'Thanks from Dairy Hub Team',
 
             image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E%20(1).png?alt=media&token=8b9c0609-762c-4e7b-bcfc-94b65976b54c',
 
             prefill: {
-                name:  donorName,           // ✅ App ka login naam
-                email: user?.email || '',   // ✅ Email
-                // ❌ contact NAHI diya — yahi phone number show hone ki wajah thi
+                name:  donorName,
+                email: user?.email || '',
             },
 
             readonly: {
@@ -245,7 +241,6 @@ export default function ProfilePage() {
             config: {
                 display: {
                     language: 'en',
-                    // ✅ Contact field puri tarah hide — phone screen bypass
                     hide: [
                         { key: 'contact' },
                     ],
@@ -267,7 +262,7 @@ export default function ProfilePage() {
             modal: {
                 ondismiss: () => {
                     setIsPaymentLoading(false);
-                    toast({ title: 'Payment cancelled', description: 'Aapne window band kar di.' });
+                    toast({ title: 'Payment Cancelled', description: 'You closed the payment window.' });
                 },
                 escape: true,
             },
@@ -280,13 +275,13 @@ export default function ProfilePage() {
                 toast({
                     variant: 'destructive',
                     title: 'Payment Failed',
-                    description: response.error.description || 'Kuch problem aayi. Dobara try karo.',
+                    description: response.error.description || 'Something went wrong. Please try again.',
                 });
             });
             rzp.open();
         } catch {
             setIsPaymentLoading(false);
-            toast({ variant: 'destructive', title: 'Error', description: 'Payment window nahi khula.' });
+            toast({ variant: 'destructive', title: 'Error', description: 'Could not open payment window.' });
         }
     };
 
@@ -512,7 +507,7 @@ export default function ProfilePage() {
                         <div className="relative z-10 text-center">
                             <Sparkles className="w-8 h-8 mx-auto mb-2 text-yellow-200" />
                             <h3 className="text-2xl font-bold">Support Dairy Hub's Mission</h3>
-                            <p className="text-sm mt-2 opacity-90">Aapka support app ko aur behtar banata hai!</p>
+                            <p className="text-sm mt-2 opacity-90">Your contribution keeps Dairy Hub free and constantly improving!</p>
                             <DialogTrigger asChild>
                                 <Button className="mt-4 bg-white text-rose-500 font-bold py-2 px-6 rounded-full hover:bg-rose-50 transition-all hover:scale-105 shadow-lg">
                                     <Heart className="mr-2 h-4 w-4"/> Donate Now
@@ -530,31 +525,31 @@ export default function ProfilePage() {
                             </div>
                             <DialogTitle className="text-2xl font-bold text-center">Support Dairy Hub</DialogTitle>
                             <DialogDescription className="text-center">
-                                आपका समर्थन हमें सशक्त बनाता है 🙏
+                                Your support empowers us to build better tools for the community 🙏
                             </DialogDescription>
                         </DialogHeader>
 
                         {paymentSuccess ? (
                             <div className="py-8 text-center space-y-4">
                                 <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto" />
-                                <h3 className="text-xl font-bold text-gray-800">Bahut Shukriya! 🎉</h3>
+                                <h3 className="text-xl font-bold text-gray-800">Thank You So Much! 🎉</h3>
                                 <p className="text-gray-600">
-                                    Aapka <span className="font-bold text-rose-500">₹{selectedTier?.amount}</span> donation receive ho gaya.
+                                    Your donation of <span className="font-bold text-rose-500">₹{selectedTier?.amount}</span> has been received.
                                 </p>
                                 {lastPaymentId && (
                                     <p className="text-xs text-gray-400 font-mono bg-gray-50 px-3 py-2 rounded-lg">
                                         Payment ID: {lastPaymentId}
                                     </p>
                                 )}
-                                <p className="text-rose-600 font-semibold text-lg">हर योगदान मायने रखता है! ❤️</p>
+                                <p className="text-rose-600 font-semibold text-lg">Every contribution makes a difference! ❤️</p>
                                 <Button onClick={resetDonation} variant="outline" className="mt-2 border-rose-200 text-rose-500 hover:bg-rose-50">
-                                    Dobara Donate Karo
+                                    Donate Again
                                 </Button>
                             </div>
                         ) : (
                             <div className="py-4 space-y-5">
                                 <div>
-                                    <p className="text-sm font-semibold text-gray-700 mb-3 text-center">💝 Ek amount choose karo</p>
+                                    <p className="text-sm font-semibold text-gray-700 mb-3 text-center">💝 Select a Donation Amount</p>
                                     <div className="grid grid-cols-2 gap-3">
                                         {DONATION_TIERS.map((tier) => (
                                             <button
@@ -581,16 +576,16 @@ export default function ProfilePage() {
                                     className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 text-base rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all hover:scale-[1.02] shadow-lg disabled:opacity-50 disabled:scale-100"
                                 >
                                     {isPaymentLoading ? (
-                                        <><Loader2 className="mr-2 h-5 w-5 animate-spin"/> Payment khul raha hai...</>
+                                        <><Loader2 className="mr-2 h-5 w-5 animate-spin"/> Opening Payment Gateway...</>
                                     ) : selectedTier ? (
                                         <>❤️ Pay {selectedTier.label} via Razorpay</>
                                     ) : (
-                                        <>Pehle amount select karo</>
+                                        <>Select an amount first</>
                                     )}
                                 </Button>
 
                                 <p className="text-center text-xs text-gray-400">
-                                    💳 Cards · 📱 UPI · 🏦 NetBanking · 👝 Wallets — sab supported
+                                    💳 Cards · 📱 UPI · 🏦 NetBanking · 👝 Wallets — All major payment methods supported
                                 </p>
                             </div>
                         )}
@@ -816,6 +811,9 @@ export default function ProfilePage() {
 
             {/* Video Tutorials Modal */}
             <TutorialVideosModal open={isTutorialsOpen} onOpenChange={setIsTutorialsOpen} />
+
+            {/* Bottom Navigation */}
+            <BottomNav activeTab="profile" />
         </div>
         </>
     );
