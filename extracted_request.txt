@@ -1,0 +1,442 @@
+<USER_REQUEST>
+diye gye is content ko update kro with both lenguage, in milk handling, pura ka pura update krna kuch missing mt krna diye gye topis se, export const milkHandlingPreservationContent = {
+    hi: {
+        title: "Milk Handling aur Preservation",
+        description: "Reception se Preservation tak: Quality aur Safety ensure karna",
+        backToTopics: "Topics par vapas jayen",
+        tabs: {
+            introduction: "Introduction",
+            reception: "Reception",
+            transportation: "Transportation",
+            storage: "Storage",
+            preservation: "Preservation",
+            qualityTesting: "Quality Testing",
+            processingMethods: "Processing Methods",
+            packagingLabeling: "Packaging & Labeling",
+            wastageManagement: "Wastage Management",
+            conclusions: "Conclusions"
+        },
+        sections: {
+            introduction: {
+                title: "I. Introduction: Doodh ki Quality aur Safety ki Criticality",
+                p1: "Doodh, hajaro saalon se human nutrition ka ek staple, inherently ek highly perishable raw material hai. Iski rich nutritional composition — jisme approximately 87% water, 3.4% protein (casein aur whey), 3.7% fat, 4.9% lactose, aur essential vitamins aur minerals jaise calcium (120 mg/100mL), phosphorus, riboflavin (B2), aur vitamin B12 shamil hain — ek ideal growth medium provide karti hai diverse array of spoilage aur pathogenic microorganisms ke liye. In microorganisms mein Klebsiella, Bacillus cereus, Pseudomonas fluorescens, Staphylococcus aureus, Streptococcus agalactiae, Listeria monocytogenes, Salmonella spp., aur E. coli O157:H7 shamil hain. Yeh inherent susceptibility ka matlab hai ki bacterial populations rapidly multiply kar sakte hain — kuch species ki doubling time 20 minutes se bhi kam hoti hai 37°C par — jisse doodh processing ke liye unsuitable aur human consumption ke liye unsafe ho jata hai.",
+
+                p2: "Dairy processing mein ek fundamental principle is baat par emphasize karta hai ki doodh ki quality ko higher quality doodh ke saath blend karke improve nahi kiya ja sakta. Poor-quality doodh ka ek single lot (jisme even 1% contaminated doodh bhi shamil ho) poore mixed batch ko compromise ya spoil karne ki capacity rakhta hai — ek phenomenon jise 'microbial cross-contamination effect' kehte hain. Yeh robust initial quality checks aur effective segregation protocols ki critical need ko underscore karta hai. Indian dairy industry, jo apne vast network of over 350 million smallholder farmers ki characteristic rakhti hai, frequently raw milk quality se related challenges encounter karti hai, jisme high bacterial loads (often exceeding 10^6 CFU/mL), somatic cell counts (>5 lakh cells/mL), aur antibiotic residues (beta-lactams, tetracyclines) ki potential presence shamil hai — yeh sab public health aur trade barriers create karte hain.",
+
+                p3: "Doodh mein spoilage aur pathogenic microorganisms ki rapid multiplication rates — exponential phase mein 2^n growth kinetics follow karte hue — ka matlab hai ki earliest stages mein hygiene ya temperature control mein koi bhi failure, jaise farm collection ya initial transport ke dauran, bacterial load mein astronomical increase ka karan ban sakti hai. Example ke liye, agar milk 10°C par 6 ghante ke liye rahta hai instead of 4°C ke, bacterial count 10 guna zyada ho sakta hai. Yeh cascading effect — jise 'temperature abuse cascade' kehte hain — quality control mein ek initial, seemingly minor lapse ke widespread aur severe consequences demonstrate karta hai, jaise rejected doodh se substantial economic losses (India mein estimated ₹2,000 crore annually) aur significant public health risks. Isliye, reception dock par rigorous quality control keval ek regulatory hurdle nahi hai, balki ek critical, proactive risk mitigation strategy hai jise 'Hazard Analysis and Critical Control Points (HACCP)' framework ke under implement kiya jata hai.",
+
+                scientificData: {
+                    title: "Scientific Data aur Statistics",
+                    composition: {
+                        title: "Doodh ki Average Chemical Composition (Cow Milk)",
+                        items: [
+                            "Water: 87.3%",
+                            "Fat: 3.7% (range 3.2-5.0%)",
+                            "Protein: 3.4% (Casein: 2.7%, Whey: 0.7%)",
+                            "Lactose: 4.9%",
+                            "Minerals: 0.7% (Ca, P, K, Na, Mg)",
+                            "Vitamins: A, D, E, K, B-complex",
+                            "pH: 6.6-6.8 (fresh milk)"
+                        ]
+                    },
+                    microbialGrowth: {
+                        title: "Microbial Growth Rates at Different Temperatures",
+                        items: [
+                            "0°C: Minimal growth (generation time >24 hours)",
+                            "4°C: Severely inhibited (generation time ~12-15 hours)",
+                            "10°C: Slow growth (generation time ~3-4 hours)",
+                            "21°C: Moderate growth (generation time ~45-60 min)",
+                            "37°C: Optimal growth (generation time ~20-30 min)"
+                        ]
+                    }
+                }
+            },
+
+            reception: {
+                title: "II. Dairy Plants mein Doodh ka Reception aur Initial Handling",
+                p1: "Farm se processing plant tak doodh ki journey mein meticulous handling aur stringent quality control measures shamil hain iske integrity ko preserve karne ke liye. Reception stage — jise 'first critical control point (CCP-1)' bhi kehte hain HACCP framework mein — determine karta hai ki incoming milk processing ke liye acceptable hai ya nahi.",
+
+                farm_practices: {
+                    title: "Farm-Level par Milk Collection aur Cooling ke liye Best Practices",
+                    p1: "Farm level par, doodh ki quality ki foundation hygiene aur rapid cooling protocols ke strict adherence ke through rakhi jati hai. Hygienic milking practices mein shamil hain: udder pre-dipping (0.5-1% iodine solution se), teat cleaning aur drying (individual paper towels se), fore-stripping (mastitis detection ke liye), aur post-dipping (glycerin-based teat dip se). In practices se bacterial contamination 90% tak reduce ho sakta hai. Equipment — stainless steel buckets, milking machines, pipelines — ko food-grade detergents (alkaline cleaners pH 11-12 aur acidic cleaners pH 2-3) se daily clean karna essential hai.",
+
+                    p2: "Rapid cooling ek aur essential practice hai. Doodh ko milking ke do ghante ke andar +4°C (ya 40°F se neeche) tak jaldi se cool kiya jana chahiye — yeh 'two-hour rule' internationally accepted standard hai. Yeh immediate chilling bacterial growth ko inhibit karne aur processing plant tak pahunchne tak doodh ki quality ko preserve karne ke liye crucial hai. Farm mein commonly use kiye jane wale cooling systems hain: Direct Expansion Bulk Milk Coolers (DX-BMCs) jo 45 minutes mein 35°C se 4°C tak cool kar sakte hain, aur Plate Coolers jo bore well/spring water use karke initial pre-cooling karte hain milking parlor mein hi.",
+
+                    p3: "Modern dairy farms increasingly initial quality checks ke liye data-driven tools utilize kar rahe hain. Automated Milking Systems (AMS ya 'Milking Robots') vital information record karte hain jaise milk volume, milking duration, milk conductivity (>6.0 mS/cm par mastitis suspect hota hai), mid-infrared spectroscopy se fat/protein/lactose analysis, aur RFID tags ke through individual cow identity. Precision Livestock Farming (PLF) technologies real-time data provide karti hain. Farm se doodh nikalne se pehle preliminary quality tests kiye jate hain: Clot-on-Boiling (COB) test, Alcohol Test (68% ethanol ke saath), pH measurement, Lactometer reading (SNF ke liye 1.028-1.034 range normal hai), aur antibiotic residue screening (Charm ROSA, Delvotest, Copan bioptic kits).",
+
+                    additionalTests: {
+                        title: "Farm-Level Par Additional Quality Parameters",
+                        items: [
+                            "Somatic Cell Count (SCC): <2,00,000 cells/mL (normal), >5,00,000 cells/mL (mastitis indicator) — BIS IS:1479 standard",
+                            "Total Bacterial Count (TBC): <1,00,000 CFU/mL (Grade A milk) — Plate Count Agar par 32°C, 48 hours incubation",
+                            "Titratable Acidity: 0.14-0.16% lactic acid (fresh milk), >0.18% mein spoilage start",
+                            "Freezing Point: -0.530°C to -0.560°C (adulteration se change hota hai — water addition se -0.530°C se upar aata hai)",
+                            "Coliform Count: <10 CFU/mL (good hygiene indicator)"
+                        ]
+                    }
+                },
+
+                plant_reception: {
+                    title: "Dairy Plant Reception Area Design aur Equipment",
+                    p1: "Dairy plant mein arrival par, doodh specialized reception departments mein enter karta hai jo efficient handling aur rigorous quality assessment ke liye design kiye gaye hain. Reception dock ka design GMP (Good Manufacturing Practices) aur FSMA (Food Safety Modernization Act) guidelines ke according hona chahiye. Yeh departments comprehensive quality testing, accurate quantity measurement aur doodh ko subsequent processing stages mein seamless transfer ke liye responsible hain.",
+
+                    p2: "Tanker reception area configuration: minimum 3-4 unloading bays (peak hours mein waiting time <30 minutes), dedicated sampling points (HDPE ya stainless steel sampling valves), aur separate lanes for accepted/rejected milk. Tankers ko arrival par unique codes ya RFID tags use karke identify kiya jata hai — complete traceability ke liye.",
+
+                    measurement_methods: {
+                        by_weight: {
+                            title: "Weight dwara (Gravimetric Method)",
+                            text: "Is method mein unloading se pehle aur baad mein certified weighbridge par tanker ka weighing shamil hai — accuracy ±0.1% hoti hai. Alternatively, doodh ko load cells se equipped specialized weighing tanks mein pump kiya ja sakta hai (capacity 5,000-30,000 L). Weighing tanks typically stainless steel 304/316L se bane hote hain aur NABL-accredited load cells use karte hain. Legal metrology requirements ke under tampered weights regular calibration se guzarte hain."
+                        },
+                        by_volume: {
+                            title: "Volume dwara (Volumetric Method)",
+                            text: "Volume measurement ke liye electromagnetic flowmeters (EMF) ya positive displacement flowmeters utilize kiye jate hain — accuracy ±0.5%. Accuracy ensure karne ke liye aur doodh line mein air ke entry ko prevent karne ke liye — jo false high readings aur foam formation causa karta hai — flowmeter se pehle typically ek centrifugal air-eliminator lagaya jata hai. Modern systems mein Coriolis mass flowmeters bhi use hone lage hain jo simultaneously density bhi measure karte hain."
+                        }
+                    },
+
+                    p3: "Farm mein initial cooling (+4°C) aur insulated transport ke bawajood, transit ke dauran thoda temperature increase (typically 1-3°C) aksar unavoidable hota hai. Isliye, doodh ko usually raw milk silos mein transfer karne se pehle plate heat exchanger (PHE) ya tubular heat exchanger use karke +4°C se neeche re-cool kiya jata hai. Chilled water (0-2°C) ya glycol systems (propylene glycol, food-grade) cooling medium ke roop mein use kiye jate hain.",
+
+                    receptionQualityTests: {
+                        title: "Platform Tests at Reception — Scientific Basis",
+                        organoleptic: {
+                            title: "Organoleptic/Sensory Tests",
+                            items: [
+                                "Color: Normal cow milk creamy white; bluish tint — water addition; yellow tint — colostrum/mastitis",
+                                "Odor: Clean, slightly sweet; off-odors indicate spoilage (butyric acid — rancidity, acetic acid — fermentation)",
+                                "Appearance: Homogeneous; sediment — dirt/mastitis; ropy texture — bacterial contamination (Alcaligenes viscolactis)"
+                            ]
+                        },
+                        chemical: {
+                            title: "Rapid Chemical Tests",
+                            items: [
+                                "Alcohol Test: 2 mL milk + 2 mL 68% alcohol — coagulation means acidity >0.18% ya calcium imbalance",
+                                "Clot on Boiling (COB): Milk boil karein — clot/curd formation means acidity >0.20%",
+                                "Methylene Blue Reduction Test (MBRT): 10 mL milk + 1 mL MBRT solution, 37°C incubation — Grade A milk 5+ hours mein decolorize hota hai",
+                                "Resazurin Test (30-min): Rapid version of MBRT — Grade A milk purple color retain karta hai",
+                                "Lactometer Test: Lactometer reading (LR) at 27°C — adultered milk mein LR >32 (water addition)"
+                            ]
+                        },
+                        adulteration: {
+                            title: "Adulteration Detection Tests",
+                            items: [
+                                "Starch Detection: Milk + iodine solution — blue/black color = starch added (illegal thickener)",
+                                "Urea Detection: Urease + bromothymol blue — green/blue color = exogenous urea added",
+                                "Detergent Detection: Bromocresol purple test — violet color = detergent present",
+                                "Formalin Detection: Sulfuric acid layer test — violet ring at interface = formalin present",
+                                "Hydrogen Peroxide Detection: Vanadium pentoxide test — pink/red = H2O2 present",
+                                "Neutralizer Detection (Soda): Rosolic acid test — rose/crimson = sodium carbonate/bicarbonate added"
+                            ]
+                        }
+                    }
+                },
+
+                hygiene_cleaning: {
+                    title: "Containers aur Equipment ke liye Hygiene aur CIP Procedures",
+                    p1: "Cleaning aur disinfection do distinct processes hain: Cleaning physical aur chemical residues remove karta hai (soil removal — >99.5% required), jabki Disinfection/Sanitization harmful bacteria ko kill karta hai (>99.999% reduction = 5-log reduction target). Dairy industry mein 'Clean-in-Place (CIP)' technology standard hai jo manual disassembly ke bina automated cleaning enable karta hai.",
+
+                    cipProtocol: {
+                        title: "Standard CIP Protocol (5-Step Process)",
+                        steps: [
+                            "Step 1 - Pre-rinse: Lukewarm water (35-45°C) se 5-10 minutes — loosens milk residues",
+                            "Step 2 - Alkaline Wash: NaOH/KOH solution (1-2%, pH 11-13) at 70-75°C for 20-30 min — fat aur protein dissolve karta hai",
+                            "Step 3 - Intermediate Rinse: Hot water (65-70°C) se — alkaline cleaner remove karta hai",
+                            "Step 4 - Acid Wash: Nitric acid/phosphoric acid (0.5-1%, pH 2-3) at 65-70°C for 15-20 min — mineral deposits (milkstone = calcium phosphate) remove karta hai",
+                            "Step 5 - Final Rinse + Sanitization: Cold water rinse, phir sanitizer (chlorine 200 ppm, peracetic acid 100-200 ppm, ya hot water 85°C+ for 20 min)"
+                        ]
+                    },
+
+                    p2: "Farm tanks ko kisi bhi milk residue ke liye inspect kiya jata hai — ATP bioluminescence testing (Relative Light Units <200 = clean) increasingly popular ho raha hai. Milk tankers ki daily CIP hoti hai, ya har collection round ke baad. Tanker cleaning ka verification conductivity measurement se hota hai — rinse water conductivity <10 µS/cm = adequate rinse.",
+
+                    p3: "Reception area mein contamination prevention ke liye: dedicated color-coded utensils (blue = raw area, red = reject area), positive pressure HVAC systems jo insects aur dust ko bahar rakhte hain, aur regular environmental monitoring (air sampling — settle plate method, surface swabs — contact plates) ka implementation essential hai."
+                }
+            },
+
+            transportation: {
+                title: "III. Milk Transportation Systems aur Logistics",
+                p1: "Farm se processing plant tak doodh ka transportation ek carefully orchestrated operation hai. Global milk collection volumes — jisme India ka 23% global share (2023 data) shamil hai — ek efficient, safe, aur traceable transport network ki imperative demand karte hain. India mein approximately 1.2 lakh milk collection routes hain jo organized sector ko service karte hain.",
+
+                tanker_design: {
+                    title: "Milk Tankers ka Design aur Construction",
+                    p1: "Milk tank trucks exclusively food-grade stainless steel se constructed hote hain — typically AISI Grade 304 (18% chromium, 8% nickel) ya superior Grade 316L (2-3% molybdenum addition jo chloride corrosion resistance enhance karta hai). Interior surface finish: 2B ya BA finish, Ra ≤0.8 µm (roughness average) — smoother surfaces bacterial adhesion reduce karte hain. All welds continuous aur crevice-free hone chahiye — ASME Bioprocessing Equipment (BPE) standards ke according.",
+
+                    p2: "Critical design feature ek robust insulation system hai: typically 100-150 mm thick polyurethane foam (thermal conductivity λ = 0.022-0.026 W/m·K). ATP-R1 certification require karta hai ki external temperature 30°C par bhi internal milk temperature 10 hours mein ≤6°C increase honi chahiye. Vacuum-insulated panels (VIPs) increasingly use ho rahe hain jo traditional foam se 5-10x better insulation provide karte hain.",
+
+                    p3: "Milk tankers 2-6 internal compartments ke saath design kiye jate hain (baffles/bulkheads se divided), capacity 8,000-30,000 liters. Compartmentalization allow karta hai: different farms se milk segregation (quality-based sorting), different fat content milk ka separate transport, aur vehicle stability improvement (sloshing se CoG shift minimize hota hai). Bottom outlet valves butterfly design ke hote hain (no dead legs, complete drainage ensure karta hai).",
+
+                    tankerSpecifications: {
+                        title: "Standard Milk Tanker Technical Specifications",
+                        items: [
+                            "Material: SS 304/316L, 3-4 mm shell thickness",
+                            "Capacity: Small — 3,000-8,000 L (rural routes), Large — 15,000-30,000 L (highway routes)",
+                            "Insulation: 100-150 mm PUF, Temperature rise <2°C in 6 hours",
+                            "Pump: Centrifugal/sanitary pump, 500-1000 L/min flow rate",
+                            "Agitator: Slow-speed (1-5 RPM) to prevent fat globule damage",
+                            "Sampling Valve: Tri-clamp fittings, aseptic sampling",
+                            "CIP Connection: Dedicated spray balls (360° coverage), 1.5 bar pressure"
+                        ]
+                    }
+                },
+
+                hygienic_transport: {
+                    title: "Hygienic Transport Ensure karna",
+                    p1: "Sare milk-contact components — valves, pumps, hoses, gaskets — ko 3-A Sanitary Standards (USA) ya EHEDG (European Hygienic Engineering and Design Group) guidelines ke according design kiya jana chahiye. Gaskets food-grade EPDM ya silicone se bane hone chahiye (PTFE nahi — absorption potential ke karan). Hoses food-grade PTFE-lined ya SS corrugated flexible hoses preferably honi chahiye.",
+
+                    p2: "Milk tanker ki interior surface Ra ≤0.8 µm honi chahiye — yeh smooth surface bacterial biofilm formation ko dramatically reduce karta hai. Studies show karte hain ki Ra >1.6 µm surfaces par biofilm formation 10x zyada hoti hai compared to Ra ≤0.4 µm surfaces. Electropolishing (acidic electrolyte mein anodic dissolution) further surface smoothness aur corrosion resistance enhance karta hai.",
+
+                    p3: "Advanced CIP systems tankers par: bottom-mounted spray balls aur top-mounted rotating spray heads comprehensive coverage ensure karte hain. CIP validation ATP bioluminescence testing se hoti hai — acceptable threshold <100 RLU (Relative Light Units). Microbiological verification: Rinse water samples — <10 CFU/mL acceptable.",
+
+                    biofilmPrevention: {
+                        title: "Biofilm Formation aur Prevention",
+                        p1: "Biofilms — surfaces par adhered bacteria ke protected communities — dairy equipment mein ek major hazard hain. Biofilm mein bacteria 100-1000x more resistant hote hain sanitizers ke against compared to planktonic cells. Common biofilm formers in dairy: Listeria monocytogenes, Pseudomonas aeruginosa, Bacillus cereus, aur Staphylococcus aureus.",
+                        preventionMethods: [
+                            "Surface finish: Ra ≤0.8 µm — attachment sites minimize karta hai",
+                            "CIP frequency: Daily minimum, post-collection harbaar",
+                            "Enzymatic cleaners: Protease + lipase cocktails (biofilm matrix dissolve karte hain)",
+                            "High-velocity flow: >1.5 m/s (turbulent flow Re >10,000) — mechanical scouring",
+                            "Ozone treatment: 1-2 ppm aqueous ozone — broad-spectrum sanitizer (EPA-approved)"
+                        ]
+                    }
+                },
+
+                temp_control: {
+                    title: "Transit ke dauran Temperature Control aur Cold Chain Management",
+                    p1: "International dairy standards (Codex Alimentarius — CAC/RCP 57-2004) specify karte hain ki raw milk transport ke dauran 10°C se exceed nahi karna chahiye. India mein FSSAI Food Safety and Standards (Food Products Standards and Food Additives) Regulations specify karte hain raw milk ko 5°C ya us se neeche maintain karna. ATP (Accord sur le Transport des denrées Périssables) — international agreement — temperature-controlled transport equipment ke liye standards define karta hai.",
+
+                    p2: "Modern milk tank trucks advanced IoT-enabled temperature monitoring systems feature karte hain: multiple PT-100 aur PT-1000 resistance temperature detectors (RTDs) ya NTC thermistors placed at strategic locations (top, middle, bottom of each compartment). Data loggers (HACCP-compliant, tamper-proof) temperature, GPS location, speed aur door opening events ko continuous record karte hain — cloud mein upload hota hai real-time mein (GPRS/4G connectivity). Alert systems: SMS/email alerts >6°C temperature breaches par, geofencing alerts unauthorized diversions ke liye.",
+
+                    coldChainIntegrity: {
+                        title: "Cold Chain Integrity — Scientific Importance",
+                        p1: "Integrated Temperature-Time concept use kiya jata hai dairy mein: Total Bacterial Count exponential function hai of temperature × time. Formula: N = N₀ × e^(µ×t) jahan µ = specific growth rate (temperature-dependent, Arrhenius equation follow karta hai).",
+                        items: [
+                            "4°C mein 12 hours: Bacterial count approximately doubles (2x N₀)",
+                            "10°C mein 12 hours: Bacterial count approximately 10x ho jata hai",
+                            "20°C mein 12 hours: Bacterial count approximately 1000x ho jata hai",
+                            "Practical implication: 4°C se 2°C ka temperature abuse bhi long routes mein significant quality degradation cause kar sakta hai"
+                        ]
+                    }
+                },
+
+                monitoring_logistics: {
+                    title: "Smart Logistics aur Real-time Monitoring",
+                    p1: "Industry 4.0 technologies dairy logistics mein revolutionize kar rahi hain. Advanced systems mein shamil hain: Fleet Management Systems (FMS) jo route optimization, fuel efficiency aur driver behavior (harsh braking — fat globule damage risk) monitor karte hain. Blockchain-based traceability platforms (jaise IBM Food Trust, Ripe.io) milk batches ko farm se plant tak immutably track karte hain — recall events mein extremely valuable.",
+
+                    p2: "Milk quality monitoring in-transit: Near-Infrared (NIR) spectroscopy sensors kuch advanced tankers mein installed hote hain jo real-time milk quality parameters (fat, protein, lactose, somatic cells) measure karte hain without sampling. Electronic nose technology (e-nose) — array of gas sensors — off-odors aur spoilage volatiles (acetaldehyde, diacetyl, butyric acid) detect karte hain.",
+
+                    p3: "India mein National Dairy Development Board (NDDB) ka 'iMark' system — RFID aur QR code-based tracking system — milk cans aur tankers track karta hai cooperative dairy supply chain mein. AMUL ka 'Milk Procurement System' real-time data capture karta hai 18,000+ collection centers se.",
+
+                    p4: "Logistics optimization: Milk collection route optimization algorithms (Vehicle Routing Problem — VRP solvers) use karte hain jo minimize karte hain: total travel distance, fuel consumption, aur critically, milk-in-transit time. Studies show karte hain ki optimal routing 15-25% mileage aur 10-20% transit time reduce kar sakta hai — directly milk quality improvement mein result karta hai.",
+
+                    regulatoryCompliance: {
+                        title: "Transport ke liye Regulatory Compliance",
+                        items: [
+                            "India: FSSAI Regulations — Food Safety and Standards (Licensing and Registration) Regulations 2011, Schedule 4 — vehicles ke liye requirements",
+                            "AGMARK standards — grade specifications",
+                            "Prevention of Food Adulteration (PFA) Act",
+                            "Europe: EC Regulation 853/2004 — hygiene rules for food of animal origin",
+                            "EC Regulation 1/2005 — animal transport (indirectly relevant)",
+                            "USA: Grade 'A' Pasteurized Milk Ordinance (PMO) — comprehensive milk transport regulations",
+                            "International: Codex Alimentarius CAC/RCP 57-2004 — Hygienic Practices for Milk"
+                        ]
+                    }
+                }
+            },
+
+            storage: {
+                title: "IV. Milk Storage Techniques aur Technologies",
+                p1: "Effective storage doodh preservation ka ek critical component hai. Different stages par different storage requirements hote hain — raw milk reception se processed product distribution tak. Storage conditions directly shelf life, safety aur sensory quality ko determine karte hain.",
+
+                raw_milk_silos: {
+                    title: "Silo Tanks mein Raw Milk Storage",
+                    p1: "Untreated raw milk usually large, vertical, insulated silo tanks mein store kiya jata hai, jo aksar plant ke bahar located hote hain (space optimization ke liye). Tank capacity typically 50,000-500,000 liters tak range karti hai, tall cylindrical design ke saath (height:diameter ratio ≈ 3:1 to 5:1 — efficient mixing ke liye). Construction: SS 304 double-walled tanks with 100-150 mm PUF insulation. External surface: cladding (SS 2B ya stucco aluminum) ya fiberglass reinforced plastic (FRP).",
+
+                    p2: "Gravity ke karan cream separation prevent karne ke liye raw milk silos mein gentle agitation crucial hai. Side-mounted variable-speed propeller agitators (paddle ya hydrofoil design) ya top-mounted slow-speed agitators use kiye jate hain. Agitation gentle hona chahiye taki: air entrainment minimize ho (foam formation se fat loss aur oxidation), fat globule damage se bacha ja sake (free fat release — rancidity cause karta hai), aur air-milk interface minimized rahe.",
+
+                    sensors: {
+                        temp: {
+                            title: "Temperature Sensors (PT-100 RTDs)",
+                            text: "Multiple sensors at different heights (top, middle, bottom) — temperature stratification detect karte hain. Continuous monitoring with PLC integration, alarm triggers at >6°C."
+                        },
+                        level: {
+                            title: "Level Sensors (Ultrasonic ya Pressure Transmitters)",
+                            text: "Continuous level measurement — inventory management ke liye critical. Magnetostrictive level sensors high accuracy (±1 mm) provide karte hain."
+                        },
+                        low_level: {
+                            title: "Low-Level Sensors (Float Switches ya Guided Wave Radar)",
+                            text: "Outlet pipe par — pump cavitation se prevent karte hain. Automatic pump shutoff when level too low."
+                        },
+                        overflow: {
+                            title: "Overflow Protection (High-Level Alarm + Auto-shutoff Valve)",
+                            text: "Tank ke top par — dual protection: high-level alarm + automatic inlet valve closure. Prevents product loss aur contamination."
+                        }
+                    },
+
+                    siloManagement: {
+                        title: "Silo Management Best Practices",
+                        items: [
+                            "FIFO (First-In-First-Out) principle — oldest milk first process karo",
+                            "Maximum raw milk holding time: 24-48 hours at 4°C (>72 hours mein quality degradation significant hoti hai)",
+                            "Regular milk quality checks during storage (acidity, temperature, organoleptic every 4-6 hours)",
+                            "Silo CIP after each complete emptying — full CIP cycle mandatory",
+                            "Silo interior inspection: monthly visual inspection, annual dimensional check",
+                            "Positive pressure nitrogen blanketing: some plants mein oxidation prevent karne ke liye"
+                        ]
+                    }
+                },
+
+                refrigerated_storage: {
+                    title: "Pasteurized/Processed Milk ke liye Refrigerated Storage",
+                    p1: "Refrigeration doodh aur dairy products ki safety aur quality maintain karne ke liye sabse critical aur widely used method hai. Scientific basis: Arrhenius equation demonstrate karta hai ki har 10°C temperature reduction se reaction rates (microbial growth aur enzymatic activity) approximately 2-3x (Q10 factor) slow ho jati hain.",
+
+                    p2: "International standards: Codex Standard 206-1999 (fluid milk) — pasteurized milk 6°C ya neeche store hona chahiye. India (FSSAI): pasteurized milk 4°C ya neeche. USA (PMO): 45°F (7.2°C) ya below. Optimum storage temperature for maximum shelf life: 1-4°C. Freezing point of milk: approximately -0.54°C — isliye 0°C se zyada neeche nahi store karna chahiye (partial freezing fat structure damage karta hai aur protein precipitation cause karta hai).",
+
+                    p3: "Cold storage room design: Insulated panels (PUF — 150-200 mm), automatic temperature recording, multiple thermometers at different heights, backup refrigeration systems (N+1 redundancy), emergency alarm systems. Refrigeration systems: vapor compression cycle (HFO-1234yf ya CO2 transcritical systems — eco-friendly refrigerants replacing older HFCs). Defrost systems: electric, hot gas, ya off-cycle defrost (typically every 6-8 hours, <30 min duration).",
+
+                    shelfLifeData: {
+                        title: "Pasteurized Milk Shelf Life at Different Temperatures",
+                        items: [
+                            "1-2°C: Up to 21-25 days (Extended Shelf Life — ESL milk)",
+                            "4°C: 14-18 days (standard pasteurized)",
+                            "7°C: 7-10 days",
+                            "10°C: 3-5 days",
+                            ">15°C: <48 hours (rapid quality loss)"
+                        ]
+                    },
+
+                    eslMilk: {
+                        title: "Extended Shelf Life (ESL) Milk Technology",
+                        p1: "ESL milk ek relatively new category hai jo standard pasteurized aur UHT ke beech positioned hai. ESL milk achieve kiya jata hai by combining: Microfiltration (MF) — 1.4 µm membranes se 99.9% bacteria remove hote hain, higher pasteurization temperatures (125-127°C for 2-4 seconds), aur aseptic/semi-aseptic packaging. Result: 30-45 days shelf life at refrigeration temperatures — UHT taste nahi, but longer than conventional pasteurized."
+                    }
+                },
+
+                uht_storage: {
+                    title: "Ultra-High Temperature (UHT) Milk — Science aur Technology",
+                    p1: "UHT milk flash sterilization se guzarta hai: rapidly heated to 135-155°C (FSSAI minimum 135°C) for 2-8 seconds (continuous flow system mein). Two types: Direct UHT (steam injection ya steam infusion — milk directly steam ke saath contact mein aata hai, rapid heating 0.3 seconds mein, flavour naram) aur Indirect UHT (PHE ya THX ke through, slower heating, more caramelization). Sterility concept: 12-D process — most heat-resistant pathogen Bacillus stearothermophilus (z-value = 10°C, D121°C = 4 min) ke liye 12 log reduction achieve karna.",
+
+                    p2: "Aseptic packaging UHT milk ki shelf stability ke liye equally critical hai. Common packaging: Tetra Pak (6-layer laminate: PE/paper/PE/Al/PE/PE), SIG Combibloc. These materials provide: oxygen barrier (O2 transmission rate <0.1 cc/day), light barrier (prevents photooxidation — riboflavin destruction aur off-flavours), mechanical protection. Filling mein: packaging sterilization (H2O2 spray + UV, ya H2O2 bath at 70°C), aseptic filling environment (ISO Class 5 or better), hermetic sealing.",
+
+                    p3: "UHT milk mein chemical preservatives ki zarurat nahi hoti — commercial sterility (viable spoilage organisms ki absence at normal storage conditions) already achieved hai. However, chemical changes during storage hoti hain: Maillard browning (lactose + lysine reaction — slow at room temp, months ke baad noticeable), proteolysis by heat-stable enzymes (plasmin — indigenous milk enzyme — UHT resistant, eventually causes bitterness aur gelation — 'age gelation problem'), aur fat oxidation (especially linolenic acid).",
+
+                    uhtChanges: {
+                        title: "UHT Processing se Nutritional aur Sensory Changes",
+                        nutritional: [
+                            "Vitamin C: 20-25% reduction (heat-labile)",
+                            "Thiamine (B1): 10-20% reduction",
+                            "Vitamin B12: 10-20% reduction",
+                            "Folic acid: 5-10% reduction",
+                            "Vitamin A, D, E, K: Minimal change (heat-stable)",
+                            "Calcium, Phosphorus: No significant change",
+                            "Protein: Slight denaturation of whey proteins (β-Lg — 70-80% denatured), digestibility improved slightly",
+                            "Casein: Relatively heat-stable, Maillard reaction causes slight lysine loss"
+                        ],
+                        sensory: [
+                            "Cooked/sulphurous flavour (volatile sulfur compounds — H2S, dimethyl sulfide from whey protein denaturation)",
+                            "Slight caramelization (Maillard reaction — HMF formation, furanic compounds)",
+                            "These off-flavours diminish after few weeks storage (dissipation through packaging)",
+                            "UHT milk viscosity slightly higher than pasteurized (whey protein denaturation aur casein micelle changes)"
+                        ]
+                    }
+                },
+
+                otherStorageMethods: {
+                    title: "Other Specialized Storage Methods",
+                    condensedMilk: {
+                        title: "Condensed Milk Storage",
+                        p1: "Sweetened condensed milk: 60-65% sucrose concentration — 'hurdle effect' — water activity (aw) 0.83 tak reduce ho jata hai, microbial growth inhibit hoti hai. Shelf life: 1-2 years at room temperature (unopened cans). Evaporated milk (unsweetened): sterilization required (115-120°C for 15-20 min) — shelf life 1-2 years. Storage: dry, cool (below 20°C), dark conditions preferred."
+                    },
+                    driedMilk: {
+                        title: "Dried Milk/Milk Powder Storage",
+                        p1: "Spray drying: milk concentrate (48-52% TS) ko hot air chamber mein atomize kiya jata hai (inlet temp 170-220°C, outlet 80-95°C). Moisture content: ≤3% (whole milk powder) ya ≤4% (skim milk powder) — water activity aw ≤0.25, microbial stability excellent. Shelf life: Whole milk powder — 6-12 months (fat oxidation limiting factor), Skim milk powder — 18-24 months (lower fat content). Storage requirements: airtight containers (nitrogen flushing recommended), cool (15-20°C), dry (<65% RH), dark. Caking prevention: silica gel desiccants, proper packaging (multi-layer laminated pouches)."
+                    },
+                    fermentedProducts: {
+                        title: "Fermented Dairy Products Storage",
+                        p1: "Yogurt, dahi, buttermilk, cheese — refrigerated storage at 2-6°C. Self-preserving nature due to: lactic acid (pH 4.0-4.6 — inhibits pathogen growth), bacteriocins production (nisin, acidophilin — antimicrobial peptides), competitive exclusion by starter cultures. Hard cheeses (moisture <39%): stored at 2-8°C, up to 12+ months. Soft cheeses (moisture >55%): refrigerated, short shelf life (2-4 weeks). Modified Atmosphere Packaging (MAP) — CO2/N2 mixture used for cheese — extends shelf life 50-100%."
+                    }
+                }
+            },
+
+            preservation: {
+                title: "V. Doodh Preservation Methods — Comprehensive Overview",
+                principles: {
+                    title: "Dairy mein Preservation ke Scientific Principles",
+                    p1: "Doodh preservation ka fundamental concept 'Leistner's Hurdle Technology' par based hai — multiple simultaneous antimicrobial factors (hurdles) jo microorganisms ki growth ko collectively inhibit karte hain. Koi bhi single hurdle sufficient nahi hota hai — unka combination synergistic effect create karta hai. Major hurdles: Temperature (T), Water Activity (aw), pH, Redox Potential (Eh), Competitive Microbiota, aur Preservatives.",
+
+                    hurdleConcept: {
+                        title: "Hurdle Concept — Scientific Basis",
+                        items: [
+                            "Temperature hurdle: <4°C ya >72°C — microbial growth severely restricted",
+                            "Water activity hurdle: aw <0.91 (yeast/mold), <0.86 (Staphylococcus), <0.60 (no microbial growth)",
+                            "pH hurdle: <4.6 (prevents C. botulinum), <4.0 (prevents most pathogens)",
+                            "Redox potential hurdle: Eh <-150 mV (anaerobic conditions — aerobic spoilage prevent)",
+                            "Competitive microbiota: Lactic acid bacteria (LAB) outcompete pathogens — 'biological preservation'"
+                        ]
+                    },
+
+                    p2: "Chemical preservatives ek aisa environment create karke kaam karte hain jo microbial growth ke liye unfavorable hota hai. Mechanisms: (1) Disruption of cell membrane integrity, (2) Inhibition of critical metabolic enzymes, (3) Interference with DNA replication/transcription, (4) Reduction in water activity, (5) pH depression below growth optimum. Bactericidal effect: microorganisms kill karna; Bacteriostatic effect: growth inhibit karna without killing."
+                },
+
+                thermalPreservation: {
+                    title: "Thermal Preservation Methods",
+                    pasteurization: {
+                        title: "Pasteurization — Science aur Methods",
+                        p1: "Pasteurization ka scientific basis: all milk-borne pathogenic organisms ke against thermal death kinetics follow karte hain first-order reaction kinetics: log(N/N₀) = -t/D, jahan D = decimal reduction time (time to achieve 1-log reduction at specific temperature). Target pathogen: Coxiella burnetii (Q fever organism — most heat-resistant pathogen in milk, D63°C = 2-3 min).",
+                        methods: [
+                            "LTLT (Low Temperature Long Time): 62.8°C (145°F) for 30 minutes — batch/vat pasteurization",
+                            "HTST (High Temperature Short Time): 72°C (161.6°F) for 15 seconds — continuous flow, most common",
+                            "Higher Heat Shorter Time (HHST): 89°C for 1 sec, 90°C for 0.5 sec, 94°C for 0.1 sec, 96°C for 0.05 sec",
+                            "UHT: 135-140°C for 2-8 seconds",
+                            "Ultra-Pasteurization: 138°C for at least 2 seconds (with refrigeration) — ESL milk"
+                        ],
+                        effectiveness: "HTST pasteurization: 5+ log reduction in pathogenic bacteria, including: Mycobacterium tuberculosis, Salmonella spp., Listeria monocytogenes, Staphylococcus aureus (but not its heat-stable toxins), E. coli O157:H7, Campylobacter jejuni"
+                    },
+
+                    htst_equipment: {
+                        title: "HTST Pasteurizer — Equipment Components",
+                        items: [
+                            "Balance Tank (Constant Level Tank): Continuous uninterrupted milk supply ensure karta hai",
+                            "Feed Pump: Centrifugal pump, maintains constant flow rate",
+                            "Flow Controller: Metering pump ya flow control valve — precise residence time ensure karta hai",
+                            "Regeneration Section (PHE): Cold raw milk preheated by hot pasteurized milk (energy savings: 85-95%)",
+                            "Heating Section (PHE): Hot water/steam-heated plates — target temperature achieve karta hai",
+                            "Holding Tube: Calculated length/diameter for minimum 15-second residence time at flow rate",
+                            "Flow Diversion Device (FDD): Safety device — agar temperature <72°C fall karein toh automatically milk divert karta hai (unpasteurized milk back to balance tank)",
+                            "Cooling Section (PHE): Pasteurized milk ko chilled water/glycol se cool karna",
+                            "Homogenizer (optional): 150-200 bar pressure — fat globule size reduction"
+                        ]
+                    }
+                },
+
+                chemicals: {
+                    title: "Chemical Preservation Methods",
+                    h2o2: {
+                        title: "Hydrogen Peroxide (H2O2) — Scientific Details",
+                        p1: "H2O2 ek powerful oxidizing agent hai jiska antimicrobial mechanism: reactive oxygen species (ROS) generation — hydroxyl radicals (·OH), superoxide (O2·⁻) — jo bacterial cell membranes, proteins aur DNA ko oxidatively damage karte hain. Effective concentration: 0.03-0.1% (300-1000 ppm) for milk preservation. Gram-negative bacteria generally more sensitive hain than Gram-positive.",
+                        p2: "H2O2 doodh mein catalase enzyme (naturally present) se rapidly decompose ho jata hai: 2H₂O₂ → 2H₂O + O₂ (catalase-mediated). Isliye higher concentrations needed. Disadvantages: destroys catalase aur peroxidase (indigenous enzymes), reduces vitamin C aur some B vitamins, can cause protein oxidation (off-flavours), methionine oxidation in proteins. Regulatory status: FDA 21 CFR 184.1366 — GRAS (Generally Recognized as Safe) for specific uses, but banned in many countries for direct milk preservation."
+                    },
+
+                    lp_system: {
+                        title: "Lactoperoxidase System (LP-System) — Detailed Science",
+                        p1: "LP-System ek naturally occurring antimicrobial system hai: Lactoperoxidase enzyme (LP) + Thiocyanate ions (SCN⁻) + Hydrogen peroxide (H2O2). Reaction: LP catalyzes oxidation of SCN⁻ by H2O2 → Hypothiocyanous acid (HOSCN) + Hypothiocyanite (OSCN⁻). Natural content: LP — 30 mg/L bovine milk (highly concentrated whey protein), SCN⁻ — 1-15 mg/L (from glucosinolate metabolism, brassica feed se variably). H2O2 naturally very low — limiting factor.",
+                        p2: "LP-System activation: WHO/FAO approved protocol — thiocyanate 14 ppm + H2O2 8.5 ppm add karna (H2O2 source: sodium percarbonate). Effect: bacteriostatic (growth inhibition) rather than bactericidal for mesophilic bacteria, at 30°C, up to 7-8 hours additional protection. Scientific mechanism: HOSCN irreversibly inhibits bacterial enzymes containing sulfhydryl groups (thiol-dependent enzymes like glycolysis enzymes, hexokinase, aldolase) → energy metabolism block → bacterial growth arrest. LP-system ineffective against: thermophilic bacteria, spores, yeasts, molds."
+                    },
+
+                    nisin: {
+                        title: "Nisin — Natural Antimicrobial Peptide",
+                        p1: "Nisin ek bacteriocin hai — Lactococcus lactis subsp. lactis dwara produced ek antimicrobial peptide. Structure: 34 amino acid lantibiotic with unique lanthionine residues. Mechanism: pore formation in bacterial cell membrane (lipid II binding) + inhibition of cell wall synthesis. Spectrum: active against Gram-positive bacteria aur spores (Clostridium botulinum, Bacillus cereus, Listeria monocytogenes, Staphylococcus aureus). Gram-negative bacteria resistant (outer membrane barrier). FSSAI permitted level: 250 IU/g (international units per gram). Dairy applications: processed cheese (prevents late blowing by Clostridia), flavoured milk, UHT milk (extra safety hurdle). Temperature stability: stable at low pH (<5.0), loses activity at neutral pH — dairy applications limited by this.",
+                        regulatory: "Status: E234 (European food additive number), GRAS (USA), Codex GSFA — permitted in various dairy products at specific levels."
+                    },
+
+                    natamycin: {
+                        title: "Natamycin (Pimaricin) — Antifungal Preservative",
+                        p1: "Natamycin ek polyene macrolide antifungal compound hai — Streptomyces natalensis dwara produced. Mechanism: ergosterol ke saath binding (fungal cell membrane component) → membrane permeability aur function disrupt → fungal cell death. Spectrum: highly effective against all yeasts aur molds, bacteria ko affect nahi karta. Dairy applications: cheese surface treatment (0.2-0.4 mg/dm²), cottage cheese, sour cream. NOT for use in fermented dairy products where starter culture (yeast-based) involved. FSSAI permitted: surface treatment of cheese only. EU: E235 — permitted only for surface treatment of hard/semi-hard cheeses.",
+                    },
+
+                    other: {
+                        title: "Other Chemical Preservatives aur Modern Approaches",
+                        items: [
+                            "Sodium benzoate: Primarily antifungal, effective pH <4.5 — mainly fruit-flavoured dairy drinks mein; FSSAI allows in flavoured milk up to 600 ppm",
+                            "Potassium sorbate: Sorbic acid (CH3CH=CHCH=CHCOOH) — antifungal; more effective at pH 4.0-6.0; used in dairy spreads, cheese coatings; FSSAI permits 1000 ppm in some categories",
+                            "Lysozyme: Natural enzyme from egg white; cleaves bacterial cell wall (peptidoglycan); used in hard cheese to prevent late blowing by Clostridium tyrobutyricum; E1105 in EU",
+                            "Carbon Dioxide (CO2): Dissolved CO2 (Hyperbaric CO2 treatment) inhibits many bacteria; used in some ESL milk applications; 'carbonic acid' antimicrobial effect",
+                            "Bacteriophages: Viruses that infect bacteria; FDA-approved ListShield™ (against L. monocytogenes) for ready-to-eat foods; research stage for
+<truncated 44641 bytes>
+
+NOTE: The output was truncated because it was too long. Use a more targeted query or a smaller range to get the information you need.

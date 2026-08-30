@@ -1,0 +1,519 @@
+"use client";
+
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Factory,
+  FlaskConical,
+  Beaker,
+  Scale,
+  Calculator,
+  Settings,
+  Users,
+  TestTube,
+  ClipboardCheck,
+  CheckSquare,
+  Droplet,
+  PackageCheck,
+  Lock,
+  Microscope,
+  Recycle,
+  Bug,
+  ShieldCheck,
+  FileSpreadsheet,
+  Search,
+  GraduationCap,
+  Atom,
+  Combine
+} from "lucide-react";
+import { ReagentIcon, HplcIcon } from "@/components/icons";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "@/context/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+
+import { useFavorites } from "@/context/favorites-context";
+
+// All Modals - dynamically imported to prevent compilation hang
+const DairyIndustryModal = dynamic(() => import("./info-modals/dairy-industry-modal").then(m => ({ default: m.DairyIndustryModal })), { ssr: false });
+const MilkChemistryModal = dynamic(() => import("./info-modals/milk-chemistry-modal").then(m => ({ default: m.MilkChemistryModal })), { ssr: false });
+const AdulterationModal = dynamic(() => import("./info-modals/adulteration-modal").then(m => ({ default: m.AdulterationModal })), { ssr: false });
+const StandardizationIModal = dynamic(() => import("./calculators/standardization-i-modal").then(m => ({ default: m.StandardizationIModal })), { ssr: false });
+const StandardizationIIModal = dynamic(() => import("./calculators/standardization-ii-modal").then(m => ({ default: m.StandardizationIIModal })), { ssr: false });
+const SolutionsPrepModal = dynamic(() => import("./calculators/solutions-prep-modal").then(m => ({ default: m.SolutionsPrepModal })), { ssr: false });
+const DairyProcessingModal = dynamic(() => import("./info-modals/dairy-processing-modal").then(m => ({ default: m.DairyProcessingModal })), { ssr: false });
+const AboutUsModal = dynamic(() => import("./info-modals/about-us-modal").then(m => ({ default: m.AboutUsModal })), { ssr: false });
+const CompositionalAnalysisModal = dynamic(() => import("./info-modals/compositional-analysis-modal").then(m => ({ default: m.CompositionalAnalysisModal })), { ssr: false });
+const CalibrationStandardizationModal = dynamic(() => import("./info-modals/calibration-standardization-modal").then(m => ({ default: m.CalibrationStandardizationModal })), { ssr: false });
+const QualityConceptModal = dynamic(() => import("./info-modals/quality-concept-modal").then(m => ({ default: m.QualityConceptModal })), { ssr: false });
+const WaterTestingModal = dynamic(() => import("./info-modals/water-testing-modal").then(m => ({ default: m.WaterTestingModal })), { ssr: false });
+const PackagingMaterialTestingModal = dynamic(() => import("./info-modals/packaging-material-testing-modal").then(m => ({ default: m.PackagingMaterialTestingModal })), { ssr: false });
+const LabEquipmentsModal = dynamic(() => import("./info-modals/lab-equipments-modal").then(m => ({ default: m.LabEquipmentsModal })), { ssr: false });
+const CipProcessModal = dynamic(() => import("./info-modals/cip-process-modal").then(m => ({ default: m.CipProcessModal })), { ssr: false });
+const MicrobiologyTestingModal = dynamic(() => import("./info-modals/microbiology-testing-modal").then(m => ({ default: m.MicrobiologyTestingModal })), { ssr: false });
+const MilkHandlingPreservationModal = dynamic(() => import("./info-modals/milk-handling-preservation-modal").then(m => ({ default: m.MilkHandlingPreservationModal })), { ssr: false });
+const FssaiStandardsModal = dynamic(() => import("./info-modals/fssai-standards-modal").then(m => ({ default: m.FssaiStandardsModal })), { ssr: false });
+const VariousCalculatorsModal = dynamic(() => import("./calculators/various-calculators-modal").then(m => ({ default: m.VariousCalculatorsModal })), { ssr: false });
+const ProductsProcessingModal = dynamic(() => import("./info-modals/products-processing-modal").then(m => ({ default: m.ProductsProcessingModal })), { ssr: false });
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+
+const AuditsModal = dynamic(() => import("./info-modals/audits-modal").then(m => ({ default: m.AuditsModal })), { ssr: false });
+const ValidationVerificationModal = dynamic(() => import("./info-modals/validation-verification-modal").then(m => ({ default: m.ValidationVerificationModal })), { ssr: false });
+const EtpModal = dynamic(() => import("./info-modals/etp-modal").then(m => ({ default: m.EtpModal })), { ssr: false });
+const ExpertSupportModal = dynamic(() => import("./info-modals/expert-support-modal").then(m => ({ default: m.ExpertSupportModal })), { ssr: false });
+const ProductionCalculationsModal = dynamic(() => import("./calculators/production-calculations-modal").then(m => ({ default: m.ProductionCalculationsModal })), { ssr: false });
+const PestControlModal = dynamic(() => import("./info-modals/pest-control-modal").then(m => ({ default: m.PestControlModal })), { ssr: false });
+const ChromatographyModal = dynamic(() => import("./info-modals/chromatography-modal").then(m => ({ default: m.ChromatographyModal })), { ssr: false });
+const ResumeMakerModal = dynamic(() => import("./calculators/resume-maker-modal").then(m => ({ default: m.ResumeMakerModal })), { ssr: false });
+const TestSeriesModal = dynamic(() => import("./test-series-modal").then(m => ({ default: m.TestSeriesModal })), { ssr: false });
+const SarathiChatWidget = dynamic(() => import("./sarathi-chat-widget").then(m => ({ default: m.SarathiChatWidget })), { ssr: false });
+const JobLaunchpadModal = dynamic(() => import("./job-launchpad-modal").then(m => ({ default: m.JobLaunchpadModal })), { ssr: false });
+const FoodTestingLaunchpadModal = dynamic(() => import("./food-testing-launchpad-modal").then(m => ({ default: m.FoodTestingLaunchpadModal })), { ssr: false });
+
+type Topic = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  icon: React.ElementType;
+  badge?: string;
+  modal: React.ElementType;
+  isPro: boolean;
+  color: string;
+  iconColor: string;
+};
+
+const qualityAccessTopics = [
+  'test-series', 'industry', 'fssai-standards', 'quality-concept', 'microbiology', 'audits', 'validation-verification',
+  'expert-support', 'calibration', 'lab-equipments', 'milk-chemistry', 'lab-calculations', 'production-calculations',
+  'adulteration', 'solutions-prep', 'compositional-analysis', 'water-testing', 'packaging-testing', 'chromatography',
+  'std1', 'std2', 'milk-handling', 'cip-process', 'etp', 'about-us', 'pest-control'
+];
+
+const productionAccessTopics = [
+  'test-series', 'industry', 'fssai-standards', 'quality-concept', 'audits', 'validation-verification', 'expert-support',
+  'milk-chemistry', 'production-calculations', 'std1', 'std2', 'processing', 'milk-handling',
+  'products-processing',
+  'cip-process', 'etp', 'about-us', 'pest-control'
+];
+
+const processAccessTopics = [
+  'test-series', 'industry', 'std1', 'std2', 'processing', 'milk-handling',
+  'products-processing', 'cip-process', 'about-us'
+];
+
+const departmentAccess: Record<string, string[]> = {
+  'quality-access': qualityAccessTopics,
+  'production-access': productionAccessTopics,
+  'process-access': processAccessTopics,
+};
+
+const topics: Topic[] = [
+  { id: 'test-series', title: 'Test Series', description: '120 Qs Live Exam Practice', category: 'quality', icon: GraduationCap, badge: 'New Live', modal: TestSeriesModal, isPro: false, color: 'from-amber-500 via-orange-500 to-red-600', iconColor: 'text-white' },
+  { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'production', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-500 via-indigo-500 to-purple-600', iconColor: 'text-white' },
+  { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'quality', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: false, color: 'from-emerald-500 via-teal-500 to-cyan-600', iconColor: 'text-white' },
+  { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'quality', icon: CheckSquare, modal: QualityConceptModal, isPro: true, color: 'from-cyan-500 via-sky-500 to-blue-600', iconColor: 'text-white' },
+  { id: 'microbiology', title: 'Microbiology', description: 'Testing & Pathogens', category: 'quality', icon: Bug, badge: 'New', modal: MicrobiologyTestingModal, isPro: true, color: 'from-purple-500 via-violet-500 to-fuchsia-600', iconColor: 'text-white' },
+  { id: 'audits', title: 'Audits', description: 'Internal & External Audits', category: 'quality', icon: ClipboardCheck, badge: 'New', modal: AuditsModal, isPro: true, color: 'from-rose-500 via-pink-500 to-red-600', iconColor: 'text-white' },
+  { id: 'validation-verification', title: 'Validation & Verification', description: 'Food Safety Assurance', category: 'quality', icon: ClipboardCheck, badge: 'New', modal: ValidationVerificationModal, isPro: true, color: 'from-violet-500 via-purple-500 to-fuchsia-600', iconColor: 'text-white' },
+  { id: 'expert-support', title: 'Expert Support', description: 'Real Expert Advice', category: 'production', icon: GraduationCap, modal: ExpertSupportModal, isPro: true, color: 'from-orange-500 via-amber-500 to-yellow-600', iconColor: 'text-white' },
+  { id: 'calibration', title: 'Calibration', description: 'Glassware & Reagents', category: 'quality', icon: ClipboardCheck, modal: CalibrationStandardizationModal, isPro: true, color: 'from-red-500 via-orange-500 to-amber-600', iconColor: 'text-white' },
+  { id: 'lab-equipments', title: 'Lab Equipments', description: 'Principles & Working', category: 'quality', icon: Microscope, badge: 'Pro', modal: LabEquipmentsModal, isPro: true, color: 'from-slate-500 via-gray-500 to-zinc-600', iconColor: 'text-white' },
+  { id: 'milk-chemistry', title: 'Milk Chemistry', description: 'Composition & Properties', category: 'quality', icon: Atom, modal: MilkChemistryModal, isPro: true, color: 'from-pink-500 via-rose-500 to-red-600', iconColor: 'text-white' },
+  { id: 'lab-calculations', title: 'Lab Calculations', description: 'Yield, Acidity, etc.', category: 'quality', icon: FileSpreadsheet, badge: 'Updated', modal: VariousCalculatorsModal, isPro: true, color: 'from-amber-500 via-orange-500 to-red-600', iconColor: 'text-white' },
+  { id: 'production-calculations', title: 'Production Calculations', description: 'Batch, Yield & Costing', category: 'production', icon: Combine, modal: ProductionCalculationsModal, isPro: true, color: 'from-indigo-500 via-violet-500 to-purple-600', iconColor: 'text-white' },
+  { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'quality', icon: ReagentIcon, badge: 'Updated', modal: AdulterationModal, isPro: true, color: 'from-yellow-500 via-amber-500 to-orange-600', iconColor: 'text-white' },
+  { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'quality', icon: Beaker, modal: SolutionsPrepModal, isPro: true, color: 'from-green-500 via-emerald-500 to-teal-600', iconColor: 'text-white' },
+  { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'quality', icon: TestTube, modal: CompositionalAnalysisModal, isPro: true, color: 'from-indigo-500 via-blue-500 to-purple-600', iconColor: 'text-white' },
+  { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'quality', icon: Droplet, modal: WaterTestingModal, isPro: true, color: 'from-blue-500 via-cyan-500 to-sky-600', iconColor: 'text-white' },
+  { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'quality', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true, color: 'from-yellow-500 via-amber-500 to-orange-600', iconColor: 'text-white' },
+  { id: 'chromatography', title: 'Chromatography', description: 'HPLC, GC, TLC & More', category: 'quality', icon: HplcIcon, badge: 'New', modal: ChromatographyModal, isPro: false, color: 'from-pink-100 to-rose-200', iconColor: 'text-white' },
+  { id: 'std1', title: 'Standardization I', description: 'Basic Principles', category: 'process', icon: Scale, modal: StandardizationIModal, isPro: true, color: 'from-sky-500 via-blue-500 to-cyan-600', iconColor: 'text-white' },
+  { id: 'std2', title: 'Advanced Standardization', description: 'Advanced Blending', category: 'process', icon: Calculator, modal: StandardizationIIModal, isPro: true, color: 'from-fuchsia-500 via-pink-500 to-purple-600', iconColor: 'text-white' },
+  { id: 'processing', title: 'Dairy Processing', description: 'Techniques & Machinery', category: 'process', icon: Settings, modal: DairyProcessingModal, isPro: true, color: 'from-gray-500 via-slate-500 to-zinc-600', iconColor: 'text-white' },
+  { id: 'milk-handling', title: 'Milk Handling', description: 'Reception & Preservation', category: 'process', icon: Droplet, badge: 'New', modal: MilkHandlingPreservationModal, isPro: false, color: 'from-cyan-500 via-blue-500 to-sky-600', iconColor: 'text-white' },
+  { id: 'products-processing', title: 'Products Processing', description: 'Yogurt, Butter, Ghee & More', category: 'production', icon: Factory, badge: 'New', modal: ProductsProcessingModal, isPro: true, color: 'from-pink-500 via-fuchsia-500 to-purple-600', iconColor: 'text-white' },
+  { id: 'cip-process', title: 'CIP Process', description: 'Cleaning-In-Place Guide', category: 'process', icon: Recycle, badge: 'New', modal: CipProcessModal, isPro: true, color: 'from-blue-500 via-cyan-500 to-teal-600', iconColor: 'text-white' },
+  { id: 'etp', title: 'ETP', description: 'Wastewater Treatment', category: 'process', icon: Recycle, badge: 'New', modal: EtpModal, isPro: true, color: 'from-lime-500 via-green-500 to-emerald-600', iconColor: 'text-white' },
+  { id: 'pest-control', title: 'Pest Control', description: 'Prevention & Management', category: 'quality', icon: Bug, modal: PestControlModal, isPro: true, color: 'from-red-500 via-rose-500 to-pink-600', iconColor: 'text-white' },
+  { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'production', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-500 via-gray-500 to-stone-600', iconColor: 'text-white' },
+];
+
+const ToolsHub = dynamic(() => import("./tools-hub").then(m => ({ default: m.ToolsHub })), { ssr: false });
+const BookmarksWorkspace = dynamic(() => import("./bookmarks-workspace").then(m => ({ default: m.BookmarksWorkspace })), { ssr: false });
+
+interface TopicGridProps {
+  activeTab?: string;
+}
+
+export function TopicGrid({ activeTab = "home" }: TopicGridProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const router = useRouter();
+  const { isFavorite, toggleFavorite } = useFavorites();
+
+  const filteredTopics = topics.filter((topic) => {
+    // Hide Test Series from Home Screen Grid cards - accessible only via Tools Hub
+    if (topic.id === "test-series") {
+      return false;
+    }
+
+    const favorited = isFavorite(topic.id);
+
+    if (activeTab === "bookmarks" && !favorited) {
+      return false;
+    }
+
+    if (activeTab === "tools") {
+      const isToolOrCalc =
+        topic.category === "process" ||
+        topic.id.includes("calc") ||
+        topic.id.includes("std") ||
+        topic.id.includes("calibration") ||
+        topic.id.includes("solutions") ||
+        topic.id.includes("equipments");
+      if (!isToolOrCalc) return false;
+    }
+
+    const matchesSearch =
+      topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      topic.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesSearch;
+  });
+
+  const openModal = (id: string, isProFeature: boolean) => {
+    if (user?.isAnonymous && id !== 'about-us') {
+      toast({
+        title: "Sign Up to Access",
+        description: "This feature is locked for guests. Please create an account to continue.",
+        action: (
+          <Button onClick={() => router.push('/signup')}>Sign Up</Button>
+        ),
+      });
+      return;
+    }
+    setActiveModal(id);
+  };
+
+  return (
+    <div className="relative min-h-screen pb-20">
+      {/* Animated Gradient Background with Lab Equipment */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        {/* Main gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 animate-gradient-shift" />
+        
+        {/* Gradient orbs */}
+        <div className="absolute top-10 right-20 w-72 h-72 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-br from-pink-400/20 to-orange-400/20 rounded-full blur-3xl animate-float-delayed" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-cyan-400/15 to-teal-400/15 rounded-full blur-3xl animate-pulse-slow" />
+        
+        {/* Grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, #8b5cf6 1px, transparent 1px),
+              linear-gradient(to bottom, #8b5cf6 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px'
+          }}
+        />
+
+        {/* Floating Lab Equipment Icons */}
+        
+        {/* Beaker 1 */}
+        <div className="absolute top-[15%] left-[10%] animate-float-equipment-1 opacity-10">
+          <Beaker className="w-16 h-16 text-blue-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Test Tube 1 */}
+        <div className="absolute top-[25%] right-[15%] animate-float-equipment-2 opacity-10">
+          <TestTube className="w-14 h-14 text-purple-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Flask Conical 1 */}
+        <div className="absolute top-[40%] left-[8%] animate-float-equipment-3 opacity-10">
+          <FlaskConical className="w-18 h-18 text-pink-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Microscope */}
+        <div className="absolute top-[60%] right-[12%] animate-float-equipment-4 opacity-10">
+          <Microscope className="w-16 h-16 text-teal-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Droplet (Milk) */}
+        <div className="absolute top-[70%] left-[20%] animate-float-equipment-5 opacity-10">
+          <Droplet className="w-14 h-14 text-cyan-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Settings (Gear/Wheel) */}
+        <div className="absolute top-[35%] right-[25%] animate-spin-equipment opacity-10">
+          <Settings className="w-16 h-16 text-orange-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Scale/Balance */}
+        <div className="absolute bottom-[20%] left-[30%] animate-float-equipment-6 opacity-10">
+          <Scale className="w-15 h-15 text-indigo-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Beaker 2 */}
+        <div className="absolute bottom-[40%] right-[8%] animate-float-equipment-7 opacity-10">
+          <Beaker className="w-14 h-14 text-emerald-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Test Tube 2 */}
+        <div className="absolute top-[50%] left-[15%] animate-float-equipment-8 opacity-10">
+          <TestTube className="w-16 h-16 text-rose-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Calculator */}
+        <div className="absolute bottom-[50%] right-[30%] animate-float-equipment-10 opacity-10">
+          <Calculator className="w-14 h-14 text-amber-500" strokeWidth={1.5} />
+        </div>
+        
+        {/* Factory (Processing) */}
+        <div className="absolute top-[80%] right-[18%] animate-float-equipment-11 opacity-10">
+          <Factory className="w-16 h-16 text-blue-600" strokeWidth={1.5} />
+        </div>
+        
+        {/* Package */}
+        <div className="absolute top-[10%] right-[35%] animate-float-equipment-12 opacity-10">
+          <PackageCheck className="w-14 h-14 text-green-500" strokeWidth={1.5} />
+        </div>
+      </div>
+
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        {activeTab === "bookmarks" ? (
+          <BookmarksWorkspace
+            bookmarkedTopics={filteredTopics}
+            onOpenModal={(id) => openModal(id, true)}
+            onToggleFavorite={(topic) => {
+              toggleFavorite({
+                id: topic.id,
+                title: topic.title,
+                category: topic.category,
+                description: topic.description,
+                type: 'topic'
+              });
+              toast({
+                title: "Updated Favorites",
+                description: `Bookmarks updated.`
+              });
+            }}
+          />
+        ) : activeTab === "tools" ? (
+          <ToolsHub onOpenModal={(id) => openModal(id, true)} />
+        ) : (
+          <>
+
+            <div className="mb-6 space-y-4">
+              <div className="relative max-w-md mx-auto">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Input
+                  type="text"
+                  placeholder="Search topics, calculators, tests..."
+                  className="pl-9 bg-white/90 backdrop-blur-sm border-slate-200/80 shadow-sm rounded-xl text-sm"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* 3-column Grid matching the photo */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 sm:gap-4">
+              {filteredTopics.map((topic) => {
+                const isLocked = user?.isAnonymous && topic.id !== 'about-us';
+
+                return (
+                  <div
+                    key={topic.id}
+                    onClick={() => openModal(topic.id, topic.isPro)}
+                    className={cn(
+                      "bg-white p-2.5 sm:p-3.5 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1 transition-all duration-200 text-center relative flex flex-col items-center justify-between group border border-slate-100",
+                      "cursor-pointer"
+                    )}
+                  >
+
+                    {/* Top-Left Badge (New / Pro / Updated / Lock) */}
+                    {isLocked ? (
+                      <div className="absolute top-2 left-2 bg-slate-900 text-white rounded-full p-0.5 z-20 shadow-sm">
+                        <Lock className="w-3 h-3" />
+                      </div>
+                    ) : topic.badge ? (
+                      <span
+                        className={cn(
+                          "absolute top-2 left-2 text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.2 rounded-md shadow-sm z-10 leading-tight tracking-tight text-white",
+                          topic.badge === 'Pro' ? "bg-indigo-600" : topic.badge === 'Updated' ? "bg-red-500" : "bg-red-500"
+                        )}
+                      >
+                        {topic.badge}
+                      </span>
+                    ) : null}
+
+                    {/* Center Squircle Icon Container matching photo */}
+                    <div className={cn(
+                      "w-13 h-13 sm:w-16 sm:h-16 mx-auto mt-2 mb-2 rounded-2xl flex items-center justify-center bg-gradient-to-br shadow-sm",
+                      "group-hover:scale-105 transition-transform duration-200 relative overflow-hidden",
+                      topic.color
+                    )}>
+                      <topic.icon className={cn("w-7 h-7 sm:w-8 sm:h-8 relative z-10", topic.iconColor)} strokeWidth={2.2} />
+                    </div>
+                    
+                    {/* Title */}
+                    <h3 className="font-bold text-slate-800 text-[11px] sm:text-xs leading-tight text-center group-hover:text-indigo-600 transition-colors line-clamp-2 px-0.5">
+                      {topic.title}
+                    </h3>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+
+        {topics.map(topic => {
+          const ModalComponent = topic.modal;
+          if (!ModalComponent) return null;
+          return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
+        })}
+        <TestSeriesModal isOpen={activeModal === 'test-series'} setIsOpen={() => setActiveModal(null)} />
+        <ResumeMakerModal isOpen={activeModal === 'resume-maker'} setIsOpen={() => setActiveModal(null)} />
+        <JobLaunchpadModal isOpen={activeModal === 'job-launchpad'} setIsOpen={() => setActiveModal(null)} />
+        <FoodTestingLaunchpadModal isOpen={activeModal === 'food-testing-launchpad'} setIsOpen={() => setActiveModal(null)} />
+        {activeModal === 'sarathi-bot' && (
+          <Dialog open={true} onOpenChange={() => setActiveModal(null)}>
+            <DialogContent className="max-w-4xl w-full h-[92vh] sm:h-[90vh] p-0 rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-slate-50">
+              <SarathiChatWidget />
+            </DialogContent>
+          </Dialog>
+        )}
+      </div>
+
+      <style jsx>{`
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-30px) translateX(20px); }
+        }
+        
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(30px) translateX(-20px); }
+        }
+        
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.15; transform: scale(1); }
+          50% { opacity: 0.25; transform: scale(1.05); }
+        }
+        
+        /* Equipment Animations */
+        @keyframes float-equipment-1 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(20px, -30px) rotate(5deg); }
+          66% { transform: translate(-15px, -15px) rotate(-3deg); }
+        }
+        
+        @keyframes float-equipment-2 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(-25px, 20px) rotate(-7deg); }
+          66% { transform: translate(15px, 10px) rotate(4deg); }
+        }
+        
+        @keyframes float-equipment-3 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(30px, -25px) rotate(8deg); }
+        }
+        
+        @keyframes float-equipment-4 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-20px, 30px) rotate(-6deg); }
+        }
+        
+        @keyframes float-equipment-5 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(25px, -20px) scale(1.1); }
+        }
+        
+        @keyframes float-equipment-6 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-30px, -20px) rotate(10deg); }
+        }
+        
+        @keyframes float-equipment-7 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(15px, 25px) rotate(-5deg); }
+          66% { transform: translate(-20px, 10px) rotate(3deg); }
+        }
+        
+        @keyframes float-equipment-8 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(20px, 30px) rotate(7deg); }
+        }
+        
+        @keyframes float-equipment-9 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-25px, -30px) rotate(-8deg); }
+        }
+        
+        @keyframes float-equipment-10 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(-15px, -25px) rotate(6deg); }
+          66% { transform: translate(20px, -10px) rotate(-4deg); }
+        }
+        
+        @keyframes float-equipment-11 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(15px, -35px) scale(1.05); }
+        }
+        
+        @keyframes float-equipment-12 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-30px, 25px) rotate(9deg); }
+        }
+        
+        @keyframes spin-equipment {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        
+        @keyframes spin-equipment-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        
+        .animate-gradient-shift {
+          background-size: 200% 200%;
+          animation: gradient-shift 15s ease infinite;
+        }
+        
+        .animate-float { animation: float 8s ease-in-out infinite; }
+        .animate-float-delayed { animation: float-delayed 10s ease-in-out infinite; }
+        .animate-pulse-slow { animation: pulse-slow 6s ease-in-out infinite; }
+        
+        .animate-float-equipment-1 { animation: float-equipment-1 12s ease-in-out infinite; }
+        .animate-float-equipment-2 { animation: float-equipment-2 15s ease-in-out infinite; }
+        .animate-float-equipment-3 { animation: float-equipment-3 10s ease-in-out infinite; }
+        .animate-float-equipment-4 { animation: float-equipment-4 13s ease-in-out infinite; }
+        .animate-float-equipment-5 { animation: float-equipment-5 11s ease-in-out infinite; }
+        .animate-float-equipment-6 { animation: float-equipment-6 14s ease-in-out infinite; }
+        .animate-float-equipment-7 { animation: float-equipment-7 16s ease-in-out infinite; }
+        .animate-float-equipment-8 { animation: float-equipment-8 9s ease-in-out infinite; }
+        .animate-float-equipment-9 { animation: float-equipment-9 12s ease-in-out infinite; }
+        .animate-float-equipment-10 { animation: float-equipment-10 13s ease-in-out infinite; }
+        .animate-float-equipment-11 { animation: float-equipment-11 11s ease-in-out infinite; }
+        .animate-float-equipment-12 { animation: float-equipment-12 14s ease-in-out infinite; }
+        .animate-spin-equipment { animation: spin-equipment 25s linear infinite; }
+        .animate-spin-equipment-slow { animation: spin-equipment-slow 30s linear infinite; }
+      `}</style>
+    </div>
+  );
+}

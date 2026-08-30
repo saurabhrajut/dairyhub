@@ -1,0 +1,110 @@
+import './globals.css';
+import { cn } from "@/lib/utils";
+import { AuthProvider } from "@/context/auth-context";
+import { Toaster } from "@/components/ui/toaster";
+import { SubscriptionProvider } from "@/context/subscription-context";
+import { LanguageProvider } from "@/context/language-context";
+import Script from 'next/script';
+import { FirebaseClientProvider } from "@/firebase/client-provider";
+import { SplashScreenProvider } from "@/context/splash-screen-context";
+import { ReadingModeProvider } from "@/context/reading-mode-context";
+
+const inter = { variable: '--font-inter', className: '' };
+const spaceGrotesk = { variable: '--font-space-grotesk', className: '' };
+const notoDevanagari = { variable: '--font-noto-devanagari', className: '' };
+
+import { FavoritesProvider } from "@/context/favorites-context";
+
+export const metadata = {
+  title: 'Dairy Hub: Dairy Technology, Milk Standardization & QA Guide',
+  description: 'The ultimate digital companion for dairy technology, milk standardization calculations, SNF & Fat estimation, dairy processing guides, QA/QC formats, and plant quality assurance.',
+  applicationName: 'Dairy Hub',
+  keywords: [
+    'Dairy Technology',
+    'Milk Standardization Calculator',
+    'Dairy Processing App',
+    'Pearson Square Milk',
+    'SNF Fat Calculator',
+    'Dairy QA QC Formats',
+    'Dairy Plant Management',
+    'FSSAI Dairy Standards',
+    'Milk Testing Equipment',
+    'Dairy Hub'
+  ],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Dairy Hub',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  other: {
+    'google-adsense-account': 'ca-pub-1786473188592937',
+  },
+};
+
+import { AppBackButtonHandler } from "@/components/mobile/app-back-button-handler";
+import { AntiCopyGuard } from "@/components/security/anti-copy-guard";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192x192.png" />
+        <meta name="theme-color" content="#4F46E5" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Dairy Hub" />
+        
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1786473188592937"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
+
+      <body className={cn('font-body antialiased', inter.variable, spaceGrotesk.variable, notoDevanagari.variable)}>
+        {/* Provider order is critical - SplashScreen must be outermost */}
+        <SplashScreenProvider>
+          <ReadingModeProvider>
+            <FirebaseClientProvider>
+              <LanguageProvider>
+                <SubscriptionProvider>
+                  <AuthProvider>
+                    <FavoritesProvider>
+                      {children}
+                    </FavoritesProvider>
+                  </AuthProvider>
+                </SubscriptionProvider>
+              </LanguageProvider>
+            </FirebaseClientProvider>
+          </ReadingModeProvider>
+        </SplashScreenProvider>
+        
+        <Toaster />
+        <AntiCopyGuard />
+        <AppBackButtonHandler />
+        
+        <Script id="chunk-error-handler">
+          {`
+            window.addEventListener('error', (event) => {
+              if (event.message && (event.message.includes('ChunkLoadError') || event.message.includes('Loading chunk'))) {
+                console.warn('ChunkLoadError detected, forcing page reload.');
+                window.location.reload();
+              }
+            });
+          `}
+        </Script>
+      </body>
+    </html>
+  );
+}

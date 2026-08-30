@@ -1,0 +1,3085 @@
+"use client";
+
+import React, { useState, useRef, useMemo } from "react";
+import {
+  Printer,
+  Download,
+  FileText,
+  Building2,
+  MapPin,
+  Calendar,
+  Plus,
+  Trash2,
+  CheckCircle,
+  Info,
+  Loader2,
+  FileDown,
+  ShieldCheck,
+  ClipboardList,
+  Beaker,
+  FlaskConical,
+  Droplet,
+  TestTube,
+  Scale,
+  Columns,
+  RotateCw,
+  UserCheck,
+  Clock,
+  PackageCheck,
+  AlertTriangle
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
+import { savePdfFile } from "@/lib/mobile-download";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+
+// Types for different formats
+type FormatType = 
+  | "raw-milk-tanker" 
+  | "raw-milk-can" 
+  | "raw-milk-silo" 
+  | "finished-products" 
+  | "lab-calibration" 
+  | "chemical-reagent" 
+  | "media-log" 
+  | "sample-register-coa" 
+  | "product-release" 
+  | "water-testing" 
+  | "micro-swabs"
+  | "cip-validation"
+  | "adulteration-strip"
+  | "sensory-organoleptic"
+  | "effluent-etp"
+  | "packing-integrity"
+  | "incubation-shelf-life"
+  | "glass-brittle-audit"
+  | "pest-control-hygiene"
+  | "cip-sanitation-verification"
+  | "leave-application"
+  | "overtime-application"
+  | "material-issue-slip"
+  | "equipment-breakage-log";
+
+interface FormatInfo {
+  id: FormatType;
+  title: string;
+  description: string;
+  orientation: "portrait" | "landscape";
+  icon: any;
+}
+
+const FORMATS_CATALOG: FormatInfo[] = [
+  {
+    id: "raw-milk-tanker",
+    title: "Raw Milk Reception Log Sheet (Tankers)",
+    description: "Quality control tracker for milk tankers receiving at dock.",
+    orientation: "landscape",
+    icon: TestTube
+  },
+  {
+    id: "raw-milk-can",
+    title: "Raw Milk Reception Log Sheet (Cans)",
+    description: "Quality control tracker for milk cans/routes receiving at dock.",
+    orientation: "landscape",
+    icon: TestTube
+  },
+  {
+    id: "raw-milk-silo",
+    title: "Raw Milk Silo Storage Log Sheet",
+    description: "Quality control and temperature tracker for raw milk storage silos.",
+    orientation: "landscape",
+    icon: TestTube
+  },
+  {
+    id: "finished-products",
+    title: "Finished Product Analysis Report",
+    description: "Daily chemical & physical standards verification sheet for finished dairy products.",
+    orientation: "landscape",
+    icon: ShieldCheck
+  },
+  {
+    id: "lab-calibration",
+    title: "Laboratory Calibration & Equipment Log",
+    description: "Accuracy check record for digital instruments, balances, and glassware.",
+    orientation: "portrait",
+    icon: Scale
+  },
+  {
+    id: "chemical-reagent",
+    title: "Chemical & Reagent Prep & Stock Log",
+    description: "Log for chemical preparation, stock verification, standardization factor, and expiry.",
+    orientation: "portrait",
+    icon: Beaker
+  },
+  {
+    id: "media-log",
+    title: "Microbiology Culture Media Log Sheet",
+    description: "Autoclave sterilization and prep log for microbiology agar and broth media.",
+    orientation: "portrait",
+    icon: FlaskConical
+  },
+  {
+    id: "sample-register-coa",
+    title: "Sample Register & COA Log",
+    description: "Daily register of analysis results and Certificate of Analysis (COA) compliance checks.",
+    orientation: "landscape",
+    icon: ClipboardList
+  },
+  {
+    id: "product-release",
+    title: "Product Release Register",
+    description: "Finished product batch release tracking sheet including chemical, micro, and sensory clearances.",
+    orientation: "landscape",
+    icon: CheckCircle
+  },
+  {
+    id: "water-testing",
+    title: "Water Quality Analysis Log Sheet",
+    description: "Daily checks for pH, hardness, TDS, alkalinity, and residual chlorine in plant water systems.",
+    orientation: "portrait",
+    icon: Droplet
+  },
+  {
+    id: "micro-swabs",
+    title: "Microbiology Swab Testing Record",
+    description: "Swab and environmental testing log for SPC, Coliform, Yeast & Mold in silos, packaging lines, and hands.",
+    orientation: "landscape",
+    icon: FlaskConical
+  },
+  {
+    id: "cip-validation",
+    title: "CIP Chemical & Wash Cycle Validation Register",
+    description: "Tracking log for Caustic/Acid %, wash temps, flow rate, titration end-points, and rinse pH.",
+    orientation: "landscape",
+    icon: ClipboardList
+  },
+  {
+    id: "adulteration-strip",
+    title: "Milk Adulteration & Chemical Test Register",
+    description: "Screening log for Urea, Starch, Detergent, Neutralizers, Glucose, H2O2, Salt, and Antibiotics.",
+    orientation: "landscape",
+    icon: Beaker
+  },
+  {
+    id: "sensory-organoleptic",
+    title: "Sensory & Organoleptic Evaluation Sheet",
+    description: "Organoleptic panel rating for Flavor, Odor, Appearance, Texture, and Color score (1-10 scale).",
+    orientation: "landscape",
+    icon: CheckCircle
+  },
+  {
+    id: "effluent-etp",
+    title: "Effluent Treatment Plant (ETP) Wastewater Log",
+    description: "Daily testing sheet for pH, BOD, COD, TSS, Oil & Grease, and treated water SPCB compliance.",
+    orientation: "landscape",
+    icon: Droplet
+  },
+  {
+    id: "packing-integrity",
+    title: "Pouch & Packaging Integrity Quality Sheet",
+    description: "Inspection record for leak test (submerged 5 psi), seal strength, weight variation, and MRP legibility.",
+    orientation: "portrait",
+    icon: ShieldCheck
+  },
+  {
+    id: "incubation-shelf-life",
+    title: "Incubation & Shelf-Life Retention Register",
+    description: "37°C & 4°C retention control sample monitoring log for gas formation, pH drop, and curdling.",
+    orientation: "portrait",
+    icon: Calendar
+  },
+  {
+    id: "glass-brittle-audit",
+    title: "Glass & Brittle Plastic Audit Register",
+    description: "Physical audit log for lab glassware, windows, sight glasses, lamps, and hard plastic guards.",
+    orientation: "portrait",
+    icon: Scale
+  },
+  {
+    id: "pest-control-hygiene",
+    title: "Lab & Plant Pest Control & Hygiene Record",
+    description: "Audit register for rodent bait stations, insect light traps (ILT), fly counts, and air hygiene.",
+    orientation: "portrait",
+    icon: Info
+  },
+  {
+    id: "cip-sanitation-verification",
+    title: "CIP Thermal & Chemical Sanitation Log",
+    description: "Sanitizer concentration (Chlorine / PAA / 85°C Hot Water) and contact time validation sheet.",
+    orientation: "landscape",
+    icon: ShieldCheck
+  },
+  {
+    id: "leave-application",
+    title: "Leave Application Form",
+    description: "Official staff leave application form with applicant, contact & approval signatures.",
+    orientation: "portrait",
+    icon: UserCheck
+  },
+  {
+    id: "overtime-application",
+    title: "Monthly Overtime Verification Form",
+    description: "Monthly staff overtime duty hours verification form with daily log.",
+    orientation: "portrait",
+    icon: Clock
+  },
+  {
+    id: "material-issue-slip",
+    title: "Material Issue Slip",
+    description: "Official store material issue slip with items, code, rate, amount & 6 verification signatures.",
+    orientation: "landscape",
+    icon: PackageCheck
+  },
+  {
+    id: "equipment-breakage-log",
+    title: "Lab Glassware & Equipment Breakage Register",
+    description: "Incident report for broken glassware, damaged probes, cost & replacement tracking.",
+    orientation: "landscape",
+    icon: AlertTriangle
+  }
+];
+
+export function LabFormatsCalc() {
+  const { toast } = useToast();
+  const printAreaRef = useRef<HTMLDivElement>(null);
+  
+  const [companyName, setCompanyName] = useState("DAIRY HUB COOPERATIVE");
+  const [labLocation, setLabLocation] = useState("QUALITY CONTROL LABORATORY");
+  const [currentDate, setCurrentDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
+  
+  const [selectedFormatId, setSelectedFormatId] = useState<FormatType>("raw-milk-tanker");
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isContentOn, setIsContentOn] = useState(true);
+
+  const cellVal = (v: any) => (isContentOn ? (v !== null && v !== undefined ? String(v) : "") : "");
+
+  // Initial States for Lab Formats Data
+  const [rawMilkTankerRows, setRawMilkTankerRows] = useState([
+    { id: 1, tankerNo: "HR-55-A-1234", source: "Banas Union", qty: "15000", temp: "4.2", acidity: "0.130", fat: "4.20", snf: "8.50", cob: "Negative", mbrt: "5.5", adulteration: "Nil", status: "Accepted", analyst: "Amit K." },
+    { id: 2, tankerNo: "UP-16-T-8899", source: "Center-12 Raw", qty: "8500", temp: "5.5", acidity: "0.140", fat: "4.50", snf: "8.60", cob: "Negative", mbrt: "4.5", adulteration: "Nil", status: "Accepted", analyst: "Amit K." },
+    { id: 3, tankerNo: "MH-12-Q-4567", source: "Saras Collection", qty: "12000", temp: "8.2", acidity: "0.180", fat: "3.80", snf: "8.10", cob: "Positive (COB)", mbrt: "1.5", adulteration: "Starch Trace", status: "Rejected", analyst: "Ritu S." }
+  ]);
+
+  const [rawMilkCanRows, setRawMilkCanRows] = useState([
+    { id: 1, route: "R-102 (Meerut)", totalCans: "45", acceptedCans: "42", rejectedCans: "3", temp: "8.5", acidity: "0.180", fat: "3.80", snf: "8.10", cob: "Positive", adulteration: "Sour Milk", status: "Rejected Cans", analyst: "Ritu S." },
+    { id: 2, route: "R-105 (Hapur)", totalCans: "80", acceptedCans: "80", rejectedCans: "0", temp: "6.2", acidity: "0.145", fat: "4.30", snf: "8.45", cob: "Negative", adulteration: "Nil", status: "Accepted", analyst: "Amit K." },
+    { id: 3, route: "R-108 (Baghpat)", totalCans: "120", acceptedCans: "118", rejectedCans: "2", temp: "5.8", acidity: "0.140", fat: "4.50", snf: "8.55", cob: "Negative", adulteration: "Nil", status: "Accepted", analyst: "Amit K." }
+  ]);
+
+  const [rawMilkSiloRows, setRawMilkSiloRows] = useState([
+    { id: 1, siloNo: "SILO-01", siloPosition: "Zone A - North", openingBal: "12000", receivedQty: "15000", source: "Tanker GP-12", temp: "4.0", acidity: "0.135", fat: "4.15", snf: "8.48", closingBal: "27000", remarks: "Rec. from Banas Tanker" },
+    { id: 2, siloNo: "SILO-02", siloPosition: "Zone A - South", openingBal: "45000", receivedQty: "0", source: "-", temp: "4.2", acidity: "0.140", fat: "4.25", snf: "8.52", closingBal: "35000", remarks: "10000L sent to pasteurizer" },
+    { id: 3, siloNo: "SILO-03", siloPosition: "Zone B - East", openingBal: "0", receivedQty: "12000", source: "Tanker GP-14", temp: "3.8", acidity: "0.130", fat: "4.40", snf: "8.60", closingBal: "12000", remarks: "CIP done, fresh fill" }
+  ]);
+
+  const [productRows, setProductRows] = useState([
+    { id: 1, batchNo: "B-FCM-101", productName: "Full Cream Milk", packSize: "500 ml Pouch", fat: "6.05", snf: "9.02", moisture: "-", acidity: "0.135", phosphatase: "Negative", coliform: "Nil", organoleptic: "Excellent", analyst: "Dr. Verma" },
+    { id: 2, batchNo: "B-PNR-05", productName: "Fresh Paneer", packSize: "200 g Pack", fat: "50.5 (DB)", snf: "-", moisture: "58.2", acidity: "0.200", phosphatase: "-", coliform: "Nil", organoleptic: "Good", analyst: "Amit K." },
+    { id: 3, batchNo: "B-GHEE-12", productName: "Cow Ghee", packSize: "1 L Carton", fat: "99.8", snf: "-", moisture: "0.15", acidity: "0.12 (FFA)", phosphatase: "-", coliform: "Nil", organoleptic: "Pleasant", analyst: "Dr. Verma" }
+  ]);
+
+  const [labCalibrationRows, setLabCalibrationRows] = useState([
+    { id: 1, equipId: "EQ-PH-02", type: "Digital pH Meter", nominalVol: "Buffer 4.0 & 7.0", waterTemp: "25.0", emptyWt: "7.00", filledWt: "7.03", netVol: "+0.03", error: "OK", accepted: "Yes", operator: "Amit K." },
+    { id: 2, glasswareId: "G-PIP-01", type: "Milk Pipette", nominalVol: "10.75", waterTemp: "25.0", emptyWt: "18.250", filledWt: "28.930", netVol: "10.712", error: "-0.038", accepted: "Yes", operator: "Ritu S." },
+    { id: 3, equipId: "EQ-BAL-01", type: "Analytical Balance", nominalVol: "Std Weight 100g", waterTemp: "22.5", emptyWt: "100.000", filledWt: "100.002", netVol: "+0.002", error: "OK", accepted: "Yes", operator: "Dr. Verma" }
+  ]);
+
+  const [chemicalReagentRows, setChemicalReagentRows] = useState([
+    { id: 1, serial: "1", reagentName: "0.1N Sodium Hydroxide (NaOH)", normality: "0.1 N", factor: "0.1005 N", prepDate: "2026-07-01", expDate: "2026-07-31", preparedBy: "Amit K.", standardizedBy: "Dr. Verma", stock: "2.5 L", remarks: "Used for milk acidity" },
+    { id: 2, serial: "2", reagentName: "0.1N Hydrochloric Acid (HCl)", normality: "0.1 N", factor: "0.0998 N", prepDate: "2026-07-05", expDate: "2026-10-05", preparedBy: "Amit K.", standardizedBy: "Dr. Verma", stock: "5.0 L", remarks: "Used for cleaning audits" },
+    { id: 3, serial: "3", reagentName: "Starch Indicator Solution (1%)", normality: "1.0 %", factor: "1.00 %", prepDate: "2026-07-10", expDate: "2026-07-17", preparedBy: "Ritu S.", standardizedBy: "Amit K.", stock: "500 ml", remarks: "Fresh prep weekly" }
+  ]);
+
+  const [mediaLogRows, setMediaLogRows] = useState([
+    { id: 1, date: "2026-07-14", mediaName: "Standard Plate Count Agar (SPCA)", batchNo: "M-SPC-54", qty: "500", temp: "121", pressure: "15", sterility: "No Growth", ph: "7.0", expDate: "2026-07-21", preparedBy: "Dr. Verma" },
+    { id: 2, date: "2026-07-15", mediaName: "Violet Red Bile Agar (VRBA)", batchNo: "M-VRB-23", qty: "300", temp: "121", pressure: "15", sterility: "No Growth", ph: "7.4", expDate: "2026-07-18", preparedBy: "Amit K." }
+  ]);
+
+  const [sampleRegisterRows, setSampleRegisterRows] = useState([
+    { id: 1, sampleId: "S-FCM-782", dateTime: "2026-07-18 09:30", sampleName: "Full Cream Milk", source: "Batch FCM-101", chemical: "Fat:6.05%, SNF:9.02%", micro: "SPC:15 CFU/ml", status: "Pass", coaRef: "COA-782", analyst: "Dr. Verma" },
+    { id: 2, sampleId: "S-PNR-783", dateTime: "2026-07-18 10:15", sampleName: "Paneer", source: "Batch PNR-05", chemical: "Mst:58.2%, Fat:50.5% DB", micro: "Coliform:Nil", status: "Pass", coaRef: "COA-783", analyst: "Amit K." }
+  ]);
+
+  const [productReleaseRows, setProductReleaseRows] = useState([
+    { id: 1, date: "2026-07-18", productName: "Full Cream Milk Pouch", batchNo: "B-FCM-101", mfgDate: "2026-07-18", qty: "9960 Pouches", chemical: "Clear", micro: "Clear", packing: "OK", status: "Released", analyst: "Dr. Verma" },
+    { id: 2, date: "2026-07-18", productName: "Fresh Paneer", batchNo: "B-PNR-05", mfgDate: "2026-07-18", qty: "760 Packs", chemical: "Clear", micro: "Clear", packing: "OK", status: "Released", analyst: "Dr. Verma" }
+  ]);
+
+  const [waterRows, setWaterRows] = useState([
+    { id: 1, source: "Raw Water (Borewell)", ph: "7.4", hardness: "280", tds: "450", chlorine: "Nil", alkalinity: "180", coliform: "Present", remarks: "Requires chlorination" },
+    { id: 2, source: "Soft Water (Softener Out)", ph: "7.2", hardness: "5", tds: "410", chlorine: "Nil", alkalinity: "150", coliform: "Nil", remarks: "OK for boiler feed" },
+    { id: 3, source: "RO Treated Water", ph: "6.8", hardness: "12", tds: "45", chlorine: "0.2", alkalinity: "10", coliform: "Absent", remarks: "Safe drinking water" }
+  ]);
+
+  const [swabRows, setSwabRows] = useState([
+    { id: 1, dateShift: "2026-07-14 A", area: "Tanker Manhole Gasket", sanitizer: "Peracetic Acid (100ppm)", spc: "15", coliform: "Absent", yeastMold: "Absent", status: "OK", analyst: "Dr. Verma" },
+    { id: 2, dateShift: "2026-07-14 A", area: "Pasteurizer Balance Tank", sanitizer: "Hot Water Wash", spc: "4", coliform: "Absent", yeastMold: "Absent", status: "OK", analyst: "Dr. Verma" },
+    { id: 3, dateShift: "2026-07-14 B", area: "Pouch Filler Nozzle", sanitizer: "Ethanol Spray (70%)", spc: "85", coliform: "Present (1 CFU)", yeastMold: "Absent", status: "Alert", analyst: "Dr. Verma" }
+  ]);
+
+  const [cipValidationRows, setCipValidationRows] = useState([
+    { id: 1, circuit: "Pasteurizer #01 Line", washTime: "08:30 - 09:15", lyeConc: "1.50 %", lyeTemp: "78°C", acidConc: "0.85 %", acidTemp: "65°C", flowRate: "12,000 LPH", titrationVol: "15.0 ml NaOH", finalPh: "7.0 (Neutral)", status: "Validated", analyst: "Rahul V." },
+    { id: 2, circuit: "Raw Milk Silo #03", washTime: "10:00 - 10:45", lyeConc: "1.60 %", lyeTemp: "80°C", acidConc: "0.90 %", acidTemp: "68°C", flowRate: "15,000 LPH", titrationVol: "16.0 ml NaOH", finalPh: "7.1 (Neutral)", status: "Validated", analyst: "Rahul V." }
+  ]);
+
+  const [adulterationRows, setAdulterationRows] = useState([
+    { id: 1, sampleSource: "Tanker HR-55-1234", urea: "Negative", starch: "Negative", glucose: "Negative", detergent: "Negative", neutralizer: "Negative", h2o2: "Negative", nitrate: "Negative", salt: "Normal", antibiotic: "Negative", status: "Pass / Authentic", analyst: "Dr. Verma" },
+    { id: 2, sampleSource: "Route-102 Cans", urea: "Trace Positive", starch: "Negative", glucose: "Negative", detergent: "Negative", neutralizer: "Positive (Carbonates)", h2o2: "Negative", nitrate: "Negative", salt: "High (0.28%)", antibiotic: "Negative", status: "REJECTED (Adulterated)", analyst: "Ritu S." }
+  ]);
+
+  const [sensoryRows, setSensoryRows] = useState([
+    { id: 1, sampleName: "Pasteurized FCM Pouch", batchNo: "B-FCM-101", temp: "4°C", flavor: "Clean, Sweet Milk (9/10)", odor: "Fresh (9/10)", color: "Normal White (10/10)", texture: "Smooth (10/10)", overallScore: "9.5 / 10", decision: "Approved", panelist: "Panel A (3 Members)" },
+    { id: 2, sampleName: "Fresh Cow Ghee", batchNo: "B-GHEE-12", temp: "25°C", flavor: "Pleasant Granular Nutty (10/10)", odor: "Aromatic (10/10)", color: "Golden Yellow (10/10)", texture: "Uniform Granular (9/10)", overallScore: "9.8 / 10", decision: "Approved", panelist: "Panel B (2 Members)" }
+  ]);
+
+  const [etpRows, setEtpRows] = useState([
+    { id: 1, dateShift: "2026-07-18 A", sampleLocation: "Equalization Tank Inflow", ph: "5.8", bod: "1,200 mg/L", cod: "2,400 mg/L", tss: "650 mg/L", oilGrease: "85 mg/L", svi: "-", dischargeStatus: "Untreated Raw", analyst: "M. Sharma" },
+    { id: 2, dateShift: "2026-07-18 A", sampleLocation: "Final Treated Discharge", ph: "7.45", bod: "18 mg/L", cod: "110 mg/L", tss: "32 mg/L", oilGrease: "4 mg/L", svi: "95 ml/g", dischargeStatus: "Compliant (SPCB Norms)", analyst: "M. Sharma" }
+  ]);
+
+  const [packingRows, setPackingRows] = useState([
+    { id: 1, lineNo: "Pouch Filler #01", product: "Standard Milk 500ml", leakTest: "Pass (Submerged Water 5 psi)", sealStrength: "Pass (Good Fusion)", weightVar: "502.5 g (Within ±2g)", codePrint: "Clear Legible MRP/Date", status: "Approved", inspector: "K. Singh" },
+    { id: 2, lineNo: "Dahi Cup Filler #02", product: "Plain Dahi 200g Cup", leakTest: "Pass (Foil Heat Seal Tight)", sealStrength: "Pass (No Peeling)", weightVar: "201.0 g (Within ±1g)", codePrint: "Clear Legible B.No", status: "Approved", inspector: "K. Singh" }
+  ]);
+
+  const [incubationRows, setIncubationRows] = useState([
+    { id: 1, sampleName: "Full Cream Milk Pouch", batchNo: "B-FCM-101", storeTemp: "37°C Incubation", incubationDays: "48 Hours", phDrop: "6.68 ➔ 6.65 (Stable)", gasCurd: "No Gas / No Curd", tasteOdor: "Normal", shelfLifeStatus: "Pass (Completely Stable)", analyst: "Dr. Verma" },
+    { id: 2, sampleName: "Flavored Milk Bottle", batchNo: "B-FMB-04", storeTemp: "37°C Incubation", incubationDays: "7 Days", phDrop: "6.55 ➔ 6.52 (Stable)", gasCurd: "No Gas / No Curd", tasteOdor: "Sweet Cardamom", shelfLifeStatus: "Pass (Stable 180 Days)", analyst: "Dr. Verma" }
+  ]);
+
+  const [glassAuditRows, setGlassAuditRows] = useState([
+    { id: 1, area: "QC Wet Chemistry Lab", item: "Glass Burettes & Pipettes", condition: "Intact / No Cracks", protectiveShield: "Installed", actionRequired: "None", status: "Pass", auditor: "S. Patel" },
+    { id: 2, area: "Processing Plant Floor", item: "Silo Sight Glass Window", condition: "Intact", protectiveShield: "Polycarbonate Guard OK", actionRequired: "None", status: "Pass", auditor: "S. Patel" }
+  ]);
+
+  const [pestControlRows, setPestControlRows] = useState([
+    { id: 1, location: "Raw Milk Dock (Bait #01)", trapType: "Rodent Bait Station", inspectionResult: "Intact / No Bait Taken", fliesCount: "Nil", actionTaken: "Re-baited", status: "Satisfactory", auditor: "Pest Officer" },
+    { id: 2, location: "Packaging Hall (Insect Trap #03)", trapType: "UV Insect Light Trap (ILT)", inspectionResult: "Cleaned Catch Tray", fliesCount: "4 Houseflies", actionTaken: "Tray Cleaned & Sticky Pad Changed", status: "Satisfactory", auditor: "Pest Officer" }
+  ]);
+
+  const [cipSanitationRows, setCipSanitationRows] = useState([
+    { id: 1, equipment: "Milk Pasteurizer PHE", sanitizerType: "Hot Water 85°C", contactTime: "20 Mins", concPpm: "85°C Temp", swabRes: "SPC < 10 CFU", status: "Sanitized", analyst: "Rahul V." },
+    { id: 2, equipment: "Siloline Piping", sanitizerType: "Peracetic Acid (PAA)", contactTime: "15 Mins", concPpm: "150 PPM", swabRes: "Coliform Nil", status: "Sanitized", analyst: "Rahul V." }
+  ]);
+
+  // ── Single Form States for Image Formats ──
+  const [leaveAppForm, setLeaveAppForm] = useState({
+    companyName: "YOUR COMPANY NAME",
+    companyAddress: "PLANT / UNIT LOCATION",
+    date: currentDate,
+    name: "Amit Kumar",
+    department: "Quality Control",
+    designation: "Lab Chemist",
+    fromDate: currentDate,
+    toDate: currentDate,
+    noOfDays: "1",
+    purpose: "Personal / Medical Checkup",
+    kindOfLeave: "CL",
+    addressOnLeave: "Contact Address on Leave",
+    addressOnLeaveLine2: "",
+    mobile1: "9876543210",
+    mobile2: "9812345678",
+    personInCharge1: "Rahul V. (Shift Chemist)",
+    personInCharge2: "",
+    personInCharge3: "",
+    applicantSign: "",
+    recommendedBy: "",
+    headOfDept: "",
+  });
+
+  const [overtimeFormHeader, setOvertimeFormHeader] = useState({
+    companyName: "YOUR COMPANY NAME",
+    companyAddress: "PLANT / UNIT LOCATION",
+    name: "Amit Kumar",
+    department: "Quality Control",
+    designation: "Lab Chemist",
+    employeeId: "EMP-104",
+    month: "August 2026",
+    employeeSign: "",
+    deptHeadSign: "",
+  });
+
+  const [overtimeTableRows, setOvertimeTableRows] = useState([
+    { id: 1, date: "2026-08-01", totalDutyHrs: "8.0", extraHours: "3.5", reason: "Raw milk dock tanker receiving overload" },
+    { id: 2, date: "2026-08-02", totalDutyHrs: "8.0", extraHours: "2.0", reason: "ETP wastewater sampling & titration" },
+    { id: 3, date: "2026-08-03", totalDutyHrs: "8.0", extraHours: "4.0", reason: "Pasteurizer CIP verification & micro swab" },
+    { id: 4, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+    { id: 5, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+    { id: 6, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+    { id: 7, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+    { id: 8, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+  ]);
+
+  const updateOvertimeTableRow = (id: number, field: string, val: string) => {
+    setOvertimeTableRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const addOvertimeTableRow = () => {
+    setOvertimeTableRows(prev => [...prev, { id: Date.now(), date: "", totalDutyHrs: "", extraHours: "", reason: "" }]);
+  };
+
+  const deleteOvertimeTableRow = (id: number) => {
+    if (overtimeTableRows.length > 1) {
+      setOvertimeTableRows(prev => prev.filter(r => r.id !== id));
+    }
+  };
+
+  const [materialIssueFormHeader, setMaterialIssueFormHeader] = useState({
+    companyName: "YOUR COMPANY NAME",
+    companyAddress: "PLANT / UNIT LOCATION",
+    sNo: "MIS-2026-089",
+    date: currentDate,
+    dept: "Quality Control Lab",
+    materialRequired: "",
+    authorisedBy: "",
+    receivedBy: "",
+    materialIssued: "",
+    issuedBy: "",
+    storeIncharge: "",
+  });
+
+  const [materialIssueTableItems, setMaterialIssueTableItems] = useState([
+    { id: 1, codeNo: "CH-014", items: "0.1N Sodium Hydroxide (NaOH)", units: "Bottles", qty: "2", rate: "250", amount: "500", remarks: "For Gerber Fat titration" },
+    { id: 2, codeNo: "GL-088", items: "10.75ml Milk Pipette (Class A)", units: "Pcs", qty: "5", rate: "120", amount: "600", remarks: "Dock lab stock replacement" },
+    { id: 3, codeNo: "CH-052", items: "Phenolphthalein Indicator Solution", units: "Bottle", qty: "1", rate: "180", amount: "180", remarks: "Acidity testing" },
+    { id: 4, codeNo: "", items: "", units: "", qty: "", rate: "", amount: "", remarks: "" },
+    { id: 5, codeNo: "", items: "", units: "", qty: "", rate: "", amount: "", remarks: "" },
+    { id: 6, codeNo: "", items: "", units: "", qty: "", rate: "", amount: "", remarks: "" },
+  ]);
+
+  const updateMaterialIssueItem = (id: number, field: string, val: string) => {
+    setMaterialIssueTableItems(prev => prev.map(item => {
+      if (item.id !== id) return item;
+      const updated = { ...item, [field]: val };
+      if (field === "qty" || field === "rate") {
+        const q = parseFloat(field === "qty" ? val : updated.qty) || 0;
+        const r = parseFloat(field === "rate" ? val : updated.rate) || 0;
+        if (q > 0 && r > 0) {
+          updated.amount = (q * r).toFixed(2);
+        }
+      }
+      return updated;
+    }));
+  };
+
+  const addMaterialIssueItem = () => {
+    setMaterialIssueTableItems(prev => [...prev, { id: Date.now(), codeNo: "", items: "", units: "", qty: "", rate: "", amount: "", remarks: "" }]);
+  };
+
+  const deleteMaterialIssueItem = (id: number) => {
+    if (materialIssueTableItems.length > 1) {
+      setMaterialIssueTableItems(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
+  const [leaveAppRows, setLeaveAppRows] = useState([
+    { id: 1, empName: "Amit Kumar", empId: "EMP-104", department: "Quality Control", designation: "Lab Chemist", leaveType: "Casual Leave (CL)", fromDate: "2026-08-01", toDate: "2026-08-02", totalDays: "2", reason: "Family Function", status: "Approved", approvedBy: "HOD / Manager" },
+    { id: 2, empName: "Ritu Sharma", empId: "EMP-112", department: "Plant Operations", designation: "Shift Officer", leaveType: "Sick Leave (SL)", fromDate: "2026-08-05", toDate: "2026-08-05", totalDays: "1", reason: "Fever / Medical Checkup", status: "Pending", approvedBy: "HOD / Manager" }
+  ]);
+
+  const [overtimeRows, setOvertimeRows] = useState([
+    { id: 1, empName: "Amit Kumar", empId: "EMP-104", shift: "Night Shift (C)", otDate: "2026-07-28", otHours: "4.0", workDescription: "Tanker receiving & adulteration screening overload", recommendedBy: "Rahul V.", status: "Approved", approvedBy: "Plant Head" },
+    { id: 2, empName: "M. Sharma", empId: "EMP-108", shift: "Morning (A)", otDate: "2026-07-29", otHours: "3.5", workDescription: "ETP Wastewater BOD/COD trial testing", recommendedBy: "Dr. Verma", status: "Approved", approvedBy: "Plant Head" }
+  ]);
+
+  const [materialIssueRows, setMaterialIssueRows] = useState([
+    { id: 1, issueNo: "IS-2026-042", itemName: "0.1N NaOH Reagent Powder", specification: "AR Grade (500g Bottle)", reqQty: "2 Bottles", issuedQty: "2 Bottles", requestedBy: "Amit K. (Chem Lab)", issuedBy: "Store In-charge", status: "Issued", remarks: "For Gerber Fat titration" },
+    { id: 2, issueNo: "IS-2026-043", itemName: "10.75ml Milk Pipette", specification: "Borosilicate Class A", reqQty: "5 Pcs", issuedQty: "5 Pcs", requestedBy: "Ritu S. (Dock Lab)", issuedBy: "Store In-charge", status: "Issued", remarks: "Replacement for broken unit" }
+  ]);
+
+  const [breakageRows, setBreakageRows] = useState([
+    { id: 1, incidentDate: "2026-07-25", itemName: "250ml Glass Measuring Cylinder", assetTag: "G-CYL-14", cost: "350", handledBy: "Ritu S.", cause: "Accidental slippage during washing", actionTaken: "Scrapped & Replaced", verifiedBy: "Dr. Verma" },
+    { id: 2, incidentDate: "2026-07-27", itemName: "Digital pH Meter Electrode", assetTag: "EQ-PH-02", cost: "2400", handledBy: "Amit K.", cause: "Glass bulb cracked on beaker rim", actionTaken: "New electrode installed & calibrated", verifiedBy: "Dr. Verma" }
+  ]);
+
+  // Find active format info
+  const selectedFormat = useMemo(() => {
+    return FORMATS_CATALOG.find(f => f.id === selectedFormatId)!;
+  }, [selectedFormatId]);
+
+  // Dynamic custom columns & orientation state
+  const [customColumnsMap, setCustomColumnsMap] = useState<Record<string, string[]>>({});
+  const [customCellValues, setCustomCellValues] = useState<Record<string, Record<string | number, Record<string, string>>>>({});
+  const [orientationMap, setOrientationMap] = useState<Record<string, "portrait" | "landscape">>({});
+
+  const currentOrientation = orientationMap[selectedFormatId] || selectedFormat?.orientation || "portrait";
+
+  const toggleOrientation = () => {
+    const next = currentOrientation === "landscape" ? "portrait" : "landscape";
+    setOrientationMap(prev => ({ ...prev, [selectedFormatId]: next }));
+    toast({
+      title: "Page Orientation Changed",
+      description: `Layout set to ${next.toUpperCase()} A4 mode.`,
+    });
+  };
+
+  const addColumn = () => {
+    const existing = customColumnsMap[selectedFormatId] || [];
+    const defaultName = `Custom Col ${existing.length + 1}`;
+    const inputName = window.prompt("Enter new Column Header Name:", defaultName);
+    if (inputName !== null && inputName.trim() !== "") {
+      const colName = inputName.trim();
+      setCustomColumnsMap(prev => ({
+        ...prev,
+        [selectedFormatId]: [...(prev[selectedFormatId] || []), colName]
+      }));
+      toast({
+        title: "Custom Column Added",
+        description: `Added column "${colName}".`,
+      });
+    }
+  };
+
+  const removeColumn = (colName: string) => {
+    setCustomColumnsMap(prev => ({
+      ...prev,
+      [selectedFormatId]: (prev[selectedFormatId] || []).filter(c => c !== colName)
+    }));
+  };
+
+  const updateCustomCell = (rowId: string | number, colName: string, value: string) => {
+    setCustomCellValues(prev => ({
+      ...prev,
+      [selectedFormatId]: {
+        ...(prev[selectedFormatId] || {}),
+        [rowId]: {
+          ...((prev[selectedFormatId] || {})[rowId] || {}),
+          [colName]: value
+        }
+      }
+    }));
+  };
+
+  const getCustomCell = (rowId: string | number, colName: string) => {
+    return customCellValues[selectedFormatId]?.[rowId]?.[colName] || "";
+  };
+
+  const renderCustomHeaderCols = () => {
+    const cols = customColumnsMap[selectedFormatId] || [];
+    return cols.map((colName, cIdx) => (
+      <th key={`custom-col-head-${cIdx}`} className="border border-black px-1.5 py-1 text-center font-bold min-w-[80px]">
+        <div className="flex items-center justify-between gap-1">
+          <span className="truncate">{colName}</span>
+          <button
+            type="button"
+            onClick={() => removeColumn(colName)}
+            className="text-red-500 hover:text-red-700 font-extrabold print:hidden text-[9px] px-1"
+            title="Remove Column"
+          >
+            ×
+          </button>
+        </div>
+      </th>
+    ));
+  };
+
+  const renderCustomBodyCells = (rowId: number | string) => {
+    const cols = customColumnsMap[selectedFormatId] || [];
+    return cols.map((colName, cIdx) => (
+      <td key={`custom-col-cell-${cIdx}`} className="border border-black p-0.5 text-center min-w-[80px]">
+        <input
+          type="text"
+          value={cellVal(getCustomCell(rowId, colName))}
+          onChange={(e) => updateCustomCell(rowId, colName, e.target.value)}
+          className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 focus:outline-none"
+          placeholder="-"
+        />
+      </td>
+    ));
+  };
+
+  // Actions
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!printAreaRef.current) return;
+    setIsDownloading(true);
+    try {
+      printAreaRef.current.classList.add("is-exporting-pdf");
+      const canvas = await html2canvas(printAreaRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: printAreaRef.current.scrollWidth || 1200,
+        windowHeight: printAreaRef.current.scrollHeight || 1600,
+        scrollX: 0,
+        scrollY: 0,
+      });
+      printAreaRef.current.classList.remove("is-exporting-pdf");
+      const imgData = canvas.toDataURL("image/png");
+      
+      const isLandscape = currentOrientation === "landscape";
+      const pdf = new jsPDF({ 
+        orientation: isLandscape ? "l" : "p", 
+        unit: "mm", 
+        format: "a4" 
+      });
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      await savePdfFile(pdf, `lab_${selectedFormat.id}_${currentDate}.pdf`);
+      
+      toast({
+        title: "PDF Format Generated",
+        description: "Your printable PDF lab sheet is ready.",
+      });
+    } catch (e) {
+      if (printAreaRef.current) {
+        printAreaRef.current.classList.remove("is-exporting-pdf");
+      }
+      console.error(e);
+      toast({
+        title: "Export Failed",
+        description: "Failed to generate PDF format.",
+        variant: "destructive",
+      });
+    }
+    setIsDownloading(false);
+  };
+
+  // Row update handlers
+  const updateRawMilkTankerRow = (id: number, field: string, val: string) => {
+    setRawMilkTankerRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateRawMilkCanRow = (id: number, field: string, val: string) => {
+    setRawMilkCanRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateRawMilkSiloRow = (id: number, field: string, val: string) => {
+    setRawMilkSiloRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateProductRow = (id: number, field: string, val: string) => {
+    setProductRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateLabCalibrationRow = (id: number, field: string, val: string) => {
+    setLabCalibrationRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateChemicalReagentRow = (id: number, field: string, val: string) => {
+    setChemicalReagentRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateMediaLogRow = (id: number, field: string, val: string) => {
+    setMediaLogRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateSampleRegisterRow = (id: number, field: string, val: string) => {
+    setSampleRegisterRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateProductReleaseRow = (id: number, field: string, val: string) => {
+    setProductReleaseRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateWaterRow = (id: number, field: string, val: string) => {
+    setWaterRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateSwabRow = (id: number, field: string, val: string) => {
+    setSwabRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateCipValidationRow = (id: number, field: string, val: string) => {
+    setCipValidationRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateAdulterationRow = (id: number, field: string, val: string) => {
+    setAdulterationRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateSensoryRow = (id: number, field: string, val: string) => {
+    setSensoryRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateEtpRow = (id: number, field: string, val: string) => {
+    setEtpRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updatePackingRow = (id: number, field: string, val: string) => {
+    setPackingRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateIncubationRow = (id: number, field: string, val: string) => {
+    setIncubationRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateGlassAuditRow = (id: number, field: string, val: string) => {
+    setGlassAuditRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updatePestControlRow = (id: number, field: string, val: string) => {
+    setPestControlRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateCipSanitationRow = (id: number, field: string, val: string) => {
+    setCipSanitationRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateLeaveAppRow = (id: number, field: string, val: string) => {
+    setLeaveAppRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateOvertimeRow = (id: number, field: string, val: string) => {
+    setOvertimeRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateMaterialIssueRow = (id: number, field: string, val: string) => {
+    setMaterialIssueRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateBreakageRow = (id: number, field: string, val: string) => {
+    setBreakageRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  // Add / Delete row utilities
+  const addRow = () => {
+    switch (selectedFormatId) {
+      case "raw-milk-tanker":
+        setRawMilkTankerRows(prev => [...prev, { id: Date.now(), tankerNo: "", source: "", qty: "", temp: "", acidity: "", fat: "", snf: "", cob: "Negative", mbrt: "", adulteration: "Nil", status: "Accepted", analyst: "" }]);
+        break;
+      case "raw-milk-can":
+        setRawMilkCanRows(prev => [...prev, { id: Date.now(), route: "", totalCans: "", acceptedCans: "", rejectedCans: "", temp: "", acidity: "", fat: "", snf: "", cob: "Negative", adulteration: "Nil", status: "Accepted", analyst: "" }]);
+        break;
+      case "raw-milk-silo":
+        setRawMilkSiloRows(prev => [...prev, { id: Date.now(), siloNo: "", siloPosition: "", openingBal: "", receivedQty: "", source: "", temp: "", acidity: "", fat: "", snf: "", closingBal: "", remarks: "" }]);
+        break;
+      case "finished-products":
+        setProductRows(prev => [...prev, { id: Date.now(), batchNo: "", productName: "", packSize: "", fat: "", snf: "", moisture: "", acidity: "", phosphatase: "", coliform: "", organoleptic: "", analyst: "" }]);
+        break;
+      case "lab-calibration":
+        setLabCalibrationRows(prev => [...prev, { id: Date.now(), equipId: "", type: "", nominalVol: "", waterTemp: "", emptyWt: "", filledWt: "", netVol: "", error: "", accepted: "Yes", operator: "" }]);
+        break;
+      case "chemical-reagent":
+        setChemicalReagentRows(prev => [...prev, { id: Date.now(), serial: (prev.length + 1).toString(), reagentName: "", normality: "", factor: "", prepDate: currentDate, expDate: "", preparedBy: "", standardizedBy: "", stock: "", remarks: "" }]);
+        break;
+      case "media-log":
+        setMediaLogRows(prev => [...prev, { id: Date.now(), date: currentDate, mediaName: "", batchNo: "", qty: "", temp: "", pressure: "", sterility: "No Growth", ph: "", expDate: "", preparedBy: "" }]);
+        break;
+      case "sample-register-coa":
+        setSampleRegisterRows(prev => [...prev, { id: Date.now(), sampleId: "", dateTime: "", sampleName: "", source: "", chemical: "", micro: "", status: "Pass", coaRef: "", analyst: "" }]);
+        break;
+      case "product-release":
+        setProductReleaseRows(prev => [...prev, { id: Date.now(), date: currentDate, productName: "", batchNo: "", mfgDate: currentDate, qty: "", chemical: "Clear", micro: "Clear", packing: "OK", status: "Released", analyst: "" }]);
+        break;
+      case "water-testing":
+        setWaterRows(prev => [...prev, { id: Date.now(), source: "", ph: "", hardness: "", tds: "", chlorine: "", alkalinity: "", coliform: "Absent", remarks: "" }]);
+        break;
+      case "micro-swabs":
+        setSwabRows(prev => [...prev, { id: Date.now(), dateShift: currentDate, area: "", sanitizer: "", spc: "", coliform: "Absent", yeastMold: "Absent", status: "OK", analyst: "" }]);
+        break;
+      case "cip-validation":
+        setCipValidationRows(prev => [...prev, { id: Date.now(), circuit: "", washTime: "", lyeConc: "", lyeTemp: "", acidConc: "", acidTemp: "", flowRate: "", titrationVol: "", finalPh: "7.0", status: "Validated", analyst: "" }]);
+        break;
+      case "adulteration-strip":
+        setAdulterationRows(prev => [...prev, { id: Date.now(), sampleSource: "", urea: "Negative", starch: "Negative", glucose: "Negative", detergent: "Negative", neutralizer: "Negative", h2o2: "Negative", nitrate: "Negative", salt: "Normal", antibiotic: "Negative", status: "Pass / Authentic", analyst: "" }]);
+        break;
+      case "sensory-organoleptic":
+        setSensoryRows(prev => [...prev, { id: Date.now(), sampleName: "", batchNo: "", temp: "", flavor: "", odor: "", color: "", texture: "", overallScore: "9.0 / 10", decision: "Approved", panelist: "" }]);
+        break;
+      case "effluent-etp":
+        setEtpRows(prev => [...prev, { id: Date.now(), dateShift: currentDate, sampleLocation: "", ph: "", bod: "", cod: "", tss: "", oilGrease: "", svi: "", dischargeStatus: "Compliant", analyst: "" }]);
+        break;
+      case "packing-integrity":
+        setPackingRows(prev => [...prev, { id: Date.now(), lineNo: "", product: "", leakTest: "Pass", sealStrength: "Pass", weightVar: "", codePrint: "Clear", status: "Approved", inspector: "" }]);
+        break;
+      case "incubation-shelf-life":
+        setIncubationRows(prev => [...prev, { id: Date.now(), sampleName: "", batchNo: "", storeTemp: "37°C", incubationDays: "48 Hours", phDrop: "Stable", gasCurd: "No Gas", tasteOdor: "Normal", shelfLifeStatus: "Pass", analyst: "" }]);
+        break;
+      case "glass-brittle-audit":
+        setGlassAuditRows(prev => [...prev, { id: Date.now(), area: "", item: "", condition: "Intact", protectiveShield: "Installed", actionRequired: "None", status: "Pass", auditor: "" }]);
+        break;
+      case "pest-control-hygiene":
+        setPestControlRows(prev => [...prev, { id: Date.now(), location: "", trapType: "", inspectionResult: "Intact", fliesCount: "0", actionTaken: "Cleaned", status: "Satisfactory", auditor: "" }]);
+        break;
+      case "cip-sanitation-verification":
+        setCipSanitationRows(prev => [...prev, { id: Date.now(), equipment: "", sanitizerType: "", contactTime: "", concPpm: "", swabRes: "Pass", status: "Sanitized", analyst: "" }]);
+        break;
+      case "leave-application":
+        setLeaveAppRows(prev => [...prev, { id: Date.now(), empName: "", empId: "", department: "", designation: "", leaveType: "Casual Leave (CL)", fromDate: currentDate, toDate: currentDate, totalDays: "1", reason: "", status: "Pending", approvedBy: "" }]);
+        break;
+      case "overtime-application":
+        setOvertimeRows(prev => [...prev, { id: Date.now(), empName: "", empId: "", shift: "General", otDate: currentDate, otHours: "2.0", workDescription: "", recommendedBy: "", status: "Approved", approvedBy: "" }]);
+        break;
+      case "material-issue-slip":
+        setMaterialIssueRows(prev => [...prev, { id: Date.now(), issueNo: `IS-2026-${String(prev.length + 1).padStart(3, '0')}`, itemName: "", specification: "", reqQty: "", issuedQty: "", requestedBy: "", issuedBy: "", status: "Issued", remarks: "" }]);
+        break;
+      case "equipment-breakage-log":
+        setBreakageRows(prev => [...prev, { id: Date.now(), incidentDate: currentDate, itemName: "", assetTag: "", cost: "", handledBy: "", cause: "", actionTaken: "", verifiedBy: "" }]);
+        break;
+    }
+  };
+
+  const deleteRow = (id: number) => {
+    switch (selectedFormatId) {
+      case "raw-milk-tanker":
+        if (rawMilkTankerRows.length > 1) setRawMilkTankerRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "raw-milk-can":
+        if (rawMilkCanRows.length > 1) setRawMilkCanRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "raw-milk-silo":
+        if (rawMilkSiloRows.length > 1) setRawMilkSiloRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "finished-products":
+        if (productRows.length > 1) setProductRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "lab-calibration":
+        if (labCalibrationRows.length > 1) setLabCalibrationRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "chemical-reagent":
+        if (chemicalReagentRows.length > 1) setChemicalReagentRows(prev => prev.filter(r => r.id !== id).map((r, i) => ({ ...r, serial: (i + 1).toString() })));
+        break;
+      case "media-log":
+        if (mediaLogRows.length > 1) setMediaLogRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "sample-register-coa":
+        if (sampleRegisterRows.length > 1) setSampleRegisterRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "product-release":
+        if (productReleaseRows.length > 1) setProductReleaseRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "water-testing":
+        if (waterRows.length > 1) setWaterRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "micro-swabs":
+        if (swabRows.length > 1) setSwabRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "cip-validation":
+        if (cipValidationRows.length > 1) setCipValidationRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "adulteration-strip":
+        if (adulterationRows.length > 1) setAdulterationRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "sensory-organoleptic":
+        if (sensoryRows.length > 1) setSensoryRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "effluent-etp":
+        if (etpRows.length > 1) setEtpRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "packing-integrity":
+        if (packingRows.length > 1) setPackingRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "incubation-shelf-life":
+        if (incubationRows.length > 1) setIncubationRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "glass-brittle-audit":
+        if (glassAuditRows.length > 1) setGlassAuditRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "pest-control-hygiene":
+        if (pestControlRows.length > 1) setPestControlRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "cip-sanitation-verification":
+        if (cipSanitationRows.length > 1) setCipSanitationRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "leave-application":
+        if (leaveAppRows.length > 1) setLeaveAppRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "overtime-application":
+        if (overtimeRows.length > 1) setOvertimeRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "material-issue-slip":
+        if (materialIssueRows.length > 1) setMaterialIssueRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "equipment-breakage-log":
+        if (breakageRows.length > 1) setBreakageRows(prev => prev.filter(r => r.id !== id));
+        break;
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      
+      {/* Top Header Card */}
+      <Card className="border-b-4 border-b-teal-600 shadow-md">
+        <CardHeader className="bg-gradient-to-br from-teal-950 to-slate-900 text-white p-6 rounded-t-xl">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-2xl font-bold font-headline">
+                <FileText className="h-7 w-7 text-teal-400" />
+                Dairy Laboratory Formats & Log Sheets
+              </CardTitle>
+              <CardDescription className="text-teal-200 mt-1 text-xs md:text-sm">
+                Ready-to-print laboratory log sheets. Enter your company name, edit standard entries, and download as clean A4 templates.
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Editor & Configuration Sidebar Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        {/* Configurations Column */}
+        <div className="lg:col-span-1 space-y-6 print:hidden">
+          
+          <Card className="border border-slate-200 shadow-sm">
+            <CardHeader className="bg-slate-100 p-4 border-b">
+              <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                1. Lab Info & Configuration
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 space-y-3">
+              <div>
+                <Label className="text-[10px] font-bold text-slate-500 uppercase">Company/Firm Name</Label>
+                <div className="relative mt-1">
+                  <Building2 className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                  <Input 
+                    value={companyName} 
+                    onChange={(e) => setCompanyName(e.target.value.toUpperCase())}
+                    className="pl-9 h-9 text-xs font-bold border-slate-200" 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-[10px] font-bold text-slate-500 uppercase">Lab Unit / Location</Label>
+                <div className="relative mt-1">
+                  <MapPin className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                  <Input 
+                    value={labLocation} 
+                    onChange={(e) => setLabLocation(e.target.value.toUpperCase())}
+                    className="pl-9 h-9 text-xs font-semibold border-slate-200" 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-[10px] font-bold text-slate-500 uppercase">Date of Record</Label>
+                <div className="relative mt-1">
+                  <Calendar className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                  <Input 
+                    type="date"
+                    value={currentDate} 
+                    onChange={(e) => setCurrentDate(e.target.value)}
+                    className="pl-9 h-9 text-xs border-slate-200" 
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2 border-t">
+                <div className="flex items-center justify-between p-2 rounded-lg border border-slate-200 bg-slate-50">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="content-toggle-lab-side" className="text-xs font-bold text-slate-800 cursor-pointer block">
+                      Format Data
+                    </Label>
+                    <p className="text-[10px] text-slate-500 font-semibold">
+                      {isContentOn ? "ON (Filled Data)" : "OFF (Blank Sheet)"}
+                    </p>
+                  </div>
+                  <Switch
+                    id="content-toggle-lab-side"
+                    checked={isContentOn}
+                    onCheckedChange={setIsContentOn}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border border-slate-200 shadow-sm">
+            <CardHeader className="bg-slate-100 p-4 border-b">
+              <CardTitle className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                2. Choose Lab Format
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-2 space-y-1">
+              {FORMATS_CATALOG.map((f) => {
+                const Icon = f.icon;
+                return (
+                  <button
+                    key={f.id}
+                    onClick={() => setSelectedFormatId(f.id)}
+                    className={cn(
+                      "w-full text-left p-3 rounded-lg flex items-start gap-2.5 transition-all text-xs font-semibold",
+                      selectedFormatId === f.id 
+                        ? "bg-teal-50 text-teal-800 border-l-4 border-l-teal-600 shadow-sm" 
+                        : "text-slate-600 hover:bg-slate-50"
+                    )}
+                  >
+                    <Icon className="w-4 h-4 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-bold">{f.title}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </CardContent>
+          </Card>
+
+          {/* Quick Info */}
+          <Card className="border border-indigo-100 bg-indigo-50/20 p-4 space-y-3">
+            <h4 className="font-bold text-xs text-indigo-900 flex items-center gap-1.5">
+              <Info className="w-4 h-4 text-indigo-600" /> Print Guidelines
+            </h4>
+            <p className="text-[10px] text-slate-600 leading-relaxed">
+              These formats match physical quality registers. Turn Content OFF for blank templates or ON for filled sample logs.
+            </p>
+          </Card>
+        </div>
+
+        {/* Live Preview & Print Window Column */}
+        <div className="lg:col-span-3 space-y-4">
+          
+          {/* Print Controls Header */}
+          <div className="flex flex-wrap justify-between items-center bg-slate-100 p-3 rounded-xl border border-slate-200 gap-2 print:hidden">
+            <div className="flex items-center gap-3">
+              <Badge variant="secondary" className="bg-teal-100 text-teal-850 font-bold text-[10px] uppercase">
+                {currentOrientation} A4
+              </Badge>
+              <div className="flex items-center gap-2 bg-white px-2.5 py-1 rounded-md border border-slate-200">
+                <Label htmlFor="content-toggle-top-lab" className="text-xs font-bold text-slate-700 cursor-pointer">
+                  Content:
+                </Label>
+                <Switch
+                  id="content-toggle-top-lab"
+                  checked={isContentOn}
+                  onCheckedChange={setIsContentOn}
+                />
+                <span className={cn("text-xs font-bold", isContentOn ? "text-teal-700" : "text-slate-500")}>
+                  {isContentOn ? "ON (Filled Data)" : "OFF (Blank Sheet)"}
+                </span>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" onClick={addRow} className="bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex gap-1">
+                <Plus className="w-3.5 h-3.5" /> Add Row
+              </Button>
+              <Button size="sm" onClick={addColumn} variant="outline" className="border-teal-600 text-teal-700 hover:bg-teal-50 font-bold text-xs flex gap-1">
+                <Columns className="w-3.5 h-3.5" /> Add Column
+              </Button>
+              <Button size="sm" onClick={toggleOrientation} variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs flex gap-1">
+                <RotateCw className="w-3.5 h-3.5" /> {currentOrientation === "landscape" ? "A4 Landscape" : "A4 Portrait"}
+              </Button>
+              <Button size="sm" onClick={handlePrint} className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex gap-1">
+                <Printer className="w-4 h-4" /> Print
+              </Button>
+              <Button 
+                size="sm" 
+                onClick={handleDownloadPdf} 
+                disabled={isDownloading} 
+                className="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 hover:from-emerald-500 hover:via-teal-400 hover:to-cyan-500 text-white font-extrabold text-xs shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex gap-2 px-4 py-2 rounded-lg border border-teal-300/40 tracking-wide uppercase"
+              >
+                {isDownloading ? <Loader2 className="w-4 h-4 animate-spin text-amber-300"/> : <FileDown className="w-4 h-4 text-amber-300 animate-bounce"/>} 
+                <span className="drop-shadow">Download PDF</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Document Sheet Area */}
+          <div className="overflow-x-auto print:overflow-visible">
+            <div 
+              ref={printAreaRef}
+              id="print-area-formats"
+              className={cn(
+                "bg-white border shadow-md font-sans text-black mx-auto overflow-hidden print:border-none print:shadow-none print:p-0 print:m-0",
+                currentOrientation === "landscape" 
+                  ? "w-[297mm] min-h-[210mm] p-[15mm] print:w-[297mm] print:h-[210mm]" 
+                  : "w-[210mm] min-h-[297mm] p-[15mm] print:w-[210mm] print:h-[297mm]"
+              )}
+              style={{
+                boxSizing: "border-box"
+              }}
+            >
+              {/* Paper Layout Container */}
+              <div className="space-y-4 h-full flex flex-col justify-between">
+                
+                {/* 1. Header Box */}
+                <div className="space-y-3">
+                  <div className="border-2 border-black p-3 text-center">
+                    <h1 className="text-lg font-black tracking-wide text-black uppercase leading-none">
+                      {companyName || "DAIRY HUB COOPERATIVE LABS"}
+                    </h1>
+                    <p className="text-[10px] font-bold text-slate-800 mt-1 uppercase">
+                      {labLocation || "QUALITY ASSURANCE DIVISION"}
+                    </p>
+                    <div className="border-t border-black my-2" />
+                    <h2 className="text-sm font-black tracking-widest text-black uppercase leading-none flex justify-center items-center gap-1.5">
+                      {selectedFormat.title.toUpperCase()}
+                    </h2>
+                  </div>
+
+                  {/* Meta Details Row */}
+                  <div className="grid grid-cols-3 border border-black p-2 bg-slate-50 text-[10px] font-bold gap-4">
+                    <div>DATE: <span className="font-normal border-b border-black ml-1 px-1">{isContentOn ? currentDate : "_________________"}</span></div>
+                    <div>LAB IN-CHARGE: <span className="font-normal border-b border-black ml-1 px-1">_________________</span></div>
+                    <div>DOC REF NO: <span className="font-normal border-b border-black ml-1 px-1">{isContentOn ? `QA-LAB-${selectedFormat.id.toUpperCase()}-2026` : "_________________"}</span></div>
+                  </div>
+                </div>
+
+                {/* 2. Format Specific Contents */}
+                <div className="flex-grow pt-2">
+
+                  {/* CASE 1: Raw Milk Reception Log Sheet - Tankers (Landscape) */}
+                  {selectedFormatId === "raw-milk-tanker" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">Tanker No.</th>
+                            <th className="border border-black px-1.5 py-1">Source / Supplier</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Qty (L)</th>
+                            <th className="border border-black px-1.5 py-1 w-12">Temp (°C)</th>
+                            <th className="border border-black px-1.5 py-1 w-14">Acidity (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-12">Fat (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-12">SNF (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-16">COB Test</th>
+                            <th className="border border-black px-1.5 py-1 w-14">MBRT (hr)</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Adulteration</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Status</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rawMilkTankerRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.tankerNo)} onChange={(e) => updateRawMilkTankerRow(row.id, "tankerNo", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5">
+                                <input value={cellVal(row.source)} onChange={(e) => updateRawMilkTankerRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono">
+                                <input type="number" value={cellVal(row.qty)} onChange={(e) => updateRawMilkTankerRow(row.id, "qty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="number" step="0.1" value={cellVal(row.temp)} onChange={(e) => updateRawMilkTankerRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="number" step="0.005" value={cellVal(row.acidity)} onChange={(e) => updateRawMilkTankerRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input type="number" step="0.1" value={cellVal(row.fat)} onChange={(e) => updateRawMilkTankerRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input type="number" step="0.1" value={cellVal(row.snf)} onChange={(e) => updateRawMilkTankerRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.cob)} onChange={(e) => updateRawMilkTankerRow(row.id, "cob", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.cob.toLowerCase().includes("positive") ? "text-red-700" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.mbrt)} onChange={(e) => updateRawMilkTankerRow(row.id, "mbrt", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.adulteration)} onChange={(e) => updateRawMilkTankerRow(row.id, "adulteration", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.adulteration !== "Nil" && row.adulteration !== "" ? "text-orange-700 font-bold" : "")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateRawMilkTankerRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateRawMilkTankerRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                          <tr className="bg-slate-50 font-bold text-black border-t-2 border-black">
+                            <td colSpan={2} className="border border-black px-1.5 py-1 text-left uppercase">Total Received (Tankers)</td>
+                            <td className="border border-black px-1.5 py-1 text-right font-black">{isContentOn ? rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.qty) || 0), 0).toLocaleString() + " L" : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-mono">{isContentOn ? (rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.temp) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(1) + "°C" : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-mono">{isContentOn ? (rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.acidity) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(3) + "%" : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-mono">{isContentOn ? (rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.fat) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(2) + "%" : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-mono">{isContentOn ? (rawMilkTankerRows.reduce((s, r) => s + (parseFloat(r.snf) || 0), 0) / rawMilkTankerRows.length || 0).toFixed(2) + "%" : ""}</td>
+                            <td colSpan={6} className="border border-black px-1.5 py-1 bg-slate-100"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 2: Raw Milk Reception Log Sheet - Cans (Landscape) */}
+                  {selectedFormatId === "raw-milk-can" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">Route / Collection Center</th>
+                            <th className="border border-black px-1.5 py-1 w-14">Total Cans</th>
+                            <th className="border border-black px-1.5 py-1 w-14">Acc. Cans</th>
+                            <th className="border border-black px-1.5 py-1 w-14">Rej. Cans</th>
+                            <th className="border border-black px-1.5 py-1 w-12">Temp (°C)</th>
+                            <th className="border border-black px-1.5 py-1 w-14">Acidity (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-12">Fat (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-12">SNF (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-16">COB Test</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Adulteration</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Status</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rawMilkCanRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.route)} onChange={(e) => updateRawMilkCanRow(row.id, "route", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.totalCans)} onChange={(e) => updateRawMilkCanRow(row.id, "totalCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono text-green-700">
+                                <input value={cellVal(row.acceptedCans)} onChange={(e) => updateRawMilkCanRow(row.id, "acceptedCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-green-700 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono text-red-700">
+                                <input value={cellVal(row.rejectedCans)} onChange={(e) => updateRawMilkCanRow(row.id, "rejectedCans", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="number" step="0.1" value={cellVal(row.temp)} onChange={(e) => updateRawMilkCanRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="number" step="0.005" value={cellVal(row.acidity)} onChange={(e) => updateRawMilkCanRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input type="number" step="0.1" value={cellVal(row.fat)} onChange={(e) => updateRawMilkCanRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input type="number" step="0.1" value={cellVal(row.snf)} onChange={(e) => updateRawMilkCanRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.cob)} onChange={(e) => updateRawMilkCanRow(row.id, "cob", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.cob.toLowerCase().includes("positive") ? "text-red-700" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.adulteration)} onChange={(e) => updateRawMilkCanRow(row.id, "adulteration", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.adulteration !== "Nil" && row.adulteration !== "" ? "text-orange-700 font-bold" : "")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateRawMilkCanRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateRawMilkCanRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                          <tr className="bg-slate-50 font-bold text-black border-t-2 border-black">
+                            <td className="border border-black px-1.5 py-1 text-left uppercase">Route Totals</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-black">{isContentOn ? rawMilkCanRows.reduce((s, r) => s + (parseInt(r.totalCans) || 0), 0) : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-black text-green-700">{isContentOn ? rawMilkCanRows.reduce((s, r) => s + (parseInt(r.acceptedCans) || 0), 0) : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-black text-red-700">{isContentOn ? rawMilkCanRows.reduce((s, r) => s + (parseInt(r.rejectedCans) || 0), 0) : ""}</td>
+                            <td colSpan={9} className="border border-black px-1.5 py-1 bg-slate-100"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 3: Raw Milk Silo Storage Log Sheet (Landscape) */}
+                  {selectedFormatId === "raw-milk-silo" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 w-16">Silo No.</th>
+                            <th className="border border-black px-1.5 py-1">Silo Position</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Opening Bal. (L)</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Received Qty (L)</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Source / Tanker Ref</th>
+                            <th className="border border-black px-1.5 py-1 w-12">Temp (°C)</th>
+                            <th className="border border-black px-1.5 py-1 w-14">Acidity (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-12">Fat (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-12">SNF (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Closing Bal. (L)</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Remarks</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rawMilkSiloRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input value={cellVal(row.siloNo)} onChange={(e) => updateRawMilkSiloRow(row.id, "siloNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center text-slate-700">
+                                <input value={cellVal(row.siloPosition ?? "")} onChange={(e) => updateRawMilkSiloRow(row.id, "siloPosition", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono">
+                                <input value={cellVal(row.openingBal)} onChange={(e) => updateRawMilkSiloRow(row.id, "openingBal", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono text-teal-800 font-bold">
+                                <input value={cellVal(row.receivedQty)} onChange={(e) => updateRawMilkSiloRow(row.id, "receivedQty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-teal-800 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.source)} onChange={(e) => updateRawMilkSiloRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="number" step="0.1" value={cellVal(row.temp)} onChange={(e) => updateRawMilkSiloRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="number" step="0.005" value={cellVal(row.acidity)} onChange={(e) => updateRawMilkSiloRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input type="number" step="0.1" value={cellVal(row.fat)} onChange={(e) => updateRawMilkSiloRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input type="number" step="0.1" value={cellVal(row.snf)} onChange={(e) => updateRawMilkSiloRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono font-black">
+                                <input value={cellVal(row.closingBal)} onChange={(e) => updateRawMilkSiloRow(row.id, "closingBal", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-black" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left text-slate-600">
+                                <input value={cellVal(row.remarks)} onChange={(e) => updateRawMilkSiloRow(row.id, "remarks", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 4: Finished Product Analysis Report (Landscape) */}
+                  {selectedFormatId === "finished-products" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 w-20">Batch No</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Product Name</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Pack Size</th>
+                            <th className="border border-black px-1.5 py-1 w-12">Fat (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-12">SNF (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Moisture (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Acidity (%)</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Phosphatase</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Coliform / ml</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Organoleptic</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {productRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateProductRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.productName)} onChange={(e) => updateProductRow(row.id, "productName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.packSize)} onChange={(e) => updateProductRow(row.id, "packSize", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.fat)} onChange={(e) => updateProductRow(row.id, "fat", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.snf)} onChange={(e) => updateProductRow(row.id, "snf", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.moisture)} onChange={(e) => updateProductRow(row.id, "moisture", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.acidity)} onChange={(e) => updateProductRow(row.id, "acidity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.phosphatase)} onChange={(e) => updateProductRow(row.id, "phosphatase", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.phosphatase.toLowerCase().includes("positive") ? "text-red-700 font-bold" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.coliform)} onChange={(e) => updateProductRow(row.id, "coliform", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.organoleptic)} onChange={(e) => updateProductRow(row.id, "organoleptic", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateProductRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 5: Laboratory Calibration & Equipment Log (Portrait) */}
+                  {selectedFormatId === "lab-calibration" && (
+                    <div className="w-full">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1.5 w-20">Equip / Glass ID</th>
+                            <th className="border border-black px-1.5 py-1.5 text-left">Equipment / Instrument Type</th>
+                            <th className="border border-black px-1.5 py-1.5 w-22">Std Range / Vol</th>
+                            <th className="border border-black px-1.5 py-1.5 w-14">Temp (°C)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-18">Std / Empty Wt</th>
+                            <th className="border border-black px-1.5 py-1.5 w-18">Obs / Filled Wt</th>
+                            <th className="border border-black px-1.5 py-1.5 w-18">Net Vol / Obs</th>
+                            <th className="border border-black px-1.5 py-1.5 w-16">Error / Dev</th>
+                            <th className="border border-black px-1.5 py-1.5 w-14">OK/Fail</th>
+                            <th className="border border-black px-1.5 py-1.5 w-16">Checked By</th>
+                            <th className="border border-black px-1.5 py-1.5 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {labCalibrationRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input value={row.equipId ?? (row as any).glasswareId ?? ""} onChange={(e) => updateLabCalibrationRow(row.id, "equipId", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.type)} onChange={(e) => updateLabCalibrationRow(row.id, "type", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.nominalVol)} onChange={(e) => updateLabCalibrationRow(row.id, "nominalVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-semibold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.waterTemp)} onChange={(e) => updateLabCalibrationRow(row.id, "waterTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono">
+                                <input value={cellVal(row.emptyWt)} onChange={(e) => updateLabCalibrationRow(row.id, "emptyWt", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono pr-1" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono">
+                                <input value={cellVal(row.filledWt)} onChange={(e) => updateLabCalibrationRow(row.id, "filledWt", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono pr-1" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.netVol)} onChange={(e) => updateLabCalibrationRow(row.id, "netVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono text-red-700">
+                                <input value={cellVal(row.error)} onChange={(e) => updateLabCalibrationRow(row.id, "error", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.accepted)} onChange={(e) => updateLabCalibrationRow(row.id, "accepted", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.accepted.toLowerCase() === "no" || row.accepted.toLowerCase() === "fail" ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.operator)} onChange={(e) => updateLabCalibrationRow(row.id, "operator", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 6: Chemical & Reagent Prep & Stock Log (Portrait) */}
+                  {selectedFormatId === "chemical-reagent" && (
+                    <div className="w-full">
+                      <table className="w-full text-[9.5px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1.5 w-10">Sr.</th>
+                            <th className="border border-black px-1.5 py-1.5 text-left">Chemical / Reagent Solution Name</th>
+                            <th className="border border-black px-1.5 py-1.5 w-16">Target Norm.</th>
+                            <th className="border border-black px-1.5 py-1.5 w-20">Actual / Factor</th>
+                            <th className="border border-black px-1.5 py-1.5 w-20">Prep Date</th>
+                            <th className="border border-black px-1.5 py-1.5 w-20">Expiry Date</th>
+                            <th className="border border-black px-1.5 py-1.5 w-18">Prep By</th>
+                            <th className="border border-black px-1.5 py-1.5 w-18">Std By</th>
+                            <th className="border border-black px-1.5 py-1.5 w-16">Stock</th>
+                            <th className="border border-black px-1.5 py-1.5 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {chemicalReagentRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.serial)} onChange={(e) => updateChemicalReagentRow(row.id, "serial", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.reagentName)} onChange={(e) => updateChemicalReagentRow(row.id, "reagentName", e.target.value)} className="w-full bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.normality)} onChange={(e) => updateChemicalReagentRow(row.id, "normality", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.factor)} onChange={(e) => updateChemicalReagentRow(row.id, "factor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="date" value={cellVal(row.prepDate)} onChange={(e) => updateChemicalReagentRow(row.id, "prepDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="date" value={cellVal(row.expDate)} onChange={(e) => updateChemicalReagentRow(row.id, "expDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono text-red-700" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.preparedBy)} onChange={(e) => updateChemicalReagentRow(row.id, "preparedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.standardizedBy)} onChange={(e) => updateChemicalReagentRow(row.id, "standardizedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-semibold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono text-teal-800 font-semibold">
+                                <input value={cellVal(row.stock)} onChange={(e) => updateChemicalReagentRow(row.id, "stock", e.target.value)} className="w-full text-center bg-transparent border-none text-[9.5px] p-1 focus:ring-0 font-mono text-teal-800 font-semibold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 7: Microbiology Culture Media Log Sheet (Portrait) */}
+                  {selectedFormatId === "media-log" && (
+                    <div className="w-full">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1.5 w-20">Prep Date</th>
+                            <th className="border border-black px-1.5 py-1.5 text-left">Media Name</th>
+                            <th className="border border-black px-1.5 py-1.5 w-20">Batch No.</th>
+                            <th className="border border-black px-1.5 py-1.5 w-16">Qty (ml)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-14">Autoclave Temp (°C)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-16">Pressure (psi)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-24">Sterility Check</th>
+                            <th className="border border-black px-1.5 py-1.5 w-14">pH (Post)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-20">Expiry Date</th>
+                            <th className="border border-black px-1.5 py-1.5 w-18">Prepared By</th>
+                            <th className="border border-black px-1.5 py-1.5 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {mediaLogRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="date" value={cellVal(row.date)} onChange={(e) => updateMediaLogRow(row.id, "date", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.mediaName)} onChange={(e) => updateMediaLogRow(row.id, "mediaName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateMediaLogRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.qty)} onChange={(e) => updateMediaLogRow(row.id, "qty", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold text-teal-800">
+                                <input value={cellVal(row.temp)} onChange={(e) => updateMediaLogRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-teal-800 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.pressure)} onChange={(e) => updateMediaLogRow(row.id, "pressure", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.sterility)} onChange={(e) => updateMediaLogRow(row.id, "sterility", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.sterility.toLowerCase().includes("growth") && !row.sterility.toLowerCase().includes("no") ? "text-red-700 font-bold" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.ph)} onChange={(e) => updateMediaLogRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="date" value={cellVal(row.expDate)} onChange={(e) => updateMediaLogRow(row.id, "expDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono text-red-700" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.preparedBy)} onChange={(e) => updateMediaLogRow(row.id, "preparedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 8: Sample Register & COA Log (Landscape) */}
+                  {selectedFormatId === "sample-register-coa" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 w-20">Sample ID</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Date & Time</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Sample Name</th>
+                            <th className="border border-black px-1.5 py-1 w-22">Source / Batch</th>
+                            <th className="border border-black px-1.5 py-1">Chemical Results</th>
+                            <th className="border border-black px-1.5 py-1">Micro Results</th>
+                            <th className="border border-black px-1.5 py-1 w-14">Status</th>
+                            <th className="border border-black px-1.5 py-1 w-18">COA Ref No.</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Analyst</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {sampleRegisterRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input value={cellVal(row.sampleId)} onChange={(e) => updateSampleRegisterRow(row.id, "sampleId", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.dateTime)} onChange={(e) => updateSampleRegisterRow(row.id, "dateTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.sampleName)} onChange={(e) => updateSampleRegisterRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.source)} onChange={(e) => updateSampleRegisterRow(row.id, "source", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-mono text-[8.5px]">
+                                <input value={cellVal(row.chemical)} onChange={(e) => updateSampleRegisterRow(row.id, "chemical", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-mono text-[8.5px]">
+                                <input value={cellVal(row.micro)} onChange={(e) => updateSampleRegisterRow(row.id, "micro", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateSampleRegisterRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.coaRef)} onChange={(e) => updateSampleRegisterRow(row.id, "coaRef", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateSampleRegisterRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 9: Product Release Register (Landscape) */}
+                  {selectedFormatId === "product-release" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 w-18">Date</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Product Name</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Batch No.</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Mfg Date</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Qty / Packs</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Chem. Clear</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Micro Clear</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Pkg. OK</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Release Status</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Released By</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {productReleaseRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="date" value={cellVal(row.date)} onChange={(e) => updateProductReleaseRow(row.id, "date", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.productName)} onChange={(e) => updateProductReleaseRow(row.id, "productName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateProductReleaseRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input type="date" value={cellVal(row.mfgDate)} onChange={(e) => updateProductReleaseRow(row.id, "mfgDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono font-bold">
+                                <input value={cellVal(row.qty)} onChange={(e) => updateProductReleaseRow(row.id, "qty", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.chemical)} onChange={(e) => updateProductReleaseRow(row.id, "chemical", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.chemical.toLowerCase().includes("hold") || row.chemical.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.micro)} onChange={(e) => updateProductReleaseRow(row.id, "micro", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.micro.toLowerCase().includes("hold") || row.micro.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.packing)} onChange={(e) => updateProductReleaseRow(row.id, "packing", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.packing.toLowerCase() !== "ok" && row.packing !== "" ? "text-orange-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateProductReleaseRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-black text-[10px]", row.status.toLowerCase().includes("hold") || row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateProductReleaseRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 10: Water Quality Analysis Log Sheet (Portrait) */}
+                  {selectedFormatId === "water-testing" && (
+                    <div className="w-full">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1.5 text-left">Water Sample Source</th>
+                            <th className="border border-black px-1.5 py-1.5 w-16">pH</th>
+                            <th className="border border-black px-1.5 py-1.5 w-24">Hardness (ppm)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-20">TDS (ppm)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-24">Residual Cl (ppm)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-24">Alkalinity (ppm)</th>
+                            <th className="border border-black px-1.5 py-1.5 w-24">Coliform / 100ml</th>
+                            <th className="border border-black px-1.5 py-1.5 text-left">Remarks / Actions</th>
+                            <th className="border border-black px-1.5 py-1.5 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {waterRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.source)} onChange={(e) => updateWaterRow(row.id, "source", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.ph)} onChange={(e) => updateWaterRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.hardness)} onChange={(e) => updateWaterRow(row.id, "hardness", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.tds)} onChange={(e) => updateWaterRow(row.id, "tds", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.chlorine)} onChange={(e) => updateWaterRow(row.id, "chlorine", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold text-teal-800" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.alkalinity)} onChange={(e) => updateWaterRow(row.id, "alkalinity", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.coliform)} onChange={(e) => updateWaterRow(row.id, "coliform", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.coliform.toLowerCase().includes("present") ? "text-red-700 font-bold" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.remarks)} onChange={(e) => updateWaterRow(row.id, "remarks", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 11: Microbiology Swab Testing Record (Landscape) */}
+                  {selectedFormatId === "micro-swabs" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 w-24">Date & Shift</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Swab Area / Sampling Surface</th>
+                            <th className="border border-black px-1.5 py-1 w-32">Sanitizer & Concentration</th>
+                            <th className="border border-black px-1.5 py-1 w-24 text-center">SPC (CFU/cm²)</th>
+                            <th className="border border-black px-1.5 py-1 w-24 text-center">Coliform Count</th>
+                            <th className="border border-black px-1.5 py-1 w-24 text-center">Yeast & Mold</th>
+                            <th className="border border-black px-1.5 py-1 w-20 text-center">Status</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Analyst</th>
+                            {renderCustomHeaderCols()}
+                      <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {swabRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.dateShift)} onChange={(e) => updateSwabRow(row.id, "dateShift", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.area)} onChange={(e) => updateSwabRow(row.id, "area", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5">
+                                <input value={cellVal(row.sanitizer)} onChange={(e) => updateSwabRow(row.id, "sanitizer", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.spc)} onChange={(e) => updateSwabRow(row.id, "spc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.coliform)} onChange={(e) => updateSwabRow(row.id, "coliform", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono", row.coliform.toLowerCase().includes("present") ? "text-red-700 font-bold" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.yeastMold)} onChange={(e) => updateSwabRow(row.id, "yeastMold", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateSwabRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("alert") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateSwabRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 12: CIP Chemical & Wash Cycle Validation Register (Landscape) */}
+                  {selectedFormatId === "cip-validation" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">CIP Circuit / Equipment</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Wash Time</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Caustic Lye %</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Lye Temp</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Acid %</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Acid Temp</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Flow Rate</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Titration Vol</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Rinse pH</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Status</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Analyst</th>
+                            {renderCustomHeaderCols()}
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {cipValidationRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.circuit)} onChange={(e) => updateCipValidationRow(row.id, "circuit", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.washTime)} onChange={(e) => updateCipValidationRow(row.id, "washTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold text-blue-900">
+                                <input value={cellVal(row.lyeConc)} onChange={(e) => updateCipValidationRow(row.id, "lyeConc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.lyeTemp)} onChange={(e) => updateCipValidationRow(row.id, "lyeTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold text-amber-900">
+                                <input value={cellVal(row.acidConc)} onChange={(e) => updateCipValidationRow(row.id, "acidConc", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.acidTemp)} onChange={(e) => updateCipValidationRow(row.id, "acidTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.flowRate)} onChange={(e) => updateCipValidationRow(row.id, "flowRate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.titrationVol)} onChange={(e) => updateCipValidationRow(row.id, "titrationVol", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.finalPh)} onChange={(e) => updateCipValidationRow(row.id, "finalPh", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold text-emerald-800" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateCipValidationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateCipValidationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 13: Milk Adulteration & Chemical Test Register (Landscape) */}
+                  {selectedFormatId === "adulteration-strip" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[8.5px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1 py-1 text-left">Sample Source / Tanker</th>
+                            <th className="border border-black px-1 py-1 w-14">Urea</th>
+                            <th className="border border-black px-1 py-1 w-14">Starch</th>
+                            <th className="border border-black px-1 py-1 w-14">Glucose</th>
+                            <th className="border border-black px-1 py-1 w-14">Detergent</th>
+                            <th className="border border-black px-1 py-1 w-20">Neutralizer</th>
+                            <th className="border border-black px-1 py-1 w-14">H2O2</th>
+                            <th className="border border-black px-1 py-1 w-14">Nitrate</th>
+                            <th className="border border-black px-1 py-1 w-16">Salt %</th>
+                            <th className="border border-black px-1 py-1 w-16">Antibiotics</th>
+                            <th className="border border-black px-1 py-1 w-24">Final Status</th>
+                            <th className="border border-black px-1 py-1 w-16">Analyst</th>
+                            {renderCustomHeaderCols()}
+                            <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {adulterationRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.sampleSource)} onChange={(e) => updateAdulterationRow(row.id, "sampleSource", e.target.value)} className="w-full bg-transparent border-none text-[8.5px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.urea)} onChange={(e) => updateAdulterationRow(row.id, "urea", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.urea.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.starch)} onChange={(e) => updateAdulterationRow(row.id, "starch", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.starch.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.glucose)} onChange={(e) => updateAdulterationRow(row.id, "glucose", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.glucose.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.detergent)} onChange={(e) => updateAdulterationRow(row.id, "detergent", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.detergent.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.neutralizer)} onChange={(e) => updateAdulterationRow(row.id, "neutralizer", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.neutralizer.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.h2o2)} onChange={(e) => updateAdulterationRow(row.id, "h2o2", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.h2o2.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.nitrate)} onChange={(e) => updateAdulterationRow(row.id, "nitrate", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.nitrate.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.salt)} onChange={(e) => updateAdulterationRow(row.id, "salt", e.target.value)} className="w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.antibiotic)} onChange={(e) => updateAdulterationRow(row.id, "antibiotic", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0", row.antibiotic.toLowerCase().includes("pos") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateAdulterationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateAdulterationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[8.5px] p-0.5 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 14: Sensory & Organoleptic Evaluation Sheet (Landscape) */}
+                  {selectedFormatId === "sensory-organoleptic" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">Product Name</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Batch No.</th>
+                            <th className="border border-black px-1.5 py-1 w-14">Temp</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Flavor & Taste (10)</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Odor / Aroma (10)</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Color (10)</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Texture & Body (10)</th>
+                            <th className="border border-black px-1.5 py-1 w-20 font-bold">Overall Score</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Decision</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Panelist Ref</th>
+                            {renderCustomHeaderCols()}
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {sensoryRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.sampleName)} onChange={(e) => updateSensoryRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateSensoryRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.temp)} onChange={(e) => updateSensoryRow(row.id, "temp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.flavor)} onChange={(e) => updateSensoryRow(row.id, "flavor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.odor)} onChange={(e) => updateSensoryRow(row.id, "odor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.color)} onChange={(e) => updateSensoryRow(row.id, "color", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.texture)} onChange={(e) => updateSensoryRow(row.id, "texture", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-bold font-mono text-blue-900">
+                                <input value={cellVal(row.overallScore)} onChange={(e) => updateSensoryRow(row.id, "overallScore", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.decision)} onChange={(e) => updateSensoryRow(row.id, "decision", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.decision.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.panelist)} onChange={(e) => updateSensoryRow(row.id, "panelist", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 15: Effluent Treatment Plant (ETP) Wastewater Log (Landscape) */}
+                  {selectedFormatId === "effluent-etp" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 w-24">Date & Shift</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Sample Location / Tank</th>
+                            <th className="border border-black px-1.5 py-1 w-16">pH</th>
+                            <th className="border border-black px-1.5 py-1 w-20">BOD (mg/L)</th>
+                            <th className="border border-black px-1.5 py-1 w-20">COD (mg/L)</th>
+                            <th className="border border-black px-1.5 py-1 w-20">TSS (mg/L)</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Oil & Grease</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Sludge SVI</th>
+                            <th className="border border-black px-1.5 py-1 text-left font-bold">SPCB Discharge Status</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Analyst</th>
+                            {renderCustomHeaderCols()}
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {etpRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.dateShift)} onChange={(e) => updateEtpRow(row.id, "dateShift", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.sampleLocation)} onChange={(e) => updateEtpRow(row.id, "sampleLocation", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.ph)} onChange={(e) => updateEtpRow(row.id, "ph", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input value={cellVal(row.bod)} onChange={(e) => updateEtpRow(row.id, "bod", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold">
+                                <input value={cellVal(row.cod)} onChange={(e) => updateEtpRow(row.id, "cod", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.tss)} onChange={(e) => updateEtpRow(row.id, "tss", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.oilGrease)} onChange={(e) => updateEtpRow(row.id, "oilGrease", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.svi)} onChange={(e) => updateEtpRow(row.id, "svi", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.dischargeStatus)} onChange={(e) => updateEtpRow(row.id, "dischargeStatus", e.target.value)} className={cn("w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.dischargeStatus.toLowerCase().includes("non") ? "text-red-700" : "text-green-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateEtpRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 16: Pouch & Packaging Integrity Quality Sheet (Portrait) */}
+                  {selectedFormatId === "packing-integrity" && (
+                    <div className="w-full">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">Line & Machine No.</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Product Name</th>
+                            <th className="border border-black px-1.5 py-1 w-28">Leak Test (5 psi)</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Seal Fusion</th>
+                            <th className="border border-black px-1.5 py-1 w-28">Weight Variation</th>
+                            <th className="border border-black px-1.5 py-1 text-left">MRP / Date Print</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Status</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Inspector</th>
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {packingRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.lineNo)} onChange={(e) => updatePackingRow(row.id, "lineNo", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.product)} onChange={(e) => updatePackingRow(row.id, "product", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.leakTest)} onChange={(e) => updatePackingRow(row.id, "leakTest", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.leakTest.toLowerCase().includes("fail") ? "text-red-700 font-bold" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.sealStrength)} onChange={(e) => updatePackingRow(row.id, "sealStrength", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.weightVar)} onChange={(e) => updatePackingRow(row.id, "weightVar", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.codePrint)} onChange={(e) => updatePackingRow(row.id, "codePrint", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updatePackingRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("reject") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.inspector)} onChange={(e) => updatePackingRow(row.id, "inspector", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 17: Incubation & Shelf-Life Retention Register (Portrait) */}
+                  {selectedFormatId === "incubation-shelf-life" && (
+                    <div className="w-full">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">Sample Product</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Batch No</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Storage Temp</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Incub. Period</th>
+                            <th className="border border-black px-1.5 py-1 w-28">pH Drop Check</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Gas / Curd</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Taste & Odor</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Status</th>
+                            <th className="border border-black px-1.5 py-1 w-18">Analyst</th>
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {incubationRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.sampleName)} onChange={(e) => updateIncubationRow(row.id, "sampleName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.batchNo)} onChange={(e) => updateIncubationRow(row.id, "batchNo", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.storeTemp)} onChange={(e) => updateIncubationRow(row.id, "storeTemp", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.incubationDays)} onChange={(e) => updateIncubationRow(row.id, "incubationDays", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.phDrop)} onChange={(e) => updateIncubationRow(row.id, "phDrop", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.gasCurd)} onChange={(e) => updateIncubationRow(row.id, "gasCurd", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0", row.gasCurd.toLowerCase().includes("curd") || row.gasCurd.toLowerCase().includes("gas") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.tasteOdor)} onChange={(e) => updateIncubationRow(row.id, "tasteOdor", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.shelfLifeStatus)} onChange={(e) => updateIncubationRow(row.id, "shelfLifeStatus", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.shelfLifeStatus.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateIncubationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 18: Glass & Brittle Plastic Audit Register (Portrait) */}
+                  {selectedFormatId === "glass-brittle-audit" && (
+                    <div className="w-full">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">Location / Department Area</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Glass / Brittle Item Name</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Condition</th>
+                            <th className="border border-black px-1.5 py-1 w-28">Protective Shield</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Corrective Action Needed</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Audit Status</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Auditor</th>
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {glassAuditRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.area)} onChange={(e) => updateGlassAuditRow(row.id, "area", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.item)} onChange={(e) => updateGlassAuditRow(row.id, "item", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.condition)} onChange={(e) => updateGlassAuditRow(row.id, "condition", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold", row.condition.toLowerCase().includes("broken") || row.condition.toLowerCase().includes("crack") ? "text-red-700 font-bold" : "text-slate-800")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.protectiveShield)} onChange={(e) => updateGlassAuditRow(row.id, "protectiveShield", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.actionRequired)} onChange={(e) => updateGlassAuditRow(row.id, "actionRequired", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateGlassAuditRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.auditor)} onChange={(e) => updateGlassAuditRow(row.id, "auditor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 19: Lab & Plant Pest Control & Hygiene Record (Portrait) */}
+                  {selectedFormatId === "pest-control-hygiene" && (
+                    <div className="w-full">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">Location / Station No</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Trap Type</th>
+                            <th className="border border-black px-1.5 py-1 w-32">Inspection Result</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Flies / Pest Count</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Action Taken</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Hygiene Status</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Auditor</th>
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {pestControlRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.location)} onChange={(e) => updatePestControlRow(row.id, "location", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.trapType)} onChange={(e) => updatePestControlRow(row.id, "trapType", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.inspectionResult)} onChange={(e) => updatePestControlRow(row.id, "inspectionResult", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.fliesCount)} onChange={(e) => updatePestControlRow(row.id, "fliesCount", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.actionTaken)} onChange={(e) => updatePestControlRow(row.id, "actionTaken", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 text-slate-700" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updatePestControlRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("unsat") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.auditor)} onChange={(e) => updatePestControlRow(row.id, "auditor", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* CASE 20: CIP Thermal & Chemical Sanitation Log (Landscape) */}
+                  {selectedFormatId === "cip-sanitation-verification" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 text-left">Equipment / Pipeline Circuit</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Sanitizer Agent Type</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Contact Time</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Concentration (PPM / °C)</th>
+                            <th className="border border-black px-1.5 py-1 w-24 text-center">Post-Sanitation Swab</th>
+                            <th className="border border-black px-1.5 py-1 w-20 text-center">Sanitation Status</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Verified By</th>
+                            {renderCustomHeaderCols()}
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {cipSanitationRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.equipment)} onChange={(e) => updateCipSanitationRow(row.id, "equipment", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.sanitizerType)} onChange={(e) => updateCipSanitationRow(row.id, "sanitizerType", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.contactTime)} onChange={(e) => updateCipSanitationRow(row.id, "contactTime", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono font-bold text-teal-900">
+                                <input value={cellVal(row.concPpm)} onChange={(e) => updateCipSanitationRow(row.id, "concPpm", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.swabRes)} onChange={(e) => updateCipSanitationRow(row.id, "swabRes", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.status)} onChange={(e) => updateCipSanitationRow(row.id, "status", e.target.value)} className={cn("w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold", row.status.toLowerCase().includes("fail") ? "text-red-700" : "text-green-700")} />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.analyst)} onChange={(e) => updateCipSanitationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  <datalist id="dairy-departments">
+                    <option value="Quality Control (QC / QA)" />
+                    <option value="Milk Processing & Production" />
+                    <option value="Maintenance & Engineering" />
+                    <option value="Stores & Inventory" />
+                    <option value="Raw Milk Reception (Dock)" />
+                    <option value="Packaging & Dispatch" />
+                    <option value="Utilities & Refrigeration" />
+                    <option value="Electrical & DG Operations" />
+                    <option value="ETP & WTP Operations" />
+                    <option value="HR & Administration" />
+                    <option value="Finance & Accounts" />
+                    <option value="Logistics & Transport" />
+                    <option value="Safety & EHS" />
+                  </datalist>
+
+                  {/* CASE 21: Staff Leave Application Form (Matching Image 1) */}
+                  {selectedFormatId === "leave-application" && (
+                    <div className="w-full max-w-2xl mx-auto bg-white p-6 sm:p-8 text-black border border-black shadow-none rounded-none font-sans text-xs">
+                      {/* Header */}
+                      <div className="text-center mb-4 space-y-1">
+                        <input
+                          value={leaveAppForm.companyName}
+                          onChange={(e) => setLeaveAppForm({ ...leaveAppForm, companyName: e.target.value })}
+                          className="w-full text-center text-xl sm:text-2xl font-black tracking-wide border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-black uppercase"
+                        />
+                        <input
+                          value={leaveAppForm.companyAddress}
+                          onChange={(e) => setLeaveAppForm({ ...leaveAppForm, companyAddress: e.target.value })}
+                          placeholder="PLANT / UNIT LOCATION"
+                          className="w-full text-center text-xs sm:text-sm font-semibold border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-slate-800"
+                        />
+                        <div className="pt-2">
+                          <span className="text-base sm:text-lg font-bold border-b-2 border-black tracking-wider uppercase px-2 py-0.5 inline-block">
+                            LEAVE APPLICATION FORM
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Top Right Date */}
+                      <div className="flex justify-end mb-4 font-bold text-xs">
+                        <div className="flex items-center gap-1">
+                          <span>DATE:</span>
+                          <input
+                            type="date"
+                            value={leaveAppForm.date}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, date: e.target.value })}
+                            className="border-b border-black border-t-0 border-x-0 rounded-none bg-transparent text-xs px-1 py-0.5 focus:ring-0 font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Form Fields */}
+                      <div className="space-y-3.5 text-xs sm:text-sm text-black">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[120px]">Name :</span>
+                          <input
+                            value={leaveAppForm.name}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, name: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[120px]">Department :</span>
+                          <input
+                            list="dairy-departments"
+                            value={leaveAppForm.department}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, department: e.target.value })}
+                            placeholder="e.g. Quality Control, Processing, Maintenance, Stores..."
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[120px]">Designation :</span>
+                          <input
+                            value={leaveAppForm.designation}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, designation: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="flex flex-wrap items-baseline gap-2 sm:gap-4">
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                            <span className="font-bold whitespace-nowrap min-w-[120px]">Leave Date From :</span>
+                            <input
+                              type="date"
+                              value={leaveAppForm.fromDate}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, fromDate: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono text-xs sm:text-sm"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[150px]">
+                            <span className="font-bold whitespace-nowrap">To :</span>
+                            <input
+                              type="date"
+                              value={leaveAppForm.toDate}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, toDate: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono text-xs sm:text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-baseline gap-2 sm:gap-4">
+                          <div className="flex items-baseline gap-2 w-full sm:w-48">
+                            <span className="font-bold whitespace-nowrap min-w-[120px]">No. of Days :</span>
+                            <input
+                              value={leaveAppForm.noOfDays}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, noOfDays: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono font-bold text-xs sm:text-sm text-center"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                            <span className="font-bold whitespace-nowrap">Purpose :</span>
+                            <input
+                              value={leaveAppForm.purpose}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, purpose: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap">Kind of leave (CL/EL/ML/W-OFF/Other)</span>
+                          <input
+                            value={leaveAppForm.kindOfLeave}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, kindOfLeave: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="space-y-2 pt-1">
+                          <div className="flex items-baseline gap-2">
+                            <span className="font-bold whitespace-nowrap">Contact Address on leave :</span>
+                            <input
+                              value={leaveAppForm.addressOnLeave}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, addressOnLeave: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                          <input
+                            value={leaveAppForm.addressOnLeaveLine2}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, addressOnLeaveLine2: e.target.value })}
+                            placeholder=""
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="flex flex-wrap items-baseline gap-4 pt-1">
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                            <span className="font-bold whitespace-nowrap">Mobile no. (1)</span>
+                            <input
+                              value={leaveAppForm.mobile1}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, mobile1: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono text-xs sm:text-sm"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                            <span className="font-bold whitespace-nowrap">(2)</span>
+                            <input
+                              value={leaveAppForm.mobile2}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, mobile2: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono text-xs sm:text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2 pt-1">
+                          <div className="flex items-baseline gap-2">
+                            <span className="font-bold whitespace-nowrap min-w-[210px]">Person in charge in absence (1)</span>
+                            <input
+                              value={leaveAppForm.personInCharge1}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, personInCharge1: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 pl-4">
+                            <span className="font-bold whitespace-nowrap min-w-[40px] text-right">(2)</span>
+                            <input
+                              value={leaveAppForm.personInCharge2}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, personInCharge2: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 pl-4">
+                            <span className="font-bold whitespace-nowrap min-w-[40px] text-right">(3)</span>
+                            <input
+                              value={leaveAppForm.personInCharge3}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, personInCharge3: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="pt-8 space-y-6">
+                          <div className="flex items-baseline gap-2 max-w-sm">
+                            <span className="font-bold whitespace-nowrap">Applicant sign</span>
+                            <input
+                              value={leaveAppForm.applicantSign}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, applicantSign: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs text-center"
+                            />
+                          </div>
+
+                          <div className="flex flex-wrap items-baseline gap-6 pt-2">
+                            <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                              <span className="font-bold whitespace-nowrap">Recommended by</span>
+                              <input
+                                value={leaveAppForm.recommendedBy}
+                                onChange={(e) => setLeaveAppForm({ ...leaveAppForm, recommendedBy: e.target.value })}
+                                className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs text-center"
+                              />
+                            </div>
+                            <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                              <span className="font-bold whitespace-nowrap">Head of Dept.</span>
+                              <input
+                                value={leaveAppForm.headOfDept}
+                                onChange={(e) => setLeaveAppForm({ ...leaveAppForm, headOfDept: e.target.value })}
+                                className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs text-center"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* CASE 22: Monthly Overtime Verification Form (Matching Image 2) */}
+                  {selectedFormatId === "overtime-application" && (
+                    <div className="w-full max-w-2xl mx-auto bg-white p-6 sm:p-8 text-black border border-black shadow-none rounded-none font-sans text-xs">
+                      {/* Header */}
+                      <div className="text-center mb-4 space-y-1">
+                        <input
+                          value={overtimeFormHeader.companyName}
+                          onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, companyName: e.target.value })}
+                          className="w-full text-center text-xl sm:text-2xl font-black tracking-wide border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-black uppercase"
+                        />
+                        <input
+                          value={overtimeFormHeader.companyAddress}
+                          onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, companyAddress: e.target.value })}
+                          placeholder="PLANT / UNIT LOCATION"
+                          className="w-full text-center text-xs sm:text-sm font-semibold border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-slate-800"
+                        />
+                        <div className="pt-2">
+                          <span className="text-base sm:text-lg font-bold border-b-2 border-black tracking-wider uppercase px-2 py-0.5 inline-block">
+                            MONTHLY OVERTIME VERIFICATION FORM
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Header Info Box */}
+                      <div className="border border-black p-3 space-y-1.5 mb-4 text-xs">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Name</span>
+                          <span>:</span>
+                          <input
+                            value={overtimeFormHeader.name}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, name: e.target.value })}
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Department</span>
+                          <span>:</span>
+                          <input
+                            list="dairy-departments"
+                            value={overtimeFormHeader.department}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, department: e.target.value })}
+                            placeholder="e.g. Quality Control, Processing, Maintenance, Stores..."
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Designation</span>
+                          <span>:</span>
+                          <input
+                            value={overtimeFormHeader.designation}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, designation: e.target.value })}
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Employee ID</span>
+                          <span>:</span>
+                          <input
+                            value={overtimeFormHeader.employeeId}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, employeeId: e.target.value })}
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Month</span>
+                          <span>:</span>
+                          <input
+                            value={overtimeFormHeader.month}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, month: e.target.value })}
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Overtime Table */}
+                      <div className="w-full overflow-x-auto mb-4">
+                        <table className="w-full border-collapse border border-black text-xs text-black">
+                          <thead>
+                            <tr className="bg-slate-100 font-bold text-center">
+                              <th className="border border-black px-2 py-1.5 w-24">Date</th>
+                              <th className="border border-black px-2 py-1.5 w-28">Total Duty Hrs</th>
+                              <th className="border border-black px-2 py-1.5 w-28">Extra Hours</th>
+                              <th className="border border-black px-2 py-1.5 text-left">Reason For OT</th>
+                              <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {overtimeTableRows.map((row) => (
+                              <tr key={row.id}>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={row.date}
+                                    onChange={(e) => updateOvertimeTableRow(row.id, "date", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={row.totalDutyHrs}
+                                    onChange={(e) => updateOvertimeTableRow(row.id, "totalDutyHrs", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono font-bold">
+                                  <input
+                                    value={row.extraHours}
+                                    onChange={(e) => updateOvertimeTableRow(row.id, "extraHours", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono font-bold"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-left">
+                                  <input
+                                    value={row.reason}
+                                    onChange={(e) => updateOvertimeTableRow(row.id, "reason", e.target.value)}
+                                    className="w-full bg-transparent border-none text-xs p-1 focus:ring-0"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center print:hidden">
+                                  <button onClick={() => deleteOvertimeTableRow(row.id)} className="text-red-500 hover:text-red-700">
+                                    <Trash2 className="w-3.5 h-3.5 mx-auto" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Table Control Buttons */}
+                      <div className="flex items-center gap-2 mb-6 print:hidden">
+                        <Button onClick={addOvertimeTableRow} size="sm" variant="outline" className="text-xs h-8">
+                          <Plus className="w-3.5 h-3.5 mr-1" /> Add OT Row
+                        </Button>
+                      </div>
+
+                      {/* Footer Box Signatures */}
+                      <div className="border border-black p-4 space-y-4 text-xs">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[140px]">Employee Sign :</span>
+                          <input
+                            value={overtimeFormHeader.employeeSign}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, employeeSign: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[140px]">Department Head Sign :</span>
+                          <input
+                            value={overtimeFormHeader.deptHeadSign}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, deptHeadSign: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* CASE 23: Material Issue Slip (Matching Image 3) */}
+                  {selectedFormatId === "material-issue-slip" && (
+                    <div className="w-full max-w-4xl mx-auto bg-white p-6 sm:p-8 text-black border border-black shadow-none rounded-none font-sans text-xs">
+                      {/* Header */}
+                      <div className="flex flex-wrap items-start justify-between border-b border-black pb-3 mb-3 gap-4">
+                        <div className="flex-1 text-center sm:text-left">
+                          <input
+                            value={materialIssueFormHeader.companyName}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, companyName: e.target.value })}
+                            className="w-full text-xl sm:text-2xl font-black tracking-wide border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-black uppercase"
+                          />
+                          <input
+                            value={materialIssueFormHeader.companyAddress}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, companyAddress: e.target.value })}
+                            placeholder="PLANT / UNIT LOCATION"
+                            className="w-full text-xs sm:text-sm font-semibold border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-slate-800"
+                          />
+                          <div className="pt-2">
+                            <span className="text-base sm:text-lg font-bold border-b-2 border-black tracking-wider uppercase px-2 py-0.5 inline-block">
+                              MATERIAL ISSUE SLIP
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1 text-xs font-bold shrink-0 min-w-[160px]">
+                          <div className="flex items-baseline gap-1">
+                            <span className="min-w-[45px]">S.No.</span>
+                            <span>:</span>
+                            <input
+                              value={materialIssueFormHeader.sNo}
+                              onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, sNo: e.target.value })}
+                              className="w-full border-b border-dotted border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-1">
+                            <span className="min-w-[45px]">Date</span>
+                            <span>:</span>
+                            <input
+                              type="date"
+                              value={materialIssueFormHeader.date}
+                              onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, date: e.target.value })}
+                              className="w-full border-b border-dotted border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-1">
+                            <span className="min-w-[45px]">Dept.</span>
+                            <span>:</span>
+                            <input
+                              list="dairy-departments"
+                              value={materialIssueFormHeader.dept}
+                              onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, dept: e.target.value })}
+                              placeholder="e.g. Stores / QC / Processing / Maintenance"
+                              className="w-full border-b border-dotted border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Subtext */}
+                      <p className="font-bold text-xs mb-2 text-black">Please issue me following items :-</p>
+
+                      {/* Table */}
+                      <div className="w-full overflow-x-auto mb-4">
+                        <table className="w-full border-collapse border border-black text-xs text-black">
+                          <thead>
+                            <tr className="bg-slate-100 font-bold text-center">
+                              <th className="border border-black px-2 py-1.5 w-20">Code No.</th>
+                              <th className="border border-black px-2 py-1.5 text-left">Items</th>
+                              <th className="border border-black px-2 py-1.5 w-20">Units</th>
+                              <th className="border border-black px-2 py-1.5 w-16">Qty.</th>
+                              <th className="border border-black px-2 py-1.5 w-20">Rate</th>
+                              <th className="border border-black px-2 py-1.5 w-24">Amount</th>
+                              <th className="border border-black px-2 py-1.5 text-left">Remarks</th>
+                              <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {materialIssueTableItems.map((item) => (
+                              <tr key={item.id}>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={item.codeNo}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "codeNo", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-left font-semibold">
+                                  <input
+                                    value={item.items}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "items", e.target.value)}
+                                    className="w-full bg-transparent border-none text-xs p-1 focus:ring-0 font-semibold"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center">
+                                  <input
+                                    value={item.units}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "units", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={item.qty}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "qty", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={item.rate}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "rate", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono font-bold">
+                                  <input
+                                    value={item.amount}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "amount", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono font-bold"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-left">
+                                  <input
+                                    value={item.remarks}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "remarks", e.target.value)}
+                                    className="w-full bg-transparent border-none text-xs p-1 focus:ring-0"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center print:hidden">
+                                  <button onClick={() => deleteMaterialIssueItem(item.id)} className="text-red-500 hover:text-red-700">
+                                    <Trash2 className="w-3.5 h-3.5 mx-auto" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Control Button */}
+                      <div className="flex items-center gap-2 mb-4 print:hidden">
+                        <Button onClick={addMaterialIssueItem} size="sm" variant="outline" className="text-xs h-8">
+                          <Plus className="w-3.5 h-3.5 mr-1" /> Add Item Row
+                        </Button>
+                      </div>
+
+                      {/* Bottom Verification 6-Box Row */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 border border-black text-center text-xs">
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Material Required</span>
+                          <input
+                            value={materialIssueFormHeader.materialRequired}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, materialRequired: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Authorised by</span>
+                          <input
+                            value={materialIssueFormHeader.authorisedBy}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, authorisedBy: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Received by</span>
+                          <input
+                            value={materialIssueFormHeader.receivedBy}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, receivedBy: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Material Issued</span>
+                          <input
+                            value={materialIssueFormHeader.materialIssued}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, materialIssued: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Issued by</span>
+                          <input
+                            value={materialIssueFormHeader.issuedBy}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, issuedBy: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Store Incharge</span>
+                          <input
+                            value={materialIssueFormHeader.storeIncharge}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, storeIncharge: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* CASE 24: Lab Glassware & Equipment Breakage Register (Landscape) */}
+                  {selectedFormatId === "equipment-breakage-log" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 w-20">Date</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Item / Glassware Name</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Asset / Tag No.</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Est. Cost (₹)</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Handled By</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Cause of Breakage / Damage</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Action Taken</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Verified By</th>
+                            {renderCustomHeaderCols()}
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {breakageRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.incidentDate)} onChange={(e) => updateBreakageRow(row.id, "incidentDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.itemName)} onChange={(e) => updateBreakageRow(row.id, "itemName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.assetTag)} onChange={(e) => updateBreakageRow(row.id, "assetTag", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono font-bold text-red-700">
+                                <input value={cellVal(row.cost)} onChange={(e) => updateBreakageRow(row.id, "cost", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.handledBy)} onChange={(e) => updateBreakageRow(row.id, "handledBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.cause)} onChange={(e) => updateBreakageRow(row.id, "cause", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-semibold">
+                                <input value={cellVal(row.actionTaken)} onChange={(e) => updateBreakageRow(row.id, "actionTaken", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.verifiedBy)} onChange={(e) => updateBreakageRow(row.id, "verifiedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                </div>
+
+                {/* 3. Signature & Brand Footer */}
+                <div className="pt-8 space-y-4">
+                  
+                  {/* Standard Sign block */}
+                  <div className="flex justify-between items-center text-[8.5px] font-bold uppercase tracking-wider px-4">
+                    <div className="text-center w-32 border-t border-black pt-1">
+                      ANALYST SIGN
+                    </div>
+                    <div className="text-center w-32 border-t border-black pt-1">
+                      VERIFIED BY
+                    </div>
+                    <div className="text-center w-32 border-t border-black pt-1">
+                      QA MANAGER AUTHORIZED SIGN
+                    </div>
+                  </div>
+
+                  {/* Brand Footer */}
+                  <div className="border-t border-slate-300 pt-2 text-center text-[7.5px] text-slate-400 font-bold tracking-widest uppercase">
+                    POWERED BY DAIRY HUB ERP SYSTEM
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* Global CSS overrides for A4 Printing layout */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        .is-exporting-pdf .print\\:hidden,
+        .is-exporting-pdf .no-pdf {
+          display: none !important;
+        }
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          #print-area-formats, #print-area-formats * {
+            visibility: visible;
+          }
+          #print-area-formats {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: ${currentOrientation === 'landscape' ? '297mm' : '210mm'} !important;
+            height: ${currentOrientation === 'landscape' ? '210mm' : '297mm'} !important;
+            padding: 10mm !important;
+            margin: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background-color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          /* Hide tabs, header and buttons when printing */
+          .print\\:hidden {
+            display: none !important;
+          }
+        }
+      `}} />
+    </div>
+  );
+}
