@@ -1,8 +1,14 @@
 'use client';
 
 // /firebase/firestore/use-doc.tsx
-import { useEffect, useState, useRef } from 'react';
-import { onSnapshot, type DocumentReference, type DocumentData, type DocumentSnapshot, type FirestoreError } from 'firebase/firestore';
+import { useEffect, useState, useRef } from "react";
+import {
+  onSnapshot,
+  type DocumentReference,
+  type DocumentData,
+  type DocumentSnapshot,
+  type FirestoreError
+} from "firebase/firestore";
 
 interface UseDocOptions {
   initialData?: any;

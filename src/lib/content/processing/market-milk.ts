@@ -1862,4 +1862,3 @@ export const marketMilkContent = {
     }
 }
 
-    

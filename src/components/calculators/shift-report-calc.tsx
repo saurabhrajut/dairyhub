@@ -1,17 +1,34 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { 
-  FileSpreadsheet, Printer, Download, Trash2, User, Clock, Calendar as CalendarIcon, HelpCircle,
-  Mail, MessageCircle, Plus, Building2, Sparkles, CheckCircle2
+import {
+  FileSpreadsheet,
+  Printer,
+  Download,
+  Trash2,
+  User,
+  Clock,
+  Calendar as CalendarIcon,
+  HelpCircle,
+  Mail,
+  MessageCircle,
+  Building2,
+  Sparkles,
+  CheckCircle2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-import { savePdfFile, saveFile } from "@/lib/mobile-download";
+import { saveFile } from "@/lib/mobile-download";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 
 // Types for spreadsheet data

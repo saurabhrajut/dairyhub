@@ -2334,5 +2334,3 @@ export const cheeseContent = {
         },
 }
 
-    
-

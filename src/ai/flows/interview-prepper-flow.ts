@@ -1,7 +1,7 @@
 'use server';
-import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-import { InterviewPrepperInputSchema, InterviewPrepperOutputSchema, type InterviewPrepperInput, type InterviewPrepperOutput } from './types';
+import { ai } from "@/ai/genkit";
+import { z } from "zod";
+import { InterviewPrepperInputSchema, InterviewPrepperOutputSchema, type InterviewPrepperInput, type InterviewPrepperOutput } from "./types";
 
 /**
  * Primary prompt (uses your strict schema).
@@ -55,7 +55,6 @@ Please respond to the user's last message and ask the next relevant question.
 {{/if}}
     `,
 });
-
 
 const RawTextSchema = z.object({
   rawText: z.string()
@@ -207,7 +206,7 @@ const interviewPrepperFlow = ai.defineFlow(
 
       // try primary prompt
       try {
-        const primaryResult: any = await callWithRetries((payload) => interviewPrepperPrompt(payload, {history: payload.history}), promptInput, 2);
+        const primaryResult: any = await callWithRetries((payload) => interviewPrepperPrompt(payload, {history: payload.history} as any), promptInput, 2);
         if (primaryResult?.output) {
           console.log("[interviewPrepperFlow] primary prompt succeeded.");
           return primaryResult.output;
@@ -231,7 +230,7 @@ const interviewPrepperFlow = ai.defineFlow(
       // fallback attempt
       console.warn("[interviewPrepperFlow] Primary prompt failed or returned no output. Trying fallback.");
       try {
-        const fallbackResult: any = await callWithRetries((payload) => interviewPrepperFallbackPrompt(payload, {history: payload.history}), promptInput, 2);
+        const fallbackResult: any = await callWithRetries((payload) => interviewPrepperFallbackPrompt(payload, {history: payload.history} as any), promptInput, 2);
         if (fallbackResult?.output?.rawText) {
           const rawText = fallbackResult.output.rawText.trim();
           try {

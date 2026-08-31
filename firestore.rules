@@ -11,7 +11,20 @@ service cloud.firestore {
 
       // Allow a user to manage their own subscription
       match /subscription/{subId} {
-      	allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Allow anyone to read and write experts and chats (important for local mock auth users)
+    match /experts/{expertId} {
+      allow read, write: if true;
+    }
+    
+    match /chats/{chatId} {
+      allow read, write: if true;
+      
+      match /messages/{messageId} {
+        allow read, write: if true;
       }
     }
   }

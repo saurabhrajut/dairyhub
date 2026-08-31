@@ -16,8 +16,7 @@ export const sizeExclusionContent = {
     principle: {
       title: "Size Exclusion Chromatography ka Scientific Principle",
       content: `<p>SEC separation mechanism purely entropy-driven physical process hai jisme molecules distribute hote hain column ke mobile phase aur stationary phase pores ke beech, entirely based on size-based accessibility. Koi adsorptive, ionic, ya hydrophobic interactions involved nahi hoti (ideally).</p>
-      
-      
+
       <p><strong>Column Structure:</strong> SEC column spherical, porous beads se packed hota hai (typical diameter 5-300 μm depending on application). Beads chemically inert matrix se bane hote hain jaise cross-linked agarose (Sepharose, Superose), dextran (Sephadex), polyacrylamide (Bio-Gel P), ya silica-based materials (high-performance SEC/GPC columns mein). Pore sizes precisely controlled hote hain (typically 10 Å to >1000 Å) to match target molecular weight range.</p>
       
       <p><strong>Molecular Sieving Mechanism:</strong> Jab sample column mein inject hota hai, molecules column ke liquid-filled space mein distribute hote hain. Column ka total liquid volume do components mein divide hota hai:</p>
@@ -128,8 +127,7 @@ export const sizeExclusionContent = {
       title: "Data Analysis, Calibration, aur MW Determination",
       content: `<h4>Calibration Curve Construction</h4>
       <p>Standard proteins of known MW run kiye jate hain same column aur conditions par. Elution volume (V<sub>e</sub>) peak maximum par note kiya jata hai. Distribution coefficient calculate karte hain: K<sub>av</sub> = (V<sub>e</sub> - V<sub>0</sub>)/(V<sub>t</sub> - V<sub>0</sub>). Plot log(MW) vs V<sub>e</sub> ya K<sub>av</sub>. Linear region (fractionation range) identify karte hain.</p>
-      
-      
+
       <p>Standard protein sets commercially available hain, e.g., Bio-Rad Gel Filtration Standard (contains thyroglobulin 670 kDa, γ-globulin 158 kDa, ovalbumin 44 kDa, myoglobin 17 kDa, vitamin B12 1.35 kDa). Calibration curve protein-specific hota hai (globular proteins), so non-globular proteins ke liye accuracy limited.</p>
       
       <h4>Void Volume (V<sub>0</sub>) Determination</h4>
@@ -252,8 +250,7 @@ export const sizeExclusionContent = {
     principle: {
       title: "Scientific Principle of Size Exclusion Chromatography",
       content: `<p>The SEC separation mechanism is a purely entropy-driven physical process in which molecules distribute between the mobile phase and the pores of the stationary phase beads, entirely based on size-dependent accessibility. No adsorptive, ionic, or hydrophobic interactions are involved (ideally).</p>
-      
-      
+
       <p><strong>Column Structure:</strong> An SEC column is packed with spherical, porous beads (typical diameter 5-300 μm depending on application). Beads are made from chemically inert matrices such as cross-linked agarose (Sepharose, Superose), dextran (Sephadex), polyacrylamide (Bio-Gel P), or silica-based materials (for high-performance SEC/GPC). Pore sizes are precisely controlled (typically 10 Å to >1000 Å) to match the target molecular weight range.</p>
       
       <p><strong>Molecular Sieving Mechanism:</strong> When a sample is injected into the column, molecules distribute in the liquid-filled space of the column. The total liquid volume of the column is divided into two components:</p>
@@ -364,8 +361,7 @@ export const sizeExclusionContent = {
       title: "Data Analysis, Calibration, and MW Determination",
       content: `<h4>Calibration Curve Construction</h4>
       <p>Standard proteins of known MW are run on the same column under identical conditions. Elution volume (V<sub>e</sub>) at peak maximum is noted. Distribution coefficient is calculated: K<sub>av</sub> = (V<sub>e</sub> - V<sub>0</sub>)/(V<sub>t</sub> - V<sub>0</sub>). Plot log(MW) vs V<sub>e</sub> or K<sub>av</sub>. Identify the linear region (fractionation range).</p>
-      
-      
+
       <p>Standard protein sets are commercially available, e.g., Bio-Rad Gel Filtration Standard (contains thyroglobulin 670 kDa, γ-globulin 158 kDa, ovalbumin 44 kDa, myoglobin 17 kDa, vitamin B12 1.35 kDa). Calibration curves are protein-specific (globular proteins), so accuracy is limited for non-globular proteins.</p>
       
       <h4>Void Volume (V<sub>0</sub>) Determination</h4>

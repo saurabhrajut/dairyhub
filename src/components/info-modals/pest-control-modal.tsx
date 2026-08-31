@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +26,7 @@ import {
   ChevronRight,
   LayoutGrid,
   Activity,
-  BugOff,
+  BugOff
 } from "lucide-react";
 
 // ─────────────────────────────────────────────

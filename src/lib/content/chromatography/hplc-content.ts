@@ -25,8 +25,7 @@ export const hplcContent = {
         <li><strong>Mobile Phase:</strong> Polar hota hai (e.g., Water + Methanol/Acetonitrile).</li>
         <li><strong>Result:</strong> Non-polar compounds column ke saath strong bond banate hain aur late nikalte hain. Polar compounds mobile phase ke saath jaldi nikal jate hain.</li>
       </ul>
-      
-      
+
       <p>Har component ka column se nikalne ka time alag hota hai, jise hum <strong>Retention Time (Rt)</strong> kehte hain. Ye har compound ka unique fingerprint hai.</p>`
     },
     components: {
@@ -49,7 +48,6 @@ export const hplcContent = {
           </ul>
         </li>
       </ol>
-      
 
 [Image of HPLC Instrumentation Diagram]
 `
@@ -115,7 +113,6 @@ export const hplcContent = {
         <li><strong>Mobile Phase:</strong> Polar (e.g., Water mixed with Methanol or Acetonitrile).</li>
         <li><strong>Mechanism:</strong> "Like dissolves like." Non-polar analytes bind to the non-polar column (longer retention time), while polar analytes prefer the mobile phase and elute earlier. Increasing the organic solvent percentage in the mobile phase speeds up elution of non-polar compounds.</li>
       </ul>
-      
 
       <h4>2. Normal-Phase Chromatography</h4>
       <p>Uses a polar stationary phase (pure Silica) and non-polar mobile phase (Hexane). Used for separating very hydrophobic isomers, like Tocopherols (Vitamin E).</p>`

@@ -1,13 +1,39 @@
 "use client";
 
 import React, { useState, useRef, useMemo } from "react";
-import { 
-  Printer, Download, FileText, Building2, MapPin, Calendar, 
-  Plus, Trash2, CheckCircle, Info, Loader2, FileDown,
-  ShieldCheck, ClipboardList, Beaker, FlaskConical, Droplet, TestTube, Scale,
-  Columns, RotateCw, UserCheck, HeartPulse, Sparkles, AlertTriangle, Bug,
-  GraduationCap, Wrench, RefreshCw, Layers, ShieldAlert, Biohazard, Recycle,
-  Search, CheckSquare, Eye, Truck, Snowflake, Package, Thermometer, Zap, Factory, Lock
+import {
+  Printer,
+  FileText,
+  Building2,
+  Plus,
+  Trash2,
+  Loader2,
+  FileDown,
+  ShieldCheck,
+  ClipboardList,
+  FlaskConical,
+  Droplet,
+  Scale,
+  Columns,
+  UserCheck,
+  HeartPulse,
+  Sparkles,
+  AlertTriangle,
+  Bug,
+  GraduationCap,
+  Wrench,
+  RefreshCw,
+  ShieldAlert,
+  Biohazard,
+  Recycle,
+  Search,
+  Eye,
+  Truck,
+  Snowflake,
+  Package,
+  Zap,
+  Factory,
+  Lock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +43,7 @@ import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { savePdfFile } from "@/lib/mobile-download";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 

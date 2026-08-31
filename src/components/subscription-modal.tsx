@@ -1,21 +1,20 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Crown, CheckCircle2, Zap, Loader2 } from "lucide-react";
+import { Crown, CheckCircle2, Loader2 } from "lucide-react";
 import { useSubscription, type SubscriptionPlan } from "@/context/subscription-context";
 import { useAuth } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 import { createRazorpayOrder } from "@/app/actions";
-import { cn } from "@/lib/utils";
 
 declare global {
     interface Window {
@@ -26,7 +25,7 @@ declare global {
 const allProFeatures = [
     "Unlock all premium calculators & guides",
     "Full access to Sarathi AI Chatbot",
-    "Full access to Expert Support & Gyan AI",
+    "Full access to Expert Support & DairyHub Experts",
     "AI-powered Interview Preparation",
     "Access to exclusive industry reports",
     "Save and export your calculations",
@@ -140,7 +139,6 @@ export function SubscriptionModal({
     processPayment();
 
   }, [selectedPlan, isOpen, user, subscribe, setIsOpen, toast]);
-
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

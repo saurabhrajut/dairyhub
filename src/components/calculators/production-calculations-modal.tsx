@@ -2,80 +2,34 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { useState, memo, useCallback, useMemo, useRef, useEffect } from "react";
+import {
+  useState,
+  memo,
+  useCallback,
+  useMemo,
+  useEffect
+} from "react";
 import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  FileText,
-  ArrowLeft,
-  Percent,
-  Calendar,
-  ChevronDown,
-  ChevronUp,
-  ChevronsUp,
-  Droplets,
-  Info,
-  Weight,
-  Thermometer,
-  Factory,
-  DollarSign,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-  Zap,
-  PlusCircle,
-  FileDown,
-  Loader2,
-  Plus,
-  Minus,
-  Scale,
-  TrendingUp,
-  TrendingDown,
-  Beaker,
-  Settings2,
-  Calculator,
-  BadgeIndianRupee,
-  IceCream2,
-  PieChart,
-  ArrowRight,
-  LayoutDashboard,
-  Package,
-  Flame,
-  Snowflake,
-  Milk,
-  Target,
-  // 👇 New Icons for Advanced Calculators 👇
-  Ruler,         // Tank Dipstick
-  PackageOpen,   // Packaging Film
-  Cylinder,      // Pipeline Volume
-  Recycle,       // Recombined Milk
-  Pipette,       // Culture Dosing
-  Trash2,        // ETP Waste
-  Box,           // Cold Storage
-  Truck,         // Dispatch Logistics
-  Activity,      // Suite Header
-  FlaskConical,  // Lab SNF
-  Banknote,      // Rate Calculation
-  Coins,
-  FileSpreadsheet
-} from "lucide-react";
+import { FileText, ArrowLeft, Percent, ChevronDown, ChevronUp, ChevronsUp, Droplets, Info, Weight, Thermometer, Factory, DollarSign, CheckCircle2, XCircle, AlertTriangle, Zap, PlusCircle, Scale, Beaker, Settings2, Calculator, BadgeIndianRupee, IceCream2, Flame, Snowflake, Milk, Target, FileSpreadsheet, Video, Truck, Trash2, PackageOpen, Activity, Pipette, Cylinder, Box, Coins, Ruler } from "lucide-react";
+import { triggerVideoTutorial } from "@/components/tutorial-videos-modal";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
@@ -92,7 +46,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import {
   Table,
@@ -100,7 +54,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
@@ -611,6 +565,43 @@ const calculatorsInfo = {
     },
   };  
 
+const prodVideoMap: Record<string, string> = {
+  'cream-sep': 'prod-cream-sep',
+  'butter': 'prod-butter-yield',
+  'khoa': 'prod-khoa-yield',
+  'shrikhand': 'prod-shrikhand',
+  'pedha': 'prod-pedha-burfi',
+  'cheese': 'prod-cheese',
+  'ghee': 'prod-ghee-recovery',
+  'pasteurization': 'prod-pasteurization',
+  'evaporator': 'prod-evaporator',
+  'drying': 'prod-drying',
+  'coagulant': 'prod-paneer-coagulant',
+  'culture': 'prod-culture-dosing',
+  'cip': 'prod-cip-dosing',
+  'tank': 'prod-tank-volume',
+  'pipeline': 'prod-pipeline-loss',
+  'packaging': 'prod-packaging-film',
+  'storage': 'prod-packaging-film',
+  'dispatch': 'prod-tank-volume',
+  'chilling': 'prod-chilling-load',
+  'boiler': 'prod-boiler-cost',
+  'ibt': 'prod-ibt-ice',
+  'wmr': 'prod-wmr-water',
+  'etp': 'prod-etp-load',
+  'yields': 'prod-butter-yield',
+  'paneer-yield': 'prod-cheese',
+  'ice-cream': 'prod-cream-sep',
+  'production-process': 'prod-pasteurization',
+  'utility-infra': 'prod-boiler-cost',
+  'plant-efficiency': 'prod-wmr-water',
+  'plant-cost': 'prod-boiler-cost',
+  'mass-balance': 'prod-cream-sep',
+  'plant-formats': 'prod-cip-dosing',
+  'running-reports': 'prod-packaging-film',
+  'shift-report': 'prod-tank-volume',
+};
+
 export function ProductionCalculationsModal({
   isOpen,
   setIsOpen,
@@ -642,16 +633,16 @@ export function ProductionCalculationsModal({
       <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-[95vh] sm:max-w-5xl sm:max-h-[95vh] sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
-            <DialogHeader className="flex flex-row flex-wrap items-center gap-3 sm:space-x-4 shrink-0">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleBack}
-                className="shrink-0 hover:bg-white/50"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
+            <DialogHeader className="flex flex-row flex-wrap items-center justify-between gap-3 sm:space-x-4 shrink-0">
               <div className="flex items-center gap-3">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleBack}
+                  className="shrink-0 hover:bg-white/50"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
                 <div
                   className={cn(
                     "p-3 rounded-xl bg-gradient-to-br text-white",
@@ -669,6 +660,14 @@ export function ProductionCalculationsModal({
                   </DialogDescription>
                 </div>
               </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => triggerVideoTutorial(prodVideoMap[activeCalculator] || 'prod-butter-yield')}
+                className="shrink-0 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 border-indigo-200 gap-1.5 rounded-full"
+              >
+                <Video className="w-3.5 h-3.5 text-indigo-600" /> Watch Video 📺
+              </Button>
             </DialogHeader>
             <div className="flex-1 w-full max-w-full min-w-0 overflow-y-auto overflow-x-hidden mt-6 pr-2">
               <ActiveCalculatorComponent />
@@ -676,7 +675,7 @@ export function ProductionCalculationsModal({
           </>
         ) : (
           <>
-            <DialogHeader>
+            <DialogHeader className="flex flex-col items-center">
               <div className="flex items-center justify-center mb-4">
                 <div className="p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl">
                   <Calculator className="h-8 sm:h-12 w-8 sm:w-12 text-white" />
@@ -688,6 +687,14 @@ export function ProductionCalculationsModal({
               <DialogDescription className="text-center text-sm sm:text-lg">
                 Advanced calculators for precision dairy production
               </DialogDescription>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => triggerVideoTutorial('prod-butter-yield')}
+                className="mt-2 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 border-indigo-200 gap-1.5 rounded-full"
+              >
+                <Video className="w-3.5 h-3.5 text-indigo-600" /> Watch All Production Videos 📺
+              </Button>
             </DialogHeader>
             <div className="flex-1 w-full max-w-full min-w-0 overflow-y-auto overflow-x-hidden mt-6 pr-2">
               {/* ALWAYS SHOW GRID - Mobile aur Desktop dono pe */}
@@ -1548,7 +1555,6 @@ function CIPChemicalCalc() {
   );
 }
 
-
 // ════════════════════════════════════════════════════════════
 // CALCULATOR 2: EVAPORATOR / CONCENTRATOR
 // Water evaporation load, steam economy, concentration ratio
@@ -1803,7 +1809,6 @@ function EvaporatorCalc() {
   );
 }
 
-
 // ════════════════════════════════════════════════════════════
 // CALCULATOR 3: SPRAY DRYER YIELD & EFFICIENCY
 // Feed → powder yield, moisture, energy, outlet humidity
@@ -2035,7 +2040,6 @@ function SprayDryerCalc() {
     </div>
   );
 }
-
 
 // ════════════════════════════════════════════════════════════
 // CALCULATOR 4: PASTEURIZATION LOG REDUCTION & D-VALUE
@@ -3128,7 +3132,6 @@ export function GheeRecoveryCalc() {
     </div>
   );
 }
-
 
 // ════════════════════════════════════════════════════════════
 // ADVANCED CHEESE YIELD CALCULATOR (VAN SLYKE FORMULA)
@@ -10494,7 +10497,6 @@ function CreamSeparationCalc() {
   );
 }
 
-
 function ButterYieldCalc() {
   const { toast } = useToast();
   const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
@@ -11667,7 +11669,6 @@ function KhoaYieldCalc() {
   );
 }
 
-
 function ShrikhandYieldCalc() {
   const { toast } = useToast();
   const { validatePositive, validatePercentage, validateNumber } = useInputValidation();
@@ -12832,7 +12833,6 @@ function PedhaBurfiYieldCalc() {
     </div>
   );
 }
-
 
 // ==================== ENHANCED ICE CREAM CALCULATORS ====================
 function IceCreamCalculators() {

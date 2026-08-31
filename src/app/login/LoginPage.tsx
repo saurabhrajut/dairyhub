@@ -1,12 +1,20 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import Link from 'next/link';
-import { Mail, Lock, Loader2, UserCheck, ArrowLeft, Milk, Eye, EyeOff } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/auth-context';
-import { FactoryIcon } from '@/components/icons';
+import {
+  Mail,
+  Lock,
+  Loader2,
+  UserCheck,
+  ArrowLeft,
+  Milk,
+  Eye,
+  EyeOff
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/auth-context";
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>

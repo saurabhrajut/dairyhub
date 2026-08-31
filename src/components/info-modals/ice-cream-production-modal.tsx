@@ -7,14 +7,31 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table";
 import { useLanguage } from "@/context/language-context";
 import { iceCreamProductionContent } from "@/lib/content/ice-cream-production-content";
 import { Button } from "../ui/button";
-import { ArrowLeft, BookOpen, ChevronsRight, Component, Factory, FlaskConical, Snowflake, Thermometer, Wind } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  ChevronsRight,
+  Component,
+  Factory,
+  FlaskConical,
+  Snowflake,
+  Thermometer,
+  Wind
+} from "lucide-react";
 
 const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="space-y-4 text-gray-700 leading-relaxed">
@@ -159,7 +176,6 @@ const topicComponents = {
         )
     }
 }
-
 
 export function IceCreamProductionModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const { t } = useLanguage();

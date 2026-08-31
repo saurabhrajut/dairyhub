@@ -18,27 +18,23 @@ import {
   Droplet,
   PackageCheck,
   Lock,
-  DollarSign,
   Microscope,
   Recycle,
   Bug,
   ShieldCheck,
   FileSpreadsheet,
   Search,
-  Wind,
   GraduationCap,
   Atom,
-  Combine,
-  ShieldAlert,
-  Bookmark,
+  Combine
 } from "lucide-react";
-import { ReagentIcon, PaneerIcon, IceCreamIcon, HplcIcon } from "@/components/icons";
+import { ReagentIcon, HplcIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useSubscription } from "@/context/subscription-context";
+
 import { useFavorites } from "@/context/favorites-context";
 
 // All Modals - dynamically imported to prevent compilation hang
@@ -62,6 +58,8 @@ const MilkHandlingPreservationModal = dynamic(() => import("./info-modals/milk-h
 const FssaiStandardsModal = dynamic(() => import("./info-modals/fssai-standards-modal").then(m => ({ default: m.FssaiStandardsModal })), { ssr: false });
 const VariousCalculatorsModal = dynamic(() => import("./calculators/various-calculators-modal").then(m => ({ default: m.VariousCalculatorsModal })), { ssr: false });
 const ProductsProcessingModal = dynamic(() => import("./info-modals/products-processing-modal").then(m => ({ default: m.ProductsProcessingModal })), { ssr: false });
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+
 const AuditsModal = dynamic(() => import("./info-modals/audits-modal").then(m => ({ default: m.AuditsModal })), { ssr: false });
 const ValidationVerificationModal = dynamic(() => import("./info-modals/validation-verification-modal").then(m => ({ default: m.ValidationVerificationModal })), { ssr: false });
 const EtpModal = dynamic(() => import("./info-modals/etp-modal").then(m => ({ default: m.EtpModal })), { ssr: false });
@@ -69,7 +67,11 @@ const ExpertSupportModal = dynamic(() => import("./info-modals/expert-support-mo
 const ProductionCalculationsModal = dynamic(() => import("./calculators/production-calculations-modal").then(m => ({ default: m.ProductionCalculationsModal })), { ssr: false });
 const PestControlModal = dynamic(() => import("./info-modals/pest-control-modal").then(m => ({ default: m.PestControlModal })), { ssr: false });
 const ChromatographyModal = dynamic(() => import("./info-modals/chromatography-modal").then(m => ({ default: m.ChromatographyModal })), { ssr: false });
-
+const ResumeMakerModal = dynamic(() => import("./calculators/resume-maker-modal").then(m => ({ default: m.ResumeMakerModal })), { ssr: false });
+const TestSeriesModal = dynamic(() => import("./test-series-modal").then(m => ({ default: m.TestSeriesModal })), { ssr: false });
+const SarathiChatWidget = dynamic(() => import("./sarathi-chat-widget").then(m => ({ default: m.SarathiChatWidget })), { ssr: false });
+const JobLaunchpadModal = dynamic(() => import("./job-launchpad-modal").then(m => ({ default: m.JobLaunchpadModal })), { ssr: false });
+const FoodTestingLaunchpadModal = dynamic(() => import("./food-testing-launchpad-modal").then(m => ({ default: m.FoodTestingLaunchpadModal })), { ssr: false });
 
 type Topic = {
   id: string;
@@ -85,21 +87,21 @@ type Topic = {
 };
 
 const qualityAccessTopics = [
-  'industry', 'fssai-standards', 'quality-concept', 'microbiology', 'audits', 'validation-verification',
+  'test-series', 'industry', 'fssai-standards', 'quality-concept', 'microbiology', 'audits', 'validation-verification',
   'expert-support', 'calibration', 'lab-equipments', 'milk-chemistry', 'lab-calculations', 'production-calculations',
   'adulteration', 'solutions-prep', 'compositional-analysis', 'water-testing', 'packaging-testing', 'chromatography',
   'std1', 'std2', 'milk-handling', 'cip-process', 'etp', 'about-us', 'pest-control'
 ];
 
 const productionAccessTopics = [
-  'industry', 'fssai-standards', 'quality-concept', 'audits', 'validation-verification', 'expert-support',
+  'test-series', 'industry', 'fssai-standards', 'quality-concept', 'audits', 'validation-verification', 'expert-support',
   'milk-chemistry', 'production-calculations', 'std1', 'std2', 'processing', 'milk-handling',
   'products-processing',
   'cip-process', 'etp', 'about-us', 'pest-control'
 ];
 
 const processAccessTopics = [
-  'industry', 'std1', 'std2', 'processing', 'milk-handling',
+  'test-series', 'industry', 'std1', 'std2', 'processing', 'milk-handling',
   'products-processing', 'cip-process', 'about-us'
 ];
 
@@ -110,6 +112,7 @@ const departmentAccess: Record<string, string[]> = {
 };
 
 const topics: Topic[] = [
+  { id: 'test-series', title: 'Test Series', description: '120 Qs Live Exam Practice', category: 'quality', icon: GraduationCap, badge: 'New Live', modal: TestSeriesModal, isPro: false, color: 'from-amber-500 via-orange-500 to-red-600', iconColor: 'text-white' },
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'production', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-500 via-indigo-500 to-purple-600', iconColor: 'text-white' },
   { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'quality', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: false, color: 'from-emerald-500 via-teal-500 to-cyan-600', iconColor: 'text-white' },
   { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'quality', icon: CheckSquare, modal: QualityConceptModal, isPro: true, color: 'from-cyan-500 via-sky-500 to-blue-600', iconColor: 'text-white' },
@@ -139,8 +142,14 @@ const topics: Topic[] = [
   { id: 'about-us', title: 'About Us', description: 'Our Mission & Vision', category: 'production', icon: Users, modal: AboutUsModal, isPro: false, color: 'from-slate-500 via-gray-500 to-stone-600', iconColor: 'text-white' },
 ];
 
-export function TopicGrid() {
-  const [activeFilter, setActiveFilter] = useState("all");
+const ToolsHub = dynamic(() => import("./tools-hub").then(m => ({ default: m.ToolsHub })), { ssr: false });
+const BookmarksWorkspace = dynamic(() => import("./bookmarks-workspace").then(m => ({ default: m.BookmarksWorkspace })), { ssr: false });
+
+interface TopicGridProps {
+  activeTab?: string;
+}
+
+export function TopicGrid({ activeTab = "home" }: TopicGridProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const { user } = useAuth();
@@ -149,7 +158,32 @@ export function TopicGrid() {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const filteredTopics = topics.filter((topic) => {
-    const matchesSearch = topic.title.toLowerCase().includes(searchTerm.toLowerCase()) || topic.description.toLowerCase().includes(searchTerm.toLowerCase());
+    // Hide Test Series from Home Screen Grid cards - accessible only via Tools Hub
+    if (topic.id === "test-series") {
+      return false;
+    }
+
+    const favorited = isFavorite(topic.id);
+
+    if (activeTab === "bookmarks" && !favorited) {
+      return false;
+    }
+
+    if (activeTab === "tools") {
+      const isToolOrCalc =
+        topic.category === "process" ||
+        topic.id.includes("calc") ||
+        topic.id.includes("std") ||
+        topic.id.includes("calibration") ||
+        topic.id.includes("solutions") ||
+        topic.id.includes("equipments");
+      if (!isToolOrCalc) return false;
+    }
+
+    const matchesSearch =
+      topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      topic.description.toLowerCase().includes(searchTerm.toLowerCase());
+
     return matchesSearch;
   });
 
@@ -168,7 +202,7 @@ export function TopicGrid() {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen pb-20">
       {/* Animated Gradient Background with Lab Equipment */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         {/* Main gradient background */}
@@ -238,16 +272,6 @@ export function TopicGrid() {
           <TestTube className="w-16 h-16 text-rose-500" strokeWidth={1.5} />
         </div>
         
-        {/* Flask Conical 2 */}
-        <div className="absolute bottom-[30%] right-[20%] animate-float-equipment-9 opacity-10">
-          <FlaskConical className="w-17 h-17 text-violet-500" strokeWidth={1.5} />
-        </div>
-        
-        {/* Atom (Chemistry) */}
-        <div className="absolute top-[20%] left-[25%] animate-spin-equipment-slow opacity-10">
-          <Atom className="w-15 h-15 text-fuchsia-500" strokeWidth={1.5} />
-        </div>
-        
         {/* Calculator */}
         <div className="absolute bottom-[50%] right-[30%] animate-float-equipment-10 opacity-10">
           <Calculator className="w-14 h-14 text-amber-500" strokeWidth={1.5} />
@@ -264,101 +288,110 @@ export function TopicGrid() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8 space-y-4">
-          <div className="relative max-w-md mx-auto">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search topics, calculators, tests..."
-              className="pl-9 bg-white/80 backdrop-blur-sm border-slate-200"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-        </div>
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        {activeTab === "bookmarks" ? (
+          <BookmarksWorkspace
+            bookmarkedTopics={filteredTopics}
+            onOpenModal={(id) => openModal(id, true)}
+            onToggleFavorite={(topic) => {
+              toggleFavorite({
+                id: topic.id,
+                title: topic.title,
+                category: topic.category,
+                description: topic.description,
+                type: 'topic'
+              });
+              toast({
+                title: "Updated Favorites",
+                description: `Bookmarks updated.`
+              });
+            }}
+          />
+        ) : activeTab === "tools" ? (
+          <ToolsHub onOpenModal={(id) => openModal(id, true)} />
+        ) : (
+          <>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
-          {filteredTopics.map((topic) => {
-            const isLocked = user?.isAnonymous && topic.id !== 'about-us';
-            const favorited = isFavorite(topic.id);
-
-            return (
-              <div
-                key={topic.id}
-                onClick={() => openModal(topic.id, topic.isPro)}
-                className={cn(
-                  "bg-white p-4 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden group border-2 border-slate-200",
-                  "cursor-pointer"
-                )}
-              >
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleFavorite({
-                      id: topic.id,
-                      title: topic.title,
-                      category: topic.category,
-                      description: topic.description,
-                      type: 'topic'
-                    });
-                    toast({
-                      title: favorited ? "Removed from Favorites" : "Saved to Favorites ⭐",
-                      description: `${topic.title} is now in your saved profile list.`
-                    });
-                  }}
-                  className="absolute top-2 right-2 z-20 p-1 rounded-full bg-slate-100/90 hover:bg-amber-100 text-slate-400 hover:text-amber-500 transition-all shadow-sm"
-                  title={favorited ? "Remove from Favorites" : "Save to Favorites"}
-                >
-                  <Bookmark className={cn("w-3.5 h-3.5", favorited && "fill-amber-400 text-amber-500")} />
-                </button>
-
-                {isLocked && (
-                  <div className="absolute top-2 left-2 bg-gradient-to-br from-gray-700 to-gray-900 text-white rounded-full p-1 z-20 shadow-lg">
-                    <Lock className="w-3 h-3" />
-                  </div>
-                )}
-                {topic.badge && !isLocked && (
-                  <Badge 
-                    variant={topic.badge === 'Pro' ? 'default' : 'destructive'} 
-                    className="absolute top-2 left-2 text-[10px] px-1.5 py-0.2 h-auto z-10 shadow-md font-semibold"
-                  >
-                    {topic.badge}
-                  </Badge>
-                )}
-                
-                <div className={cn(
-                  "w-16 h-16 mx-auto mb-3 rounded-2xl flex items-center justify-center bg-gradient-to-br shadow-lg",
-                  "group-hover:scale-110 group-hover:rotate-3 transition-all duration-300",
-                  "relative overflow-hidden",
-                  topic.color
-                )}>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <topic.icon className={cn("w-8 h-8 relative z-10", topic.iconColor)} strokeWidth={2.5} />
-                </div>
-                
-                <h3 className="font-headline font-bold text-card-foreground text-sm leading-tight mb-1 group-hover:text-primary transition-colors">
-                  {topic.title}
-                </h3>
-                <p className="hidden sm:block text-xs text-muted-foreground mt-1 line-clamp-2">
-                  {topic.description}
-                </p>
-
-                <div className={cn(
-                  "absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300",
-                  topic.color
-                )} />
+            <div className="mb-6 space-y-4">
+              <div className="relative max-w-md mx-auto">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Input
+                  type="text"
+                  placeholder="Search topics, calculators, tests..."
+                  className="pl-9 bg-white/90 backdrop-blur-sm border-slate-200/80 shadow-sm rounded-xl text-sm"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-            );
-          })}
-        </div>
+            </div>
+
+            {/* 3-column Grid matching the photo */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 sm:gap-4">
+              {filteredTopics.map((topic) => {
+                const isLocked = user?.isAnonymous && topic.id !== 'about-us';
+
+                return (
+                  <div
+                    key={topic.id}
+                    onClick={() => openModal(topic.id, topic.isPro)}
+                    className={cn(
+                      "bg-white p-2.5 sm:p-3.5 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1 transition-all duration-200 text-center relative flex flex-col items-center justify-between group border border-slate-100",
+                      "cursor-pointer"
+                    )}
+                  >
+
+                    {/* Top-Left Badge (New / Pro / Updated / Lock) */}
+                    {isLocked ? (
+                      <div className="absolute top-2 left-2 bg-slate-900 text-white rounded-full p-0.5 z-20 shadow-sm">
+                        <Lock className="w-3 h-3" />
+                      </div>
+                    ) : topic.badge ? (
+                      <span
+                        className={cn(
+                          "absolute top-2 left-2 text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.2 rounded-md shadow-sm z-10 leading-tight tracking-tight text-white",
+                          topic.badge === 'Pro' ? "bg-indigo-600" : topic.badge === 'Updated' ? "bg-red-500" : "bg-red-500"
+                        )}
+                      >
+                        {topic.badge}
+                      </span>
+                    ) : null}
+
+                    {/* Center Squircle Icon Container matching photo */}
+                    <div className={cn(
+                      "w-13 h-13 sm:w-16 sm:h-16 mx-auto mt-2 mb-2 rounded-2xl flex items-center justify-center bg-gradient-to-br shadow-sm",
+                      "group-hover:scale-105 transition-transform duration-200 relative overflow-hidden",
+                      topic.color
+                    )}>
+                      <topic.icon className={cn("w-7 h-7 sm:w-8 sm:h-8 relative z-10", topic.iconColor)} strokeWidth={2.2} />
+                    </div>
+                    
+                    {/* Title */}
+                    <h3 className="font-bold text-slate-800 text-[11px] sm:text-xs leading-tight text-center group-hover:text-indigo-600 transition-colors line-clamp-2 px-0.5">
+                      {topic.title}
+                    </h3>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
 
         {topics.map(topic => {
           const ModalComponent = topic.modal;
           if (!ModalComponent) return null;
           return <ModalComponent key={`${topic.id}-modal`} isOpen={activeModal === topic.id} setIsOpen={() => setActiveModal(null)} />
         })}
+        <TestSeriesModal isOpen={activeModal === 'test-series'} setIsOpen={() => setActiveModal(null)} />
+        <ResumeMakerModal isOpen={activeModal === 'resume-maker'} setIsOpen={() => setActiveModal(null)} />
+        <JobLaunchpadModal isOpen={activeModal === 'job-launchpad'} setIsOpen={() => setActiveModal(null)} />
+        <FoodTestingLaunchpadModal isOpen={activeModal === 'food-testing-launchpad'} setIsOpen={() => setActiveModal(null)} />
+        {activeModal === 'sarathi-bot' && (
+          <Dialog open={true} onOpenChange={() => setActiveModal(null)}>
+            <DialogContent className="max-w-4xl w-full h-[92vh] sm:h-[90vh] p-0 rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-slate-50">
+              <SarathiChatWidget />
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
       <style jsx>{`

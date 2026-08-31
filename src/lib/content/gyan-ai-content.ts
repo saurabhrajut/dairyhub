@@ -1,9 +1,9 @@
-import { 
-    Bot, Lightbulb, Factory, FlaskConical, Beaker, Scale, 
-    Calculator, Settings, TestTube, ClipboardCheck, CheckSquare, 
-    Droplet, PackageCheck, Lock, DollarSign, Microscope, 
-    Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, 
-    Users, GraduationCap, Atom, Combine, ShieldAlert, Milk, FileText 
+import {
+  Factory,
+  ShieldCheck,
+  GraduationCap,
+  Milk,
+  FileText
 } from "lucide-react";
 
 export interface GyanAiSubTopic {
@@ -21,7 +21,10 @@ export interface GyanAiTopic {
 }
 
 interface GyanAiContent {
-    [key: string]: GyanAiTopic;
+    fallback: string;
+    topics: {
+        [key: string]: GyanAiTopic;
+    };
 }
 
 // ====================================================================

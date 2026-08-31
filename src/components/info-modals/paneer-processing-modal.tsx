@@ -7,7 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -16,11 +16,17 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "../ui/button";
-import { ArrowLeft, Beaker, CheckSquare, Settings, BarChart } from "lucide-react";
+import {
+  ArrowLeft,
+  Beaker,
+  CheckSquare,
+  Settings,
+  BarChart
+} from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 import { paneerProcessingContent } from "@/lib/content/paneer-processing-modal-content";
 
@@ -32,7 +38,6 @@ const Section = ({ title, children }: { title: string, children: React.ReactNode
         </div>
     </section>
 );
-
 
 const topicComponents = {
     process: ({ content }: { content: any }) => {

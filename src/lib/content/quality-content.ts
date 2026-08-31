@@ -806,7 +806,6 @@ export const qualityContent = {
     }
   },
 
-
   en: {
       title: "The Concept of Quality",
       description: "A comprehensive scientific guide for ensuring quality in the dairy industry.",

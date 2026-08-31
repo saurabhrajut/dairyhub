@@ -1,21 +1,50 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, memo, useCallback } from "react";
-import { 
-  FileSpreadsheet, Printer, Download, Trash2, Plus, RefreshCw, Info, Edit3, Calendar as CalendarIcon,
-  DollarSign, Droplets, Target, Percent, ArrowRight, CheckCircle2, Loader2, FileDown, 
-  LayoutDashboard, Package, Calculator, Weight, PieChart, XCircle, Scale, PlusCircle, AlertTriangle
+import {
+  FileSpreadsheet,
+  Printer,
+  Download,
+  Trash2,
+  Plus,
+  RefreshCw,
+  Info,
+  Calendar as CalendarIcon,
+  Target,
+  ArrowRight,
+  Loader2,
+  FileDown,
+  LayoutDashboard,
+  Package,
+  Calculator,
+  PieChart,
+  XCircle,
+  Scale,
+  AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { savePdfFile, saveFile } from "@/lib/mobile-download";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 

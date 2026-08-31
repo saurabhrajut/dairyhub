@@ -2,11 +2,25 @@
 
 import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
-  FileSpreadsheet, Download, Printer, Plus, Trash2, Loader2,
-  CheckCircle2, AlertTriangle, Package, BarChart3, RefreshCw, FileText,
-  Sparkles, Calculator, SlidersHorizontal, Milk, Target, Layers,
-  Building2, Calendar, User, ShieldCheck, Scale, Droplets, Info, ChevronRight,
-  Lock, Unlock
+  FileSpreadsheet,
+  Download,
+  Printer,
+  Plus,
+  Trash2,
+  Loader2,
+  CheckCircle2,
+  AlertTriangle,
+  Package,
+  RefreshCw,
+  Sparkles,
+  Calculator,
+  Milk,
+  Target,
+  Building2,
+  Scale,
+  Info,
+  Lock,
+  Unlock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,10 +29,29 @@ import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { savePdfFile } from "@/lib/mobile-download";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 

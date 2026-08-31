@@ -1,15 +1,32 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { 
-  Scale, FileText, Printer, Download, Trash2, Plus, RefreshCw, Info, Edit3, Calendar, Beaker, Sparkles
+import {
+  Scale,
+  FileText,
+  Printer,
+  Download,
+  Trash2,
+  Plus,
+  RefreshCw,
+  Info,
+  Edit3,
+  Calendar,
+  Beaker,
+  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+
 import { snfFormulas } from "@/lib/data";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";

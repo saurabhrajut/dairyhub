@@ -1,7 +1,12 @@
 'use client';
 
-import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { fssaiStandardsContent } from '@/lib/content/fssai-standards-content';
+import {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect
+} from "react";
 
 type Language = 'en' | 'hi'; // 'en' for English, 'hi' for Hindi
 
@@ -57,4 +62,3 @@ export function useLanguage() {
   return context;
 }
 
-    

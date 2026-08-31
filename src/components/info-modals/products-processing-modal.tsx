@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -26,12 +26,11 @@ import {
   CupSoda,
   Coffee,
   Box,
-  Factory,
   ChevronRight,
   Sparkles,
   LayoutGrid,
   Activity,
-  PackageCheck,
+  PackageCheck
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/language-context";

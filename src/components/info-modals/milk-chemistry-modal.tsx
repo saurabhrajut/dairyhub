@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -30,10 +30,8 @@ import {
   Layers,
   BarChart3,
   Zap,
-  ChevronDown,
-  ChevronUp,
   LayoutGrid,
-  Droplet,
+  Droplet
 } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 import { milkChemistryContent } from "@/lib/content/milk-chemistry-content";
@@ -811,7 +809,6 @@ function GenericContent({ data, icon }: { data: any; icon: React.ElementType }) 
     </div>
   );
 }
-
 
 // ─────────────────────────────────────────────────────────────────
 // Topic Content Renderers

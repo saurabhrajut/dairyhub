@@ -6,18 +6,42 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCaption
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
-  ArrowLeft, BookOpen, Droplets, TestTube, Thermometer,
-  FlaskConical, Gauge, Scale, Beaker, Activity,
-  FileText, ClipboardList, AlertTriangle, Info, CheckCircle2, ChevronRight,
-  Sparkles, LayoutGrid, PackageCheck, Search
+  ArrowLeft,
+  BookOpen,
+  Droplets,
+  TestTube,
+  Thermometer,
+  FlaskConical,
+  Gauge,
+  Scale,
+  Beaker,
+  Activity,
+  FileText,
+  ClipboardList,
+  AlertTriangle,
+  Info,
+  CheckCircle2,
+  ChevronRight,
+  Sparkles,
+  LayoutGrid,
+  PackageCheck,
+  Search
 } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 import { calibrationStandardizationContent } from "@/lib/content/calibration-standardization-content";
@@ -219,7 +243,6 @@ const TopicCard = ({
     <Sparkles className="absolute top-1 right-1 h-2.5 w-2.5 text-yellow-400 opacity-0 group-hover:opacity-100 transition-all group-hover:rotate-12" />
   </button>
 );
-
 
 // ─────────────────────────────────────────────
 // TOPIC CONTENT COMPONENTS

@@ -6,11 +6,21 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+
 import { Badge } from "@/components/ui/badge";
-import { Play, Video, Clock, CheckCircle, ExternalLink, RefreshCw, Tag, Code, Search, X, Sparkles, Heart, Rocket } from "lucide-react";
+import {
+  Play,
+  Video,
+  Clock,
+  CheckCircle,
+  ExternalLink,
+  RefreshCw,
+  Code,
+  Search,
+  X
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface VideoTutorial {
@@ -267,13 +277,13 @@ export const TUTORIAL_VIDEOS: VideoTutorial[] = [
     title: "Butter Yield & Churning Fat Loss",
     duration: "0:00",
     category: "production",
-    description: "Calculate butter yield from cream, overrun %, and fat loss in buttermilk (छाछ).",
+    description: "Calculate butter yield from cream, overrun %, and fat loss in buttermilk.",
     youtubeId: "dyuTFg28TO0",
     thumbnailBg: "from-yellow-600 to-amber-700",
     bullets: [
       "Butter yield per 100 kg cream",
       "Overrun percentage calculation",
-      "Buttermilk (छाछ) fat loss tracking",
+      "Buttermilk fat loss tracking",
     ],
   },
   {
@@ -337,12 +347,12 @@ export const TUTORIAL_VIDEOS: VideoTutorial[] = [
     title: "Ghee Production & Fat Recovery %",
     duration: "0:00",
     category: "production",
-    description: "Calculate Ghee yield from butter/cream, residue loss (गड्डी %), and net fat recovery.",
+    description: "Calculate Ghee yield from butter/cream, ghee residue loss %, and net fat recovery.",
     youtubeId: "dyuTFg28TO0",
     thumbnailBg: "from-yellow-600 to-orange-600",
     bullets: [
       "Ghee yield from white butter & cream",
-      "Residue loss (गड्डी) percentage",
+      "Ghee residue loss percentage",
       "Total fat recovery efficiency %",
     ],
   },
@@ -998,10 +1008,10 @@ export function TutorialVideosModal({ open, onOpenChange, initialVideoId }: Tuto
                         <span>{selectedVideo.title}</span> 💖
                       </h4>
                       <p className="text-xs sm:text-sm text-slate-100 leading-relaxed font-medium">
-                        प्यारे साथी! 💖 यह विशेष HD वीडियो ट्यूटोरियल भविष्य के नए अपडेट में बहुत जल्द लाइव रिलीज़ किया जाएगा! 🌟
+                        Dear user! 💖 This specialized HD video tutorial will be released live in an upcoming update! 🌟
                       </p>
                       <p className="text-[11px] text-amber-200 bg-amber-500/20 border border-amber-500/30 px-3 py-1.5 rounded-xl font-semibold">
-                        तब तक आप नीचे दिए गए मुख्य बिंदु (Key Takeaways) व गाइड देखकर आसानी से समझ सकते हैं! 🥛✨
+                        In the meantime, you can easily learn using the Key Takeaways and guides below! 🥛✨
                       </p>
                       <div className="flex items-center justify-center gap-2 pt-1 text-[11px]">
                         <span className="bg-amber-500/30 text-amber-200 px-2.5 py-0.5 rounded-full border border-amber-400/40 font-semibold flex items-center gap-1">

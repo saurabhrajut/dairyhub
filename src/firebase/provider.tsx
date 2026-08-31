@@ -1,9 +1,20 @@
 "use client";
 
 import React, { createContext, useContext } from 'react';
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
+
+function getOrCreateFirestore(app: any) {
+  try {
+    return initializeFirestore(app, {
+      experimentalAutoDetectLongPolling: true,
+      ignoreUndefinedProperties: true,
+    });
+  } catch (err) {
+    return getFirestore(app);
+  }
+}
 
 type FirebaseContextValue = {
   app: ReturnType<typeof getApp> | null;
@@ -35,7 +46,7 @@ export function FirebaseProvider({
       appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
     });
     const auth = getAuth(app);
-    const firestore = getFirestore(app);
+    const firestore = getOrCreateFirestore(app);
     return { app, auth, firestore };
   })();
 

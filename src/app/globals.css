@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap');
+
+* {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -212,44 +218,266 @@
   }
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* ════════════════════════════════════════════════════════════
+   🎨 APP-WIDE READING MODE THEMES OVERRIDES
+   Ensures selecting any theme transforms the ENTIRE APP!
+   ════════════════════════════════════════════════════════════ */
+
+/* ☕ SEPIA THEME (Warm Amber) */
+body.theme-sepia,
+body.theme-sepia .min-h-screen,
+body.theme-sepia main,
+body.theme-sepia [role="dialog"] {
+  background-color: hsl(44, 23%, 86%) !important;
+  color: hsl(44, 25%, 18%) !important;
 }
 
-/* Dark themes */
-.dark .glass-card,
+body.theme-sepia .bg-white,
+body.theme-sepia .bg-slate-50,
+body.theme-sepia .bg-slate-100,
+body.theme-sepia .bg-slate-800,
+body.theme-sepia .bg-slate-900,
+body.theme-sepia .bg-slate-950,
+body.theme-sepia .glass-card,
+body.theme-sepia [role="dialog"] > div {
+  background-color: hsl(44, 23%, 92%) !important;
+  border-color: hsl(44, 20%, 78%) !important;
+  color: hsl(44, 25%, 18%) !important;
+}
+
+body.theme-sepia h1,
+body.theme-sepia h2,
+body.theme-sepia h3,
+body.theme-sepia h4,
+body.theme-sepia p,
+body.theme-sepia span,
+body.theme-sepia label,
+body.theme-sepia div:not(.bg-gradient-to-tr):not(.bg-gradient-to-r) {
+  color: hsl(44, 25%, 18%) !important;
+}
+
+/* 🌙 SLATE THEME (Cool Dark Slate) */
+body.theme-slate,
+body.theme-slate .min-h-screen,
+body.theme-slate main,
+body.theme-slate [role="dialog"] {
+  background-color: hsl(220, 14%, 16%) !important;
+  color: hsl(220, 10%, 88%) !important;
+}
+
+body.theme-slate .bg-white,
+body.theme-slate .bg-slate-50,
+body.theme-slate .bg-slate-100,
+body.theme-slate .bg-slate-800,
+body.theme-slate .bg-slate-900,
+body.theme-slate .bg-slate-950,
 body.theme-slate .glass-card,
-body.theme-night .glass-card,
-body.theme-forest .glass-card {
-    background: rgba(20, 38, 28, 0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+body.theme-slate [role="dialog"] > div {
+  background-color: hsl(220, 14%, 22%) !important;
+  border-color: hsl(220, 14%, 30%) !important;
+  color: hsl(220, 10%, 90%) !important;
 }
 
-body.theme-sepia .glass-card {
-    background: rgba(240, 230, 210, 0.6);
-    border: 1px solid rgba(210, 190, 170, 0.3);
+body.theme-slate h1,
+body.theme-slate h2,
+body.theme-slate h3,
+body.theme-slate h4,
+body.theme-slate p,
+body.theme-slate span,
+body.theme-slate label {
+  color: hsl(220, 10%, 90%) !important;
 }
-body.theme-paper .glass-card {
-    background: rgba(252, 251, 244, 0.7);
-    border: 1px solid rgba(240, 235, 220, 0.4);
+
+/* 📜 PAPER THEME (Vintage Parchment) */
+body.theme-paper,
+body.theme-paper .min-h-screen,
+body.theme-paper main,
+body.theme-paper [role="dialog"] {
+  background-color: hsl(50, 33%, 94%) !important;
+  color: hsl(40, 20%, 20%) !important;
 }
-body.theme-mint .glass-card {
-    background: rgba(230, 250, 240, 0.7);
-    border: 1px solid rgba(200, 230, 210, 0.4);
+
+body.theme-paper .bg-white,
+body.theme-paper .bg-slate-50,
+body.theme-paper .bg-slate-100,
+body.theme-paper .bg-slate-800,
+body.theme-paper .bg-slate-900,
+body.theme-paper .bg-slate-950,
+body.theme-paper .glass-card,
+body.theme-paper [role="dialog"] > div {
+  background-color: hsl(50, 33%, 98%) !important;
+  border-color: hsl(50, 25%, 82%) !important;
+  color: hsl(40, 20%, 20%) !important;
 }
-body.theme-rose .glass-card {
-    background: rgba(255, 235, 238, 0.72);
-    border: 1px solid rgba(240, 190, 200, 0.4);
+
+body.theme-paper h1,
+body.theme-paper h2,
+body.theme-paper h3,
+body.theme-paper h4,
+body.theme-paper p,
+body.theme-paper span,
+body.theme-paper label {
+  color: hsl(40, 20%, 20%) !important;
 }
-body.theme-cream .glass-card {
-    background: rgba(255, 253, 235, 0.75);
-    border: 1px solid rgba(235, 218, 185, 0.45);
+
+/* 🍃 MINT THEME (Refreshing Mint Green) */
+body.theme-mint,
+body.theme-mint .min-h-screen,
+body.theme-mint main,
+body.theme-mint [role="dialog"] {
+  background-color: hsl(140, 30%, 93%) !important;
+  color: hsl(140, 25%, 16%) !important;
+}
+
+body.theme-mint .bg-white,
+body.theme-mint .bg-slate-50,
+body.theme-mint .bg-slate-100,
+body.theme-mint .bg-slate-800,
+body.theme-mint .bg-slate-900,
+body.theme-mint .bg-slate-950,
+body.theme-mint .glass-card,
+body.theme-mint [role="dialog"] > div {
+  background-color: hsl(140, 30%, 97%) !important;
+  border-color: hsl(140, 25%, 82%) !important;
+  color: hsl(140, 25%, 16%) !important;
+}
+
+body.theme-mint h1,
+body.theme-mint h2,
+body.theme-mint h3,
+body.theme-mint h4,
+body.theme-mint p,
+body.theme-mint span,
+body.theme-mint label {
+  color: hsl(140, 25%, 16%) !important;
+}
+
+/* 🌌 NIGHT THEME (Midnight Dark) */
+body.theme-night,
+body.theme-night .min-h-screen,
+body.theme-night main,
+body.theme-night [role="dialog"] {
+  background-color: hsl(220, 14%, 9%) !important;
+  color: hsl(220, 10%, 85%) !important;
+}
+
+body.theme-night .bg-white,
+body.theme-night .bg-slate-50,
+body.theme-night .bg-slate-100,
+body.theme-night .bg-slate-800,
+body.theme-night .bg-slate-900,
+body.theme-night .bg-slate-950,
+body.theme-night .glass-card,
+body.theme-night [role="dialog"] > div {
+  background-color: hsl(220, 14%, 15%) !important;
+  border-color: hsl(220, 14%, 25%) !important;
+  color: hsl(220, 10%, 88%) !important;
+}
+
+body.theme-night h1,
+body.theme-night h2,
+body.theme-night h3,
+body.theme-night h4,
+body.theme-night p,
+body.theme-night span,
+body.theme-night label {
+  color: hsl(220, 10%, 88%) !important;
+}
+
+/* 🌸 ROSE THEME (Soft Blush Pink) */
+body.theme-rose,
+body.theme-rose .min-h-screen,
+body.theme-rose main,
+body.theme-rose [role="dialog"] {
+  background-color: hsl(350, 60%, 95%) !important;
+  color: hsl(350, 35%, 20%) !important;
+}
+
+body.theme-rose .bg-white,
+body.theme-rose .bg-slate-50,
+body.theme-rose .bg-slate-100,
+body.theme-rose .bg-slate-800,
+body.theme-rose .bg-slate-900,
+body.theme-rose .bg-slate-950,
+body.theme-rose .glass-card,
+body.theme-rose [role="dialog"] > div {
+  background-color: hsl(350, 50%, 98%) !important;
+  border-color: hsl(350, 35%, 84%) !important;
+  color: hsl(350, 35%, 20%) !important;
+}
+
+body.theme-rose h1,
+body.theme-rose h2,
+body.theme-rose h3,
+body.theme-rose h4,
+body.theme-rose p,
+body.theme-rose span,
+body.theme-rose label {
+  color: hsl(350, 35%, 20%) !important;
+}
+
+/* 🌲 FOREST THEME (Midnight Deep Green) */
+body.theme-forest,
+body.theme-forest .min-h-screen,
+body.theme-forest main,
+body.theme-forest [role="dialog"] {
+  background-color: hsl(150, 25%, 11%) !important;
+  color: hsl(120, 15%, 86%) !important;
+}
+
+body.theme-forest .bg-white,
+body.theme-forest .bg-slate-50,
+body.theme-forest .bg-slate-100,
+body.theme-forest .bg-slate-800,
+body.theme-forest .bg-slate-900,
+body.theme-forest .bg-slate-950,
+body.theme-forest .glass-card,
+body.theme-forest [role="dialog"] > div {
+  background-color: hsl(150, 25%, 16%) !important;
+  border-color: hsl(150, 20%, 26%) !important;
+  color: hsl(120, 15%, 88%) !important;
+}
+
+body.theme-forest h1,
+body.theme-forest h2,
+body.theme-forest h3,
+body.theme-forest h4,
+body.theme-forest p,
+body.theme-forest span,
+body.theme-forest label {
+  color: hsl(120, 15%, 88%) !important;
+}
+
+/* 🍦 CREAM THEME (Warm Ivory) */
+body.theme-cream,
+body.theme-cream .min-h-screen,
+body.theme-cream main,
+body.theme-cream [role="dialog"] {
+  background-color: hsl(48, 80%, 96%) !important;
+  color: hsl(35, 30%, 18%) !important;
+}
+
+body.theme-cream .bg-white,
+body.theme-cream .bg-slate-50,
+body.theme-cream .bg-slate-100,
+body.theme-cream .bg-slate-800,
+body.theme-cream .bg-slate-900,
+body.theme-cream .bg-slate-950,
+body.theme-cream .glass-card,
+body.theme-cream [role="dialog"] > div {
+  background-color: hsl(48, 70%, 99%) !important;
+  border-color: hsl(45, 35%, 84%) !important;
+  color: hsl(35, 30%, 18%) !important;
+}
+
+body.theme-cream h1,
+body.theme-cream h2,
+body.theme-cream h3,
+body.theme-cream h4,
+body.theme-cream p,
+body.theme-cream span,
+body.theme-cream label {
+  color: hsl(35, 30%, 18%) !important;
 }
 
 .card-enter {
@@ -358,6 +586,13 @@ pre code {
   overflow: hidden;
 }
 
+/* Hide heavy floating animations on mobile devices to save CPU/GPU and battery */
+@media (max-width: 768px) {
+  .background-animations {
+    display: none !important;
+  }
+}
+
 .background-animations .animated-icon {
   position: absolute;
   bottom: -50px;
@@ -365,6 +600,11 @@ pre code {
   color: hsl(var(--primary) / 0.35);
   animation: animate-background linear infinite;
   pointer-events: none;
+  /* Hardware acceleration for ultra-smooth rendering */
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .dark .background-animations .animated-icon,
@@ -392,12 +632,44 @@ body.theme-cream .background-animations .animated-icon {
 
 @keyframes animate-background {
   0% {
-    transform: translateY(0) rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0deg);
     opacity: 1;
   }
   100% {
-    transform: translateY(-100vh) rotate(360deg);
+    transform: translate3d(0, -110vh, 0) rotate(360deg);
     opacity: 0;
+  }
+}
+
+/* Mobile-specific performance optimizations for WebViews (smooth scrolling) */
+@media (max-width: 768px) {
+  .glass-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+  
+  .dark .glass-card,
+  body.theme-slate .glass-card,
+  body.theme-night .glass-card,
+  body.theme-forest .glass-card {
+    background: rgba(15, 23, 42, 0.95) !important;
+  }
+  
+  body.theme-sepia .glass-card {
+    background: rgba(240, 230, 210, 0.95) !important;
+  }
+  body.theme-paper .glass-card {
+    background: rgba(252, 251, 244, 0.98) !important;
+  }
+  body.theme-mint .glass-card {
+    background: rgba(230, 250, 240, 0.95) !important;
+  }
+  body.theme-rose .glass-card {
+    background: rgba(255, 235, 238, 0.95) !important;
+  }
+  body.theme-cream .glass-card {
+    background: rgba(255, 253, 235, 0.95) !important;
   }
 }
 /* ===== END: Animated Background ===== */
@@ -414,3 +686,169 @@ body.theme-cream .background-animations .animated-icon {
   background-color: #cbd5e1;
   border-radius: 10px;
 }
+
+/* Responsive tables inside dangerouslySetInnerHTML prose */
+.prose table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.prose table th,
+.prose table td {
+  min-width: 120px; /* Prevent text squishing inside small table columns on mobile */
+  padding: 8px 12px;
+}
+
+/* Fallback styles for HTML content inside .prose since tailwind typography is not present */
+.prose {
+  width: 100%;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.prose p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose li {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Responsive dialog containment and content wrapper overrides for mobile devices */
+@media (max-width: 640px) {
+  [role="dialog"] {
+    max-width: calc(100vw - 16px) !important;
+    overflow: hidden !important;
+  }
+}
+
+/* Force any tables, pre, and code blocks inside dialogs to stay within bounds on mobile */
+[role="dialog"] table {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+[role="dialog"] pre,
+[role="dialog"] code {
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+}
+
+/* Liquid Glass CSS */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 20%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.45) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Anti-Copy and Content Protection Rules */
+body, html {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Allow text selection inside user editable input fields, textareas, and explicit editable regions */
+input,
+textarea,
+[contenteditable="true"],
+.allow-select {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  -webkit-touch-callout: default !important;
+}
+
+/* Disable dragging of images or media elements */
+img, svg, video, picture, canvas {
+  -webkit-user-drag: none !important;
+  -khtml-user-drag: none !important;
+  -moz-user-drag: none !important;
+  -o-user-drag: none !important;
+  user-drag: none !important;
+}
+
+/* Heavy Instant Obfuscation when screenshot attempt or window blur occurs on PC/Laptop */
+html.screenshot-blocked-active body > *:not(#pc-screenshot-guard-overlay),
+body.window-blurred-protection > *:not(#pc-screenshot-guard-overlay) {
+  filter: blur(80px) brightness(0) !important;
+  opacity: 0 !important;
+  transition: none !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+html.screenshot-blocked-active #pc-screenshot-guard-overlay,
+body.window-blurred-protection #pc-screenshot-guard-overlay {
+  display: flex !important;
+}
+
+/* Print Protection */
+@media print {
+  html, body {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+
+
+
+
+
+

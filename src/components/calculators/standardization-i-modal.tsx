@@ -1,28 +1,28 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+  DialogDescription
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { milkStandards, snfFormulas } from "@/lib/data"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { 
+  SelectValue
+} from "@/components/ui/select";
+import { milkStandards, snfFormulas } from "@/lib/data";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import {
   Calculator,
   Milk,
   Target,
@@ -30,13 +30,14 @@ import {
   CheckCircle2,
   AlertTriangle,
   Info,
-  Scale,
   Settings2,
   FileText,
   ChevronDown,
-  ChevronUp
-} from "lucide-react"
-import { cn } from "@/lib/utils"
+  ChevronUp,
+  Video
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { triggerVideoTutorial } from "@/components/tutorial-videos-modal";
 
 type MainComponent = 'cream' | 'rich_milk' | 'skim_milk';
 
@@ -269,6 +270,26 @@ export function StandardizationIModal({
               <DialogDescription className="text-sm md:text-xl font-semibold text-slate-700 max-w-2xl mx-auto">
                 High-Precision Mass Balance Calculator
               </DialogDescription>
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
+                <button
+                  onClick={() => triggerVideoTutorial('std1-pearson')}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1 rounded-full transition-colors shadow-sm"
+                >
+                  <Video className="w-3.5 h-3.5 text-blue-600" /> Pearson Square Video 📺
+                </button>
+                <button
+                  onClick={() => triggerVideoTutorial('std1-single-milk')}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1 rounded-full transition-colors shadow-sm"
+                >
+                  <Video className="w-3.5 h-3.5 text-indigo-600" /> Single Milk Video 📺
+                </button>
+                <button
+                  onClick={() => triggerVideoTutorial('std1-smp-water')}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-600 hover:text-teal-800 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1 rounded-full transition-colors shadow-sm"
+                >
+                  <Video className="w-3.5 h-3.5 text-teal-600" /> SMP & Water Video 📺
+                </button>
+              </div>
             </DialogHeader>
 
             <div className="space-y-6 md:space-y-8 pb-8">

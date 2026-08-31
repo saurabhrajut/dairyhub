@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -15,7 +15,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,9 +32,8 @@ import {
   LayoutGrid,
   ShieldCheck,
   ListChecks,
-  Activity,
+  Activity
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 // ─────────────────────────────────────────────
 // Language-aware UI label helpers

@@ -1,21 +1,48 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription
+} from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Mail, Lock, User, UserCheck, Loader2, ArrowLeft, Phone, DollarSign, Briefcase, Milk, Eye, EyeOff } from 'lucide-react';
+import {
+  Mail,
+  Lock,
+  User,
+  UserCheck,
+  Loader2,
+  ArrowLeft,
+  Phone,
+  DollarSign,
+  Briefcase,
+  Milk,
+  Eye,
+  EyeOff
+} from "lucide-react";
 import Link from 'next/link';
-import { useAuth, type Department } from '@/context/auth-context';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import { FactoryIcon } from '@/components/icons';
-import { initializeFirebase } from '@/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { useAuth, type Department } from "@/context/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+
+import { initializeFirebase } from "@/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 const signupSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),

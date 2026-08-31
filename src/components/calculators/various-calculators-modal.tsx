@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, memo, useCallback, useEffect, useMemo } from "react"
+import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -18,36 +18,19 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 // Make sure component imports exist in your actual file
-import { componentProps, chemicals } from "@/lib/data";
+import { componentProps } from "@/lib/data";
 import { getSnf } from "@/lib/utils";
 import { cn } from "@/lib/utils"; 
-import { 
-    CheckCircle, PlusCircle, XCircle, Beaker, Thermometer, Weight, Percent, Scaling, 
-    Combine, Calculator, FlaskConical, ArrowLeft, RotateCw, Dna, Atom, Droplet, 
-    DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, 
-    Wind, Factory, Info, TrendingDown, TrendingUp, FlaskRound as Flask, AlertCircle, Sparkles,
-    ChevronDown, FileText,
-    // ✅ NEW UNIQUE ICONS
-    CircleDollarSign, // Pricing ke liye better
-    TestTube2,        // Chemical tests (RM/PV)
-    Pipette,          // Titration (FFA)
-    Flame,            // Peroxide (Oxidation/Burn)
-    Snowflake,        // Salt (Crystals look like snowflakes)
-    Fuel,             // Oil (Fuel/Viscous)
-    Gauge,            // Acidity (Meter/Level)
-    Layers,           // Cream (Separation layer)
-    Scale,            // Gravimetric (Balance scale)
-    Waves,            // CIP (Liquid flow)
-    FunctionSquare,   // Formulas (Math function)
-    UserCheck         // Resume Maker icon
-} from "lucide-react";  
+import { CheckCircle, XCircle, Beaker, Thermometer, Weight, Percent, Calculator, FlaskConical, ArrowLeft, Dna, Atom, Droplet, DollarSign, ShieldCheck, Search, Factory, Info, TrendingDown, TrendingUp, FlaskRound as Flask, AlertCircle, Sparkles, ChevronDown, FileText, Gauge, Snowflake, TestTube2, CircleDollarSign, Scale, Pipette, Video, Fuel, Layers, Flame, FunctionSquare, Waves } from "lucide-react";  
+import { triggerVideoTutorial } from "@/components/tutorial-videos-modal";
 import { useToast } from "@/hooks/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { QRCodeSVG } from "qrcode.react"; // Ensure you run: npm install qrcode.react
 
 // ===== MISSING DATA & TYPES DEFINITIONS =====
@@ -86,11 +69,6 @@ const LabFormatsCalc = dynamic(() => import("./lab-formats-calc").then(m => ({ d
 });
 
 const QaGmpFormatsCalc = dynamic(() => import("./qa-gmp-formats-calc").then(m => ({ default: m.QaGmpFormatsCalc })), { 
-  ssr: false, 
-  loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
-});
-
-const ResumeMakerCalc = dynamic(() => import("./resume-maker-calc").then(m => ({ default: m.ResumeMakerCalc })), { 
   ssr: false, 
   loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
 });
@@ -189,13 +167,26 @@ const calculatorsInfo = {
         component: QaGmpFormatsCalc,
         color: "from-purple-500 to-indigo-600" 
     },
-    'resume-maker': { 
-        title: "Resume Maker & CV Builder", 
-        icon: UserCheck,
-        component: ResumeMakerCalc,
-        color: "from-blue-600 to-indigo-600" 
-    },
 };
+
+const labVideoMap: Record<string, string> = {
+  'pricing': 'lab-pricing',
+  'rm-pv': 'lab-rm-polenske',
+  'ffa-percent': 'lab-ffa-acid',
+  'peroxide-value': 'lab-peroxide',
+  'salt-percent': 'lab-salt-test',
+  'oil-percent': 'lab-soxhlet-oil',
+  'acidity': 'lab-acidity',
+  'protein-casein': 'lab-protein-casein',
+  'minerals': 'lab-minerals-nak',
+  'cream': 'lab-gerber-fat',
+  'gravimetric': 'lab-total-solids',
+  'cip-strength': 'lab-cip-strength',
+  'formulas': 'solutions-prep',
+  'lab-formats': 'solutions-prep',
+  'qa-gmp-formats': 'platform-test',
+};
+
 export function VariousCalculatorsModal({
   isOpen,
   setIsOpen,
@@ -221,23 +212,30 @@ export function VariousCalculatorsModal({
       <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-full sm:max-h-[90vh] sm:max-w-4xl sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
             <>
-                <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
+                <DialogHeader className="flex flex-row items-center justify-between space-x-4 pr-6 shrink-0 p-4 sm:p-0">
+                  <div className="flex items-center gap-3">
                      <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-white/50">
                         <ArrowLeft className="h-5 w-5" />
                      </Button>
-                     <div className="flex items-center gap-3">
-                        {/* Active Calculator Icon with Color */}
-                        <div className={cn("p-2 rounded-lg bg-gradient-to-br text-white shadow-sm", calculatorsInfo[activeCalculator].color)}>
-                            {(() => {
-                                const Icon = calculatorsInfo[activeCalculator].icon;
-                                return <Icon className="h-5 w-5" />;
-                            })()}
-                        </div>
-                        <div>
-                            <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
-                            <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
-                        </div>
+                     <div className={cn("p-2 rounded-lg bg-gradient-to-br text-white shadow-sm", calculatorsInfo[activeCalculator].color)}>
+                         {(() => {
+                             const Icon = calculatorsInfo[activeCalculator].icon;
+                             return <Icon className="h-5 w-5" />;
+                         })()}
                      </div>
+                     <div>
+                         <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
+                         <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+                     </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => triggerVideoTutorial(labVideoMap[activeCalculator] || 'lab-acidity')}
+                    className="shrink-0 text-xs font-semibold text-teal-600 hover:text-teal-800 bg-teal-50 border-teal-200 gap-1.5 rounded-full"
+                  >
+                    <Video className="w-3.5 h-3.5 text-teal-600" /> Watch Video 📺
+                  </Button>
                 </DialogHeader>
                 <ScrollArea className="h-full mt-4 pr-4 w-full min-w-0">
                     <div className="p-4 sm:p-0 px-1 w-full min-w-0">
@@ -247,7 +245,7 @@ export function VariousCalculatorsModal({
             </>
         ) : (
             <>
-                <DialogHeader className="p-4 sm:p-0">
+                <DialogHeader className="p-4 sm:p-0 flex flex-col items-center">
                     <div className="flex justify-center mb-4">
                         <div className="p-3 bg-white rounded-xl shadow-md">
                             <FlaskConical className="h-8 w-8 text-blue-600" />
@@ -255,6 +253,14 @@ export function VariousCalculatorsModal({
                     </div>
                     <DialogTitle className="text-2xl sm:text-3xl font-bold text-center font-headline">Lab Calculations</DialogTitle>
                     <DialogDescription className="text-center">Choose a specific analysis tool below.</DialogDescription>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => triggerVideoTutorial('lab-acidity')}
+                      className="mt-2 text-xs font-semibold text-teal-600 hover:text-teal-800 bg-teal-50 border-teal-200 gap-1.5 rounded-full"
+                    >
+                      <Video className="w-3.5 h-3.5 text-teal-600" /> Watch All Lab Testing Videos 📺
+                    </Button>
                 </DialogHeader>
                 
                 <ScrollArea className="h-full mt-4 pr-4 w-full min-w-0">
@@ -3826,7 +3832,6 @@ function PointBasedPricingCalc() {
     );
 }
 
-
 // ===== 🍦 CREAM CALCULATORS =====
 function CreamCalculators() {
     const [activeCalc, setActiveCalc] = useState<'cream-dilution' | 'fat-percent' | 'actual-snf'>('cream-dilution');
@@ -5231,7 +5236,6 @@ function MineralAnalysisCalc() {
         </CalculatorCard>
     );
 }
-
 
 // ===== 🧬 PROTEIN & CASEIN CALCULATORS =====
 function ProteinCaseinCalc() {
@@ -6747,7 +6751,6 @@ function ProteinFromCaseinCalc() {
     );
 }
 
-
 // ===== ⚖️ GRAVIMETRIC ANALYSIS CALCULATORS =====
 function GravimetricAnalysisCalc() {
     const [activeCalc, setActiveCalc] = useState<'moisture-ts' | 'ash' | 'fat-on-dry-basis'>('moisture-ts');
@@ -7783,338 +7786,525 @@ function FatOnDryBasisCalc() {
     );
 }
 
-
 function FormulasTab() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState<string>("all");
     const [expandedFormula, setExpandedFormula] = useState<string | null>(null);
+
+    // Interactive Mini-Calculators State
+    const [totoxPv, setTotoxPv] = useState<string>("1.5");
+    const [totoxAv, setTotoxAv] = useState<string>("3.2");
+    const [totoxResult, setTotoxResult] = useState<number | null>(6.2);
+
+    const [caseinN, setCaseinN] = useState<string>("0.42");
+    const [totalN, setTotalN] = useState<string>("0.54");
+    const [caseinRatioResult, setCaseinRatioResult] = useState<number | null>(77.78);
+
+    const [homoTopFat, setHomoTopFat] = useState<string>("4.8");
+    const [homoInitFat, setHomoInitFat] = useState<string>("4.5");
+    const [homoIndexResult, setHomoIndexResult] = useState<number | null>(93.33);
+
+    const [fpdObs, setFpdObs] = useState<string>("-0.486");
+    const [fpdRef, setFpdRef] = useState<string>("-0.540");
+    const [addedWaterResult, setAddedWaterResult] = useState<number | null>(10.0);
+
+    const [cipPhenol, setCipPhenol] = useState<string>("5.0");
+    const [cipMethyl, setCipMethyl] = useState<string>("1.2");
+    const [cipSampleVol, setCipSampleVol] = useState<string>("10");
+    const [activeCausticResult, setActiveCausticResult] = useState<number | null>(1.52);
 
     const toggleFormula = (id: string) => {
         setExpandedFormula(expandedFormula === id ? null : id);
     };
 
+    const handleCalcTotox = () => {
+        const pv = parseFloat(totoxPv);
+        const av = parseFloat(totoxAv);
+        if (!isNaN(pv) && !isNaN(av)) {
+            setTotoxResult(parseFloat((2 * pv + av).toFixed(2)));
+        }
+    };
+
+    const handleCalcCaseinRatio = () => {
+        const cn = parseFloat(caseinN);
+        const tn = parseFloat(totalN);
+        if (!isNaN(cn) && !isNaN(tn) && tn > 0) {
+            setCaseinRatioResult(parseFloat(((cn / tn) * 100).toFixed(2)));
+        }
+    };
+
+    const handleCalcHomoIndex = () => {
+        const topF = parseFloat(homoTopFat);
+        const initF = parseFloat(homoInitFat);
+        if (!isNaN(topF) && !isNaN(initF) && initF > 0) {
+            const index = (1 - (topF - initF) / topF) * 100;
+            setHomoIndexResult(parseFloat(index.toFixed(2)));
+        }
+    };
+
+    const handleCalcAddedWater = () => {
+        const obs = parseFloat(fpdObs);
+        const ref = parseFloat(fpdRef);
+        if (!isNaN(obs) && !isNaN(ref) && ref !== 0) {
+            const water = ((ref - obs) / ref) * 100;
+            setAddedWaterResult(parseFloat(water.toFixed(2)));
+        }
+    };
+
+    const handleCalcCipCaustic = () => {
+        const p = parseFloat(cipPhenol);
+        const m = parseFloat(cipMethyl);
+        const v = parseFloat(cipSampleVol);
+        if (!isNaN(p) && !isNaN(m) && !isNaN(v) && v > 0) {
+            const activeNaOH = ((p - m) * 0.1 * 4.0) / v;
+            setActiveCausticResult(parseFloat(activeNaOH.toFixed(2)));
+        }
+    };
+
     return (
-        <div className="space-y-6">
-            {/* SNF CALCULATIONS */}
-            <CalculatorCard title="🧮 SNF Calculation Formulas">
+        <div className="space-y-6 animate-fadeIn pb-8">
+            {/* Header Banner */}
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-lg border border-slate-800">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <span className="inline-flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1">
+                            ✨ Advanced NABL & R&D Lab Standards
+                        </span>
+                        <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                            Advanced Dairy & Food Plant Formulas
+                        </h2>
+                        <p className="text-xs text-indigo-200 mt-0.5">
+                            Comprehensive mathematical models, TOTOX, ISO 5764 Cryoscopy, Van Slyke Yield & Dual Titration equations.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Search Bar */}
+                <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                    <div className="relative flex-1">
+                        <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                        <Input
+                            placeholder="Search formula e.g. TOTOX, Van Slyke, Cryoscopy, Richmond, Casein..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-9 h-10 bg-slate-800/90 border-slate-700 text-white text-xs rounded-xl focus-visible:ring-indigo-500 placeholder:text-slate-400"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* 1. SNF & MILK FAT ADVANCED DENSITY EQUATIONS */}
+            <CalculatorCard 
+                title="1. Advanced Fat & SNF Density Equations (Richmond vs. Fleischmann vs. Ackermann)"
+                description="High-precision equations used in NABL reference labs for cow, buffalo & high-fat cream milks."
+            >
                 <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-lg border-2 border-blue-300">
-                        <h3 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
-                            <Calculator size={18} />
-                            Richmond's Formula (Original)
+                    <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-xl border border-blue-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-blue-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Calculator className="w-4 h-4 text-blue-600" />
+                                Fleischmann's Formula (High Precision Reference)
+                            </span>
+                            <Badge className="bg-blue-600 text-white text-[10px]">ISO 2446 Reference</Badge>
                         </h3>
-                        <div className="font-mono text-sm bg-white p-3 rounded border border-blue-200">
-                            SNF% = (CLR ÷ 4) + (0.2 × Fat%) + 0.14
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-blue-200 text-blue-900 font-bold shadow-inner">
+                            SNF% = 0.25 × CLR + 0.20 × Fat% + 0.14
                         </div>
-                        <div className="mt-3 text-xs text-blue-800 space-y-1">
-                            <p>• Most widely used formula worldwide</p>
-                            <p>• CLR = Corrected Lactometer Reading at 15°C</p>
-                            <p>• Constant 0.14 is empirical correction factor</p>
-                        </div>
+                        <p className="mt-2 text-xs text-blue-800 leading-relaxed">
+                            <strong>Where:</strong> CLR = Corrected Lactometer Reading at 15.5°C. Fleischmann derived this equation based on exact specific gravity of butterfat (0.930 g/cm³) and SNF (1.608 g/cm³).
+                        </p>
                     </div>
 
-                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border-2 border-purple-300">
-                        <h3 className="font-semibold text-purple-900 mb-3 flex items-center gap-2">
-                            <Sparkles size={18} />
-                            Modified Richmond's Formulas (Regional)
+                    <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-xl border border-purple-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-purple-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Sparkles className="w-4 h-4 text-purple-600" />
+                                Ackermann's Modified Formula (High-Fat Buffalo Milk & Rich Dairy Mixes)
+                            </span>
+                            <Badge className="bg-purple-600 text-white text-[10px]">Buffalo Milk Std</Badge>
                         </h3>
-                        <div className="space-y-3">
-                            <div className="bg-white p-3 rounded border border-purple-200">
-                                <div className="font-semibold text-sm text-purple-700 mb-1">BSI Formula (British):</div>
-                                <div className="font-mono text-sm">SNF% = (CLR ÷ 4) + (0.22 × Fat%) + 0.72</div>
-                            </div>
-                            <div className="bg-white p-3 rounded border border-purple-200">
-                                <div className="font-semibold text-sm text-purple-700 mb-1">Zeal Lactometer Formula:</div>
-                                <div className="font-mono text-sm">SNF% = (0.25 × LR) + (0.2 × Fat%) + 0.50</div>
-                            </div>
-                            <div className="bg-white p-3 rounded border border-purple-200">
-                                <div className="font-semibold text-sm text-purple-700 mb-1">Pakistan/Engro Formula:</div>
-                                <div className="font-mono text-sm">SNF% = (0.25 × LR) + (0.22 × Fat%) + 0.72</div>
-                            </div>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-purple-200 text-purple-900 font-bold shadow-inner">
+                            SNF% = 0.265 × CLR + 0.22 × Fat% + 0.40
                         </div>
-                        <div className="mt-3 text-xs text-purple-800">
-                            <p>💡 <strong>Secret:</strong> Correction factor varies by region (0.14 to 1.24) due to breed, feed, and climate differences!</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-lg border-2 border-amber-300">
-                        <h3 className="font-semibold text-amber-900 mb-3">Breed-Specific Correction Factors</h3>
-                        <Table className="text-sm bg-white">
-                            <TableBody>
-                                <TableRow><TableCell className="font-medium">Cow Milk (Indian)</TableCell><TableCell className="font-mono">+0.72</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Buffalo Milk</TableCell><TableCell className="font-mono">+0.85</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Jersey Cow</TableCell><TableCell className="font-mono">+0.65</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Holstein Friesian</TableCell><TableCell className="font-mono">+0.60</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Goat Milk</TableCell><TableCell className="font-mono">+0.55</TableCell></TableRow>
-                            </TableBody>
-                        </Table>
+                        <p className="mt-2 text-xs text-purple-800 leading-relaxed">
+                            <strong>Why it's advanced:</strong> Buffalo milk has higher mineral content (0.78% ash vs 0.70% in cow milk) and higher protein density. Standard Richmond formula underestimates buffalo SNF by 0.3-0.5%!
+                        </p>
                     </div>
                 </div>
             </CalculatorCard>
 
-            {/* TEMPERATURE CORRECTION */}
-            <CalculatorCard title="🌡️ Temperature Correction Formulas">
+            {/* 2. LIPID OXIDATION & SHELF LIFE FORMULAS (TOTOX & ANISIDINE VALUE) */}
+            <CalculatorCard 
+                title="2. Lipid Oxidation & Rancidity Index (TOTOX & p-Anisidine Value)"
+                description="Crucial for assessing Ghee, Butter oil, Whole milk powder & WMP shelf-life stability."
+            >
                 <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border-2 border-green-300">
-                        <h3 className="font-semibold text-green-900 mb-3">CLR Temperature Correction</h3>
-                        <div className="font-mono text-sm bg-white p-3 rounded border border-green-200 mb-3">
-                            CLR = Observed_LR + [(Temp_°C - 15) × 0.2]
+                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-xl border border-amber-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-amber-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Flame className="w-4 h-4 text-amber-600" />
+                                TOTOX Value (Total Oxidation Value Formula)
+                            </span>
+                            <Badge className="bg-amber-600 text-white text-[10px]">AOCS Cd 18-90</Badge>
+                        </h3>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-amber-200 text-amber-900 font-bold shadow-inner">
+                            TOTOX Value = (2 × Peroxide Value) + p-Anisidine Value
                         </div>
-                        <div className="bg-white p-3 rounded border border-green-200">
-                            <div className="font-semibold text-sm text-green-700 mb-2">Alternative (if calibrated at 20°C):</div>
-                            <div className="font-mono text-sm">CLR = Observed_LR + [(Temp_°C - 20) × 0.2]</div>
-                        </div>
-                        <div className="mt-3 text-xs text-green-800 space-y-1">
-                            <p>• Add 0.2 for every 1°C above standard temperature</p>
-                            <p>• Subtract 0.2 for every 1°C below standard temperature</p>
-                            <p>• Most lactometers calibrated at 15°C or 20°C</p>
-                        </div>
-                    </div>
+                        <p className="mt-2 text-xs text-amber-800 leading-relaxed">
+                            Peroxide Value (PV) measures early hydroperoxides, while p-Anisidine Value (p-AV) measures secondary aldehydes ($2,4$-dienals). TOTOX provides total oxidative stress history.
+                        </p>
 
-                    <div className="bg-gradient-to-r from-cyan-50 to-blue-50 p-4 rounded-lg border-2 border-cyan-300">
-                        <h3 className="font-semibold text-cyan-900 mb-3">Density Correction (Advanced)</h3>
-                        <div className="font-mono text-sm bg-white p-3 rounded border border-cyan-200">
-                            ρ₁₅ = ρₜ + [0.00025 × (T - 15)]
-                        </div>
-                        <div className="mt-2 text-xs text-cyan-800">
-                            Where: ρ = density (g/cm³), T = temperature (°C)
-                        </div>
-                    </div>
-                </div>
-            </CalculatorCard>
-
-            {/* PEARSON'S SQUARE */}
-            <CalculatorCard title="⬜ Pearson's Square Method (Blending/Standardization)">
-                <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-violet-50 to-purple-50 p-4 rounded-lg border-2 border-violet-300">
-                        <h3 className="font-semibold text-violet-900 mb-3">Basic Formula</h3>
-                        <div className="bg-white p-4 rounded border border-violet-200 space-y-2">
-                            <div className="font-mono text-sm">Parts_A = |Target - B|</div>
-                            <div className="font-mono text-sm">Parts_B = |A - Target|</div>
-                            <div className="font-mono text-sm text-violet-700 mt-3">Qty_A = (Total × Parts_A) ÷ (Parts_A + Parts_B)</div>
-                            <div className="font-mono text-sm text-violet-700">Qty_B = (Total × Parts_B) ÷ (Parts_A + Parts_B)</div>
-                        </div>
-                        <button
-                            onClick={() => toggleFormula('pearson')}
-                            className="mt-3 text-sm text-violet-700 hover:text-violet-900 font-semibold flex items-center gap-1"
-                        >
-                            {expandedFormula === 'pearson' ? '▼' : '▶'} Show Visual Example
-                        </button>
-                        {expandedFormula === 'pearson' && (
-                            <div className="mt-3 bg-white p-4 rounded border border-violet-200">
-                                <div className="text-center space-y-2 font-mono text-sm">
-                                    <div className="text-gray-700">Cream (40% fat) ———— 3.0 parts</div>
-                                    <div className="text-2xl text-violet-700">╲ ╱</div>
-                                    <div className="text-xl font-bold text-violet-900">Target: 3.5%</div>
-                                    <div className="text-2xl text-violet-700">╱ ╲</div>
-                                    <div className="text-gray-700">Skim (0.5% fat) ———— 36.5 parts</div>
-                                    <div className="mt-4 text-xs text-gray-600">
-                                        For 100L: Cream = (3/39.5)×100 = 7.59L, Skim = 92.41L
-                                    </div>
+                        {/* Interactive TOTOX Mini-Calc */}
+                        <div className="mt-4 p-3.5 bg-amber-100/60 rounded-xl border border-amber-300/80 space-y-3">
+                            <span className="font-extrabold text-xs text-amber-950 block">⚡ Quick Interactive TOTOX Calculator:</span>
+                            <div className="grid grid-cols-2 gap-2.5 text-xs">
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">Peroxide Value (meq O₂/kg)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.1" 
+                                        value={totoxPv} 
+                                        onChange={(e) => setTotoxPv(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">p-Anisidine Value (p-AV)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.1" 
+                                        value={totoxAv} 
+                                        onChange={(e) => setTotoxAv(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
                                 </div>
                             </div>
-                        )}
-                    </div>
-
-                    <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border-2 border-orange-300">
-                        <h3 className="font-semibold text-orange-900 mb-3">Mass Balance Equations (Alternative)</h3>
-                        <div className="bg-white p-3 rounded border border-orange-200 space-y-2 text-sm">
-                            <div className="font-mono">Total: W₁ + W₂ = W_total</div>
-                            <div className="font-mono">Component: (W₁ × C₁) + (W₂ × C₂) = W_total × C_target</div>
-                        </div>
-                        <div className="mt-3 text-xs text-orange-800">
-                            <p>💡 More accurate for complex standardization with multiple components</p>
+                            <Button onClick={handleCalcTotox} size="sm" className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold h-8 text-xs">
+                                Compute TOTOX Index
+                            </Button>
+                            {totoxResult !== null && (
+                                <div className="p-2.5 bg-white rounded-lg border border-amber-300 flex items-center justify-between text-xs font-bold text-amber-950">
+                                    <span>Calculated TOTOX Value:</span>
+                                    <span className="text-sm font-extrabold text-amber-700">{totoxResult} {totoxResult < 10 ? '✨ Excellent Fresh Fat' : (totoxResult < 26 ? '⚠️ Moderate Oxidation' : '🚨 Oxidized/Rancid')}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             </CalculatorCard>
 
-            {/* COMPONENT CALCULATIONS */}
-            <CalculatorCard title="🧪 Component Quantity Calculations">
+            {/* 3. CASEIN & PROTEIN FRACTIONATION MATH */}
+            <CalculatorCard 
+                title="3. Casein Index & True Protein Fractionation Math"
+                description="Used in NABL Kjeldahl nitrogen determination to separate Non-Protein Nitrogen (NPN) from true milk protein."
+            >
                 <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-yellow-50 to-amber-50 p-4 rounded-lg border-2 border-yellow-300">
-                        <h3 className="font-semibold text-yellow-900 mb-3">Weight & Volume Conversions</h3>
-                        <div className="space-y-2 bg-white p-3 rounded border border-yellow-200">
-                            <div className="font-mono text-sm">Milk_Weight (kg) = Liters × 1.032</div>
-                            <div className="font-mono text-sm">Milk_Volume (L) = Weight_kg × 0.970</div>
-                            <div className="font-mono text-sm text-yellow-700 mt-3">Fat_kg = Weight_kg × (Fat% ÷ 100)</div>
-                            <div className="font-mono text-sm text-yellow-700">SNF_kg = Weight_kg × (SNF% ÷ 100)</div>
-                            <div className="font-mono text-sm text-yellow-700">TS_kg = Weight_kg × (TS% ÷ 100)</div>
-                        </div>
-                        <div className="mt-3 text-xs text-yellow-800">
-                            <p>💡 <strong>Secret:</strong> Use 1.032 for accurate conversions (not 1.03)!</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-4 rounded-lg border-2 border-pink-300">
-                        <h3 className="font-semibold text-pink-900 mb-3">Total Solids & CLR Relationship</h3>
-                        <div className="bg-white p-3 rounded border border-pink-200 space-y-2">
-                            <div className="font-mono text-sm">TS% = Fat% + SNF%</div>
-                            <div className="font-mono text-sm">Moisture% = 100 - TS%</div>
-                            <div className="font-mono text-sm text-pink-700 mt-3">CLR ≈ 4 × (SNF% - 0.2×Fat% - 0.14)</div>
-                        </div>
-                    </div>
-                </div>
-            </CalculatorCard>
-
-            {/* ADVANCED FORMULAS */}
-            <CalculatorCard title="🔬 Advanced & Secret Formulas">
-                <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-4 rounded-lg border-2 border-indigo-300">
-                        <h3 className="font-semibold text-indigo-900 mb-3 flex items-center gap-2">
-                            <Sparkles size={18} />
-                            Protein from SNF Estimation
+                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-4 rounded-xl border border-emerald-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-emerald-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Dna className="w-4 h-4 text-emerald-600" />
+                                Casein-to-Total Protein Ratio Formula
+                            </span>
+                            <Badge className="bg-emerald-600 text-white text-[10px]">AOAC 998.06</Badge>
                         </h3>
-                        <div className="bg-white p-3 rounded border border-indigo-200 space-y-2">
-                            <div className="font-mono text-sm">Protein% ≈ (SNF% - 5.0) × 0.55</div>
-                            <div className="font-mono text-sm">Lactose% ≈ SNF% × 0.54</div>
-                            <div className="font-mono text-sm">Ash% ≈ SNF% × 0.08</div>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-emerald-200 text-emerald-900 font-bold shadow-inner space-y-1">
+                            <div>True Protein% = (Total Nitrogen% - NPN%) × 6.38</div>
+                            <div>Casein Index% = (Casein Nitrogen% ÷ Total Nitrogen%) × 100</div>
                         </div>
-                        <div className="mt-3 text-xs text-indigo-800">
-                            <p>💎 Industry secret: SNF composition is ~38% protein, 54% lactose, 8% ash</p>
-                        </div>
-                    </div>
 
-                    <div className="bg-gradient-to-r from-teal-50 to-cyan-50 p-4 rounded-lg border-2 border-teal-300">
-                        <h3 className="font-semibold text-teal-900 mb-3">Acidity Calculations</h3>
-                        <div className="bg-white p-3 rounded border border-teal-200 space-y-2">
-                            <div className="font-mono text-sm">°SH = (V × N × 100) ÷ W</div>
-                            <div className="font-mono text-sm">Lactic_Acid% = °SH ÷ 111</div>
-                            <div className="font-mono text-sm">pH ≈ 6.8 - (0.02 × °SH)</div>
-                        </div>
-                        <div className="mt-2 text-xs text-teal-800">
-                            Where: V=titre(ml), N=normality, W=sample weight, °SH=Soxhlet-Henkel degrees
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-red-50 to-pink-50 p-4 rounded-lg border-2 border-red-300">
-                        <h3 className="font-semibold text-red-900 mb-3">Energy Content Calculation</h3>
-                        <div className="bg-white p-3 rounded border border-red-200 space-y-2">
-                            <div className="font-mono text-sm">Energy (kcal/100g) = (Fat% × 9) + (Protein% × 4) + (Lactose% × 4)</div>
-                            <div className="font-mono text-sm text-red-700 mt-2">≈ (Fat% × 9) + (SNF% × 4.1)</div>
-                        </div>
-                        <div className="mt-3 text-xs text-red-800">
-                            <p>🔥 Typical whole milk: ~65-70 kcal/100ml</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-emerald-50 to-green-50 p-4 rounded-lg border-2 border-emerald-300">
-                        <h3 className="font-semibold text-emerald-900 mb-3">Freezing Point Depression</h3>
-                        <div className="bg-white p-3 rounded border border-emerald-200 space-y-2">
-                            <div className="font-mono text-sm">FPD(°C) ≈ -0.0206 × Lactose%</div>
-                            <div className="font-mono text-sm">Added_Water% = [(FPD_pure - FPD_sample) ÷ FPD_pure] × 100</div>
-                        </div>
-                        <div className="mt-3 text-xs text-emerald-800">
-                            <p>❄️ Normal milk FPD: -0.520°C to -0.540°C. Higher values indicate water addition!</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-purple-50 to-fuchsia-50 p-4 rounded-lg border-2 border-purple-300">
-                        <h3 className="font-semibold text-purple-900 mb-3">Cheese Yield Prediction</h3>
-                        <div className="bg-white p-3 rounded border border-purple-200 space-y-2">
-                            <div className="font-mono text-sm">Yield% ≈ (Fat% × 0.93) + (Casein% × 0.76) - 0.1</div>
-                            <div className="font-mono text-sm text-purple-700">Simplified: Yield% ≈ (Fat% + Protein%) × 1.18</div>
-                        </div>
-                        <div className="mt-3 text-xs text-purple-800">
-                            <p>🧀 Van Slyke formula: Accounts for moisture retention and salt addition</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-amber-50 to-yellow-50 p-4 rounded-lg border-2 border-amber-300">
-                        <h3 className="font-semibold text-amber-900 mb-3">Cream Separation Efficiency</h3>
-                        <div className="bg-white p-3 rounded border border-amber-200 space-y-2">
-                            <div className="font-mono text-sm">Efficiency% = [(F_cream - F_skim) ÷ (F_milk - F_skim)] × 100</div>
-                            <div className="font-mono text-sm text-amber-700">Fat_Loss% = (Skim_kg × F_skim) ÷ (Milk_kg × F_milk) × 100</div>
-                        </div>
-                        <div className="mt-3 text-xs text-amber-800">
-                            <p>⚙️ Modern separators: 98-99.5% efficiency, skim fat: 0.03-0.05%</p>
+                        {/* Interactive Casein Ratio Mini-Calc */}
+                        <div className="mt-4 p-3.5 bg-emerald-100/60 rounded-xl border border-emerald-300/80 space-y-3">
+                            <span className="font-extrabold text-xs text-emerald-950 block">⚡ Quick Interactive Casein Ratio Calculator:</span>
+                            <div className="grid grid-cols-2 gap-2.5 text-xs">
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">Casein Nitrogen (N%)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.01" 
+                                        value={caseinN} 
+                                        onChange={(e) => setCaseinN(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">Total Nitrogen (N%)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.01" 
+                                        value={totalN} 
+                                        onChange={(e) => setTotalN(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                            </div>
+                            <Button onClick={handleCalcCaseinRatio} size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-8 text-xs">
+                                Calculate Casein Index %
+                            </Button>
+                            {caseinRatioResult !== null && (
+                                <div className="p-2.5 bg-white rounded-lg border border-emerald-300 flex items-center justify-between text-xs font-bold text-emerald-950">
+                                    <span>Casein Ratio:</span>
+                                    <span className="text-sm font-extrabold text-emerald-700">{caseinRatioResult}% {caseinRatioResult >= 77 ? '✅ Ideal Cheese/Paneer Quality' : '⚠️ Sub-optimal Casein Ratio'}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             </CalculatorCard>
 
-            {/* CONVERSION TABLES */}
-            <CalculatorCard title="📊 Quick Reference Conversion Tables">
+            {/* 4. CRYOSCOPIC WATER ADULTERATION (ISO 5764) */}
+            <CalculatorCard 
+                title="4. Cryoscopic Freezing Point Adulteration Math (ISO 5764 / IDF 108)"
+                description="The gold-standard reference method for detecting added water down to 0.1% accuracy."
+            >
                 <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-slate-50 to-gray-50 p-4 rounded-lg border-2 border-slate-300">
-                        <h3 className="font-semibold text-slate-900 mb-3">Density & Weight Conversions</h3>
-                        <Table className="text-sm bg-white">
-                            <TableBody>
-                                <TableRow><TableCell className="font-medium">1 Liter Milk (3.5% fat)</TableCell><TableCell className="font-mono">1.032 kg</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">1 Kg Milk</TableCell><TableCell className="font-mono">0.970 liters</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">1 Liter Skim Milk</TableCell><TableCell className="font-mono">1.036 kg</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">1 Liter Cream (40% fat)</TableCell><TableCell className="font-mono">1.012 kg</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">1 Liter Water</TableCell><TableCell className="font-mono">1.000 kg</TableCell></TableRow>
-                            </TableBody>
-                        </Table>
-                    </div>
+                    <div className="bg-gradient-to-r from-sky-50 to-blue-50 p-4 rounded-xl border border-sky-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-sky-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Snowflake className="w-4 h-4 text-sky-600" />
+                                ISO 5764 Precise Added Water Formula
+                            </span>
+                            <Badge className="bg-sky-600 text-white text-[10px]">ISO 5764</Badge>
+                        </h3>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-sky-200 text-sky-900 font-bold shadow-inner">
+                            Added Water% = [(T_ref - T_sample) ÷ T_ref] × (100 - TS%)
+                        </div>
 
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border-2 border-blue-300">
-                        <h3 className="font-semibold text-blue-900 mb-3">Lactometer Reading Standards</h3>
-                        <Table className="text-sm bg-white">
-                            <TableBody>
-                                <TableRow><TableCell className="font-medium">Cow Milk (Normal)</TableCell><TableCell className="font-mono">27-32 LR</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Buffalo Milk</TableCell><TableCell className="font-mono">32-36 LR</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Water (Pure)</TableCell><TableCell className="font-mono">0 LR</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">10% Water Added</TableCell><TableCell className="font-mono">~25 LR</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Below 26 LR</TableCell><TableCell className="text-red-600">Suspect Adulteration</TableCell></TableRow>
-                            </TableBody>
-                        </Table>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border-2 border-green-300">
-                        <h3 className="font-semibold text-green-900 mb-3">Temperature Equivalents</h3>
-                        <Table className="text-sm bg-white">
-                            <TableBody>
-                                <TableRow><TableCell className="font-medium">Standard Lactometer Temp</TableCell><TableCell className="font-mono">15°C (59°F)</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Alternate Standard</TableCell><TableCell className="font-mono">20°C (68°F)</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Body Temperature</TableCell><TableCell className="font-mono">37°C (98.6°F)</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Pasteurization (HTST)</TableCell><TableCell className="font-mono">72°C for 15s</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Pasteurization (LTH)</TableCell><TableCell className="font-mono">63°C for 30min</TableCell></TableRow>
-                            </TableBody>
-                        </Table>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-rose-50 to-pink-50 p-4 rounded-lg border-2 border-rose-300">
-                        <h3 className="font-semibold text-rose-900 mb-3">Precision Guidelines</h3>
-                        <Table className="text-sm bg-white">
-                            <TableBody>
-                                <TableRow><TableCell className="font-medium">Fat % (Gerber)</TableCell><TableCell className="font-mono">±0.1%</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">SNF % (Richmond)</TableCell><TableCell className="font-mono">±0.2%</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Lactometer Reading</TableCell><TableCell className="font-mono">±0.5 LR</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Weight (Analytical)</TableCell><TableCell className="font-mono">±0.0001g</TableCell></TableRow>
-                                <TableRow><TableCell className="font-medium">Temperature</TableCell><TableCell className="font-mono">±0.5°C</TableCell></TableRow>
-                            </TableBody>
-                        </Table>
+                        {/* Interactive Cryoscopy Mini-Calc */}
+                        <div className="mt-4 p-3.5 bg-sky-100/60 rounded-xl border border-sky-300/80 space-y-3">
+                            <span className="font-extrabold text-xs text-sky-950 block">⚡ Quick Freezing Point Water Adulteration Calculator:</span>
+                            <div className="grid grid-cols-2 gap-2.5 text-xs">
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">Observed FPD (°C)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.001" 
+                                        value={fpdObs} 
+                                        onChange={(e) => setFpdObs(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">Unadulterated Ref FPD (°C)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.001" 
+                                        value={fpdRef} 
+                                        onChange={(e) => setFpdRef(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                            </div>
+                            <Button onClick={handleCalcAddedWater} size="sm" className="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold h-8 text-xs">
+                                Calculate Added Water %
+                            </Button>
+                            {addedWaterResult !== null && (
+                                <div className="p-2.5 bg-white rounded-lg border border-sky-300 flex items-center justify-between text-xs font-bold text-sky-950">
+                                    <span>Calculated Extraneous Water:</span>
+                                    <span className="text-sm font-extrabold text-sky-700">{addedWaterResult}% {addedWaterResult > 0.5 ? '🚨 Water Adulteration Detected!' : '✅ Pure Milk Range'}</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </CalculatorCard>
 
-            {/* PRO TIPS */}
-            <CalculatorCard title="💡 Pro Tips & Industry Secrets">
-                <div className="bg-gradient-to-r from-yellow-50 via-orange-50 to-red-50 p-5 rounded-lg border-2 border-yellow-300">
-                    <div className="space-y-3 text-sm">
-                        <div className="flex items-start gap-2">
-                            <Sparkles className="text-yellow-600 flex-shrink-0 mt-0.5" size={16} />
-                            <p><strong>Secret #1:</strong> For ultra-precise SNF, use plant-specific correction factors calibrated monthly using gravimetric reference samples.</p>
+            {/* 5. HOMOGENIZATION EFFICIENCY & PARTICLE SIZE */}
+            <CalculatorCard 
+                title="5. USPHS Homogenization Efficiency Index Formula"
+                description="Used in UHT & Pasteurization plants to prevent fat creaming during shelf life."
+            >
+                <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-violet-50 to-purple-50 p-4 rounded-xl border border-violet-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-violet-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Layers className="w-4 h-4 text-violet-600" />
+                                USPHS Homogenization Index Formula
+                            </span>
+                            <Badge className="bg-violet-600 text-white text-[10px]">USPHS Standard</Badge>
+                        </h3>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-violet-200 text-violet-900 font-bold shadow-inner">
+                            Homogenization Index% = [ 1 - (Fat_top10% - Fat_initial) ÷ Fat_top10% ] × 100
                         </div>
-                        <div className="flex items-start gap-2">
-                            <Sparkles className="text-orange-600 flex-shrink-0 mt-0.5" size={16} />
-                            <p><strong>Secret #2:</strong> Lactometer readings can be manipulated by adding sugar or starch. Always cross-verify with freezing point test!</p>
-                        </div>
-                        <div className="flex items-start gap-2">
-                            <Sparkles className="text-red-600 flex-shrink-0 mt-0.5" size={16} />
-                            <p><strong>Secret #3:</strong> The ratio SNF/Fat should be 2.25-2.35 for genuine milk. Deviations indicate possible adulteration.</p>
-                        </div>
-                        <div className="flex items-start gap-2">
-                            <Sparkles className="text-purple-600 flex-shrink-0 mt-0.5" size={16} />
-                            <p><strong>Secret #4:</strong> Protein% × 6.38 = Nitrogen%. This reverse calculation helps verify Kjeldahl results quickly.</p>
-                        </div>
-                        <div className="flex items-start gap-2">
-                            <Sparkles className="text-blue-600 flex-shrink-0 mt-0.5" size={16} />
-                            <p><strong>Secret #5:</strong> For instant SNF check: If (CLR/4) + (Fat×0.25) ≈ SNF-0.5, milk is likely genuine!</p>
+
+                        {/* Interactive Homogenization Mini-Calc */}
+                        <div className="mt-4 p-3.5 bg-violet-100/60 rounded-xl border border-violet-300/80 space-y-3">
+                            <span className="font-extrabold text-xs text-violet-950 block">⚡ Quick Homogenization Index Calculator:</span>
+                            <div className="grid grid-cols-2 gap-2.5 text-xs">
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">Top 10% Layer Fat% (after 48h)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.1" 
+                                        value={homoTopFat} 
+                                        onChange={(e) => setHomoTopFat(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">Initial Whole Milk Fat%</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.1" 
+                                        value={homoInitFat} 
+                                        onChange={(e) => setHomoInitFat(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                            </div>
+                            <Button onClick={handleCalcHomoIndex} size="sm" className="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold h-8 text-xs">
+                                Compute Homogenization Index %
+                            </Button>
+                            {homoIndexResult !== null && (
+                                <div className="p-2.5 bg-white rounded-lg border border-violet-300 flex items-center justify-between text-xs font-bold text-violet-950">
+                                    <span>Homogenization Index:</span>
+                                    <span className="text-sm font-extrabold text-violet-700">{homoIndexResult}% {homoIndexResult >= 90 ? '✅ Excellent Stability' : '⚠️ Sub-standard Homogenization Pressure'}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             </CalculatorCard>
+
+            {/* 6. DUAL TITRATION ACTIVE CIP CHEMICAL DOSING */}
+            <CalculatorCard 
+                title="6. Active Caustic vs. Sodium Carbonate Dual Titration Math"
+                description="Solves the common plant problem of spent CIP caustic degraded by atmospheric CO₂ absorption."
+            >
+                <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-teal-50 to-emerald-50 p-4 rounded-xl border border-teal-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-teal-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Waves className="w-4 h-4 text-teal-600" />
+                                Phenolphthalein & Methyl Orange Double Titration Formula
+                            </span>
+                            <Badge className="bg-teal-600 text-white text-[10px]">Plant CIP QC</Badge>
+                        </h3>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-teal-200 text-teal-900 font-bold shadow-inner space-y-1">
+                            <div>Active NaOH% = [ (P - M) × Normality × 4.0 ] ÷ Sample_Volume_mL</div>
+                            <div>Carbonate Na₂CO₃% = [ 2 × M × Normality × 5.3 ] ÷ Sample_Volume_mL</div>
+                        </div>
+
+                        {/* Interactive CIP Titration Mini-Calc */}
+                        <div className="mt-4 p-3.5 bg-teal-100/60 rounded-xl border border-teal-300/80 space-y-3">
+                            <span className="font-extrabold text-xs text-teal-950 block">⚡ Quick Dual CIP Titration Calculator:</span>
+                            <div className="grid grid-cols-2 gap-2.5 text-xs">
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">P Titre (Phenolphthalein mL)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.1" 
+                                        value={cipPhenol} 
+                                        onChange={(e) => setCipPhenol(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-slate-700 text-[11px] font-bold">M Titre (Methyl Orange mL)</Label>
+                                    <Input 
+                                        type="number" 
+                                        step="0.1" 
+                                        value={cipMethyl} 
+                                        onChange={(e) => setCipMethyl(e.target.value)} 
+                                        className="h-8 text-xs font-bold bg-white"
+                                    />
+                                </div>
+                            </div>
+                            <Button onClick={handleCalcCipCaustic} size="sm" className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold h-8 text-xs">
+                                Calculate Active NaOH Concentration
+                            </Button>
+                            {activeCausticResult !== null && (
+                                <div className="p-2.5 bg-white rounded-lg border border-teal-300 flex items-center justify-between text-xs font-bold text-teal-950">
+                                    <span>Active Active Caustic NaOH:</span>
+                                    <span className="text-sm font-extrabold text-teal-700">{activeCausticResult}% {activeCausticResult >= 1.5 ? '✅ CIP Ready' : '⚠️ Top-up Required'}</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </CalculatorCard>
+
+            {/* 7. VAN SLYKE CHEESE & PANEER MASS YIELD FORMULA */}
+            <CalculatorCard 
+                title="7. Van Slyke Cheese & Mass Yield Recovery Equation"
+                description="Predictive yield math accounting for fat retention efficiency (0.93) & casein recovery (0.78)."
+            >
+                <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-4 rounded-xl border border-orange-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-orange-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Factory className="w-4 h-4 text-orange-600" />
+                                Modified Van Slyke Cheese Yield Equation
+                            </span>
+                            <Badge className="bg-orange-600 text-white text-[10px]">Cheddar & Paneer</Badge>
+                        </h3>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-orange-200 text-orange-900 font-bold shadow-inner">
+                            Yield% = [ (Fat% × 0.93 + Casein% × 0.78) × 1.09 ] ÷ (100 - Target_Moisture%)
+                        </div>
+                        <p className="mt-2 text-xs text-orange-800 leading-relaxed">
+                            <strong>Why it's advanced:</strong> Accounts for 93% fat retention in curd matrix, 78% casein recovery, and 1.09 salt/solute incorporation factor.
+                        </p>
+                    </div>
+                </div>
+            </CalculatorCard>
+
+            {/* 8. INTERNATIONAL ACIDITY UNIT MATRIX */}
+            <CalculatorCard 
+                title="8. International Acidity Units (°Dornic, °SH, °Thorner & % Lactic Acid)"
+                description="Crucial for global plant equipment parameters (GEA, Tetra Pak, SPX Flow)."
+            >
+                <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-rose-50 to-pink-50 p-4 rounded-xl border border-rose-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-rose-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Gauge className="w-4 h-4 text-rose-600" />
+                                Acidity Conversion Scale
+                            </span>
+                            <Badge className="bg-rose-600 text-white text-[10px]">ISO / IDF Matrix</Badge>
+                        </h3>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-rose-200 text-rose-900 font-bold shadow-inner space-y-1">
+                            <div>1°Dornic (°D) = 0.01% Lactic Acid</div>
+                            <div>1°Soxhlet-Henkel (°SH) = 2.25°D = 0.0225% Lactic Acid</div>
+                            <div>1°Thorner (°Th) = 2.50°D = 0.0250% Lactic Acid</div>
+                        </div>
+                    </div>
+                </div>
+            </CalculatorCard>
+
+            {/* 9. UHT STERILIZATION F0 LETHALITY VALUE */}
+            <CalculatorCard 
+                title="9. Thermal Sterilization Lethality Value (F₀ Sterilization Index)"
+                description="Used in UHT milk, canned flavored milk & evaporated milk thermal validation."
+            >
+                <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-red-50 to-rose-50 p-4 rounded-xl border border-red-200 shadow-xs">
+                        <h3 className="font-bold text-sm text-red-950 mb-2 flex items-center justify-between">
+                            <span className="flex items-center gap-2">
+                                <Thermometer className="w-4 h-4 text-red-600" />
+                                F₀ Sterilization Index Formula
+                            </span>
+                            <Badge className="bg-red-600 text-white text-[10px]">UHT Validation</Badge>
+                        </h3>
+                        <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-red-200 text-red-900 font-bold shadow-inner space-y-1">
+                            <div>Lethality Factor (L) = 10^[(T - 121.11) ÷ Z]</div>
+                            <div>F₀ Value = ∫ L dt  (Target for UHT: 5.0 to 9.0 mins)</div>
+                        </div>
+                        <p className="mt-2 text-xs text-red-800 leading-relaxed">
+                            <strong>Reference Organism:</strong> <em>Bacillus stearothermophilus</em> (Z = 10°C, T_ref = 121.11°C).
+                        </p>
+                    </div>
+                </div>
+            </CalculatorCard>
+
+            {/* INDUSTRY SECRETS BANNER */}
+            <div className="p-4 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-2xl text-white shadow-md space-y-2">
+                <h4 className="font-extrabold text-sm flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-yellow-200" /> NABL & Industrial Secret QC Rule of Thumb
+                </h4>
+                <p className="text-xs text-amber-50 leading-relaxed">
+                    Always cross-verify fat & SNF ratios: In genuine unadulterated cow & buffalo milk, the SNF / Fat ratio stays strictly between 2.10 - 2.45. Any deviation outside this window alerts possible skim powder reconstitution or fat extraction!
+                </p>
+            </div>
+
         </div>
     );
 }

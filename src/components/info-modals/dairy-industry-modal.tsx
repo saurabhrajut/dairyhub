@@ -6,36 +6,14 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/context/language-context";
 import { dairyIndustryContent } from "@/lib/content/dairy-industry-content";
 import { Button } from "../ui/button";
-import {
-  ArrowLeft,
-  BookOpen,
-  Users,
-  TrendingUp,
-  Ship,
-  CheckCircle,
-  BarChart4,
-  Leaf,
-  FlaskConical,
-  Dna,
-  Thermometer,
-  ShieldCheck,
-  Globe,
-  Landmark,
-  ChevronRight,
-  LayoutGrid,
-  Beaker,
-  Milk,
-  Building2,
-  Factory,
-  Microscope // <-- Yeh import add kiya gaya hai
-} from "lucide-react";
+import { ArrowLeft, BookOpen, Users, TrendingUp, Ship, CheckCircle, BarChart4, Leaf, FlaskConical, Dna, Thermometer, ShieldCheck, Globe, Landmark, ChevronRight, LayoutGrid, Milk, Building2, Factory, Microscope } from "lucide-react";
 
 // ─────────────────────────────────────────────
 // Language-aware UI label helpers
@@ -315,7 +293,6 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string; 
   ),
 };
 
-
 // ─────────────────────────────────────────────
 // Topic group config — bilingual
 // ─────────────────────────────────────────────
@@ -355,7 +332,6 @@ const getTopicGroups = (c: any, lang: "hi" | "en") => {
     },
   ];
 };
-
 
 // ─────────────────────────────────────────────
 // Main Modal Component

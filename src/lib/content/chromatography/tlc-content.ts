@@ -26,8 +26,7 @@ export const tlcContent = {
           </ul>
         </li>
       </ul>
-      
-      
+
       <p>Is tarah, components unki polarity aur silica/solvent affinity ke basis par distinct spots mein separate ho jate hain.</p>`
     },
     methodology: {
@@ -143,8 +142,7 @@ export const tlcContent = {
           </ul>
         </li>
       </ul>
-      
-      
+
       <p>The separation efficiency depends on the balance between the analyte's affinity for the adsorbent and its solubility in the solvent (Eluotropic strength).</p>`
     },
     methodology: {

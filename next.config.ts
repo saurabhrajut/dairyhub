@@ -1,6 +1,9 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // 🚀 REQUIRED FOR ANDROID/CAPACITOR: Generates the static 'out' folder
+  output: 'export',
+
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
@@ -11,6 +14,8 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    // 🚀 Unoptimized must be true for static exports (Capacitor requirement)
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

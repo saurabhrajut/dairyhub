@@ -1,5 +1,5 @@
-import { genkit } from 'genkit';
-import { googleAI, gemini25FlashLite } from '@genkit-ai/googleai';
+import { genkit } from "genkit";
+import { googleAI, gemini25FlashLite } from "@genkit-ai/googleai";
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
 if (!geminiApiKey) {

@@ -1,40 +1,66 @@
 
 "use client";
-import { useState, Fragment, useCallback, memo, useEffect, useMemo } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  useState,
+  useCallback,
+  memo,
+  useEffect,
+  useMemo
+} from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
+} from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { chemicals, reagentRecipes } from "@/lib/data";
-import { 
-  ArrowLeft, 
-  Calculator, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Info, 
-  Beaker, 
-  FlaskConical, 
-  Eye, 
-  ChevronDown, 
-  ChevronUp 
-} from 'lucide-react';
-import { 
-  AcidIcon, 
-  BaseIcon, 
-  DilutionIcon, 
-  IndicatorIcon, 
-  PercentageSolutionIcon, 
-  ReagentIcon, 
-  SpiritSolutionIcon, 
-  StandardizationIcon, 
-  StrengthIcon 
+import {
+  ArrowLeft,
+  Calculator,
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+  Beaker,
+  FlaskConical,
+  Eye,
+  ChevronDown,
+  ChevronUp,
+  Video
+} from "lucide-react";
+import { triggerVideoTutorial } from "@/components/tutorial-videos-modal";
+import {
+  AcidIcon,
+  BaseIcon,
+  DilutionIcon,
+  IndicatorIcon,
+  PercentageSolutionIcon,
+  ReagentIcon,
+  SpiritSolutionIcon,
+  StandardizationIcon,
+  StrengthIcon
 } from "@/components/icons";
 
 type CalculatorType = 'acid-solution' | 'base-solution' | 'indicator-solution' | 'reagent-calculator' | 'percentage-solution' | 'stock-solution' | 'standardization' | 'strength-calculator' | 'spirit-solution';
@@ -81,11 +107,11 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
       <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-[92vh] sm:max-w-5xl sm:max-h-[92dvh] sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
             <>
-              <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
-                  <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-primary/10">
-                      <ArrowLeft className="h-5 w-5" />
-                  </Button>
-                  <div className="flex-1">
+              <DialogHeader className="flex-row items-center justify-between space-x-4 pr-6 shrink-0 p-4 sm:p-0">
+                  <div className="flex items-center gap-3">
+                      <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-primary/10">
+                          <ArrowLeft className="h-5 w-5" />
+                      </Button>
                       <div className="flex items-center gap-3">
                           <div className={`p-2 rounded-lg bg-gradient-to-br ${activeColor}`}>
                               {(() => {
@@ -99,6 +125,14 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                           </div>
                       </div>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => triggerVideoTutorial('solutions-prep')}
+                    className="shrink-0 text-xs font-semibold text-amber-600 hover:text-amber-800 bg-amber-50 border-amber-200 gap-1.5 rounded-full"
+                  >
+                    <Video className="w-3.5 h-3.5 text-amber-600" /> Watch Video 📺
+                  </Button>
               </DialogHeader>
               <ScrollArea className="h-full mt-6 pr-4">
                   <div className="p-4 sm:p-0">
@@ -108,7 +142,7 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
             </>
         ) : (
             <>
-               <DialogHeader className="p-4 sm:p-0">
+               <DialogHeader className="p-4 sm:p-0 flex flex-col items-center">
                   <div className="text-center space-y-2">
                       <div className="inline-flex p-3 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 mb-2">
                           <Beaker className="h-8 w-8 text-white" />
@@ -119,6 +153,14 @@ export function SolutionsPrepModal({ isOpen, setIsOpen }: { isOpen: boolean; set
                       <DialogDescription className="text-base">
                           Professional calculators with verification for laboratory solutions
                       </DialogDescription>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => triggerVideoTutorial('solutions-prep')}
+                        className="mt-2 text-xs font-semibold text-amber-600 hover:text-amber-800 bg-amber-50 border-amber-200 gap-1.5 rounded-full"
+                      >
+                        <Video className="w-3.5 h-3.5 text-amber-600" /> Watch Solutions Prep Video 📺
+                      </Button>
                   </div>
               </DialogHeader>
               <ScrollArea className="flex-1 mt-6 pr-4">

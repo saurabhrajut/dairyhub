@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +16,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { useLanguage } from "@/context/language-context";
 import { auditsModalContent } from "@/lib/content/audits-modal-content";
@@ -29,7 +29,6 @@ import {
   Building,
   Search,
   AlertTriangle,
-  FileText,
   Award,
   ChevronRight,
   LayoutGrid,
@@ -41,7 +40,7 @@ import {
   Microscope,
   FlaskConical,
   Thermometer,
-  Truck,
+  Truck
 } from "lucide-react";
 
 // ─────────────────────────────────────────────

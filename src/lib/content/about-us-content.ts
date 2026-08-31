@@ -1,5 +1,25 @@
 
-import { Bot, Lightbulb, Factory, FlaskConical, Beaker, Scale, Calculator, Settings, TestTube, ClipboardCheck, CheckSquare, Droplet, PackageCheck, Lock, DollarSign, Microscope, Recycle, Bug, ShieldCheck, FileSpreadsheet, Search, Wind, Users, GraduationCap, Atom } from "lucide-react";
+import {
+  Bot,
+  Factory,
+  Beaker,
+  Scale,
+  Settings,
+  TestTube,
+  ClipboardCheck,
+  CheckSquare,
+  Droplet,
+  PackageCheck,
+  Microscope,
+  Recycle,
+  Bug,
+  ShieldCheck,
+  FileSpreadsheet,
+  Search,
+  Wind,
+  GraduationCap,
+  Atom
+} from "lucide-react";
 import { PaneerIcon, IceCreamIcon, ReagentIcon } from "@/components/icons";
 
 export const aboutUsContent = {

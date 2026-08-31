@@ -1,59 +1,42 @@
 
 "use client"
 
-import { useState, memo, useCallback, useEffect, useMemo } from "react"
+import {
+  useState,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo
+} from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { componentProps } from "@/lib/data"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { 
-  ArrowLeft, 
-  Blend, 
-  Milk, 
-  SlidersHorizontal, 
-  Combine, 
-  Bot, 
-  Calculator, 
-  Settings, 
-  ChevronsUp, 
-  Target, 
-  Droplets, 
-  Info, 
-  Weight, 
-  Thermometer, 
-  ShieldAlert, 
-  DollarSign,
-  // ✅ NEW ICONS FOR ADVANCED CALCULATOR
-  Beaker,
-  Scale,
-  TrendingUp,
-  TrendingDown,
-  CheckCircle2,
-  AlertTriangle,
-  Plus,
-  LayoutDashboard,
-  FileText,
-  ChevronRight,
-  X
-} from 'lucide-react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { cn } from "@/lib/utils"
-import { snfFormulas } from "@/lib/data"
-import { Checkbox } from "@/components/ui/checkbox"
-// ✅ NEW IMPORTS FOR ADVANCED CALCULATOR
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { componentProps } from "@/lib/data";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, Scale, TrendingUp, TrendingDown, CheckCircle2, AlertTriangle, Plus, LayoutDashboard, FileText, ChevronRight, X, Video, Beaker } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "../ui/select";
+import { Tabs } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+import { triggerVideoTutorial } from "@/components/tutorial-videos-modal";
+import { snfFormulas } from "@/lib/data";
 
+// ✅ NEW IMPORTS FOR ADVANCED CALCULATOR
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 import dynamic from "next/dynamic";
 
@@ -63,7 +46,6 @@ const AdvancedStandardizationCalc = dynamic(() => import("./advanced-standardiza
 });
 
 type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'milk-blending' | 'clr-increase' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'two-component-standardization' | 'fat-snf-adjustment' | 'advanced-standardization';
-
 
 // 1️⃣ FIX: calculatorsInfo mein 'color' property add karein
 const calculatorsInfo = {
@@ -147,6 +129,22 @@ const calculatorsInfo = {
     },
 };
 
+const std2VideoMap: Record<string, string> = {
+  'advanced-standardization': 'std2-batch',
+  'fat-snf-clr-ts': 'std2-fat-snf-clr',
+  'milk-blending': 'std2-multi-milk',
+  'two-milk-blending-target': 'std2-multi-milk',
+  'two-component-standardization': 'std2-auto-std',
+  'fat-snf-adjustment': 'std2-fat-snf-clr',
+  'clr-increase': 'std2-clr-increase',
+  'fat-blending': 'std2-pearson-fat',
+  'reconstituted-milk': 'std2-reconstituted',
+  'recombined-milk': 'std2-recombined',
+  'clr-blending': 'std2-pearson-fat',
+  'clr-correction': 'std2-clr-correction',
+  'kg-fat-snf': 'std2-fat-snf-clr',
+};
+
 // 2️⃣ FIX: Modal Component Update karein
 export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void; }) {
   const [activeCalculator, setActiveCalculator] = useState<CalculatorType | null>(null);
@@ -168,23 +166,31 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
       <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-[90vh] sm:max-w-4xl sm:max-h-[90vh] sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
-            {/* ✅ Header Update: Added Colorful Icon here */}
-            <DialogHeader className="flex-row items-center space-x-4 pr-6 shrink-0 p-4 sm:p-0">
-              <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-white/50">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
+            {/* ✅ Header Update: Added Colorful Icon & Video Button */}
+            <DialogHeader className="flex flex-row items-center justify-between space-x-4 pr-6 shrink-0 p-4 sm:p-0">
               <div className="flex items-center gap-3">
-                 <div className={cn("p-2 rounded-lg bg-gradient-to-br text-white shadow-md", calculatorsInfo[activeCalculator].color)}>
-                    {(() => {
-                        const Icon = calculatorsInfo[activeCalculator].icon;
-                        return <Icon className="h-5 w-5" />;
-                    })()}
-                 </div>
-                 <div>
-                    <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
-                    <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
-                 </div>
+                <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-white/50">
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div className={cn("p-2 rounded-lg bg-gradient-to-br text-white shadow-md", calculatorsInfo[activeCalculator].color)}>
+                  {(() => {
+                      const Icon = calculatorsInfo[activeCalculator].icon;
+                      return <Icon className="h-5 w-5" />;
+                  })()}
+                </div>
+                <div>
+                  <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
+                  <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+                </div>
               </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => triggerVideoTutorial(std2VideoMap[activeCalculator] || 'std2-batch')}
+                className="shrink-0 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 border-blue-200 gap-1.5 rounded-full"
+              >
+                <Video className="w-3.5 h-3.5 text-blue-600" /> Watch Video 📺
+              </Button>
             </DialogHeader>
             
             <ScrollArea className="h-full mt-4 pr-2 w-full min-w-0">
@@ -195,10 +201,9 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
           </>
         ) : (
           <>
-            <DialogHeader className="p-4 sm:p-0">
+            <DialogHeader className="p-4 sm:p-0 flex flex-col items-center">
               <div className="flex justify-center mb-4">
                   <div className="p-3 bg-white rounded-xl shadow-md">
-                      {/* Generic Icon */}
                       <Blend className="h-8 w-8 text-indigo-600" />
                   </div>
               </div>
@@ -208,6 +213,14 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
               <DialogDescription className="text-center text-sm sm:text-lg">
                 Advanced calculators for precise dairy processing.
               </DialogDescription>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => triggerVideoTutorial('std2-batch')}
+                className="mt-2 text-xs font-semibold text-purple-600 hover:text-purple-800 bg-purple-50 border-purple-200 gap-1.5 rounded-full"
+              >
+                <Video className="w-3.5 h-3.5 text-purple-600" /> Watch All Standardization II Videos 📺
+              </Button>
             </DialogHeader>
 
             <ScrollArea className="flex-1 mt-4 pr-2 w-full min-w-0">

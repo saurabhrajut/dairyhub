@@ -1,5 +1,5 @@
 'use client';
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 import type { FirestorePermissionError } from './errors';
 
 // This is a client-side only event emitter.

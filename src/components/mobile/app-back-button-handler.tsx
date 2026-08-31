@@ -10,9 +10,9 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-import { LogOut, Milk, ShieldAlert } from "lucide-react";
+import { LogOut, Milk } from "lucide-react";
 
 export function AppBackButtonHandler() {
   const router = useRouter();

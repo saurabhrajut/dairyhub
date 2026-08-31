@@ -504,11 +504,6 @@ export const OFFLINE_INTERVIEW_DB: OfflineQuestion[] = [
   }
 ];
 
-
-
-
-
-
 // Helper to select questions based on keywords from resume
 export function selectOfflineQuestions(resumeText: string, experienceLevel: string): OfflineQuestion[] {
   const resumeLower = resumeText.toLowerCase();

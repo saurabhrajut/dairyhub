@@ -1,12 +1,7 @@
 'use client';
 
-import {
-  useState,
-  useEffect,
-  useMemo,
-  type ReactNode,
-} from 'react';
-import { initializeFirebase } from './index';
+import { useState, useEffect, useMemo, type ReactNode } from "react";
+import { initializeFirebase } from "./index";
 import FirebaseProvider from './provider';
 
 export function FirebaseClientProvider({

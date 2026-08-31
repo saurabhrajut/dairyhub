@@ -4,9 +4,8 @@
  * @fileOverview A flow to generate an expert response for a given topic and question.
  */
 
-import { ai } from '@/ai/genkit';
-import { GyanAIInputSchema, GyanAIOutputSchema, type GyanAIInput } from './types';
-
+import { ai } from "@/ai/genkit";
+import { GyanAIInputSchema, GyanAIOutputSchema, type GyanAIInput } from "./types";
 
 const gyanAIPrompt = ai.definePrompt({
     name: 'gyanAIPrompt',
@@ -35,13 +34,12 @@ const gyanAIFlow = ai.defineFlow(
         
         const { output } = await gyanAIPrompt(
             restOfInput,
-            { history: history || [] }
+            { history: history || [] } as any
         );
 
         return output!;
     }
 );
-
 
 export async function gyanAI(input: GyanAIInput) {
   return gyanAIFlow(input);

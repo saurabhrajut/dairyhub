@@ -14,7 +14,7 @@ runConfig:
     - variable: NEXT_PUBLIC_FIREBASE_API_KEY
       value: 'AIzaSyAthfWIq2RSTYGVS2rcmO4e6b-0IQJ4qNc'
     - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-      value: 'dhenuguide.firebaseapp.com'
+      value: 'dairyhub.co.in'
     - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
       value: 'dhenuguide'
     - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET

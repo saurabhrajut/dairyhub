@@ -367,203 +367,869 @@ export const pasteurizationContent = {
                 <li>Pasteurization does NOT sterilize milk — thermoduric organisms and spores survive, necessitating refrigerated storage and limited shelf life.</li>
             </ul>
         `,
-        simulation: `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Advanced Milk Processing Plant Simulator</title>
-                <style>
-                    body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-                    #ui-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(20, 30, 40, 0.95); border-top: 4px solid #3498db; color: white; display: flex; justify-content: space-around; align-items: flex-start; padding: 15px 10px; box-sizing: border-box; backdrop-filter: blur(5px); z-index: 10; }
-                    .panel-section { display: flex; flex-direction: column; align-items: center; padding: 0 15px; border-right: 1px solid #444; height: 100%; }
-                    .panel-section:last-child { border-right: none; }
-                    h2 { margin: 0 0 10px 0; font-size: 14px; color: #3498db; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-                    .digital-display { background: #000; color: #0f0; font-family: 'Courier New', monospace; font-size: 20px; padding: 5px 10px; border: 2px solid #555; border-radius: 4px; margin-bottom: 5px; min-width: 70px; text-align: center; }
-                    .status-light { width: 15px; height: 15px; border-radius: 50%; background: #333; border: 2px solid #555; margin: 5px; box-shadow: inset 0 0 5px #000; display: inline-block; }
-                    .status-light.on { background: #00ff00; box-shadow: 0 0 8px #00ff00; }
-                    .status-light.off { background: #ff0000; box-shadow: 0 0 8px #ff0000; }
-                    .toggle-btn { background: #444; color: #ccc; border: 1px solid #666; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 12px; margin: 2px; width: 100px; }
-                    .toggle-btn.active { background: #2ecc71; color: #fff; border-color: #27ae60; }
-                    button.main-start { background: linear-gradient(to bottom, #2c3e50, #1a252f); color: white; border: 2px solid #3498db; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
-                    button.main-start:hover { background: #34495e; box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); }
-                    button.main-start.active { background: #e74c3c; border-color: #c0392b; }
-                    #view-controls { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 5px; z-index: 20; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 8px; }
-                    #view-controls button { background: rgba(50,50,50,0.8); color: white; border: 1px solid #777; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; width: 80px; }
-                    #view-controls button:hover { background: #3498db; border-color: #3498db; }
-                    .view-label { font-size: 10px; color: #aaa; text-align: center; margin-bottom: 2px; }
-                    input[type=range] { width: 120px; cursor: pointer; }
-                    #tooltip { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; pointer-events: none; font-size: 14px; border: 1px solid #555; z-index: 10; }
-                    .legend { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; font-size: 11px; color: #ddd; z-index: 10; }
-                    .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
-                    .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
-                    @media (max-width: 768px) { 
-                        #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; height: auto; max-height: 200px; }
-                        .panel-section { flex-grow: 1; flex-basis: 45%; padding: 5px; margin-bottom: 5px; border-right: none; min-width: 140px; }
-                        h2 { font-size: 11px; margin-bottom: 5px;}
-                        .digital-display { font-size: 14px; padding: 2px 4px; }
-                        .toggle-btn, button.main-start { width: 90%; font-size: 10px; padding: 4px; }
-                        #view-controls { display: none; }
-                        .legend { display: none; }
-                        #tooltip { display: none; }
-                    }
-                </style>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
-                <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>
-            </head>
-            <body>
-                <div class="legend">
-                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks / Pipes</div>
-                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump & Motors</div>
-                    <div class="legend-item"><div class="color-box" style="background:#f39c12"></div>Regen/Separator</div>
-                    <div class="legend-item"><div class="color-box" style="background:#8e44ad"></div>Homogenizer</div>
-                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating Section</div>
-                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling Section</div>
-                </div>
-                <div id="view-controls">
-                    <div class="view-label">CAMERA VIEW</div>
-                    <button onclick="setView('front')">FRONT</button>
-                    <button onclick="setView('back')">BACK</button>
-                    <button onclick="setView('left')">LEFT</button>
-                    <button onclick="setView('right')">RIGHT</button>
-                    <button onclick="setView('top')">TOP</button>
-                    <button onclick="setView('iso')">ISO</button>
-                </div>
-                <div id="tooltip">PLANT READY. Configure & Start.</div>
-                <div id="ui-container">
-                    <div class="panel-section">
-                        <h2>Main Control</h2>
-                        <div style="display:flex; align-items:center; margin-bottom:10px;">
-                            <div id="status-pump" class="status-light"></div>
-                            <span style="font-size:12px; margin-left:5px;">FEED PUMP</span>
-                        </div>
-                        <button class="main-start" id="btn-power" onclick="toggleSystem()">START PLANT</button>
-                    </div>
-                    <div class="panel-section">
-                        <h2>Units</h2>
-                        <button class="toggle-btn" id="btn-sep" onclick="toggleSep()">Separator: OFF</button>
-                        <button class="toggle-btn" id="btn-homo" onclick="toggleHomo()">Homogenizer: OFF</button>
-                    </div>
-                    <div class="panel-section">
-                        <h2>Pasteurizer</h2>
-                        <div class="digital-display" id="temp-display">25.0°C</div>
-                        <label style="font-size:11px; color:#aaa;">Steam Valve</label>
-                        <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
-                        <span id="steam-val-text" style="font-size:12px;">0%</span>
-                    </div>
-                    <div class="panel-section">
-                        <h2>FDV Logic</h2>
-                        <div style="display:flex; gap:15px; margin-top:5px;">
-                            <div style="text-align:center;"><div id="light-fwd" class="status-light"></div><div style="font-size:10px;">SAFE</div></div>
-                            <div style="text-align:center;"><div id="light-div" class="status-light on"></div><div style="font-size:10px;">DIVERT</div></div>
-                        </div>
-                        <div style="font-size:11px; color:#aaa; margin-top:8px;">Set Point: 72.0°C</div>
-                    </div>
-                    <div class="panel-section" style="width: 180px; align-items:flex-start;">
-                        <h2>Status</h2>
-                        <div id="flow-status" style="font-size: 11px; color: #0f0; line-height:1.4;">Idle.</div>
-                    </div>
-                </div>
-                <script>
-                    let scene, camera, renderer, controls;
-                    let fdvMesh, pumpMesh, particles = [];
-                    let systemOn = false, sepOn = false, homoOn = false, steamVal = 0, currentTemp = 25.0;
-                    const targetTempSet = 72.0;
-                    let fdvState = 'DIVERT';
-                    let pathFeed, pathRegen, pathSepMain, pathSepCream, pathHomo, pathHeat, pathHold, pathSafe, pathDivert;
-                    
-                    const elTemp = document.getElementById('temp-display'),
-                          elStatus = document.getElementById('flow-status'),
-                          elLightFwd = document.getElementById('light-fwd'),
-                          elLightDiv = document.getElementById('light-div'),
-                          elPumpLight = document.getElementById('status-pump'),
-                          btnPower = document.getElementById('btn-power'),
-                          btnSep = document.getElementById('btn-sep'),
-                          btnHomo = document.getElementById('btn-homo');
+        simulation: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dairy Hub - Fullscreen Industrial HTST Pasteurization SCADA & 3D Plant</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #050811; color: #f1f5f9; }
+        body { display: flex; flex-direction: column; }
 
-                    function getRendererHeight() {
-                        const uiContainer = document.getElementById('ui-container');
-                        return window.innerHeight - (uiContainer ? uiContainer.offsetHeight : 0);
-                    }
-                    
-                    function init() {
-                        scene = new THREE.Scene();
-                        scene.background = new THREE.Color(0x222222);
-                        scene.fog = new THREE.Fog(0x222222, 30, 100);
-                        camera = new THREE.PerspectiveCamera(45, window.innerWidth / getRendererHeight(), 0.1, 1000);
-                        camera.position.set(0, 20, 35);
-                        renderer = new THREE.WebGLRenderer({ antialias: true });
-                        renderer.setSize(window.innerWidth, getRendererHeight());
-                        document.body.appendChild(renderer.domElement);
-                        controls = new THREE.OrbitControls(camera, renderer.domElement);
-                        controls.enableDamping = true; controls.maxPolarAngle = Math.PI / 2 - 0.05;
-                        const amb = new THREE.AmbientLight(0xffffff, 0.4); scene.add(amb);
-                        const sun1 = new THREE.DirectionalLight(0xffffff, 0.7); sun1.position.set(10, 30, 20); scene.add(sun1);
-                        const sun2 = new THREE.DirectionalLight(0xffbbaa, 0.4); sun2.position.set(-10, 20, -20); scene.add(sun2);
-                        buildEnvironment(); buildTanks(); buildPump(); buildProcessingLine(); buildHoldingAndFDV(); buildPipes();
-                        initPaths();
-                        window.addEventListener('resize', onWindowResize);
-                        animate();
-                    }
-                    
-                    window.setView=function(v){const d=35,h=20;let x=0,y=h,z=0;switch(v){case'front':z=d;break;case'back':z=-d;break;case'left':x=-d;break;case'right':x=d;break;case'top':y=d+15,z=1;break;case'iso':x=25,y=25,z=25;break}camera.position.set(x,y,z);camera.lookAt(0,0,0);controls.update()}
-                    
-                    function buildEnvironment(){const f=new THREE.Mesh(new THREE.PlaneGeometry(80,60),new THREE.MeshStandardMaterial({color:0x151515,roughness:.8}));f.rotation.x=-Math.PI/2;scene.add(f);scene.add(new THREE.GridHelper(80,40,0x444444,0x222222))}
-                    function buildTanks(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7,metalness:.7,roughness:.2});createTank(-25,5,0,3,10,"RAW MILK",t);createTank(-15,2.5,0,1.5,3,"BALANCE",t);createTank(20,5,-5,3,10,"SKIM/PAST.",t);createTank(20,3,5,1.5,5,"CREAM",t)}
-                    function createTank(t,e,o,i,n,s,a){const d=new THREE.Mesh(new THREE.CylinderGeometry(i,i,n,32),a);d.position.set(t,e,o);scene.add(d);const r=new THREE.CylinderGeometry(.1,.1,1.5,8);for(let e=0;e<4;e++){const a=new THREE.Mesh(r);const l=e*90*Math.PI/180;a.position.set(t+Math.cos(l)*(i-.2),.75,o+Math.sin(l)*(i-.2)),scene.add(a)}addLabel(s,t,n+1.5,o)}
-                    function buildPump(){const t=new THREE.Group;const e=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1.5,16),new THREE.MeshStandardMaterial({color:0x34495e}));e.rotation.z=Math.PI/2,t.add(e);const o=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.5,16),new THREE.MeshStandardMaterial({color:0x95a5a6}));o.rotation.x=Math.PI/2,o.position.set(.8,0,0),t.add(o),t.position.set(-10,.8,0),pumpMesh=t,scene.add(t),addLabel("PUMP",-10,2,0)}
-                    function buildProcessingLine(){createPHEUnit(-5,0,0,0xf39c12,"REGEN");const t=new THREE.Group,e=new THREE.Mesh(new THREE.CylinderGeometry(1,1.5,2),new THREE.MeshStandardMaterial({color:0xecf0f1})),o=new THREE.Mesh(new THREE.SphereGeometry(1,32,16,0,6.283185307179586,0,Math.PI/2),new THREE.MeshStandardMaterial({color:0xecf0f1}));o.position.y=1,t.add(e),t.add(o),t.position.set(-1,2,2),scene.add(t),addLabel("SEPARATOR",-1,4,2);const i=new THREE.Group,n=new THREE.Mesh(new THREE.BoxGeometry(2.5,2,1.5),new THREE.MeshStandardMaterial({color:0x8e44ad})),s=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.8),new THREE.MeshStandardMaterial({color:0xffffff}));s.rotation.z=Math.PI/2,s.position.set(0,.5,.8),i.add(n),i.add(s);const a=s.clone();a.position.set(0,0,.8),i.add(a);const d=s.clone();d.position.set(0,-.5,.8),i.add(d),i.position.set(3,1.5,0),scene.add(i),addLabel("HOMOGENIZER",3,3.5,0),createPHEUnit(7,0,0,0xe74c3c,"HEATING"),createPHEUnit(10,0,0,0x3498db,"COOLING")}
-                    function createPHEUnit(t,e,o,i,n){const s=new THREE.MeshStandardMaterial({color:i}),a=new THREE.Mesh(new THREE.BoxGeometry(1.5,2.5,2),s);a.position.set(t,2,e),scene.add(a);const d=new THREE.Mesh(new THREE.BoxGeometry(1.6,2.7,.2),new THREE.MeshStandardMaterial({color:0x2c3e50}));d.position.set(t,2,e-1.1),scene.add(d);const r=d.clone();r.position.set(t,2,e+1.1),scene.add(r),addLabel(n,t,4,e)}
-                    function buildHoldingAndFDV(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7}),e=new THREE.Group;for(let o=0;o<3;o++){const i=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,4),t);i.rotation.z=Math.PI/2,i.position.set(0,o*.3,-o*.4),e.add(i)}e.position.set(7,4,-2),scene.add(e),addLabel("HOLDING",7,5.5,-2),fdvMesh=new THREE.Mesh(new THREE.SphereGeometry(.5),new THREE.MeshStandardMaterial({color:0xecf0f1}));const o=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.8),new THREE.MeshStandardMaterial({color:0x333}));o.position.y=.5,fdvMesh.add(o),fdvMesh.position.set(10,4,-2),scene.add(fdvMesh),addLabel("FDV",10,5,-2)}
-                    function buildPipes(){const t=new THREE.MeshStandardMaterial({color:0x888888,transparent:!0,opacity:.3});createPipe([-25,1,0,-15,1,0,-15,3,0],t),createPipe([-15,.5,0,-10,.5,0],t),createPipe([-10,.5,0,-5,.5,0,-5,1,0],t),createPipe([-5,3,0,-1,3,0,-1,3,2],t),createPipe([-1,3,2,3,3,2,3,2,0],t),createPipe([3,2,0,7,2,0],t),createPipe([7,3,0,7,4,0,7,4,-2],t),createPipe([7,4,-2,10,4,-2],t),createPipe([10,4,-2,10,3,0],t),createPipe([10,1,0,20,1,0],t),createPipe([10,4,-2,10,6,-2,-15,6,-2,-15,4,0],t)}
-                    function createPipe(t,e){const o=[];for(let e=0;e<t.length;e+=3)o.push(new THREE.Vector3(t[e],t[e+1],t[e+2]));const i=new THREE.CatmullRomCurve3(o),n=new THREE.TubeGeometry(i,10,.08,8,!1),s=new THREE.Mesh(n,e);scene.add(s)}
-                    function addLabel(t,e,o,i){const n=document.createElement("canvas");n.width=256,n.height=64;const s=n.getContext("2d");s.fillStyle="rgba(0,0,0,0.6)",s.fillRect(0,0,256,64),s.font="bold 28px Arial",s.fillStyle="white",s.textAlign="center",s.textBaseline="middle",s.fillText(t,128,32);const a=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(n)}));a.position.set(e,o,i),a.scale.set(3,.75,1),scene.add(a)}
-                    function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
-                    function v(t,e,o){return new THREE.Vector3(t,e,o)}
-                    function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
-                    function updateProcessLogic() {
-                        let target = 25.0;
-                        if (systemOn) {
-                            target = 25.0 + (steamVal * 0.7); // Max ~95C
-                            if (currentTemp < target) currentTemp += 0.2;
-                            if (currentTemp > target) currentTemp -= 0.1;
-                        } else {
-                            if (currentTemp > 25) currentTemp -= 0.1;
-                        }
-                        elTemp.innerText = currentTemp.toFixed(1) + "°C";
+        /* SCADA Top Header */
+        #scada-header {
+            background: linear-gradient(180deg, #0f172a 0%, #090d16 100%);
+            border-bottom: 2px solid #1e293b;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .header-title { display: flex; align-items: center; gap: 8px; }
+        .header-title h1 { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; color: #38bdf8; text-transform: uppercase; }
+        .badge-scada { background: #0284c7; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; }
 
-                        if (systemOn && currentTemp >= targetTempSet) {
-                            fdvState = 'FORWARD';
-                            setLight(elLightFwd, true);
-                            setLight(elLightDiv, false);
-                            fdvMesh.material.color.setHex(0x2ecc71);
-                        } else {
-                            fdvState = 'DIVERT';
-                            setLight(elLightFwd, false);
-                            setLight(elLightDiv, true);
-                            fdvMesh.material.color.setHex(0xe74c3c);
-                        }
-                        let status = "System Off";
-                        if (systemOn) {
-                           status = \`Pump ON.\\nSeparator: \${sepOn ? 'Active' : 'Bypass'}\\nHomo: \${homoOn ? 'Active' : 'Bypass'}\\nMode: \${fdvState}\`;
-                        }
-                        elStatus.innerText = status;
+        .header-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .mode-badge { font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .mode-off { background: #334155; color: #94a3b8; }
+        .mode-run { background: #15803d; color: #4ade80; border: 1px solid #22c55e; box-shadow: 0 0 12px rgba(74,222,128,0.4); }
+        .mode-divert { background: #991b1b; color: #fca5a5; border: 1px solid #ef4444; animation: pulse-red 1s infinite alternate; }
+
+        @keyframes pulse-red { 0% { opacity: 0.8; } 100% { opacity: 1; box-shadow: 0 0 15px rgba(239,68,68,0.7); } }
+
+        /* Large Touch Buttons for Real Industrial Feel */
+        .scada-btn {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #f1f5f9;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease-out;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            touch-action: manipulation;
+        }
+        .scada-btn:active { transform: scale(0.95); background: #334155; }
+        .scada-btn.primary { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #38bdf8; color: #fff; }
+        .scada-btn.success { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); border-color: #4ade80; color: #fff; }
+        .scada-btn.danger { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-color: #f87171; color: #fff; }
+        .scada-btn.warning { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); border-color: #fbbf24; color: #fff; }
+        .scada-btn.active { border-color: #00f2fe; box-shadow: 0 0 12px rgba(0,242,254,0.5); }
+
+        /* SCADA KPIs Strip */
+        #scada-kpis {
+            background: #090d16;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 6px;
+            padding: 6px 10px;
+            border-bottom: 1px solid #1e293b;
+            z-index: 40;
+        }
+        .kpi-card { background: #131c2e; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 8px; display: flex; flex-direction: column; }
+        .kpi-label { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 1px; }
+        .kpi-val { font-family: 'Courier New', monospace; font-size: 16px; font-weight: 800; color: #00f2fe; }
+        .kpi-unit { font-size: 10px; color: #94a3b8; margin-left: 2px; }
+        .kpi-sub { font-size: 9px; color: #475569; margin-top: 1px; }
+
+        /* Viewport Container */
+        #viewport-container { flex: 1; position: relative; width: 100%; height: 100%; background: #02040a; }
+        #canvas-3d { width: 100%; height: 100%; display: block; }
+
+        /* 3D Floating Overlays */
+        #camera-presets { display: none !important; }
+
+        /* 360° Touch Rotate Overlay Removed */
+        #touch-rotate-pad { display: none !important; }
+
+        /* Flow Guide / Step Banner */
+        #flow-banner {
+            position: absolute; top: 6px; left: 6px; z-index: 30;
+            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);
+            padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(2, 132, 199, 0.4);
+            max-width: 220px; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
+        }
+        #flow-banner:hover { background: rgba(15, 23, 42, 0.95); max-width: 280px; }
+        .flow-title { font-size: 9px; font-weight: 800; color: #38bdf8; text-transform: uppercase; margin-bottom: 1px; display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+        .flow-desc { font-size: 9px; color: #cbd5e1; line-height: 1.25; max-height: 32px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+        /* SCADA Control Console Bottom */
+        #scada-console {
+            background: #0f172a; border-top: 2px solid #1e293b;
+            padding: 10px; z-index: 50; display: flex; flex-direction: column; gap: 8px;
+            max-height: 220px; overflow-y: auto;
+        }
+        .console-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .control-card { background: #131c2e; border: 1px solid #1e293b; border-radius: 8px; padding: 8px 12px; flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 6px; }
+        .card-header { font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase; border-bottom: 1px solid #1e293b; padding-bottom: 3px; display: flex; justify-content: space-between; }
+
+        .slider-group { display: flex; align-items: center; gap: 8px; }
+        .slider-group label { font-size: 11px; font-weight: 600; color: #94a3b8; min-width: 80px; }
+        input[type=range] { flex: 1; accent-color: #0284c7; height: 6px; cursor: pointer; }
+        .val-tag { font-family: monospace; font-size: 11px; font-weight: 700; color: #00f2fe; min-width: 50px; text-align: right; }
+
+        /* Detailed Regeneration Flow Modal Overlay */
+        #regen-modal {
+            position: absolute; inset: 0; z-index: 100; background: rgba(5, 8, 17, 0.95); backdrop-filter: blur(12px);
+            display: none; flex-direction: column; padding: 16px; overflow-y: auto;
+        }
+        #regen-modal.open { display: flex; }
+        .modal-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 12px; }
+        .modal-head h2 { font-size: 16px; font-weight: 800; color: #38bdf8; text-transform: uppercase; }
+
+        .regen-diagram { background: #090d16; border: 1px solid #1e293b; border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
+        .stream-box { border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+        .stream-cold { background: rgba(14, 165, 233, 0.15); border: 1px solid #0ea5e9; }
+        .stream-hot { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; }
+        .stream-title { font-size: 12px; font-weight: 800; display: flex; justify-content: space-between; }
+        .stream-cold .stream-title { color: #38bdf8; }
+        .stream-hot .stream-title { color: #fca5a5; }
+
+        /* Mobile Responsive adjustments */
+        @media (max-width: 640px) {
+            #scada-header h1 { font-size: 11px; }
+            .scada-btn { padding: 6px 10px; font-size: 11px; }
+            #camera-presets { top: 6px; right: 6px; padding: 4px; }
+            #flow-banner { max-width: 200px; padding: 6px 8px; }
+            .flow-desc { font-size: 9px; }
+            #touch-rotate-pad { display: grid; }
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <!-- SCADA Header -->
+    <div id="scada-header">
+        <div class="header-title">
+            <span class="badge-scada">SCADA 5.0</span>
+            <h1>HTST Pasteurizer Plant (10,000 LPH)</h1>
+        </div>
+        <div class="header-controls">
+            <div id="sys-mode-badge" class="mode-badge mode-off">OFFLINE</div>
+            <button class="scada-btn primary" onclick="toggleFullscreen()">📺 FULLSCREEN</button>
+            <button class="scada-btn" id="btn-auto-rotate" onclick="toggleAutoRotate()">🔄 360° ROTATE</button>
+            <button class="scada-btn warning" onclick="openRegenModal()">🔄 REGEN FLOW DETAIL</button>
+            <button class="scada-btn danger" onclick="triggerEStop()">E-STOP</button>
+        </div>
+    </div>
+
+    <!-- SCADA KPIs -->
+    <div id="scada-kpis">
+        <div class="kpi-card">
+            <span class="kpi-label">Pasteur Temp</span>
+            <div><span class="kpi-val" id="kpi-temp">25.0</span><span class="kpi-unit">°C</span></div>
+            <span class="kpi-sub">Target: 72.5°C</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Holding Time</span>
+            <div><span class="kpi-val" id="kpi-time">15.4</span><span class="kpi-unit">sec</span></div>
+            <span class="kpi-sub">Min Reg: 15.0 s</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">FDV Valve</span>
+            <div><span class="kpi-val" id="kpi-fdv" style="color:#ef4444;">DIVERT</span></div>
+            <span class="kpi-sub" id="kpi-fdv-sub">Recycling Milk</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Feed Flow</span>
+            <div><span class="kpi-val" id="kpi-flow">10,000</span><span class="kpi-unit">LPH</span></div>
+            <span class="kpi-sub">VFD Speed</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Regen Heat Rec.</span>
+            <div><span class="kpi-val">91.8</span><span class="kpi-unit">%</span></div>
+            <span class="kpi-sub">Energy Saved</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">ALP QA Test</span>
+            <div><span class="kpi-val" id="kpi-alp" style="color:#4ade80;">PASS</span></div>
+            <span class="kpi-sub">&lt; 350 mU/L</span>
+        </div>
+    </div>
+
+    <!-- Main Viewport -->
+    <div id="viewport-container">
+        <canvas id="canvas-3d"></canvas>
+
+        <!-- Dynamic Process Step Banner -->
+        <div id="flow-banner">
+            <div class="flow-title">
+                <span>📍 Milk Flow Pipeline Trace</span>
+                <span id="step-num" style="color:#22c55e; font-size:10px;">Step 1/10</span>
+            </div>
+            <div class="flow-desc" id="step-desc">
+                Raw Cold Milk (4°C) is fed from Raw Silo into Balance Tank to maintain constant hydraulic pressure head.
+            </div>
+        </div>
+
+        <!-- Camera Views Removed -->
+
+        <!-- Touch Rotate D-Pad Removed -->
+    </div>
+
+    <!-- SCADA Control Console Bottom -->
+    <div id="scada-console">
+        <div class="console-row">
+            <!-- Master Start & Flow -->
+            <div class="control-card">
+                <div class="card-header">
+                    <span>1. Plant Operation</span>
+                    <span id="lbl-master-state" style="color:#94a3b8;">OFF</span>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="scada-btn success" id="btn-master" style="flex:1; padding:10px;" onclick="toggleMasterPower()">▶ START HTST PLANT</button>
+                    <button class="scada-btn warning" id="btn-cip" onclick="toggleCIP()">CIP CLEAN</button>
+                </div>
+                <div class="slider-group">
+                    <label>Feed Flow (LPH)</label>
+                    <input type="range" id="rng-flow" min="3000" max="15000" step="500" value="10000" oninput="onFlowChange(this.value)">
+                    <span class="val-tag" id="lbl-flow">10,000 LPH</span>
+                </div>
+            </div>
+
+            <!-- Heating & Temperature PID -->
+            <div class="control-card">
+                <div class="card-header">
+                    <span>2. Heating Loop PID</span>
+                    <span style="color:#4ade80;">SP: 72.5°C</span>
+                </div>
+                <div class="slider-group">
+                    <label>Steam Valve %</label>
+                    <input type="range" id="rng-steam" min="0" max="100" value="0" oninput="onSteamChange(this.value)">
+                    <span class="val-tag" id="lbl-steam">0%</span>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="scada-btn primary" id="btn-pid" style="flex:1;" onclick="togglePID()">PID AUTO HEATING: ON</button>
+                </div>
+            </div>
+
+            <!-- Auxiliaries -->
+            <div class="control-group control-card">
+                <div class="card-header">
+                    <span>3. Aux Machinery</span>
+                    <span>Separation & Homo</span>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="scada-btn" id="btn-sep" style="flex:1;" onclick="toggleSeparator()">Separator (6k RPM)</button>
+                    <button class="scada-btn" id="btn-homo" style="flex:1;" onclick="toggleHomogenizer()">Homogenizer (200 BAR)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Regeneration Heat Exchange Flow Modal -->
+    <div id="regen-modal">
+        <div class="modal-head">
+            <h2>🔄 REGENERATION HEAT EXCHANGE & COUNTER-CURRENT FLOW DEEP DIVE</h2>
+            <button class="scada-btn danger" onclick="closeRegenModal()">✖ CLOSE</button>
+        </div>
+
+        <div style="font-size:12px; color:#cbd5e1; line-height:1.6; margin-bottom:12px;">
+            HTST Pasteurization plant me <strong>Regeneration Section</strong> sabse important energy-saving unit hai. Isme hot pasteurized milk aur cold raw milk aamne-saamne counter-current direction me flow karte hain bina ek doosre me mix huye (thin stainless steel corrugated plates ke through).
+        </div>
+
+        <div class="regen-diagram">
+            <div class="stream-box stream-cold">
+                <div class="stream-title">
+                    <span>🔵 COLD RAW MILK STREAM (INFLOW)</span>
+                    <span>4°C ➔ 55°C (PRE-HEATED)</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8;">
+                    <strong>Path:</strong> Raw Silo ➔ Balance Tank ➔ Pump ➔ PHE Regeneration Section In (4°C).<br>
+                    Return hot pasteurized milk ki garmi absorb karke raw milk temperature 55°C tak garam ho jaata hai bina kisi extra steam fuel ke! Iske baad ye Cream Separator aur Homogenizer me jaata hai.
+                </div>
+            </div>
+
+            <div class="stream-box stream-hot">
+                <div class="stream-title">
+                    <span>🔴 HOT PASTEURIZED MILK STREAM (RETURN FLOW)</span>
+                    <span>72.5°C ➔ 22°C (PRE-COOLED)</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8;">
+                    <strong>Path:</strong> Holding Tube (72.5°C, 15 sec) ➔ Flow Diversion Valve (FORWARD) ➔ PHE Regeneration Section Return.<br>
+                    Apni thermal heat naye aane wale cold raw milk ko transfer karke, garam milk auto pre-cool ho jaata hai (72.5°C se 22°C tak). Phir ye final Ice-Water Chilling Section me jaakar 4°C par storage silo me chala jaata hai.
+                </div>
+            </div>
+        </div>
+
+        <div style="background:#1e293b; padding:10px; border-radius:8px; font-size:11px; color:#38bdf8; font-weight:700;">
+            ⚡ ENERGY RECOVERY EFFICIENCY: 91.8% Steam & Chilling Energy Saved!
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer Engine (Sound FX)
+        var audioCtx = null, audioEnabled = true;
+
+        function initAudio() {
+            if (audioCtx) return;
+            try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+        }
+
+        function playSound(type) {
+            if (!audioEnabled) return;
+            initAudio();
+            if (!audioCtx) return;
+            var now = audioCtx.currentTime;
+            if (type === 'click') {
+                var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+                gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0, now + 0.05);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.05);
+            } else if (type === 'fdv_switch') {
+                var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now);
+                osc.frequency.linearRampToValueAtTime(600, now + 0.15);
+                gain.gain.setValueAtTime(0.5, now); gain.gain.linearRampToValueAtTime(0, now + 0.15);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.15);
+            } else if (type === 'alarm') {
+                var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(880, now);
+                gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.2);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.2);
+            }
+        }
+
+        // SCADA State
+        var masterPower = false;
+        var isCIP = false;
+        var pidAuto = true;
+        var sepActive = false;
+        var homoActive = false;
+
+        var flowRateLPH = 10000;
+        var steamPercent = 0;
+        var currentTemp = 25.0;
+        var targetTemp = 72.5;
+        var holdingTimeSec = 15.4;
+        var fdvState = 'DIVERT';
+
+        // Three.js Variables
+        var scene, camera, renderer, controls;
+        var pumpImpeller, separatorDrum, fdvStemMesh, phePlateMesh;
+        var rawParticles = [], returnParticles = [];
+        var pathRawFeed, pathRegenIn, pathSep, pathHomo, pathHeater, pathHolding, pathFDVForward, pathFDVDivert, pathRegenReturn, pathChiller;
+
+        // Flow Trace Steps
+        var flowSteps = [
+            { title: "Step 1: Balance Tank Feed", desc: "Raw cold milk (4°C) flows from Raw Silo into Constant Level Balance Tank." },
+            { title: "Step 2: Regeneration Pre-Heat", desc: "Raw milk enters Plate Heat Exchanger (PHE) Regeneration Section, absorbing heat from pasteurized return milk to reach ~55°C." },
+            { title: "Step 3: Cream Separation", desc: "Pre-heated milk (55°C) enters 6,000 RPM Disc Bowl Separator for fat standardization and cream extraction." },
+            { title: "Step 4: High Pressure Homogenization", desc: "Milk passes through 2-stage Homogenizer at 200 BAR to reduce fat globules below 2 microns." },
+            { title: "Step 5: PHE Steam Heating", desc: "Milk enters PHE Heating Section, heated by steam/hot water to target pasteurization temperature (72.5°C)." },
+            { title: "Step 6: Holding Tube (CCP-1)", desc: "Hot milk flows through calibrated Holding Tube for minimum 15.0 seconds for pathogen destruction." },
+            { title: "Step 7: Flow Diversion Valve Safety", desc: "Temperature sensor (TT-101) checks milk. If ≥72°C, FDV shifts FORWARD. If <72°C, FDV DIVERTS milk back to Balance Tank." },
+            { title: "Step 8: Regeneration Pre-Cooling", desc: "Safe pasteurized milk returns through Regeneration Section, transferring its heat to incoming cold raw milk and cooling down to 22°C." },
+            { title: "Step 9: Chilled Water Cooling", desc: "Pasteurized milk enters final Cooling Section (chilled water 2°C) to rapidly cool down to 4°C." },
+            { title: "Step 10: Pasteurized Storage Silo", desc: "Finished pasteurized milk is stored in sterile Pasteurized Silo ready for pouch/carton packaging!" }
+        ];
+        var currentStepIdx = 0;
+
+        function init3D() {
+            var container = document.getElementById('viewport-container');
+            var canvas = document.getElementById('canvas-3d');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x050811);
+            scene.fog = new THREE.FogExp2(0x050811, 0.012);
+
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(22, 18, 28);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxPolarAngle = Math.PI / 2 - 0.02;
+
+            var ambLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambLight);
+
+            var dirLight1 = new THREE.DirectionalLight(0x38bdf8, 0.9);
+            dirLight1.position.set(25, 45, 25);
+            dirLight1.castShadow = true;
+            scene.add(dirLight1);
+
+            var dirLight2 = new THREE.DirectionalLight(0xef4444, 0.5);
+            dirLight2.position.set(-20, 20, -20);
+            scene.add(dirLight2);
+
+            buildFloorGrid();
+            buildPlantMachinery();
+            initFlowPaths();
+
+            window.addEventListener('resize', onWindowResize);
+            animate();
+        }
+
+        function buildFloorGrid() {
+            var floorGeo = new THREE.PlaneGeometry(120, 120);
+            var floorMat = new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.8, metalness: 0.2 });
+            var floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            var grid = new THREE.GridHelper(120, 60, 0x1e293b, 0x0f172a);
+            grid.position.y = 0.01;
+            scene.add(grid);
+        }
+
+        var ssMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.9, roughness: 0.15 });
+        var pipeMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8, roughness: 0.2, transparent: true, opacity: 0.6 });
+        var darkMetal = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.7, roughness: 0.4 });
+
+        function buildPlantMachinery() {
+            createSilo(-26, 0, "RAW MILK SILO\\n(4°C)", 0x38bdf8);
+
+            var balGroup = new THREE.Group();
+            var balTank = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.8, 3, 32), ssMat);
+            balTank.position.y = 1.5;
+            balGroup.add(balTank);
+            balGroup.position.set(-16, 0, 0);
+            scene.add(balGroup);
+            createLabel(-16, 4, 0, "1. BALANCE TANK");
+
+            var pumpGroup = new THREE.Group();
+            var pBase = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 1.5), darkMetal);
+            pBase.position.y = 0.5;
+            pumpGroup.add(pBase);
+
+            var pVolute = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.6, 24), ssMat);
+            pVolute.rotation.x = Math.PI / 2;
+            pVolute.position.set(0.6, 1.2, 0);
+            pumpGroup.add(pVolute);
+
+            pumpImpeller = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.2, 0.3), new THREE.MeshBasicMaterial({ color: 0x00f2fe }));
+            pumpImpeller.position.set(0.6, 1.2, 0);
+            pumpGroup.add(pumpImpeller);
+
+            pumpGroup.position.set(-10, 0, 0);
+            scene.add(pumpGroup);
+            createLabel(-10, 2.5, 0, "BOOSTER PUMP");
+
+            // Plate Heat Exchanger (PHE)
+            var pheGroup = new THREE.Group();
+            var frame1 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 4.5, 3), darkMetal);
+            frame1.position.set(-3, 2.25, 0);
+            var frame2 = frame1.clone(); frame2.position.x = 5;
+            pheGroup.add(frame1); pheGroup.add(frame2);
+
+            // PHE Plates (Regeneration, Heating, Cooling)
+            var pRegen = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.5, 2.5), new THREE.MeshStandardMaterial({ color: 0x0ea5e9, metalness: 0.8, transparent: true, opacity: 0.85 }));
+            pRegen.position.set(-1.2, 2.25, 0);
+            var pHeat = new THREE.Mesh(new THREE.BoxGeometry(1.8, 3.5, 2.5), new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.8, transparent: true, opacity: 0.85 }));
+            pHeat.position.set(1.2, 2.25, 0);
+            var pCool = new THREE.Mesh(new THREE.BoxGeometry(1.5, 3.5, 2.5), new THREE.MeshStandardMaterial({ color: 0x06b6d4, metalness: 0.8, transparent: true, opacity: 0.85 }));
+            pCool.position.set(3.2, 2.25, 0);
+            pheGroup.add(pRegen); pheGroup.add(pHeat); pheGroup.add(pCool);
+
+            pheGroup.position.set(-2, 0, 0);
+            scene.add(pheGroup);
+            createLabel(-1, 5.2, 0, "2,5,8,9. PHE (REGEN / HEAT / COOL)");
+
+            // Separator
+            var sepGroup = new THREE.Group();
+            var sBase = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.5, 2, 32), darkMetal);
+            sBase.position.y = 1;
+            sepGroup.add(sBase);
+
+            separatorDrum = new THREE.Mesh(new THREE.ConeGeometry(1.4, 2, 32), ssMat);
+            separatorDrum.position.y = 2.8;
+            sepGroup.add(separatorDrum);
+
+            sepGroup.position.set(5, 0, 5);
+            scene.add(sepGroup);
+            createLabel(5, 4.5, 5, "3. CREAM SEPARATOR (6000 RPM)");
+
+            // Homogenizer
+            var homoGroup = new THREE.Group();
+            var hBlock = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.5, 2.2), darkMetal);
+            hBlock.position.y = 1.25;
+            homoGroup.add(hBlock);
+
+            homoGroup.position.set(5, 0, -5);
+            scene.add(homoGroup);
+            createLabel(5, 3.8, -5, "4. HOMOGENIZER (200 BAR)");
+
+            // Holding Tube
+            var holdGroup = new THREE.Group();
+            var holdTubeGeo = new THREE.TorusGeometry(2.0, 0.18, 16, 100, Math.PI * 4);
+            var holdTube = new THREE.Mesh(holdTubeGeo, ssMat);
+            holdTube.rotation.x = Math.PI / 2;
+            holdGroup.add(holdTube);
+            holdGroup.position.set(14, 3, 0);
+            scene.add(holdGroup);
+            createLabel(14, 5.8, 0, "6. HOLDING TUBE (15 SEC)");
+
+            // FDV
+            var fdvGroup = new THREE.Group();
+            var fdvBody = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.4, 16), ssMat);
+            fdvGroup.add(fdvBody);
+
+            fdvStemMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 1.2, 16), new THREE.MeshStandardMaterial({ color: 0xef4444 }));
+            fdvStemMesh.position.y = 1.1;
+            fdvGroup.add(fdvStemMesh);
+
+            fdvGroup.position.set(20, 2, 0);
+            scene.add(fdvGroup);
+            createLabel(20, 4.2, 0, "7. FLOW DIVERSION VALVE (CCP-1)");
+
+            createSilo(28, 0, "PASTEURIZED SILO\\n(4°C)", 0x22c55e);
+
+            buildPipes();
+        }
+
+        function createSilo(x, z, title, colorHex) {
+            var group = new THREE.Group();
+            var silo = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 9, 32), ssMat);
+            silo.position.y = 4.5;
+            group.add(silo);
+
+            var cap = new THREE.Mesh(new THREE.ConeGeometry(2.8, 1.5, 32), ssMat);
+            cap.position.y = 9.75;
+            group.add(cap);
+
+            var ring = new THREE.Mesh(new THREE.TorusGeometry(2.85, 0.1, 16, 32), new THREE.MeshBasicMaterial({ color: colorHex }));
+            ring.rotation.x = Math.PI / 2;
+            ring.position.y = 4.5;
+            group.add(ring);
+
+            group.position.set(x, 0, z);
+            scene.add(group);
+            createLabel(x, 11.5, z, title);
+        }
+
+        function buildPipes() {
+            createTubePath([v(-26,1,0), v(-16,1,0)]);
+            createTubePath([v(-16,1,0), v(-10,1,0)]);
+            createTubePath([v(-10,1,0), v(-4,1,0), v(-4,2.25,0)]);
+            createTubePath([v(-2,2.25,0), v(5,2.25,0), v(5,2.25,5)]);
+            createTubePath([v(5,2.25,5), v(5,2.25,0), v(5,2.25,-5)]);
+            createTubePath([v(5,2,-5), v(0,2,0), v(0,3,0), v(14,3,0)]);
+            createTubePath([v(14,3,0), v(20,2,0)]);
+            createTubePath([v(20,2,0), v(20,4.5,0), v(-3.2,4.5,0), v(-3.2,2.25,0)]);
+            createTubePath([v(-3.2,2.25,0), v(1.2,2.25,0), v(28,2,0)]);
+            createTubePath([v(20,2,0), v(20,6,0), v(-16,6,0), v(-16,3,0)]);
+        }
+
+        function createTubePath(points) {
+            var curve = new THREE.CatmullRomCurve3(points);
+            var tubeGeo = new THREE.TubeGeometry(curve, 40, 0.12, 8, false);
+            var mesh = new THREE.Mesh(tubeGeo, pipeMat);
+            scene.add(mesh);
+        }
+
+        function createLabel(x, y, z, text) {
+            var canvas = document.createElement('canvas');
+            canvas.width = 256; canvas.height = 64;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, 256, 64);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(0, 0, 256, 64);
+
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 128, 32);
+
+            var texture = new THREE.CanvasTexture(canvas);
+            var spriteMat = new THREE.SpriteMaterial({ map: texture });
+            var sprite = new THREE.Sprite(spriteMat);
+            sprite.position.set(x, y, z);
+            sprite.scale.set(4, 1, 1);
+            scene.add(sprite);
+        }
+
+        function v(x, y, z) { return new THREE.Vector3(x, y, z); }
+
+        function initFlowPaths() {
+            pathRawFeed = new THREE.CatmullRomCurve3([v(-26,1,0), v(-16,1,0), v(-10,1,0)]);
+            pathRegenIn = new THREE.CatmullRomCurve3([v(-10,1,0), v(-4,1,0), v(-4,2.25,0)]);
+            pathSep     = new THREE.CatmullRomCurve3([v(-2,2.25,0), v(5,2.25,0), v(5,2.25,5)]);
+            pathHomo    = new THREE.CatmullRomCurve3([v(5,2.25,5), v(5,2.25,0), v(5,2.25,-5)]);
+            pathHeater  = new THREE.CatmullRomCurve3([v(5,2,-5), v(0,2,0), v(0,3,0), v(14,3,0)]);
+            pathHolding = new THREE.CatmullRomCurve3([v(14,3,0), v(20,2,0)]);
+            pathFDVForward = new THREE.CatmullRomCurve3([v(20,2,0), v(20,4.5,0), v(-3.2,4.5,0), v(-3.2,2.25,0)]);
+            pathRegenReturn = new THREE.CatmullRomCurve3([v(-3.2,2.25,0), v(1.2,2.25,0)]);
+            pathChiller = new THREE.CatmullRomCurve3([v(1.2,2.25,0), v(28,2,0)]);
+            pathFDVDivert  = new THREE.CatmullRomCurve3([v(20,2,0), v(20,6,0), v(-16,6,0), v(-16,3,0)]);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            updateProcessPhysics();
+            updateParticles();
+
+            if (masterPower) {
+                if (pumpImpeller) pumpImpeller.rotation.z += (flowRateLPH / 10000) * 0.3;
+                if (sepActive && separatorDrum) separatorDrum.rotation.y += 0.4;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function updateProcessPhysics() {
+            if (masterPower) {
+                var targetT = 25.0;
+                if (pidAuto) {
+                    targetT = targetTemp;
+                    steamPercent = Math.min(100, Math.max(0, (targetT - 25.0) / 0.65));
+                    var rngSteam = document.getElementById('rng-steam');
+                    var lblSteam = document.getElementById('lbl-steam');
+                    if (rngSteam) rngSteam.value = steamPercent.toFixed(0);
+                    if (lblSteam) lblSteam.innerText = steamPercent.toFixed(0) + '%';
+                } else {
+                    targetT = 25.0 + (steamPercent * 0.65);
+                }
+
+                currentTemp += (targetT - currentTemp) * 0.08;
+
+                holdingTimeSec = (15.4 * 10000) / flowRateLPH;
+
+                if (currentTemp >= 71.5 && holdingTimeSec >= 14.5) {
+                    if (fdvState !== 'FORWARD') playSound('fdv_switch');
+                    fdvState = 'FORWARD';
+                    if (fdvStemMesh) fdvStemMesh.material.color.setHex(0x22c55e);
+                } else {
+                    if (fdvState !== 'DIVERT') {
+                        playSound('fdv_switch');
+                        playSound('alarm');
                     }
-                    function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
-                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:0xffffff}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
-                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(0xf1c40f)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(0x2ecc71)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(0xe74c3c)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(0xffffff)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
-                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add('active'),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove('active'),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
-                    function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF";btnSep.classList.toggle('active')}
-                    function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF";btnHomo.classList.toggle('active')}
-                    window.updateSteam=function(t){steamVal=parseInt(t),document.getElementById("steam-val-text").innerText=t+"%"}
-                    function setLight(t,e){e?(t.classList.add("on"),t.classList.remove("off")):(t.classList.add("off"),t.classList.remove("on"))}
-                    function onWindowResize(){camera.aspect=window.innerWidth/getRendererHeight(),camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,getRendererHeight())}
-                    init();
-                <\/script>
-            </body>
-            </html>
-        `
+                    fdvState = 'DIVERT';
+                    if (fdvStemMesh) fdvStemMesh.material.color.setHex(0xef4444);
+                }
+            } else {
+                currentTemp += (25.0 - currentTemp) * 0.08;
+                fdvState = 'DIVERT';
+                if (fdvStemMesh) fdvStemMesh.material.color.setHex(0xef4444);
+            }
+
+            var kpiTemp = document.getElementById('kpi-temp');
+            var kpiTime = document.getElementById('kpi-time');
+            if (kpiTemp) kpiTemp.innerText = currentTemp.toFixed(1);
+            if (kpiTime) kpiTime.innerText = holdingTimeSec.toFixed(1);
+
+            var fdvEl = document.getElementById('kpi-fdv');
+            var fdvSub = document.getElementById('kpi-fdv-sub');
+            if (fdvEl) {
+                if (fdvState === 'FORWARD') {
+                    fdvEl.innerText = "FORWARD"; fdvEl.style.color = "#4ade80";
+                    if (fdvSub) fdvSub.innerText = "Safe Milk -> Silo";
+                } else {
+                    fdvEl.innerText = "DIVERT"; fdvEl.style.color = "#ef4444";
+                    if (fdvSub) fdvSub.innerText = "Recycling to Tank";
+                }
+            }
+        }
+
+        function updateParticles() {
+            if (!masterPower) return;
+            if (Math.random() < 0.35) spawnParticle();
+
+            for (var i = rawParticles.length - 1; i >= 0; i--) {
+                var p = rawParticles[i];
+                p.progress += 0.015 * (flowRateLPH / 10000);
+                if (p.path) p.mesh.position.copy(p.path.getPoint(Math.min(1, p.progress)));
+
+                if (p.progress >= 1) {
+                    p.progress = 0;
+                    switch (p.stage) {
+                        case 'raw': p.path = pathRegenIn; p.stage = 'regen_in'; p.mesh.material.color.setHex(0x38bdf8); updateStepBanner(1); break;
+                        case 'regen_in': p.path = sepActive ? pathSep : pathHomo; p.stage = sepActive ? 'sep' : 'homo'; p.mesh.material.color.setHex(0xfacc15); updateStepBanner(2); break;
+                        case 'sep': p.path = pathHomo; p.stage = 'homo'; updateStepBanner(3); break;
+                        case 'homo': p.path = pathHeater; p.stage = 'heat'; updateStepBanner(4); break;
+                        case 'heat': p.path = pathHolding; p.stage = 'hold'; p.mesh.material.color.setHex(0xef4444); updateStepBanner(5); break;
+                        case 'hold':
+                            if (fdvState === 'FORWARD') {
+                                p.path = pathFDVForward; p.stage = 'regen_return'; p.mesh.material.color.setHex(0xf97316); updateStepBanner(6);
+                            } else {
+                                p.path = pathFDVDivert; p.stage = 'divert'; p.mesh.material.color.setHex(0xef4444); updateStepBanner(7);
+                            }
+                            break;
+                        case 'divert': p.path = pathRawFeed; p.stage = 'raw'; p.mesh.material.color.setHex(0x38bdf8); updateStepBanner(7); break;
+                        case 'regen_return': p.path = pathRegenReturn; p.stage = 'regen_cool'; updateStepBanner(8); break;
+                        case 'regen_cool': p.path = pathChiller; p.stage = 'done'; p.mesh.material.color.setHex(0x22c55e); updateStepBanner(9); break;
+                        default:
+                            scene.remove(p.mesh);
+                            rawParticles.splice(i, 1);
+                            updateStepBanner(10);
+                            break;
+                    }
+                }
+            }
+        }
+
+        function spawnParticle() {
+            var pGeo = new THREE.SphereGeometry(0.14, 8, 8);
+            var pMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+            var pMesh = new THREE.Mesh(pGeo, pMat);
+            scene.add(pMesh);
+            rawParticles.push({ mesh: pMesh, path: pathRawFeed, progress: 0, stage: 'raw' });
+        }
+
+        function updateStepBanner(stepNum) {
+            currentStepIdx = stepNum - 1;
+            document.getElementById('step-num').innerText = 'Step ' + stepNum + '/10';
+            document.getElementById('step-desc').innerText = flowSteps[currentStepIdx].desc;
+        }
+
+        function toggleMasterPower() {
+            masterPower = !masterPower;
+            playSound('click');
+            var btn = document.getElementById('btn-master');
+            var badge = document.getElementById('sys-mode-badge');
+            var lbl = document.getElementById('lbl-master-state');
+
+            if (masterPower) {
+                btn.innerText = "⏹ STOP HTST PLANT"; btn.className = "scada-btn danger";
+                badge.innerText = "RUNNING (PROD)"; badge.className = "mode-badge mode-run";
+                lbl.innerText = "RUNNING"; lbl.style.color = "#4ade80";
+            } else {
+                btn.innerText = "▶ START HTST PLANT"; btn.className = "scada-btn success";
+                badge.innerText = "OFFLINE"; badge.className = "mode-badge mode-off";
+                lbl.innerText = "OFF"; lbl.style.color = "#94a3b8";
+            }
+        }
+
+        function toggleCIP() {
+            isCIP = !isCIP;
+            playSound('click');
+            var badge = document.getElementById('sys-mode-badge');
+            badge.innerText = isCIP ? "CIP CLEANING" : (masterPower ? "RUNNING (PROD)" : "OFFLINE");
+            badge.className = isCIP ? "mode-badge mode-divert" : (masterPower ? "mode-badge mode-run" : "mode-badge mode-off");
+        }
+
+        function onFlowChange(val) {
+            flowRateLPH = parseFloat(val);
+            document.getElementById('lbl-flow').innerText = flowRateLPH.toLocaleString() + ' LPH';
+            document.getElementById('kpi-flow').innerText = flowRateLPH.toLocaleString();
+        }
+
+        function onSteamChange(val) {
+            steamPercent = parseFloat(val);
+            document.getElementById('lbl-steam').innerText = steamPercent + '%';
+        }
+
+        function togglePID() {
+            pidAuto = !pidAuto;
+            playSound('click');
+            var btn = document.getElementById('btn-pid');
+            btn.innerText = pidAuto ? "PID AUTO HEATING: ON" : "PID MANUAL STEAM";
+            btn.className = pidAuto ? "scada-btn primary" : "scada-btn warning";
+        }
+
+        function toggleSeparator() {
+            sepActive = !sepActive;
+            playSound('click');
+            var btn = document.getElementById('btn-sep');
+            btn.innerText = sepActive ? "Separator: ON (6k)" : "Separator: OFF";
+            btn.classList.toggle('active');
+        }
+
+        function toggleHomogenizer() {
+            homoActive = !homoActive;
+            playSound('click');
+            var btn = document.getElementById('btn-homo');
+            btn.innerText = homoActive ? "Homogenizer: ON (200B)" : "Homogenizer: OFF";
+            btn.classList.toggle('active');
+        }
+
+        function setCamera(preset) {
+            playSound('click');
+            document.querySelectorAll('.cam-btn').forEach(function(b){ b.classList.remove('active'); });
+            event.target.classList.add('active');
+
+            switch(preset) {
+                case 'iso': camera.position.set(22, 18, 28); controls.target.set(0, 0, 0); break;
+                case 'regen': camera.position.set(-2, 8, 12); controls.target.set(-2, 2, 0); break;
+                case 'sep': camera.position.set(5, 8, 14); controls.target.set(5, 2, 5); break;
+                case 'homo': camera.position.set(5, 6, -14); controls.target.set(5, 2, -5); break;
+                case 'fdv': camera.position.set(18, 8, 10); controls.target.set(18, 3, 0); break;
+            }
+        }
+
+        function toggleAutoRotate() {
+            controls.autoRotate = !controls.autoRotate;
+            controls.autoRotateSpeed = 2.0;
+            playSound('click');
+            document.getElementById('btn-auto-rotate').classList.toggle('active');
+        }
+
+        function rotateCam(deltaX, deltaY) {
+            controls.rotateLeft(deltaX);
+            controls.rotateUp(deltaY);
+        }
+
+        function resetCam() {
+            camera.position.set(22, 18, 28);
+            controls.target.set(0, 0, 0);
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(function(){});
+            } else {
+                document.exitFullscreen().catch(function(){});
+            }
+        }
+
+        function openRegenModal() { playSound('click'); document.getElementById('regen-modal').classList.add('open'); }
+        function closeRegenModal() { playSound('click'); document.getElementById('regen-modal').classList.remove('open'); }
+
+        function triggerEStop() {
+            masterPower = false;
+            playSound('alarm');
+            document.getElementById('btn-master').innerText = "▶ START HTST PLANT";
+            document.getElementById('btn-master').className = "scada-btn success";
+            document.getElementById('sys-mode-badge').innerText = "EMERGENCY STOP";
+            document.getElementById('sys-mode-badge').className = "mode-badge mode-divert";
+            document.getElementById('lbl-master-state').innerText = "E-STOPPED";
+            document.getElementById('lbl-master-state').style.color = "#ef4444";
+        }
+
+        function onWindowResize() {
+            var container = document.getElementById('viewport-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        window.onload = init3D;
+    </script>
+</body>
+</html>
+`
     },
     hi: {
         title: "Pasteurization",
@@ -933,179 +1599,868 @@ export const pasteurizationContent = {
                 <li>Pasteurization milk ko sterilize NAHI karti — thermoduric organisms aur spores survive karte hain, isliye refrigerated storage aur limited shelf life zaroori hai.</li>
             </ul>
         `,
-        simulation: `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Advanced Milk Processing Plant Simulator</title>
-                <style>
-                    body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-                    #ui-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(20, 30, 40, 0.95); border-top: 4px solid #3498db; color: white; display: flex; justify-content: space-around; align-items: flex-start; padding: 15px 10px; box-sizing: border-box; backdrop-filter: blur(5px); z-index: 10; }
-                    .panel-section { display: flex; flex-direction: column; align-items: center; padding: 0 15px; border-right: 1px solid #444; height: 100%; }
-                    .panel-section:last-child { border-right: none; }
-                    h2 { margin: 0 0 10px 0; font-size: 14px; color: #3498db; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-                    .digital-display { background: #000; color: #0f0; font-family: 'Courier New', monospace; font-size: 20px; padding: 5px 10px; border: 2px solid #555; border-radius: 4px; margin-bottom: 5px; min-width: 70px; text-align: center; }
-                    .status-light { width: 15px; height: 15px; border-radius: 50%; background: #333; border: 2px solid #555; margin: 5px; box-shadow: inset 0 0 5px #000; display: inline-block; }
-                    .status-light.on { background: #00ff00; box-shadow: 0 0 8px #00ff00; }
-                    .status-light.off { background: #ff0000; box-shadow: 0 0 8px #ff0000; }
-                    .toggle-btn { background: #444; color: #ccc; border: 1px solid #666; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 12px; margin: 2px; width: 100px; }
-                    .toggle-btn.active { background: #2ecc71; color: #fff; border-color: #27ae60; }
-                    button.main-start { background: linear-gradient(to bottom, #2c3e50, #1a252f); color: white; border: 2px solid #3498db; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
-                    button.main-start:hover { background: #34495e; box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); }
-                    button.main-start.active { background: #e74c3c; border-color: #c0392b; }
-                    #view-controls { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 5px; z-index: 20; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 8px; }
-                    #view-controls button { background: rgba(50,50,50,0.8); color: white; border: 1px solid #777; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; width: 80px; }
-                    #view-controls button:hover { background: #3498db; border-color: #3498db; }
-                    .view-label { font-size: 10px; color: #aaa; text-align: center; margin-bottom: 2px; }
-                    input[type=range] { width: 120px; cursor: pointer; }
-                    #tooltip { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; pointer-events: none; font-size: 14px; border: 1px solid #555; z-index: 10; }
-                    .legend { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; font-size: 11px; color: #ddd; z-index: 10; }
-                    .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
-                    .color-box { width: 10px; height: 10px; margin-right: 8px; border: 1px solid #777; }
-                    @media (max-width: 768px) {
-                        #ui-container { flex-wrap: wrap; padding: 5px; justify-content: center; height: auto; max-height: 200px; }
-                        .panel-section { flex-grow: 1; flex-basis: 45%; padding: 5px; margin-bottom: 5px; border-right: none; min-width: 140px; }
-                        h2 { font-size: 11px; margin-bottom: 5px;}
-                        .digital-display { font-size: 14px; padding: 2px 4px; }
-                        .toggle-btn, button.main-start { width: 90%; font-size: 10px; padding: 4px; }
-                        #view-controls { display: none; }
-                        .legend { display: none; }
-                        #tooltip { display: none; }
-                    }
-                </style>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
-                <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>
-            </head>
-            <body>
-                <div class="legend">
-                    <div class="legend-item"><div class="color-box" style="background:#ecf0f1"></div>Tanks / Pipes</div>
-                    <div class="legend-item"><div class="color-box" style="background:#34495e"></div>Pump & Motors</div>
-                    <div class="legend-item"><div class="color-box" style="background:#f39c12"></div>Regen/Separator</div>
-                    <div class="legend-item"><div class="color-box" style="background:#8e44ad"></div>Homogenizer</div>
-                    <div class="legend-item"><div class="color-box" style="background:#e74c3c"></div>Heating Section</div>
-                    <div class="legend-item"><div class="color-box" style="background:#3498db"></div>Cooling Section</div>
-                </div>
-                <div id="view-controls">
-                    <div class="view-label">CAMERA VIEW</div>
-                    <button onclick="setView('front')">FRONT</button>
-                    <button onclick="setView('back')">BACK</button>
-                    <button onclick="setView('left')">LEFT</button>
-                    <button onclick="setView('right')">RIGHT</button>
-                    <button onclick="setView('top')">TOP</button>
-                    <button onclick="setView('iso')">ISO</button>
-                </div>
-                <div id="tooltip">PLANT READY. Configure & Start.</div>
-                <div id="ui-container">
-                    <div class="panel-section">
-                        <h2>Main Control</h2>
-                        <div style="display:flex; align-items:center; margin-bottom:10px;">
-                            <div id="status-pump" class="status-light"></div>
-                            <span style="font-size:12px; margin-left:5px;">FEED PUMP</span>
-                        </div>
-                        <button class="main-start" id="btn-power" onclick="toggleSystem()">START PLANT</button>
-                    </div>
-                    <div class="panel-section">
-                        <h2>Units</h2>
-                        <button class="toggle-btn" id="btn-sep" onclick="toggleSep()">Separator: OFF</button>
-                        <button class="toggle-btn" id="btn-homo" onclick="toggleHomo()">Homogenizer: OFF</button>
-                    </div>
-                    <div class="panel-section">
-                        <h2>Pasteurizer</h2>
-                        <div class="digital-display" id="temp-display">25.0°C</div>
-                        <div style="display:flex; flex-direction:column; align-items:center;">
-                            <label style="font-size:11px; color:#aaa;">Steam Valve</label>
-                            <input type="range" min="0" max="100" value="0" oninput="updateSteam(this.value)">
-                            <span id="steam-val-text" style="font-size:12px;">0%</span>
-                        </div>
-                    </div>
-                    <div class="panel-section">
-                        <h2>FDV Logic</h2>
-                        <div style="display:flex; gap:15px; margin-top:5px;">
-                            <div style="text-align:center;"><div id="light-fwd" class="status-light"></div><div style="font-size:10px;">SAFE</div></div>
-                            <div style="text-align:center;"><div id="light-div" class="status-light on"></div><div style="font-size:10px;">DIVERT</div></div>
-                        </div>
-                        <div style="font-size:11px; color:#aaa; margin-top:8px;">Set Point: 72.0°C</div>
-                    </div>
-                    <div class="panel-section" style="width: 180px; align-items:flex-start;">
-                        <h2>Status</h2>
-                        <div id="flow-status" style="font-size: 11px; color: #0f0; line-height:1.4;">Idle.</div>
-                    </div>
-                </div>
-                <script>
-                    let scene, camera, renderer, controls;
-                    let fdvMesh, pumpMesh, particles = [];
-                    let systemOn = false, sepOn = false, homoOn = false, steamVal = 0, currentTemp = 25.0;
-                    const targetTempSet = 72.0;
-                    let fdvState = 'DIVERT';
-                    let pathFeed, pathRegen, pathSepMain, pathSepCream, pathHomo, pathHeat, pathHold, pathSafe, pathDivert;
-                    
-                    const elTemp = document.getElementById('temp-display'),
-                          elStatus = document.getElementById('flow-status'),
-                          elLightFwd = document.getElementById('light-fwd'),
-                          elLightDiv = document.getElementById('light-div'),
-                          elPumpLight = document.getElementById('status-pump'),
-                          btnPower = document.getElementById('btn-power'),
-                          btnSep = document.getElementById('btn-sep'),
-                          btnHomo = document.getElementById('btn-homo');
+        simulation: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dairy Hub - Fullscreen Industrial HTST Pasteurization SCADA & 3D Plant</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #050811; color: #f1f5f9; }
+        body { display: flex; flex-direction: column; }
 
-                    function getRendererHeight() {
-                        const uiContainer = document.getElementById('ui-container');
-                        return window.innerHeight - (uiContainer ? uiContainer.offsetHeight : 0);
+        /* SCADA Top Header */
+        #scada-header {
+            background: linear-gradient(180deg, #0f172a 0%, #090d16 100%);
+            border-bottom: 2px solid #1e293b;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .header-title { display: flex; align-items: center; gap: 8px; }
+        .header-title h1 { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; color: #38bdf8; text-transform: uppercase; }
+        .badge-scada { background: #0284c7; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; }
+
+        .header-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .mode-badge { font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .mode-off { background: #334155; color: #94a3b8; }
+        .mode-run { background: #15803d; color: #4ade80; border: 1px solid #22c55e; box-shadow: 0 0 12px rgba(74,222,128,0.4); }
+        .mode-divert { background: #991b1b; color: #fca5a5; border: 1px solid #ef4444; animation: pulse-red 1s infinite alternate; }
+
+        @keyframes pulse-red { 0% { opacity: 0.8; } 100% { opacity: 1; box-shadow: 0 0 15px rgba(239,68,68,0.7); } }
+
+        /* Large Touch Buttons for Real Industrial Feel */
+        .scada-btn {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #f1f5f9;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease-out;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            touch-action: manipulation;
+        }
+        .scada-btn:active { transform: scale(0.95); background: #334155; }
+        .scada-btn.primary { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #38bdf8; color: #fff; }
+        .scada-btn.success { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); border-color: #4ade80; color: #fff; }
+        .scada-btn.danger { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); border-color: #f87171; color: #fff; }
+        .scada-btn.warning { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); border-color: #fbbf24; color: #fff; }
+        .scada-btn.active { border-color: #00f2fe; box-shadow: 0 0 12px rgba(0,242,254,0.5); }
+
+        /* SCADA KPIs Strip */
+        #scada-kpis {
+            background: #090d16;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 6px;
+            padding: 6px 10px;
+            border-bottom: 1px solid #1e293b;
+            z-index: 40;
+        }
+        .kpi-card { background: #131c2e; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 8px; display: flex; flex-direction: column; }
+        .kpi-label { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 1px; }
+        .kpi-val { font-family: 'Courier New', monospace; font-size: 16px; font-weight: 800; color: #00f2fe; }
+        .kpi-unit { font-size: 10px; color: #94a3b8; margin-left: 2px; }
+        .kpi-sub { font-size: 9px; color: #475569; margin-top: 1px; }
+
+        /* Viewport Container */
+        #viewport-container { flex: 1; position: relative; width: 100%; height: 100%; background: #02040a; }
+        #canvas-3d { width: 100%; height: 100%; display: block; }
+
+        /* 3D Floating Overlays */
+        #camera-presets { display: none !important; }
+
+        /* 360° Touch Rotate Overlay Removed */
+        #touch-rotate-pad { display: none !important; }
+
+        /* Flow Guide / Step Banner */
+        #flow-banner {
+            position: absolute; top: 6px; left: 6px; z-index: 30;
+            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);
+            padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(2, 132, 199, 0.4);
+            max-width: 220px; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
+        }
+        #flow-banner:hover { background: rgba(15, 23, 42, 0.95); max-width: 280px; }
+        .flow-title { font-size: 9px; font-weight: 800; color: #38bdf8; text-transform: uppercase; margin-bottom: 1px; display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+        .flow-desc { font-size: 9px; color: #cbd5e1; line-height: 1.25; max-height: 32px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+        /* SCADA Control Console Bottom */
+        #scada-console {
+            background: #0f172a; border-top: 2px solid #1e293b;
+            padding: 10px; z-index: 50; display: flex; flex-direction: column; gap: 8px;
+            max-height: 220px; overflow-y: auto;
+        }
+        .console-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .control-card { background: #131c2e; border: 1px solid #1e293b; border-radius: 8px; padding: 8px 12px; flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 6px; }
+        .card-header { font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase; border-bottom: 1px solid #1e293b; padding-bottom: 3px; display: flex; justify-content: space-between; }
+
+        .slider-group { display: flex; align-items: center; gap: 8px; }
+        .slider-group label { font-size: 11px; font-weight: 600; color: #94a3b8; min-width: 80px; }
+        input[type=range] { flex: 1; accent-color: #0284c7; height: 6px; cursor: pointer; }
+        .val-tag { font-family: monospace; font-size: 11px; font-weight: 700; color: #00f2fe; min-width: 50px; text-align: right; }
+
+        /* Detailed Regeneration Flow Modal Overlay */
+        #regen-modal {
+            position: absolute; inset: 0; z-index: 100; background: rgba(5, 8, 17, 0.95); backdrop-filter: blur(12px);
+            display: none; flex-direction: column; padding: 16px; overflow-y: auto;
+        }
+        #regen-modal.open { display: flex; }
+        .modal-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 12px; }
+        .modal-head h2 { font-size: 16px; font-weight: 800; color: #38bdf8; text-transform: uppercase; }
+
+        .regen-diagram { background: #090d16; border: 1px solid #1e293b; border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
+        .stream-box { border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+        .stream-cold { background: rgba(14, 165, 233, 0.15); border: 1px solid #0ea5e9; }
+        .stream-hot { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; }
+        .stream-title { font-size: 12px; font-weight: 800; display: flex; justify-content: space-between; }
+        .stream-cold .stream-title { color: #38bdf8; }
+        .stream-hot .stream-title { color: #fca5a5; }
+
+        /* Mobile Responsive adjustments */
+        @media (max-width: 640px) {
+            #scada-header h1 { font-size: 11px; }
+            .scada-btn { padding: 6px 10px; font-size: 11px; }
+            #camera-presets { top: 6px; right: 6px; padding: 4px; }
+            #flow-banner { max-width: 200px; padding: 6px 8px; }
+            .flow-desc { font-size: 9px; }
+            #touch-rotate-pad { display: grid; }
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <!-- SCADA Header -->
+    <div id="scada-header">
+        <div class="header-title">
+            <span class="badge-scada">SCADA 5.0</span>
+            <h1>HTST Pasteurizer Plant (10,000 LPH)</h1>
+        </div>
+        <div class="header-controls">
+            <div id="sys-mode-badge" class="mode-badge mode-off">OFFLINE</div>
+            <button class="scada-btn primary" onclick="toggleFullscreen()">📺 FULLSCREEN</button>
+            <button class="scada-btn" id="btn-auto-rotate" onclick="toggleAutoRotate()">🔄 360° ROTATE</button>
+            <button class="scada-btn warning" onclick="openRegenModal()">🔄 REGEN FLOW DETAIL</button>
+            <button class="scada-btn danger" onclick="triggerEStop()">E-STOP</button>
+        </div>
+    </div>
+
+    <!-- SCADA KPIs -->
+    <div id="scada-kpis">
+        <div class="kpi-card">
+            <span class="kpi-label">Pasteur Temp</span>
+            <div><span class="kpi-val" id="kpi-temp">25.0</span><span class="kpi-unit">°C</span></div>
+            <span class="kpi-sub">Target: 72.5°C</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Holding Time</span>
+            <div><span class="kpi-val" id="kpi-time">15.4</span><span class="kpi-unit">sec</span></div>
+            <span class="kpi-sub">Min Reg: 15.0 s</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">FDV Valve</span>
+            <div><span class="kpi-val" id="kpi-fdv" style="color:#ef4444;">DIVERT</span></div>
+            <span class="kpi-sub" id="kpi-fdv-sub">Recycling Milk</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Feed Flow</span>
+            <div><span class="kpi-val" id="kpi-flow">10,000</span><span class="kpi-unit">LPH</span></div>
+            <span class="kpi-sub">VFD Speed</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Regen Heat Rec.</span>
+            <div><span class="kpi-val">91.8</span><span class="kpi-unit">%</span></div>
+            <span class="kpi-sub">Energy Saved</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">ALP QA Test</span>
+            <div><span class="kpi-val" id="kpi-alp" style="color:#4ade80;">PASS</span></div>
+            <span class="kpi-sub">&lt; 350 mU/L</span>
+        </div>
+    </div>
+
+    <!-- Main Viewport -->
+    <div id="viewport-container">
+        <canvas id="canvas-3d"></canvas>
+
+        <!-- Dynamic Process Step Banner -->
+        <div id="flow-banner">
+            <div class="flow-title">
+                <span>📍 Milk Flow Pipeline Trace</span>
+                <span id="step-num" style="color:#22c55e; font-size:10px;">Step 1/10</span>
+            </div>
+            <div class="flow-desc" id="step-desc">
+                Raw Cold Milk (4°C) is fed from Raw Silo into Balance Tank to maintain constant hydraulic pressure head.
+            </div>
+        </div>
+
+        <!-- Camera Views Removed -->
+
+        <!-- Touch Rotate D-Pad Removed -->
+    </div>
+
+    <!-- SCADA Control Console Bottom -->
+    <div id="scada-console">
+        <div class="console-row">
+            <!-- Master Start & Flow -->
+            <div class="control-card">
+                <div class="card-header">
+                    <span>1. Plant Operation</span>
+                    <span id="lbl-master-state" style="color:#94a3b8;">OFF</span>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="scada-btn success" id="btn-master" style="flex:1; padding:10px;" onclick="toggleMasterPower()">▶ START HTST PLANT</button>
+                    <button class="scada-btn warning" id="btn-cip" onclick="toggleCIP()">CIP CLEAN</button>
+                </div>
+                <div class="slider-group">
+                    <label>Feed Flow (LPH)</label>
+                    <input type="range" id="rng-flow" min="3000" max="15000" step="500" value="10000" oninput="onFlowChange(this.value)">
+                    <span class="val-tag" id="lbl-flow">10,000 LPH</span>
+                </div>
+            </div>
+
+            <!-- Heating & Temperature PID -->
+            <div class="control-card">
+                <div class="card-header">
+                    <span>2. Heating Loop PID</span>
+                    <span style="color:#4ade80;">SP: 72.5°C</span>
+                </div>
+                <div class="slider-group">
+                    <label>Steam Valve %</label>
+                    <input type="range" id="rng-steam" min="0" max="100" value="0" oninput="onSteamChange(this.value)">
+                    <span class="val-tag" id="lbl-steam">0%</span>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="scada-btn primary" id="btn-pid" style="flex:1;" onclick="togglePID()">PID AUTO HEATING: ON</button>
+                </div>
+            </div>
+
+            <!-- Auxiliaries -->
+            <div class="control-group control-card">
+                <div class="card-header">
+                    <span>3. Aux Machinery</span>
+                    <span>Separation & Homo</span>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="scada-btn" id="btn-sep" style="flex:1;" onclick="toggleSeparator()">Separator (6k RPM)</button>
+                    <button class="scada-btn" id="btn-homo" style="flex:1;" onclick="toggleHomogenizer()">Homogenizer (200 BAR)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Regeneration Heat Exchange Flow Modal -->
+    <div id="regen-modal">
+        <div class="modal-head">
+            <h2>🔄 REGENERATION HEAT EXCHANGE & COUNTER-CURRENT FLOW DEEP DIVE</h2>
+            <button class="scada-btn danger" onclick="closeRegenModal()">✖ CLOSE</button>
+        </div>
+
+        <div style="font-size:12px; color:#cbd5e1; line-height:1.6; margin-bottom:12px;">
+            HTST Pasteurization plant me <strong>Regeneration Section</strong> sabse important energy-saving unit hai. Isme hot pasteurized milk aur cold raw milk aamne-saamne counter-current direction me flow karte hain bina ek doosre me mix huye (thin stainless steel corrugated plates ke through).
+        </div>
+
+        <div class="regen-diagram">
+            <div class="stream-box stream-cold">
+                <div class="stream-title">
+                    <span>🔵 COLD RAW MILK STREAM (INFLOW)</span>
+                    <span>4°C ➔ 55°C (PRE-HEATED)</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8;">
+                    <strong>Path:</strong> Raw Silo ➔ Balance Tank ➔ Pump ➔ PHE Regeneration Section In (4°C).<br>
+                    Return hot pasteurized milk ki garmi absorb karke raw milk temperature 55°C tak garam ho jaata hai bina kisi extra steam fuel ke! Iske baad ye Cream Separator aur Homogenizer me jaata hai.
+                </div>
+            </div>
+
+            <div class="stream-box stream-hot">
+                <div class="stream-title">
+                    <span>🔴 HOT PASTEURIZED MILK STREAM (RETURN FLOW)</span>
+                    <span>72.5°C ➔ 22°C (PRE-COOLED)</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8;">
+                    <strong>Path:</strong> Holding Tube (72.5°C, 15 sec) ➔ Flow Diversion Valve (FORWARD) ➔ PHE Regeneration Section Return.<br>
+                    Apni thermal heat naye aane wale cold raw milk ko transfer karke, garam milk auto pre-cool ho jaata hai (72.5°C se 22°C tak). Phir ye final Ice-Water Chilling Section me jaakar 4°C par storage silo me chala jaata hai.
+                </div>
+            </div>
+        </div>
+
+        <div style="background:#1e293b; padding:10px; border-radius:8px; font-size:11px; color:#38bdf8; font-weight:700;">
+            ⚡ ENERGY RECOVERY EFFICIENCY: 91.8% Steam & Chilling Energy Saved!
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer Engine (Sound FX)
+        var audioCtx = null, audioEnabled = true;
+
+        function initAudio() {
+            if (audioCtx) return;
+            try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+        }
+
+        function playSound(type) {
+            if (!audioEnabled) return;
+            initAudio();
+            if (!audioCtx) return;
+            var now = audioCtx.currentTime;
+            if (type === 'click') {
+                var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+                gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0, now + 0.05);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.05);
+            } else if (type === 'fdv_switch') {
+                var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now);
+                osc.frequency.linearRampToValueAtTime(600, now + 0.15);
+                gain.gain.setValueAtTime(0.5, now); gain.gain.linearRampToValueAtTime(0, now + 0.15);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.15);
+            } else if (type === 'alarm') {
+                var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(880, now);
+                gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.2);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.2);
+            }
+        }
+
+        // SCADA State
+        var masterPower = false;
+        var isCIP = false;
+        var pidAuto = true;
+        var sepActive = false;
+        var homoActive = false;
+
+        var flowRateLPH = 10000;
+        var steamPercent = 0;
+        var currentTemp = 25.0;
+        var targetTemp = 72.5;
+        var holdingTimeSec = 15.4;
+        var fdvState = 'DIVERT';
+
+        // Three.js Variables
+        var scene, camera, renderer, controls;
+        var pumpImpeller, separatorDrum, fdvStemMesh, phePlateMesh;
+        var rawParticles = [], returnParticles = [];
+        var pathRawFeed, pathRegenIn, pathSep, pathHomo, pathHeater, pathHolding, pathFDVForward, pathFDVDivert, pathRegenReturn, pathChiller;
+
+        // Flow Trace Steps
+        var flowSteps = [
+            { title: "Step 1: Balance Tank Feed", desc: "Raw cold milk (4°C) flows from Raw Silo into Constant Level Balance Tank." },
+            { title: "Step 2: Regeneration Pre-Heat", desc: "Raw milk enters Plate Heat Exchanger (PHE) Regeneration Section, absorbing heat from pasteurized return milk to reach ~55°C." },
+            { title: "Step 3: Cream Separation", desc: "Pre-heated milk (55°C) enters 6,000 RPM Disc Bowl Separator for fat standardization and cream extraction." },
+            { title: "Step 4: High Pressure Homogenization", desc: "Milk passes through 2-stage Homogenizer at 200 BAR to reduce fat globules below 2 microns." },
+            { title: "Step 5: PHE Steam Heating", desc: "Milk enters PHE Heating Section, heated by steam/hot water to target pasteurization temperature (72.5°C)." },
+            { title: "Step 6: Holding Tube (CCP-1)", desc: "Hot milk flows through calibrated Holding Tube for minimum 15.0 seconds for pathogen destruction." },
+            { title: "Step 7: Flow Diversion Valve Safety", desc: "Temperature sensor (TT-101) checks milk. If ≥72°C, FDV shifts FORWARD. If <72°C, FDV DIVERTS milk back to Balance Tank." },
+            { title: "Step 8: Regeneration Pre-Cooling", desc: "Safe pasteurized milk returns through Regeneration Section, transferring its heat to incoming cold raw milk and cooling down to 22°C." },
+            { title: "Step 9: Chilled Water Cooling", desc: "Pasteurized milk enters final Cooling Section (chilled water 2°C) to rapidly cool down to 4°C." },
+            { title: "Step 10: Pasteurized Storage Silo", desc: "Finished pasteurized milk is stored in sterile Pasteurized Silo ready for pouch/carton packaging!" }
+        ];
+        var currentStepIdx = 0;
+
+        function init3D() {
+            var container = document.getElementById('viewport-container');
+            var canvas = document.getElementById('canvas-3d');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x050811);
+            scene.fog = new THREE.FogExp2(0x050811, 0.012);
+
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(22, 18, 28);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxPolarAngle = Math.PI / 2 - 0.02;
+
+            var ambLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambLight);
+
+            var dirLight1 = new THREE.DirectionalLight(0x38bdf8, 0.9);
+            dirLight1.position.set(25, 45, 25);
+            dirLight1.castShadow = true;
+            scene.add(dirLight1);
+
+            var dirLight2 = new THREE.DirectionalLight(0xef4444, 0.5);
+            dirLight2.position.set(-20, 20, -20);
+            scene.add(dirLight2);
+
+            buildFloorGrid();
+            buildPlantMachinery();
+            initFlowPaths();
+
+            window.addEventListener('resize', onWindowResize);
+            animate();
+        }
+
+        function buildFloorGrid() {
+            var floorGeo = new THREE.PlaneGeometry(120, 120);
+            var floorMat = new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.8, metalness: 0.2 });
+            var floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            var grid = new THREE.GridHelper(120, 60, 0x1e293b, 0x0f172a);
+            grid.position.y = 0.01;
+            scene.add(grid);
+        }
+
+        var ssMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.9, roughness: 0.15 });
+        var pipeMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8, roughness: 0.2, transparent: true, opacity: 0.6 });
+        var darkMetal = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.7, roughness: 0.4 });
+
+        function buildPlantMachinery() {
+            createSilo(-26, 0, "RAW MILK SILO\\n(4°C)", 0x38bdf8);
+
+            var balGroup = new THREE.Group();
+            var balTank = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.8, 3, 32), ssMat);
+            balTank.position.y = 1.5;
+            balGroup.add(balTank);
+            balGroup.position.set(-16, 0, 0);
+            scene.add(balGroup);
+            createLabel(-16, 4, 0, "1. BALANCE TANK");
+
+            var pumpGroup = new THREE.Group();
+            var pBase = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 1.5), darkMetal);
+            pBase.position.y = 0.5;
+            pumpGroup.add(pBase);
+
+            var pVolute = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.6, 24), ssMat);
+            pVolute.rotation.x = Math.PI / 2;
+            pVolute.position.set(0.6, 1.2, 0);
+            pumpGroup.add(pVolute);
+
+            pumpImpeller = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.2, 0.3), new THREE.MeshBasicMaterial({ color: 0x00f2fe }));
+            pumpImpeller.position.set(0.6, 1.2, 0);
+            pumpGroup.add(pumpImpeller);
+
+            pumpGroup.position.set(-10, 0, 0);
+            scene.add(pumpGroup);
+            createLabel(-10, 2.5, 0, "BOOSTER PUMP");
+
+            // Plate Heat Exchanger (PHE)
+            var pheGroup = new THREE.Group();
+            var frame1 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 4.5, 3), darkMetal);
+            frame1.position.set(-3, 2.25, 0);
+            var frame2 = frame1.clone(); frame2.position.x = 5;
+            pheGroup.add(frame1); pheGroup.add(frame2);
+
+            // PHE Plates (Regeneration, Heating, Cooling)
+            var pRegen = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.5, 2.5), new THREE.MeshStandardMaterial({ color: 0x0ea5e9, metalness: 0.8, transparent: true, opacity: 0.85 }));
+            pRegen.position.set(-1.2, 2.25, 0);
+            var pHeat = new THREE.Mesh(new THREE.BoxGeometry(1.8, 3.5, 2.5), new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.8, transparent: true, opacity: 0.85 }));
+            pHeat.position.set(1.2, 2.25, 0);
+            var pCool = new THREE.Mesh(new THREE.BoxGeometry(1.5, 3.5, 2.5), new THREE.MeshStandardMaterial({ color: 0x06b6d4, metalness: 0.8, transparent: true, opacity: 0.85 }));
+            pCool.position.set(3.2, 2.25, 0);
+            pheGroup.add(pRegen); pheGroup.add(pHeat); pheGroup.add(pCool);
+
+            pheGroup.position.set(-2, 0, 0);
+            scene.add(pheGroup);
+            createLabel(-1, 5.2, 0, "2,5,8,9. PHE (REGEN / HEAT / COOL)");
+
+            // Separator
+            var sepGroup = new THREE.Group();
+            var sBase = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.5, 2, 32), darkMetal);
+            sBase.position.y = 1;
+            sepGroup.add(sBase);
+
+            separatorDrum = new THREE.Mesh(new THREE.ConeGeometry(1.4, 2, 32), ssMat);
+            separatorDrum.position.y = 2.8;
+            sepGroup.add(separatorDrum);
+
+            sepGroup.position.set(5, 0, 5);
+            scene.add(sepGroup);
+            createLabel(5, 4.5, 5, "3. CREAM SEPARATOR (6000 RPM)");
+
+            // Homogenizer
+            var homoGroup = new THREE.Group();
+            var hBlock = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.5, 2.2), darkMetal);
+            hBlock.position.y = 1.25;
+            homoGroup.add(hBlock);
+
+            homoGroup.position.set(5, 0, -5);
+            scene.add(homoGroup);
+            createLabel(5, 3.8, -5, "4. HOMOGENIZER (200 BAR)");
+
+            // Holding Tube
+            var holdGroup = new THREE.Group();
+            var holdTubeGeo = new THREE.TorusGeometry(2.0, 0.18, 16, 100, Math.PI * 4);
+            var holdTube = new THREE.Mesh(holdTubeGeo, ssMat);
+            holdTube.rotation.x = Math.PI / 2;
+            holdGroup.add(holdTube);
+            holdGroup.position.set(14, 3, 0);
+            scene.add(holdGroup);
+            createLabel(14, 5.8, 0, "6. HOLDING TUBE (15 SEC)");
+
+            // FDV
+            var fdvGroup = new THREE.Group();
+            var fdvBody = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.4, 16), ssMat);
+            fdvGroup.add(fdvBody);
+
+            fdvStemMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 1.2, 16), new THREE.MeshStandardMaterial({ color: 0xef4444 }));
+            fdvStemMesh.position.y = 1.1;
+            fdvGroup.add(fdvStemMesh);
+
+            fdvGroup.position.set(20, 2, 0);
+            scene.add(fdvGroup);
+            createLabel(20, 4.2, 0, "7. FLOW DIVERSION VALVE (CCP-1)");
+
+            createSilo(28, 0, "PASTEURIZED SILO\\n(4°C)", 0x22c55e);
+
+            buildPipes();
+        }
+
+        function createSilo(x, z, title, colorHex) {
+            var group = new THREE.Group();
+            var silo = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 9, 32), ssMat);
+            silo.position.y = 4.5;
+            group.add(silo);
+
+            var cap = new THREE.Mesh(new THREE.ConeGeometry(2.8, 1.5, 32), ssMat);
+            cap.position.y = 9.75;
+            group.add(cap);
+
+            var ring = new THREE.Mesh(new THREE.TorusGeometry(2.85, 0.1, 16, 32), new THREE.MeshBasicMaterial({ color: colorHex }));
+            ring.rotation.x = Math.PI / 2;
+            ring.position.y = 4.5;
+            group.add(ring);
+
+            group.position.set(x, 0, z);
+            scene.add(group);
+            createLabel(x, 11.5, z, title);
+        }
+
+        function buildPipes() {
+            createTubePath([v(-26,1,0), v(-16,1,0)]);
+            createTubePath([v(-16,1,0), v(-10,1,0)]);
+            createTubePath([v(-10,1,0), v(-4,1,0), v(-4,2.25,0)]);
+            createTubePath([v(-2,2.25,0), v(5,2.25,0), v(5,2.25,5)]);
+            createTubePath([v(5,2.25,5), v(5,2.25,0), v(5,2.25,-5)]);
+            createTubePath([v(5,2,-5), v(0,2,0), v(0,3,0), v(14,3,0)]);
+            createTubePath([v(14,3,0), v(20,2,0)]);
+            createTubePath([v(20,2,0), v(20,4.5,0), v(-3.2,4.5,0), v(-3.2,2.25,0)]);
+            createTubePath([v(-3.2,2.25,0), v(1.2,2.25,0), v(28,2,0)]);
+            createTubePath([v(20,2,0), v(20,6,0), v(-16,6,0), v(-16,3,0)]);
+        }
+
+        function createTubePath(points) {
+            var curve = new THREE.CatmullRomCurve3(points);
+            var tubeGeo = new THREE.TubeGeometry(curve, 40, 0.12, 8, false);
+            var mesh = new THREE.Mesh(tubeGeo, pipeMat);
+            scene.add(mesh);
+        }
+
+        function createLabel(x, y, z, text) {
+            var canvas = document.createElement('canvas');
+            canvas.width = 256; canvas.height = 64;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, 256, 64);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(0, 0, 256, 64);
+
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 128, 32);
+
+            var texture = new THREE.CanvasTexture(canvas);
+            var spriteMat = new THREE.SpriteMaterial({ map: texture });
+            var sprite = new THREE.Sprite(spriteMat);
+            sprite.position.set(x, y, z);
+            sprite.scale.set(4, 1, 1);
+            scene.add(sprite);
+        }
+
+        function v(x, y, z) { return new THREE.Vector3(x, y, z); }
+
+        function initFlowPaths() {
+            pathRawFeed = new THREE.CatmullRomCurve3([v(-26,1,0), v(-16,1,0), v(-10,1,0)]);
+            pathRegenIn = new THREE.CatmullRomCurve3([v(-10,1,0), v(-4,1,0), v(-4,2.25,0)]);
+            pathSep     = new THREE.CatmullRomCurve3([v(-2,2.25,0), v(5,2.25,0), v(5,2.25,5)]);
+            pathHomo    = new THREE.CatmullRomCurve3([v(5,2.25,5), v(5,2.25,0), v(5,2.25,-5)]);
+            pathHeater  = new THREE.CatmullRomCurve3([v(5,2,-5), v(0,2,0), v(0,3,0), v(14,3,0)]);
+            pathHolding = new THREE.CatmullRomCurve3([v(14,3,0), v(20,2,0)]);
+            pathFDVForward = new THREE.CatmullRomCurve3([v(20,2,0), v(20,4.5,0), v(-3.2,4.5,0), v(-3.2,2.25,0)]);
+            pathRegenReturn = new THREE.CatmullRomCurve3([v(-3.2,2.25,0), v(1.2,2.25,0)]);
+            pathChiller = new THREE.CatmullRomCurve3([v(1.2,2.25,0), v(28,2,0)]);
+            pathFDVDivert  = new THREE.CatmullRomCurve3([v(20,2,0), v(20,6,0), v(-16,6,0), v(-16,3,0)]);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            updateProcessPhysics();
+            updateParticles();
+
+            if (masterPower) {
+                if (pumpImpeller) pumpImpeller.rotation.z += (flowRateLPH / 10000) * 0.3;
+                if (sepActive && separatorDrum) separatorDrum.rotation.y += 0.4;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function updateProcessPhysics() {
+            if (masterPower) {
+                var targetT = 25.0;
+                if (pidAuto) {
+                    targetT = targetTemp;
+                    steamPercent = Math.min(100, Math.max(0, (targetT - 25.0) / 0.65));
+                    var rngSteam = document.getElementById('rng-steam');
+                    var lblSteam = document.getElementById('lbl-steam');
+                    if (rngSteam) rngSteam.value = steamPercent.toFixed(0);
+                    if (lblSteam) lblSteam.innerText = steamPercent.toFixed(0) + '%';
+                } else {
+                    targetT = 25.0 + (steamPercent * 0.65);
+                }
+
+                currentTemp += (targetT - currentTemp) * 0.08;
+
+                holdingTimeSec = (15.4 * 10000) / flowRateLPH;
+
+                if (currentTemp >= 71.5 && holdingTimeSec >= 14.5) {
+                    if (fdvState !== 'FORWARD') playSound('fdv_switch');
+                    fdvState = 'FORWARD';
+                    if (fdvStemMesh) fdvStemMesh.material.color.setHex(0x22c55e);
+                } else {
+                    if (fdvState !== 'DIVERT') {
+                        playSound('fdv_switch');
+                        playSound('alarm');
                     }
-                    
-                    function init() {
-                        scene = new THREE.Scene();
-                        scene.background = new THREE.Color(0x222222);
-                        scene.fog = new THREE.Fog(0x222222, 30, 100);
-                        camera = new THREE.PerspectiveCamera(45, window.innerWidth / getRendererHeight(), 0.1, 1000);
-                        camera.position.set(0, 20, 35);
-                        renderer = new THREE.WebGLRenderer({ antialias: true });
-                        renderer.setSize(window.innerWidth, getRendererHeight());
-                        document.body.appendChild(renderer.domElement);
-                        controls = new THREE.OrbitControls(camera, renderer.domElement);
-                        controls.enableDamping = true; controls.maxPolarAngle = Math.PI / 2 - 0.05;
-                        const amb = new THREE.AmbientLight(0xffffff, 0.4); scene.add(amb);
-                        const sun1 = new THREE.DirectionalLight(0xffffff, 0.7); sun1.position.set(10, 30, 20); scene.add(sun1);
-                        const sun2 = new THREE.DirectionalLight(0xffbbaa, 0.4); sun2.position.set(-10, 20, -20); scene.add(sun2);
-                        buildEnvironment(); buildTanks(); buildPump(); buildProcessingLine(); buildHoldingAndFDV(); buildPipes();
-                        initPaths();
-                        window.addEventListener('resize', onWindowResize);
-                        animate();
+                    fdvState = 'DIVERT';
+                    if (fdvStemMesh) fdvStemMesh.material.color.setHex(0xef4444);
+                }
+            } else {
+                currentTemp += (25.0 - currentTemp) * 0.08;
+                fdvState = 'DIVERT';
+                if (fdvStemMesh) fdvStemMesh.material.color.setHex(0xef4444);
+            }
+
+            var kpiTemp = document.getElementById('kpi-temp');
+            var kpiTime = document.getElementById('kpi-time');
+            if (kpiTemp) kpiTemp.innerText = currentTemp.toFixed(1);
+            if (kpiTime) kpiTime.innerText = holdingTimeSec.toFixed(1);
+
+            var fdvEl = document.getElementById('kpi-fdv');
+            var fdvSub = document.getElementById('kpi-fdv-sub');
+            if (fdvEl) {
+                if (fdvState === 'FORWARD') {
+                    fdvEl.innerText = "FORWARD"; fdvEl.style.color = "#4ade80";
+                    if (fdvSub) fdvSub.innerText = "Safe Milk -> Silo";
+                } else {
+                    fdvEl.innerText = "DIVERT"; fdvEl.style.color = "#ef4444";
+                    if (fdvSub) fdvSub.innerText = "Recycling to Tank";
+                }
+            }
+        }
+
+        function updateParticles() {
+            if (!masterPower) return;
+            if (Math.random() < 0.35) spawnParticle();
+
+            for (var i = rawParticles.length - 1; i >= 0; i--) {
+                var p = rawParticles[i];
+                p.progress += 0.015 * (flowRateLPH / 10000);
+                if (p.path) p.mesh.position.copy(p.path.getPoint(Math.min(1, p.progress)));
+
+                if (p.progress >= 1) {
+                    p.progress = 0;
+                    switch (p.stage) {
+                        case 'raw': p.path = pathRegenIn; p.stage = 'regen_in'; p.mesh.material.color.setHex(0x38bdf8); updateStepBanner(1); break;
+                        case 'regen_in': p.path = sepActive ? pathSep : pathHomo; p.stage = sepActive ? 'sep' : 'homo'; p.mesh.material.color.setHex(0xfacc15); updateStepBanner(2); break;
+                        case 'sep': p.path = pathHomo; p.stage = 'homo'; updateStepBanner(3); break;
+                        case 'homo': p.path = pathHeater; p.stage = 'heat'; updateStepBanner(4); break;
+                        case 'heat': p.path = pathHolding; p.stage = 'hold'; p.mesh.material.color.setHex(0xef4444); updateStepBanner(5); break;
+                        case 'hold':
+                            if (fdvState === 'FORWARD') {
+                                p.path = pathFDVForward; p.stage = 'regen_return'; p.mesh.material.color.setHex(0xf97316); updateStepBanner(6);
+                            } else {
+                                p.path = pathFDVDivert; p.stage = 'divert'; p.mesh.material.color.setHex(0xef4444); updateStepBanner(7);
+                            }
+                            break;
+                        case 'divert': p.path = pathRawFeed; p.stage = 'raw'; p.mesh.material.color.setHex(0x38bdf8); updateStepBanner(7); break;
+                        case 'regen_return': p.path = pathRegenReturn; p.stage = 'regen_cool'; updateStepBanner(8); break;
+                        case 'regen_cool': p.path = pathChiller; p.stage = 'done'; p.mesh.material.color.setHex(0x22c55e); updateStepBanner(9); break;
+                        default:
+                            scene.remove(p.mesh);
+                            rawParticles.splice(i, 1);
+                            updateStepBanner(10);
+                            break;
                     }
-                    
-                    window.setView=function(v){const d=35,h=20;let x=0,y=h,z=0;switch(v){case'front':z=d;break;case'back':z=-d;break;case'left':x=-d;break;case'right':x=d;break;case'top':y=d+15,z=1;break;case'iso':x=25,y=25,z=25;break}camera.position.set(x,y,z);camera.lookAt(0,0,0);controls.update()}
-                    
-                    function buildEnvironment(){const f=new THREE.Mesh(new THREE.PlaneGeometry(80,60),new THREE.MeshStandardMaterial({color:0x151515,roughness:.8}));f.rotation.x=-Math.PI/2;scene.add(f);scene.add(new THREE.GridHelper(80,40,0x444444,0x222222))}
-                    function buildTanks(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7,metalness:.7,roughness:.2});createTank(-25,5,0,3,10,"RAW MILK",t);createTank(-15,2.5,0,1.5,3,"BALANCE",t);createTank(20,5,-5,3,10,"SKIM/PAST.",t);createTank(20,3,5,1.5,5,"CREAM",t)}
-                    function createTank(t,e,o,i,n,s,a){const d=new THREE.Mesh(new THREE.CylinderGeometry(i,i,n,32),a);d.position.set(t,e,o);scene.add(d);const r=new THREE.CylinderGeometry(.1,.1,1.5,8);for(let e=0;e<4;e++){const a=new THREE.Mesh(r);const l=e*90*Math.PI/180;a.position.set(t+Math.cos(l)*(i-.2),.75,o+Math.sin(l)*(i-.2)),scene.add(a)}addLabel(s,t,n+1.5,o)}
-                    function buildPump(){const t=new THREE.Group;const e=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,1.5,16),new THREE.MeshStandardMaterial({color:0x34495e}));e.rotation.z=Math.PI/2,t.add(e);const o=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.5,16),new THREE.MeshStandardMaterial({color:0x95a5a6}));o.rotation.x=Math.PI/2,o.position.set(.8,0,0),t.add(o),t.position.set(-10,.8,0),pumpMesh=t,scene.add(t),addLabel("PUMP",-10,2,0)}
-                    function buildProcessingLine(){createPHEUnit(-5,0,0,0xf39c12,"REGEN");const t=new THREE.Group,e=new THREE.Mesh(new THREE.CylinderGeometry(1,1.5,2),new THREE.MeshStandardMaterial({color:0xecf0f1})),o=new THREE.Mesh(new THREE.SphereGeometry(1,32,16,0,6.283185307179586,0,Math.PI/2),new THREE.MeshStandardMaterial({color:0xecf0f1}));o.position.y=1,t.add(e),t.add(o),t.position.set(-1,2,2),scene.add(t),addLabel("SEPARATOR",-1,4,2);const i=new THREE.Group,n=new THREE.Mesh(new THREE.BoxGeometry(2.5,2,1.5),new THREE.MeshStandardMaterial({color:0x8e44ad})),s=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.8),new THREE.MeshStandardMaterial({color:0xffffff}));s.rotation.z=Math.PI/2,s.position.set(0,.5,.8),i.add(n),i.add(s);const a=s.clone();a.position.set(0,0,.8),i.add(a);const d=s.clone();d.position.set(0,-.5,.8),i.add(d),i.position.set(3,1.5,0),scene.add(i),addLabel("HOMOGENIZER",3,3.5,0),createPHEUnit(7,0,0,0xe74c3c,"HEATING"),createPHEUnit(10,0,0,0x3498db,"COOLING")}
-                    function createPHEUnit(t,e,o,i,n){const s=new THREE.MeshStandardMaterial({color:i}),a=new THREE.Mesh(new THREE.BoxGeometry(1.5,2.5,2),s);a.position.set(t,2,e),scene.add(a);const d=new THREE.Mesh(new THREE.BoxGeometry(1.6,2.7,.2),new THREE.MeshStandardMaterial({color:0x2c3e50}));d.position.set(t,2,e-1.1),scene.add(d);const r=d.clone();r.position.set(t,2,e+1.1),scene.add(r),addLabel(n,t,4,e)}
-                    function buildHoldingAndFDV(){const t=new THREE.MeshStandardMaterial({color:0xbdc3c7}),e=new THREE.Group;for(let o=0;o<3;o++){const i=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,4),t);i.rotation.z=Math.PI/2,i.position.set(0,o*.3,-o*.4),e.add(i)}e.position.set(7,4,-2),scene.add(e),addLabel("HOLDING",7,5.5,-2),fdvMesh=new THREE.Mesh(new THREE.SphereGeometry(.5),new THREE.MeshStandardMaterial({color:0xecf0f1}));const o=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.8),new THREE.MeshStandardMaterial({color:0x333}));o.position.y=.5,fdvMesh.add(o),fdvMesh.position.set(10,4,-2),scene.add(fdvMesh),addLabel("FDV",10,5,-2)}
-                    function buildPipes(){const t=new THREE.MeshStandardMaterial({color:0x888888,transparent:!0,opacity:.3});createPipe([-25,1,0,-15,1,0,-15,3,0],t),createPipe([-15,.5,0,-10,.5,0],t),createPipe([-10,.5,0,-5,.5,0,-5,1,0],t),createPipe([-5,3,0,-1,3,0,-1,3,2],t),createPipe([-1,3,2,3,3,2,3,2,0],t),createPipe([3,2,0,7,2,0],t),createPipe([7,3,0,7,4,0,7,4,-2],t),createPipe([7,4,-2,10,4,-2],t),createPipe([10,4,-2,10,3,0],t),createPipe([10,1,0,20,1,0],t),createPipe([10,4,-2,10,6,-2,-15,6,-2,-15,4,0],t)}
-                    function createPipe(t,e){const o=[];for(let e=0;e<t.length;e+=3)o.push(new THREE.Vector3(t[e],t[e+1],t[e+2]));const i=new THREE.CatmullRomCurve3(o),n=new THREE.TubeGeometry(i,10,.08,8,!1),s=new THREE.Mesh(n,e);scene.add(s)}
-                    function addLabel(t,e,o,i){const n=document.createElement("canvas");n.width=256,n.height=64;const s=n.getContext("2d");s.fillStyle="rgba(0,0,0,0.6)",s.fillRect(0,0,256,64),s.font="bold 28px Arial",s.fillStyle="white",s.textAlign="center",s.textBaseline="middle",s.fillText(t,128,32);const a=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(n)}));a.position.set(e,o,i),a.scale.set(3,.75,1),scene.add(a)}
-                    function initPaths(){pathFeed=new THREE.CatmullRomCurve3([v(-25,1,0),v(-15,1,0),v(-15,.5,0),v(-10,.5,0)]),pathRegen=new THREE.CatmullRomCurve3([v(-10,.5,0),v(-5,.5,0),v(-5,2.5,0)]),pathSepMain=new THREE.CatmullRomCurve3([v(-5,2.5,0),v(-1,2.5,0),v(-1,2.5,2)]),pathSepCream=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(-1,1,4),v(20,1,5),v(20,5,5)]),pathHomo=new THREE.CatmullRomCurve3([v(-1,2.5,2),v(3,2.5,0)]),pathHeat=new THREE.CatmullRomCurve3([v(3,2.5,0),v(7,2.5,0),v(7,4,-2)]),pathHold=new THREE.CatmullRomCurve3([v(7,4,-2),v(8.5,4,-2),v(10,4,-2)]),pathSafe=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,2.5,0),v(20,0.5,-5),v(20,5,-5)]),pathDivert=new THREE.CatmullRomCurve3([v(10,4,-2),v(10,6,-2),v(-15,6,-2),v(-15,4,0)])}
-                    function v(t,e,o){return new THREE.Vector3(t,e,o)}
-                    function animate(){requestAnimationFrame(animate),controls.update(),updateProcessLogic(),updateParticles(),systemOn&&(pumpMesh.children[1].rotation.x+=.5),renderer.render(scene,camera)}
-                    function updateProcessLogic(){let t=25;systemOn?(t=25+steamVal*0.7,currentTemp<t?currentTemp+=.2:currentTemp>t&&(currentTemp-=.1)):currentTemp>25&&(currentTemp-=.1);elTemp.innerText=currentTemp.toFixed(1)+"°C";let e="System Off";if(systemOn){e=\`Pump ON.\\nSeparator: \${sepOn?'Active':'Bypass'}\\nHomo: \${homoOn?'Active':'Bypass'}\\nMode: \${fdvState}\`}elStatus.innerText=e;if(systemOn&&currentTemp>=72){fdvState="FORWARD";setLight(elLightFwd,!0);setLight(elLightDiv,!1);fdvMesh.material.color.setHex(3066993)}else{fdvState="DIVERT";setLight(elLightFwd,!1);setLight(elLightDiv,!0);fdvMesh.material.color.setHex(15158332)}}
-                    function updateParticles(){if(!systemOn)return;Math.random()>.8&&spawnParticle();for(let t=particles.length-1;t>=0;t--){let e=particles[t];e.progress+=.01,e.path&&e.mesh.position.copy(e.path.getPoint(e.progress)),e.progress>=1&&(e.progress=0,handlePathSwitch(e))}}
-                    function spawnParticle(){const t=new THREE.SphereGeometry(.1,8,8),e=new THREE.MeshBasicMaterial({color:16777215}),o=new THREE.Mesh(t,e);scene.add(o),particles.push({mesh:o,path:pathFeed,progress:0,stage:"feed"})}
-                    function handlePathSwitch(t){"feed"===t.stage?(t.path=pathRegen,t.stage="regen"):"regen"===t.stage?(t.path=pathSepMain,t.stage="sep_in"):"sep_in"===t.stage?sepOn?Math.random()>.8?(t.path=pathSepCream,t.stage="cream_out",t.mesh.material.color.setHex(15844367)):(t.path=pathHomo,t.stage="homo_in"):(t.path=pathHomo,t.stage="homo_in"):"homo_in"===t.stage?(t.path=pathHeat,t.stage="heating"):"heating"===t.stage?(t.path=pathHold,t.stage="holding"):"holding"===t.stage?"FORWARD"===fdvState?(t.path=pathSafe,t.stage="finished",t.mesh.material.color.setHex(3066993)):(t.path=pathDivert,t.stage="divert",t.mesh.material.color.setHex(15158332)):"divert"===t.stage?(t.path=pathRegen,t.stage="regen",t.mesh.material.color.setHex(16777215)):(scene.remove(t.mesh),particles.splice(particles.indexOf(t),1))}
-                    function toggleSystem(){systemOn=!systemOn,systemOn?(btnPower.classList.add('active'),btnPower.innerText="STOP PLANT",elPumpLight.classList.add("on"),elPumpLight.classList.remove("off"),elTooltip.innerText="Pump Running. Milk flowing."):(btnPower.classList.remove('active'),btnPower.innerText="START PLANT",elPumpLight.classList.remove("on"),elPumpLight.classList.add("off"),elTooltip.innerText="System Stopped.")}
-                    function toggleSep(){sepOn=!sepOn;btnSep.innerText=sepOn?"Separator: ON":"Separator: OFF";btnSep.classList.toggle('active')}
-                    function toggleHomo(){homoOn=!homoOn;btnHomo.innerText=homoOn?"Homogenizer: ON":"Homogenizer: OFF";btnHomo.classList.toggle('active')}
-                    window.updateSteam=function(t){steamVal=parseInt(t),document.getElementById("steam-val-text").innerText=t+"%"}
-                    function setLight(t,e){e?(t.classList.add("on"),t.classList.remove("off")):(t.classList.add("off"),t.classList.remove("on"))}
-                    function onWindowResize(){camera.aspect=window.innerWidth/getRendererHeight(),camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,getRendererHeight())}
-                    init();
-                <\/script>
-            </body>
-            </html>
-        `
+                }
+            }
+        }
+
+        function spawnParticle() {
+            var pGeo = new THREE.SphereGeometry(0.14, 8, 8);
+            var pMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+            var pMesh = new THREE.Mesh(pGeo, pMat);
+            scene.add(pMesh);
+            rawParticles.push({ mesh: pMesh, path: pathRawFeed, progress: 0, stage: 'raw' });
+        }
+
+        function updateStepBanner(stepNum) {
+            currentStepIdx = stepNum - 1;
+            document.getElementById('step-num').innerText = 'Step ' + stepNum + '/10';
+            document.getElementById('step-desc').innerText = flowSteps[currentStepIdx].desc;
+        }
+
+        function toggleMasterPower() {
+            masterPower = !masterPower;
+            playSound('click');
+            var btn = document.getElementById('btn-master');
+            var badge = document.getElementById('sys-mode-badge');
+            var lbl = document.getElementById('lbl-master-state');
+
+            if (masterPower) {
+                btn.innerText = "⏹ STOP HTST PLANT"; btn.className = "scada-btn danger";
+                badge.innerText = "RUNNING (PROD)"; badge.className = "mode-badge mode-run";
+                lbl.innerText = "RUNNING"; lbl.style.color = "#4ade80";
+            } else {
+                btn.innerText = "▶ START HTST PLANT"; btn.className = "scada-btn success";
+                badge.innerText = "OFFLINE"; badge.className = "mode-badge mode-off";
+                lbl.innerText = "OFF"; lbl.style.color = "#94a3b8";
+            }
+        }
+
+        function toggleCIP() {
+            isCIP = !isCIP;
+            playSound('click');
+            var badge = document.getElementById('sys-mode-badge');
+            badge.innerText = isCIP ? "CIP CLEANING" : (masterPower ? "RUNNING (PROD)" : "OFFLINE");
+            badge.className = isCIP ? "mode-badge mode-divert" : (masterPower ? "mode-badge mode-run" : "mode-badge mode-off");
+        }
+
+        function onFlowChange(val) {
+            flowRateLPH = parseFloat(val);
+            document.getElementById('lbl-flow').innerText = flowRateLPH.toLocaleString() + ' LPH';
+            document.getElementById('kpi-flow').innerText = flowRateLPH.toLocaleString();
+        }
+
+        function onSteamChange(val) {
+            steamPercent = parseFloat(val);
+            document.getElementById('lbl-steam').innerText = steamPercent + '%';
+        }
+
+        function togglePID() {
+            pidAuto = !pidAuto;
+            playSound('click');
+            var btn = document.getElementById('btn-pid');
+            btn.innerText = pidAuto ? "PID AUTO HEATING: ON" : "PID MANUAL STEAM";
+            btn.className = pidAuto ? "scada-btn primary" : "scada-btn warning";
+        }
+
+        function toggleSeparator() {
+            sepActive = !sepActive;
+            playSound('click');
+            var btn = document.getElementById('btn-sep');
+            btn.innerText = sepActive ? "Separator: ON (6k)" : "Separator: OFF";
+            btn.classList.toggle('active');
+        }
+
+        function toggleHomogenizer() {
+            homoActive = !homoActive;
+            playSound('click');
+            var btn = document.getElementById('btn-homo');
+            btn.innerText = homoActive ? "Homogenizer: ON (200B)" : "Homogenizer: OFF";
+            btn.classList.toggle('active');
+        }
+
+        function setCamera(preset) {
+            playSound('click');
+            document.querySelectorAll('.cam-btn').forEach(function(b){ b.classList.remove('active'); });
+            event.target.classList.add('active');
+
+            switch(preset) {
+                case 'iso': camera.position.set(22, 18, 28); controls.target.set(0, 0, 0); break;
+                case 'regen': camera.position.set(-2, 8, 12); controls.target.set(-2, 2, 0); break;
+                case 'sep': camera.position.set(5, 8, 14); controls.target.set(5, 2, 5); break;
+                case 'homo': camera.position.set(5, 6, -14); controls.target.set(5, 2, -5); break;
+                case 'fdv': camera.position.set(18, 8, 10); controls.target.set(18, 3, 0); break;
+            }
+        }
+
+        function toggleAutoRotate() {
+            controls.autoRotate = !controls.autoRotate;
+            controls.autoRotateSpeed = 2.0;
+            playSound('click');
+            document.getElementById('btn-auto-rotate').classList.toggle('active');
+        }
+
+        function rotateCam(deltaX, deltaY) {
+            controls.rotateLeft(deltaX);
+            controls.rotateUp(deltaY);
+        }
+
+        function resetCam() {
+            camera.position.set(22, 18, 28);
+            controls.target.set(0, 0, 0);
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(function(){});
+            } else {
+                document.exitFullscreen().catch(function(){});
+            }
+        }
+
+        function openRegenModal() { playSound('click'); document.getElementById('regen-modal').classList.add('open'); }
+        function closeRegenModal() { playSound('click'); document.getElementById('regen-modal').classList.remove('open'); }
+
+        function triggerEStop() {
+            masterPower = false;
+            playSound('alarm');
+            document.getElementById('btn-master').innerText = "▶ START HTST PLANT";
+            document.getElementById('btn-master').className = "scada-btn success";
+            document.getElementById('sys-mode-badge').innerText = "EMERGENCY STOP";
+            document.getElementById('sys-mode-badge').className = "mode-badge mode-divert";
+            document.getElementById('lbl-master-state').innerText = "E-STOPPED";
+            document.getElementById('lbl-master-state').style.color = "#ef4444";
+        }
+
+        function onWindowResize() {
+            var container = document.getElementById('viewport-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        window.onload = init3D;
+    </script>
+</body>
+</html>
+`
     }
-}
-
-    
+};

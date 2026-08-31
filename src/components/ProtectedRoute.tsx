@@ -1,9 +1,9 @@
 "use client";
 
-import { useAuth } from '@/context/auth-context';
-import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
-import { Loader2 } from 'lucide-react';
+import { useAuth } from "@/context/auth-context";
+import { useRouter } from "next/navigation";
+import { useEffect, ReactNode } from "react";
+import { Loader2 } from "lucide-react";
 
 // Yeh component ek "gatekeeper" ki tarah kaam karega
 export default function ProtectedRoute({ children }: { children: ReactNode }) {

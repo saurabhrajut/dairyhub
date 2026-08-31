@@ -1,7 +1,7 @@
 // --- MAIN CONTROLLER ---
-import { handleSarathiChat } from './sarathi';
-import { handleCareerExpert } from './expert';
-import { handleInterviewSession } from './interview';
+import { handleSarathiChat } from "./sarathi";
+import { handleCareerExpert } from "./expert";
+import { handleInterviewSession } from "./interview";
 
 // Yeh function aapke UI widget se call hoga
 export async function generateOfflineResponse(

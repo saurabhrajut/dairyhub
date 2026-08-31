@@ -1,22 +1,18 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 import { Button } from "../ui/button";
-import { FlaskConical, Microscope, Shield, ArrowLeft, Search, Zap } from "lucide-react";
+import {
+  FlaskConical,
+  Microscope,
+  Shield,
+  ArrowLeft,
+  Search,
+  Zap
+} from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 import { adulterationContent } from "@/lib/content/adulteration-content";
 import { cn } from "@/lib/utils";
@@ -114,7 +110,7 @@ export function AdulterationModal({
           // === ACTIVE CATEGORY VIEW ===
           <div className="flex flex-col h-full min-h-0 overflow-hidden">
             {/* Header — fixed height, no shrink */}
-            <div className="flex items-center gap-3 px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm shrink-0">
+            <div className="flex items-center gap-3 px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-200 bg-white shrink-0">
               <Button
                 variant="ghost"
                 size="icon"

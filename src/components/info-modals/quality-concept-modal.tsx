@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -16,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  TableCaption,
+  TableCaption
 } from "@/components/ui/table";
 import { useLanguage } from "@/context/language-context";
 import { qualityContent } from "@/lib/content/quality-content";
@@ -50,7 +50,7 @@ import {
   Sparkles,
   LayoutGrid,
   Activity,
-  PackageCheck,
+  PackageCheck
 } from "lucide-react";
 
 // ─────────────────────────────────────────────

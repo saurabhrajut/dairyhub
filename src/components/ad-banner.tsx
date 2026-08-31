@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 interface AdBannerProps extends React.HTMLAttributes<HTMLElement> {
   'data-ad-client': string;

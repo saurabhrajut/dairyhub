@@ -5,17 +5,17 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import Image from "next/image";
-import { 
-  GraduationCap, 
-  Quote, 
-  Target, 
-  Share2, 
-  User, 
-  Rocket, 
-  Heart 
+import {
+  GraduationCap,
+  Quote,
+  Target,
+  Share2,
+  User,
+  Rocket,
+  Heart
 } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 import { aboutUsContent } from "@/lib/content/about-us-content";

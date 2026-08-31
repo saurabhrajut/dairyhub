@@ -5,13 +5,22 @@ const Header = dynamic(() => import('@/components/header').then(m => ({ default:
 const TopicGrid = dynamic(() => import('@/components/topic-grid').then(m => ({ default: m.TopicGrid })), { ssr: false, loading: () => <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div> });
 const DailyTip = dynamic(() => import('@/components/daily-tip').then(m => ({ default: m.DailyTip })), { ssr: false });
 const SarathiChatWidget = dynamic(() => import('@/components/sarathi-chat-widget').then(m => ({ default: m.SarathiChatWidget })), { ssr: false });
-import { FlaskConical, Beaker, Pipette, Settings, TestTube, Microscope, Combine, Loader2 } from 'lucide-react';
+import {
+  FlaskConical,
+  Beaker,
+  Pipette,
+  Settings,
+  TestTube,
+  Microscope,
+  Combine,
+  Loader2
+} from "lucide-react";
 import React, { useState, useEffect } from 'react';
 const SplashScreen = dynamic(() => import('@/components/splash-screen'), { ssr: false });
-import { useSplashScreen } from '@/context/splash-screen-context';
-import { cn } from '@/lib/utils';
-import { useAuth } from '@/context/auth-context';
-import { useRouter } from 'next/navigation';
+import { useSplashScreen } from "@/context/splash-screen-context";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/auth-context";
+import { useRouter } from "next/navigation";
 
 const AnimatedBackground = () => {
   const icons = [
@@ -39,7 +48,6 @@ const AnimatedBackground = () => {
     </div>
   );
 };
-
 
 const BottomNav = dynamic(() => import('@/components/bottom-nav').then(m => ({ default: m.BottomNav })), { ssr: false });
 const OnboardingTourModal = dynamic(() => import('@/components/onboarding-tour-modal').then(m => ({ default: m.OnboardingTourModal })), { ssr: false });
@@ -133,7 +141,6 @@ export default function Home() {
         </footer>
       </div>
 
-      <SarathiChatWidget />
       <OnboardingTourModal />
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>

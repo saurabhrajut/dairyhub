@@ -1,9 +1,9 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { useSubscription } from './subscription-context';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, User as FirebaseUser, updateProfile } from 'firebase/auth';
-import { initializeFirebase } from '@/firebase';
+import { useSubscription } from "./subscription-context";
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import { initializeFirebase } from "@/firebase";
 // Dynamically imported on the client to avoid SSR compilation failures
 
 export type Department = 'process-access' | 'production-access' | 'quality-access' | 'all-control-access' | 'guest';
@@ -243,7 +243,10 @@ const login = async (email: string, password: string) => {
         console.error("Firebase JS signOut error:", err);
     }
     try {
+        // Fix: Dynamically import Capacitor and FirebaseAuthentication
+        const { Capacitor } = await import('@capacitor/core');
         if (Capacitor.isNativePlatform()) {
+            const { FirebaseAuthentication } = await import('@capacitor-firebase/authentication');
             await FirebaseAuthentication.signOut();
         }
     } catch (err) {

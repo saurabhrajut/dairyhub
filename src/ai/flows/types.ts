@@ -1,5 +1,5 @@
 
-import { z } from 'genkit';
+import { z } from "genkit";
 
 export interface Message {
   role: "user" | "model";
@@ -27,7 +27,6 @@ export const AskExpertOutputSchema = z.object({
 });
 export type AskExpertOutput = z.infer<typeof AskExpertOutputSchema>;
 
-
 // Types for gyan-ai-flow.ts
 export const GyanAIInputSchema = z.object({
   topic: z.string().describe("The topic of expertise (e.g., Dairy Technology, Food Safety)."),
@@ -47,7 +46,6 @@ export const GyanAIOutputSchema = z.object({
 });
 export type GyanAIOutput = z.infer<typeof GyanAIOutputSchema>;
 
-
 // Types for refine-question-flow.ts
 export const RefineQuestionInputSchema = z.object({
   question: z.string().describe("The user's original question."),
@@ -58,7 +56,6 @@ export const RefineQuestionOutputSchema = z.object({
   refinedQuestion: z.string().describe("The refined, more professional question."),
 });
 export type RefineQuestionOutput = z.infer<typeof RefineQuestionOutputSchema>;
-
 
 // Types for text-to-speech-flow.ts
 export const TextToSpeechInputSchema = z.object({
@@ -123,13 +120,11 @@ export const InterviewPrepperOutputSchema = z.object({
 });
 export type InterviewPrepperOutput = z.infer<typeof InterviewPrepperOutputSchema>;
 
-
 // Types for DOCX parsing action
 export const DocxParsingInputSchema = z.object({
   file: z.instanceof(File),
 });
 export type DocxParsingInput = z.infer<typeof DocxParsingInputSchema>;
-
 
 // Types for sarathi-ai-flow.ts
 export const SarathiAIInputSchema = z.object({

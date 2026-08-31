@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -27,14 +27,13 @@ import {
   FlaskConical,
   Filter,
   CloudFog,
-  Cog,
   BookOpen,
   Play,
   ChevronRight,
   LayoutGrid,
-  Activity,
+  Activity
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 import { useLanguage } from "@/context/language-context";
 
 import { pasteurizationContent } from "@/lib/content/dairy-processing/pasteurization";
@@ -443,9 +442,9 @@ export function DairyProcessingModal({
         {selectedTopicInfo && selectedContent ? (
 
           /* ── Topic Detail View ─────────────────── */
-          <div className="flex-1 min-h-0 overflow-hidden bg-slate-50 flex flex-col strict-html-wrap">
+          <div className="flex-1 min-h-0 w-full h-full overflow-hidden bg-slate-50 flex flex-col strict-html-wrap">
             {selectedContent.simulation ? (
-              <Tabs defaultValue="info" className="w-full h-full flex flex-col overflow-hidden">
+              <Tabs defaultValue="info" className="w-full h-full flex-1 min-h-0 flex flex-col overflow-hidden">
                 <div className="px-3 sm:px-6 py-3 bg-white border-b border-gray-200 shrink-0 shadow-sm z-10">
                   <TabsList className="grid w-full max-w-sm mx-auto grid-cols-2 bg-slate-100 p-1 rounded-lg">
                     <TabsTrigger value="info" className="rounded-md py-1.5 text-xs sm:text-sm font-semibold data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:text-indigo-600 flex items-center gap-1.5">
@@ -456,31 +455,34 @@ export function DairyProcessingModal({
                     </TabsTrigger>
                   </TabsList>
                 </div>
-                <ScrollArea className="flex-1 w-full overflow-y-auto">
-                  <TabsContent value="info" className="m-0 p-3 sm:p-6 max-w-4xl mx-auto w-full pb-10">
-                    <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 dairy-content">
-                      <div dangerouslySetInnerHTML={{ __html: processTablesForMobile(selectedContent.content) }} />
+                <TabsContent value="info" className="m-0 flex-1 w-full h-full min-h-0 overflow-hidden flex flex-col data-[state=inactive]:!hidden">
+                  <div className="flex-1 w-full h-full min-h-0 overflow-y-auto">
+                    <div className="p-3 sm:p-6 max-w-5xl mx-auto w-full pb-10">
+                      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 dairy-content">
+                        <div dangerouslySetInnerHTML={{ __html: processTablesForMobile(selectedContent.content) }} />
+                      </div>
                     </div>
-                  </TabsContent>
-                  <TabsContent value="simulation" className="m-0 w-full h-[65vh] sm:h-[75vh] p-3 sm:p-6 max-w-6xl mx-auto pb-10">
-                    <div className="w-full h-full border border-dashed border-gray-300 rounded-xl overflow-hidden bg-slate-100 shadow-inner relative">
-                      <iframe
-                        srcDoc={selectedContent.simulation}
-                        className="absolute inset-0 w-full h-full border-none"
-                        title={`${selectedContent.title} Simulation`}
-                      />
-                    </div>
-                  </TabsContent>
-                </ScrollArea>
+                  </div>
+                </TabsContent>
+                <TabsContent value="simulation" className="m-0 w-full h-full flex-1 min-h-0 p-0 max-w-none mx-auto flex flex-col overflow-hidden data-[state=inactive]:!hidden">
+                  <div className="w-full h-full border-none overflow-hidden bg-slate-950 shadow-inner relative flex-1 min-h-0">
+                    <iframe
+                      srcDoc={selectedContent.simulation}
+                      className="absolute inset-0 w-full h-full border-none"
+                      title={`${selectedContent.title} Simulation`}
+                      allow="fullscreen"
+                    />
+                  </div>
+                </TabsContent>
               </Tabs>
             ) : (
-              <ScrollArea className="flex-1 w-full overflow-y-auto">
-                <div className="p-3 sm:p-6 max-w-4xl mx-auto w-full pb-10">
+              <div className="flex-1 w-full h-full min-h-0 overflow-y-auto">
+                <div className="p-3 sm:p-6 max-w-5xl mx-auto w-full pb-10">
                   <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 dairy-content">
                     <div dangerouslySetInnerHTML={{ __html: processTablesForMobile(selectedContent.content) }} />
                   </div>
                 </div>
-              </ScrollArea>
+              </div>
             )}
           </div>
 

@@ -6,13 +6,13 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+
 import { useLanguage } from "@/context/language-context";
 import { labEquipmentsContent } from "@/lib/content/lab-equipments-content";
 import {
@@ -40,13 +40,12 @@ import {
   PcCase,
   Orbit,
   Tornado,
-  Zap,
   Activity,
   RotateCw,
   LayoutGrid,
   PackageSearch,
   CheckCircle,
-  Scale, // ✅ Error fixed: Scale icon import yahan add kiya gaya hai
+  Scale
 } from "lucide-react";
 
 // ─────────────────────────────────────────────

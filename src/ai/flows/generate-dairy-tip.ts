@@ -9,8 +9,8 @@
  * - `DairyTipOutput`: The output type for the generateDairyTip function (string).
  */
 
-import { ai } from '@/ai/genkit';
-import { z } from 'zod';
+import { ai } from "@/ai/genkit";
+import { z } from "zod";
 
 // Zod schemas for input and output validation
 const DairyTipInputSchema = z.object({});

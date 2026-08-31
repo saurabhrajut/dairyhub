@@ -1,36 +1,34 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Bot, 
-  Loader2, 
-  MessageCircle, 
-  Send, 
-  X, 
-  ArrowLeft, 
-  BrainCircuit, 
-  Upload, 
-  FileCheck, 
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
+import {
+  Bot,
+  Loader2,
+  Send,
+  X,
+  ArrowLeft,
+  BrainCircuit,
+  Upload,
+  FileCheck,
   Sparkles,
   GraduationCap,
-  FileText,
   Settings,
   ChevronRight,
   RotateCcw,
   User,
   CheckCircle2
-} from 'lucide-react';
-import { useAuth } from '@/context/auth-context';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { generateOfflineResponse } from '@/lib/my-offline-ai';
-import { selectOfflineQuestions, evaluateOfflineAnswer } from '@/lib/my-offline-ai/interview';
+} from "lucide-react";
+import { useAuth } from "@/context/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+
+import { Select } from "@/components/ui/select";
+import { generateOfflineResponse } from "@/lib/my-offline-ai";
+import { selectOfflineQuestions, evaluateOfflineAnswer } from "@/lib/my-offline-ai/interview";
 
 // --- Types ---
 
@@ -371,62 +369,24 @@ Keep it conversational and encouraging.`;
   }
 }
 
-// --- Main Widget Component ---
+export interface SarathiChatWidgetProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
 
-export function SarathiChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+export function SarathiChatWidget({ isOpen: propIsOpen = true, onClose }: SarathiChatWidgetProps = {}) {
   const [activeMode, setActiveMode] = useState<ChatMode>('sarathi');
-  const { user } = useAuth();
-  const { toast } = useToast();
-  const router = useRouter();
-
-  const handleOpenChat = () => {
-    if (!user) {
-      toast({
-        title: "Login Required",
-        description: "Please log in to use the AI assistant.",
-        action: <Button onClick={() => router.push('/login')}>Login</Button>
-      });
-      return;
-    }
-    setIsOpen(true);
-  }
 
   return (
-    <>
-      {/* Floating Action Button */}
-      <div className={cn(
-        "fixed bottom-4 right-4 z-40 transition-all duration-500 ease-in-out", 
-        isOpen ? 'scale-0 opacity-0 rotate-90' : 'scale-100 opacity-100 rotate-0'
-      )}>
-        <Button 
-          size="icon" 
-          className="rounded-2xl w-14 h-14 shadow-2xl bg-gradient-to-tr from-orange-500 via-orange-400 to-blue-600 hover:scale-110 transition-all duration-300 border-4 border-white/90 overflow-hidden relative" 
-          onClick={handleOpenChat}
-        >
-          <img 
-              src="https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/IMG_6535%20(2).jpg?alt=media&token=5843169c-b4d5-4e04-b2be-3ab1a49af457"
-              alt="Sarathi Chat Bot"
-              className="w-full h-full object-cover"
-          />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full animate-pulse shadow-md z-10"></span>
-        </Button>
-      </div>
-
-      {/* Chat Container */}
-      <div className={cn(
-        "fixed z-50 bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 w-auto sm:w-[400px] max-w-[calc(100vw-2rem)] h-[80vh] sm:h-[620px] max-h-[85vh] bg-slate-50 border border-slate-200/80 rounded-3xl shadow-2xl flex flex-col transition-all duration-300 overflow-hidden",
-        isOpen ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 translate-y-6 scale-95 pointer-events-none'
-      )}>
-        <style dangerouslySetInnerHTML={{ __html: CONTENT_STYLES }} />
-        <ChatInterface 
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)} 
-            activeMode={activeMode} 
-            setActiveMode={setActiveMode} 
-        />
-      </div>
-    </>
+    <div className="flex flex-col h-full w-full bg-slate-50 relative overflow-hidden">
+      <style dangerouslySetInnerHTML={{ __html: CONTENT_STYLES }} />
+      <ChatInterface 
+        isOpen={propIsOpen}
+        onClose={onClose || (() => {})} 
+        activeMode={activeMode} 
+        setActiveMode={setActiveMode} 
+      />
+    </div>
   );
 }
 
@@ -942,7 +902,7 @@ function ChatInterface({ isOpen, onClose, activeMode, setActiveMode }: { isOpen:
   const isInterviewSetup = activeMode === 'gyan-ai' && selectedTopic === 'Interview Preparation' && messages.length === 0;
 
   return (
-    <div className="flex flex-col h-full bg-slate-50 relative rounded-3xl overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-full w-full bg-slate-50 relative overflow-hidden">
         {/* Settings Overlay */}
         {showSettings && (
             <div className="absolute inset-0 bg-white z-30 flex flex-col p-6 transition-all duration-300">

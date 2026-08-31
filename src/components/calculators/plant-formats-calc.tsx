@@ -2,11 +2,30 @@
 
 import React, { useState, useRef, useMemo } from "react";
 import {
-  Printer, Download, FileText, Building2, MapPin, Calendar,
-  Plus, Trash2, Loader2,
-  ShieldCheck, ClipboardList, Package, Wrench, BarChart3, Truck, Factory,
-  Settings, BookOpen, Archive, Zap, Droplets, ClipboardCheck,
-  Columns, RotateCw
+  Printer,
+  Download,
+  FileText,
+  Building2,
+  MapPin,
+  Calendar,
+  Plus,
+  Trash2,
+  Loader2,
+  ShieldCheck,
+  ClipboardList,
+  Package,
+  Wrench,
+  BarChart3,
+  Truck,
+  Factory,
+  Settings,
+  BookOpen,
+  Archive,
+  Zap,
+  Droplets,
+  ClipboardCheck,
+  Columns,
+  RotateCw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +35,13 @@ import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { savePdfFile } from "@/lib/mobile-download";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 type FormatType =
@@ -332,13 +357,13 @@ export default function PlantFormatsCalc() {
   const renderCustomHeaderCols = () => {
     const cols = customColumnsMap[selectedFormatId] || [];
     return cols.map((colName, cIdx) => (
-      <th key={`custom-col-head-${cIdx}`} className="border border-black px-1.5 py-1 text-center font-bold min-w-[80px]">
+      <th key={`custom-col-head-${cIdx}`} className="border border-black px-2 py-1.5 text-center font-bold min-w-[85px] align-middle text-[10px] leading-normal">
         <div className="flex items-center justify-between gap-1">
-          <span className="truncate">{colName}</span>
+          <span className="whitespace-normal break-words">{colName}</span>
           <button
             type="button"
             onClick={() => removeColumn(colName)}
-            className="text-red-500 hover:text-red-700 font-extrabold print:hidden text-[9px] px-1"
+            className="text-red-500 hover:text-red-700 font-extrabold print:hidden text-[10px] px-1"
             title="Remove Column"
           >
             ×
@@ -351,12 +376,12 @@ export default function PlantFormatsCalc() {
   const renderCustomBodyCells = (rowId: number | string) => {
     const cols = customColumnsMap[selectedFormatId] || [];
     return cols.map((colName, cIdx) => (
-      <td key={`custom-col-cell-${cIdx}`} className="border border-black p-0.5 text-center min-w-[80px]">
+      <td key={`custom-col-cell-${cIdx}`} className="border border-black p-0.5 text-center min-w-[85px] align-middle">
         <input
           type="text"
           value={cellVal(getCustomCell(rowId, colName))}
           onChange={(e) => updateCustomCell(rowId, colName, e.target.value)}
-          className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 focus:outline-none"
+          className="w-full text-center bg-transparent border-none text-[10px] leading-normal py-0.5 px-1 h-auto min-h-[22px] focus:ring-0 focus:outline-none"
           placeholder="-"
         />
       </td>
@@ -486,7 +511,7 @@ export default function PlantFormatsCalc() {
     }
   };
 
-  const inp = "w-full bg-transparent border-none focus:ring-0";
+  const inp = "w-full bg-transparent border-none focus:ring-0 text-[10px] leading-normal py-0.5 px-1 h-auto min-h-[22px] box-border align-middle outline-none";
 
   return (
     <div className="space-y-6">
@@ -665,7 +690,7 @@ export default function PlantFormatsCalc() {
               id="print-area-formats"
               ref={printAreaRef}
               className={cn(
-                "bg-white border border-slate-200 shadow-md font-sans text-black mx-auto overflow-hidden print:border-none print:shadow-none print:p-0 print:m-0",
+                "bg-white border border-slate-200 shadow-md font-sans text-black mx-auto print:border-none print:shadow-none print:p-0 print:m-0",
                 currentOrientation === "landscape" 
                   ? "w-[297mm] min-h-[210mm] p-[15mm] print:w-[297mm] print:h-[210mm]" 
                   : "w-[210mm] min-h-[297mm] p-[15mm] print:w-[210mm] print:h-[297mm]"
@@ -689,9 +714,9 @@ export default function PlantFormatsCalc() {
 
               {/* Meta Details Row */}
               <div className="grid grid-cols-3 border border-black p-2 bg-slate-50 text-[10px] font-bold gap-2 text-black">
-                <div>DATE: <span className="font-normal border-b border-black border-dotted ml-1">{currentDate}</span></div>
-                <div className="text-center">SHIFT IN-CHARGE: <span className="font-normal border-b border-black border-dotted ml-1">_________________</span></div>
-                <div className="text-right">FORMAT NO: <span className="font-mono font-normal border-b border-black border-dotted ml-1">PLT-{selectedFormat?.id.toUpperCase().replace(/-/g,"")}-{currentDate.replace(/-/g,"")}</span></div>
+                <div>DATE: <span className="font-normal border-b border-black ml-1 px-1">{isContentOn ? currentDate : "_________________"}</span></div>
+                <div className="text-center">SHIFT IN-CHARGE: <span className="font-normal border-b border-black ml-1 px-1">_________________</span></div>
+                <div className="text-right">FORMAT NO: <span className="font-mono font-normal border-b border-black ml-1 px-1">{isContentOn ? `PLT-${selectedFormat?.id.toUpperCase().replace(/-/g,"")}-${currentDate.replace(/-/g,"")}` : "_________________"}</span></div>
               </div>
             </div>
 

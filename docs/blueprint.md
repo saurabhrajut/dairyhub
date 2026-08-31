@@ -1,4 +1,4 @@
-# **App Name**: DhenuGuide
+# **App Name**: Dairy Hub
 
 ## Core Features:
 

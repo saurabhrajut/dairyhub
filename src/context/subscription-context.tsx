@@ -1,12 +1,24 @@
-
 "use client";
 
-import { createContext, useState, useContext, ReactNode, useCallback, useEffect } from 'react';
-import { doc, getDoc, setDoc, serverTimestamp, Firestore, getFirestore } from 'firebase/firestore';
-import { initializeFirebase } from '@/firebase';
-import { add } from 'date-fns';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
+import {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useCallback,
+  useEffect
+} from "react";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+  Firestore
+} from "firebase/firestore";
+import { initializeFirebase } from "@/firebase";
+import { add, Duration } from "date-fns";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError, type SecurityRuleContext } from "@/firebase/errors";
 
 export type SubscriptionPlan = '1-day' | '7-days' | '1-month' | '6-months' | 'yearly' | 'lifetime';
 
@@ -72,7 +84,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     setExpiryDate(null);
   };
 
-  const subscribe = async (newPlan: SubscriptionPlan, userId: string, paymentId: string) => {
+  const subscribe = async (newPlan: SubscriptionPlan, userId: string, paymentId: string): Promise<void> => {
     if (!db) {
       console.error("Firestore is not initialized.");
       return;
@@ -132,7 +144,6 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   };
   
   const isPro = !!plan && (plan === 'lifetime' || (expiryDate !== null && expiryDate > new Date()));
-
 
   return (
     <SubscriptionContext.Provider value={{ plan, expiryDate, subscribe, isPro, loadSubscription, clearSubscription }}>

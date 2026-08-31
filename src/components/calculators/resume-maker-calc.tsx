@@ -1,15 +1,39 @@
 "use client";
 
 import React, { useState, useRef, useMemo } from "react";
-import { 
-  Printer, Download, FileText, Building2, MapPin, Calendar, 
-  Plus, Trash2, CheckCircle, Info, Loader2, FileDown,
-  User, Mail, Phone, Globe, Linkedin, Briefcase, GraduationCap,
-  Award, Sparkles, FolderKanban, Languages, Layout, Palette,
-  Upload, Eye, Edit3, ArrowLeft, RefreshCw,
-  ChevronDown, Check, Star, Lightbulb, Zap, CheckSquare, ShieldCheck,
-  BookOpen, HelpCircle, Layers, Settings, ChevronRight,
-  Target, Copy, Type, FileCode, Sliders, Scissors, AlignLeft
+import {
+  Printer,
+  Download,
+  FileText,
+  Building2,
+  MapPin,
+  Plus,
+  Trash2,
+  CheckCircle,
+  Info,
+  Loader2,
+  User,
+  Mail,
+  Phone,
+  Globe,
+  Linkedin,
+  Briefcase,
+  GraduationCap,
+  Award,
+  Sparkles,
+  FolderKanban,
+  Languages,
+  Layout,
+  Palette,
+  Upload,
+  RefreshCw,
+  Star,
+  Lightbulb,
+  Zap,
+  ChevronRight,
+  Target,
+  Copy,
+  Type
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,15 +42,21 @@ import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { savePdfFile } from "@/lib/mobile-download";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
@@ -1369,40 +1399,55 @@ Location: ${loc}`;
     }, 150);
   };
 
-  // Direct High-Quality A4 PDF Download via html2canvas & jsPDF
+  // Direct High-Quality A4 PDF Download via html2canvas & jsPDF with Smart Page-Break & Full Width Slicing
   const handleDownloadPDF = async () => {
     if (!previewRef.current) return;
     setIsDownloading(true);
     toast({
       title: "Rendering High-Quality A4 PDF...",
-      description: "Optimizing typography and page margins. Please wait a moment.",
+      description: "Formatting full-width A4 layout and multi-page alignment. Please wait...",
     });
 
     try {
       // Ensure preview tab is active for rendering
       setActiveViewTab("preview");
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
       const element = previewRef.current;
 
-      // Render canvas with scale 2.5 (High resolution) for crisp fonts with zero clipping or text loss
+      // Render canvas with fixed 850px viewport so A4 width is 100% full (210mm) on all mobile & desktop screens
       const canvas = await html2canvas(element, {
         scale: 2.5,
         useCORS: true,
         allowTaint: true,
         logging: false,
         backgroundColor: "#ffffff",
-        windowWidth: element.scrollWidth || 800,
+        windowWidth: 850,
         scrollX: 0,
         scrollY: 0,
         onclone: (clonedDoc) => {
           const clonedElement = clonedDoc.getElementById("resume-a4-preview");
           if (clonedElement) {
+            // Force exact 210mm A4 width (793.7px at 96dpi)
+            clonedElement.style.width = "793.7px";
+            clonedElement.style.minWidth = "793.7px";
+            clonedElement.style.maxWidth = "793.7px";
+            clonedElement.style.transform = "none";
+            clonedElement.style.margin = "0";
             clonedElement.style.display = "block";
             clonedElement.style.visibility = "visible";
             clonedElement.style.boxShadow = "none";
-            clonedElement.style.margin = "0 auto";
             clonedElement.style.border = "none";
+            clonedElement.style.boxSizing = "border-box";
+
+            // Prevent container shrink on mobile viewports
+            const parent = clonedElement.parentElement;
+            if (parent) {
+              parent.style.width = "850px";
+              parent.style.minWidth = "850px";
+              parent.style.maxWidth = "none";
+              parent.style.overflow = "visible";
+            }
 
             // Force all child text and headings to be explicitly visible
             clonedElement.querySelectorAll("*").forEach((child) => {
@@ -1412,7 +1457,6 @@ Location: ${loc}`;
         }
       });
 
-      const imgData = canvas.toDataURL("image/jpeg", 0.98);
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -1420,33 +1464,93 @@ Location: ${loc}`;
         compress: true
       });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm
-      const pdfHeight = pdf.internal.pageSize.getHeight(); // 297mm
+      const pdfWidth = 210; // mm
+      const pdfHeight = 297; // mm
 
-      const imgWidth = pdfWidth;
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
 
-      let heightLeft = imgHeight;
-      let position = 0;
+      // 1 A4 Page height in canvas pixel units (ratio 297 / 210)
+      const pageCanvasHeight = Math.floor((canvasWidth * 297) / 210);
 
-      // Add first page
-      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, "FAST");
-      heightLeft -= pdfHeight;
+      // Single Page Case
+      if (canvasHeight <= pageCanvasHeight + 30) {
+        const imgData = canvas.toDataURL("image/jpeg", 0.98);
+        const imgHeight = (canvasHeight * pdfWidth) / canvasWidth;
+        pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, imgHeight, undefined, "FAST");
+      } else {
+        // Multi-Page Case: Smart Canvas Slicing at safe white-space Y cutlines to prevent text cutting
+        const ctx = canvas.getContext("2d");
+        let startY = 0;
+        let pageCount = 0;
 
-      // Multi-page clean layout slice if content extends beyond 1 page
-      while (heightLeft >= 2) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, "FAST");
-        heightLeft -= pdfHeight;
+        while (startY < canvasHeight) {
+          if (pageCount > 0) pdf.addPage();
+          pageCount++;
+
+          let targetEndY = startY + pageCanvasHeight;
+          if (targetEndY >= canvasHeight) {
+            targetEndY = canvasHeight;
+          } else {
+            // Scan upwards from targetEndY to find a clean white background row with no text
+            let safeY = targetEndY;
+            const minScanY = Math.max(startY + pageCanvasHeight * 0.65, targetEndY - pageCanvasHeight * 0.25);
+
+            if (ctx) {
+              for (let y = targetEndY; y >= minScanY; y--) {
+                const rowData = ctx.getImageData(0, y, canvasWidth, 1).data;
+                let isWhiteRow = true;
+                for (let x = 0; x < rowData.length; x += 32) {
+                  const r = rowData[x];
+                  const g = rowData[x + 1];
+                  const b = rowData[x + 2];
+                  if (r < 245 || g < 245 || b < 245) {
+                    isWhiteRow = false;
+                    break;
+                  }
+                }
+                if (isWhiteRow) {
+                  safeY = y;
+                  break;
+                }
+              }
+            }
+            targetEndY = safeY;
+          }
+
+          const sliceHeight = targetEndY - startY;
+
+          // Create slice canvas
+          const pageCanvas = document.createElement("canvas");
+          pageCanvas.width = canvasWidth;
+          pageCanvas.height = sliceHeight;
+          const pageCtx = pageCanvas.getContext("2d");
+
+          if (pageCtx) {
+            pageCtx.fillStyle = "#ffffff";
+            pageCtx.fillRect(0, 0, canvasWidth, sliceHeight);
+            pageCtx.drawImage(
+              canvas,
+              0, startY, canvasWidth, sliceHeight,
+              0, 0, canvasWidth, sliceHeight
+            );
+          }
+
+          const sliceDataUrl = pageCanvas.toDataURL("image/jpeg", 0.98);
+          const slicePdfHeight = (sliceHeight * pdfWidth) / canvasWidth;
+
+          pdf.addImage(sliceDataUrl, "JPEG", 0, 0, pdfWidth, slicePdfHeight, undefined, "FAST");
+
+          startY = targetEndY;
+        }
       }
 
       const fileName = `${resumeData.personal.fullName || "Resume"}_CV.pdf`.replace(/\s+/g, "_");
       await savePdfFile(pdf, fileName);
 
       toast({
-        title: "A4 PDF Saved Successfully!",
-        description: `Downloaded ${fileName} with full content.`,
+        title: "Full-Width A4 PDF Saved!",
+        description: `Exported ${fileName} with smart page-break alignment.`,
       });
     } catch (err) {
       console.error("PDF render error:", err);

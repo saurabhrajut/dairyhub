@@ -6,49 +6,50 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLanguage } from "@/context/language-context";
 import { waterTestingContent } from "@/lib/content/water-testing-content";
 import { Button } from "../ui/button";
-import { 
-    ArrowLeft, 
-    TestTube, 
-    Droplet, 
-    Waves, 
-    FlaskConical, 
-    Beaker, 
-    Zap, 
-    Scale, 
-    Calculator, 
-    Thermometer, 
-    Activity,
-    Magnet,
-    Gem,
-    Gauge,
-    Filter,
-    Atom,
-    Factory,
-    Wind,
-    Pipette,
-    FlaskRound,
-    Leaf,
-    Microscope,
-    GlassWater,
-    Sparkles,
-    Layers,
-    CircleDot,
-    Radiation,
-    TestTubeDiagonal,
-    BadgeAlert,
-    Chrome,
-    Eye,
-    Fingerprint,
-    Palmtree,
-    Boxes
+import {
+  ArrowLeft,
+  TestTube,
+  Droplet,
+  Waves,
+  FlaskConical,
+  Beaker,
+  Scale,
+  Calculator,
+  Thermometer,
+  Activity,
+  Magnet,
+  Gem,
+  Gauge,
+  Filter,
+  Atom,
+  Factory,
+  Wind,
+  Pipette,
+  FlaskRound,
+  Leaf,
+  Microscope,
+  GlassWater,
+  Sparkles,
+  Layers,
+  CircleDot,
+  Radiation,
+  TestTubeDiagonal,
+  BadgeAlert,
+  Chrome,
+  Eye,
+  Fingerprint,
+  Palmtree,
+  Boxes,
+  Video
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { triggerVideoTutorial } from "@/components/tutorial-videos-modal";
 
 // ✅ COMPLETE ICON MAPPING FOR ALL WATER TESTS
 const testsConfig: Record<string, { icon: any, color: string }> = {
@@ -216,7 +217,7 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-6xl w-[95vw] h-[90vh] flex flex-col p-4 sm:p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
+      <DialogContent className="max-w-6xl w-[95vw] h-[90vh] flex flex-col p-4 sm:p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 overflow-hidden">
         
         {selectedTest && activeConfig ? (
              // === ACTIVE VIEW (Detailed Content) ===
@@ -242,8 +243,8 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
                     </div>
                 </DialogHeader>
 
-                <ScrollArea className="flex-1 mt-2 sm:mt-4 sm:pr-4 w-full">
-                    <div className="pb-8">
+                <ScrollArea className="flex-1 mt-2 sm:mt-4 sm:pr-4 w-full min-w-0">
+                    <div className="pb-8 w-full min-w-0">
                         <WaterTestSection test={selectedTest} />
                     </div>
                 </ScrollArea>
@@ -267,12 +268,22 @@ export function WaterTestingModal({ isOpen, setIsOpen }: { isOpen: boolean; setI
                             </DialogDescription>
                         </div>
                     </div>
+                    <div className="flex justify-center mt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => triggerVideoTutorial('water-testing')}
+                        className="text-xs font-semibold text-cyan-600 hover:text-cyan-800 bg-cyan-50 border-cyan-200 gap-1.5 rounded-full"
+                      >
+                        <Video className="w-3.5 h-3.5 text-cyan-600" /> Watch Video Tutorial 📺
+                      </Button>
+                    </div>
                 </DialogHeader>
 
                 {/* ✅ Replaced ScrollArea with Native div for reliable Scroll Restoration */}
                 <div 
                     ref={scrollContainerRef}
-                    className="flex-1 overflow-y-auto mt-4 sm:mt-6 sm:pr-4 pb-8 styled-scrollbar"
+                    className="flex-1 overflow-y-auto mt-4 sm:mt-6 sm:pr-4 pb-8 styled-scrollbar w-full min-w-0"
                 >
                     {/* ✅ Mobile Optimized Important Note */}
                     {content.important_note && (

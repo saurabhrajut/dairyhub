@@ -5,9 +5,8 @@
  * @fileOverview Provides recipe suggestions based on the final milk composition.
  */
 
-import {ai} from '@/ai/genkit';
-import { SuggestDairyRecipesInputSchema, SuggestDairyRecipesOutputSchema, type SuggestDairyRecipesInput } from './types';
-
+import { ai } from "@/ai/genkit";
+import { SuggestDairyRecipesInputSchema, SuggestDairyRecipesOutputSchema, type SuggestDairyRecipesInput } from "./types";
 
 const prompt = ai.definePrompt({
   name: 'suggestDairyRecipesPrompt',
@@ -39,7 +38,6 @@ const suggestDairyRecipesFlow = ai.defineFlow(
     return {recipeSuggestions: output!.recipeSuggestions!};
   }
 );
-
 
 export async function suggestDairyRecipes(input: SuggestDairyRecipesInput) {
   return suggestDairyRecipesFlow(input);

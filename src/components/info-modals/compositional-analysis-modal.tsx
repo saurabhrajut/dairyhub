@@ -6,15 +6,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -25,14 +20,11 @@ import {
   ShieldCheck,
   Component,
   FlaskConical,
-  Snowflake,
   Thermometer,
   Archive,
-  Zap,
-  FileSpreadsheet,
   Search,
   ChevronRight,
-  LayoutGrid,
+  LayoutGrid
 } from "lucide-react";
 import { IceCreamIcon, PaneerIcon } from "@/components/icons";
 import { useLanguage } from "@/context/language-context";

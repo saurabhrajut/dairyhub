@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { 
-  Lightbulb, 
-  X, 
-  Copy, 
-  ChevronRight, 
-  ChevronLeft, 
-  Sparkles 
+import {
+  Lightbulb,
+  X,
+  Copy,
+  ChevronRight,
+  ChevronLeft,
+  Sparkles
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/context/language-context";
@@ -91,7 +91,7 @@ export function DailyTip() {
       {/* Background Glow */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500/20 to-indigo-500/20 rounded-xl blur-sm opacity-50 sm:opacity-0 sm:group-hover:opacity-100 transition duration-700" />
       
-      <Card className="relative overflow-hidden border-border/40 bg-background/80 backdrop-blur-md shadow-sm rounded-xl">
+      <Card className="relative overflow-hidden border-border/40 bg-background shadow-sm rounded-xl">
         
         {/* Main Layout Container: Vertical on Mobile, Horizontal on Desktop */}
         <div className="flex flex-col sm:flex-row items-center sm:justify-between p-4 sm:p-2 gap-4 sm:gap-3">

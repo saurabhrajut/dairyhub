@@ -1,0 +1,50 @@
+import type {NextConfig} from 'next';
+
+const nextConfig: NextConfig = {
+  // 🚀 REQUIRED FOR ANDROID/CAPACITOR: Generates the static 'out' folder
+  output: 'export', 
+  
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
+  images: {
+    // 🚀 Unoptimized must be true for static exports (Capacitor requirement)
+    unoptimized: true, 
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestudio.app',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'google.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
+  serverExternalPackages: ['handlebars', 'dotprompt'],
+};
+
+export default nextConfig;

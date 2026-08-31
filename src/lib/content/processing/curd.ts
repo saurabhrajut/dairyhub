@@ -1283,10 +1283,3 @@ export const curdContent = {
     }
 }
 
-    
-
-    
-
-    
-
-    

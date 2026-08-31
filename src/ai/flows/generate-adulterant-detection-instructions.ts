@@ -4,8 +4,8 @@
  * @fileOverview A flow to generate instructions for detecting milk adulterants and preservatives.
  */
 
-import {ai} from '@/ai/genkit';
-import { GenerateAdulterantDetectionInstructionsInputSchema, GenerateAdulterantDetectionInstructionsOutputSchema, type GenerateAdulterantDetectionInstructionsInput } from './types';
+import { ai } from "@/ai/genkit";
+import { GenerateAdulterantDetectionInstructionsInputSchema, GenerateAdulterantDetectionInstructionsOutputSchema, type GenerateAdulterantDetectionInstructionsInput } from "./types";
 
 const generateAdulterantDetectionInstructionsFlow = ai.defineFlow(
   {

@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentData } from 'firebase/firestore';
+import { useEffect, useState } from "react";
+import { getApps, getApp } from "firebase/app";
+import {
+  collection,
+  onSnapshot,
+  QuerySnapshot,
+  DocumentData
+} from "firebase/firestore";
+import { getOrCreateFirestore } from "../index";
 
 // ✅ "default" hata diya gaya hai
 export function useCollection(path: string) {
@@ -10,7 +17,8 @@ export function useCollection(path: string) {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const db = getFirestore();
+    if (!getApps().length) return;
+    const db = getOrCreateFirestore(getApp());
     const colRef = collection(db, path);
     const unsub = onSnapshot(
       colRef,

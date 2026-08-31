@@ -4,9 +4,8 @@
  * @fileOverview A flow to refine a user's question to be more professional.
  */
 
-import { ai } from '@/ai/genkit';
-import { RefineQuestionInputSchema, RefineQuestionOutputSchema, type RefineQuestionInput } from './types';
-
+import { ai } from "@/ai/genkit";
+import { RefineQuestionInputSchema, RefineQuestionOutputSchema, type RefineQuestionInput } from "./types";
 
 const refineQuestionPrompt = ai.definePrompt({
     name: 'refineQuestionPrompt',

@@ -30856,7 +30856,6 @@ W  = Weight of milk sample taken (g)
 
 1.4007 = (14.007/1000) × 100 = simplified factor
 
-
 STEP 2 - Protein Calculate Karo:
 
 % Protein = % Nitrogen × 6.38
@@ -31419,7 +31418,6 @@ V_sample = Volume of milk in pack (ml)
 (W₂ - W₁) = Weight of sediment (g)
 × 1000 = g to mg conversion
 × 1000 = ml to L conversion
-
 
 METHOD 2: Percentage Basis
 
@@ -66784,7 +66782,6 @@ W  = Weight of milk sample taken (g)
 
 1.4007 = (14.007/1000) × 100 = simplified factor
 
-
 STEP 2 - Calculate Protein:
 
 % Protein = % Nitrogen × 6.38
@@ -67344,7 +67341,6 @@ V_sample = Volume of milk in pack (ml)
 (W₂ - W₁) = Weight of sediment (g)
 × 1000 = g to mg conversion
 × 1000 = ml to L conversion
-
 
 METHOD 2: Percentage Basis
 

@@ -4,9 +4,8 @@
  * @fileOverview A flow for the Sarathi AI assistant.
  */
 
-import { ai } from '@/ai/genkit';
-import { SarathiAIInputSchema, SarathiAIOutputSchema, type SarathiAIInput } from './types';
-
+import { ai } from "@/ai/genkit";
+import { SarathiAIInputSchema, SarathiAIOutputSchema, type SarathiAIInput } from "./types";
 
 const sarathiAIPrompt = ai.definePrompt({
     name: 'sarathiAIPrompt',
@@ -44,7 +43,7 @@ const sarathiAIFlow = ai.defineFlow(
         
         const { output } = await sarathiAIPrompt(
             restOfInput,
-            { history: history || [] }
+            { history: history || [] } as any
         );
 
         return output!;

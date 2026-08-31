@@ -6,18 +6,49 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table";
 import { Button } from "../ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
-  ArrowLeft, BookOpen, Droplet, Wind, ShieldCheck, Component, Factory,
-  FlaskConical, Snowflake, Thermometer, Beaker, Archive, Atom, Loader2,
-  AlertTriangle, TestTube2, ChevronRight, Info, Microscope, Milk, Tag,
-  Zap, FileText, Sparkles, LayoutGrid, Activity, PackageCheck, Search
+  ArrowLeft,
+  BookOpen,
+  Droplet,
+  Wind,
+  ShieldCheck,
+  Component,
+  Factory,
+  FlaskConical,
+  Snowflake,
+  Thermometer,
+  Beaker,
+  Archive,
+  Atom,
+  Loader2,
+  AlertTriangle,
+  TestTube2,
+  ChevronRight,
+  Info,
+  Microscope,
+  Milk,
+  Tag,
+  Zap,
+  FileText,
+  Sparkles,
+  LayoutGrid,
+  Activity,
+  PackageCheck,
+  Search
 } from "lucide-react";
 import { IceCreamIcon, PaneerIcon } from "../icons";
 import { useLanguage } from "@/context/language-context";
@@ -206,7 +237,6 @@ const renderDescription = (desc: any) => {
     </>
   );
 };
-
 
 // =============================================================================
 // TOPIC CONTENT COMPONENTS

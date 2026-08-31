@@ -7,13 +7,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
+  DialogFooter
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Star, MessageSquarePlus, Send, CheckCircle2, Bug, Lightbulb, BookOpen, ThumbsUp } from "lucide-react";
+import {
+  Star,
+  MessageSquarePlus,
+  Send,
+  CheckCircle2,
+  Bug,
+  Lightbulb,
+  BookOpen,
+  ThumbsUp
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";

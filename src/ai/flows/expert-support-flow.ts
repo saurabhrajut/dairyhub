@@ -4,9 +4,8 @@
  * @fileOverview A flow to generate an expert response for a user's question.
  */
 
-import { ai } from '@/ai/genkit';
-import { AskExpertInputSchema, AskExpertOutputSchema, type AskExpertInput } from './types';
-
+import { ai } from "@/ai/genkit";
+import { AskExpertInputSchema, AskExpertOutputSchema, type AskExpertInput } from "./types";
 
 const expertSupportPrompt = ai.definePrompt({
     name: 'expertSupportPrompt',
@@ -40,13 +39,12 @@ const expertSupportFlow = ai.defineFlow(
         
         const { output } = await expertSupportPrompt(
             restOfInput,
-            { history: history || [] }
+            { history: history || [] } as any
         );
 
         return output!;
     }
 );
-
 
 export async function askExpert(input: AskExpertInput) {
   return expertSupportFlow(input);

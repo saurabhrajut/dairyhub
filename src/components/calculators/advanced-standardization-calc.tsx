@@ -1,13 +1,18 @@
 "use client";
 
 import React, { useState, useMemo, useRef } from "react";
-import { 
-  Calculator, Plus, Trash2, Printer, Download, FileText, 
-  Beaker, RefreshCw, CheckCircle, Scale, Droplet, Sparkles,
-  Info, Loader2, FileDown, Layers, Percent, Flame, Building2,
-  Calendar, Award, ChevronRight, AlertCircle, Save, FolderOpen,
-  ChevronDown, ChevronUp, SlidersHorizontal, Milk, DollarSign, Package,
-  CheckCircle2, IndianRupee
+import {
+  Calculator,
+  Beaker,
+  Scale,
+  Droplet,
+  Sparkles,
+  Layers,
+  ChevronDown,
+  ChevronUp,
+  Milk,
+  CheckCircle2,
+  IndianRupee
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,9 +21,15 @@ import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { savePdfFile } from "@/lib/mobile-download";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { snfFormulas } from "@/lib/data";
@@ -542,6 +553,16 @@ export function AdvancedStandardizationCalc() {
         scrollY: 0,
       });
       printAreaRef.current.classList.remove("is-exporting-pdf");
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
       await savePdfFile(pdf, `Advanced_Standardization_${selectedPresetId}_${Date.now()}.pdf`);

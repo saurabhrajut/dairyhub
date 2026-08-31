@@ -1051,5 +1051,3 @@ export const evaporationContent = {
     }
 };
 
-    
-

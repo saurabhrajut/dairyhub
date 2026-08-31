@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Mail, Lock, Loader2, UserCheck } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import { MilkCanIcon } from '@/components/icons';
-import { useAuth } from '@/context/auth-context';
-
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Mail, Lock, Loader2, UserCheck } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { MilkCanIcon } from "@/components/icons";
+import { useAuth } from "@/context/auth-context";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -25,8 +24,7 @@ export default function LoginPage() {
         setIsLoading(true);
 
         try {
-            const userCredential = await login(email, password);
-            console.log(userCredential.user);
+            await login(email, password);
             toast({
                 title: 'Login Successful!',
                 description: "Welcome back!",
@@ -62,7 +60,6 @@ export default function LoginPage() {
             setIsLoading(false);
         }
     }
-
 
     return (
         <div className="bg-gray-50 flex items-center justify-center min-h-screen p-4">

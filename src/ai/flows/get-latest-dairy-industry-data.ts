@@ -10,8 +10,8 @@
  * - DairyIndustryDataSchema - The Zod schema for the output data structure.
  */
 
-import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { ai } from "@/ai/genkit";
+import { z } from "genkit";
 
 const DairyIndustryDataSchema = z.object({
   overview: z.array(z.string()).describe('A list of key overview points about the Indian dairy industry. Include the latest statistics on milk production, market size, and growth rate.'),

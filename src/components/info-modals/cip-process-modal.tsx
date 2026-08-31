@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +32,7 @@ import {
   ChevronRight,
   LayoutGrid,
   Droplet,
-  Beaker,
+  Beaker
 } from "lucide-react";
 
 // ─────────────────────────────────────────────
@@ -220,8 +220,7 @@ const topicComponents: Record<string, React.FC<{ content: any; accent?: string }
       <p className="mb-5 text-gray-600 strict-html-wrap">{content.cip_cycle.intro}</p>
       
       {/* Structural visual aid for learning the cycle */}
-      
-      
+
       <div className="space-y-1 mt-6 w-full min-w-0 max-w-full">
         {content.cip_cycle.steps.map((step: any, i: number) => (
           <CollapsibleStep key={i} step={step} index={i} total={content.cip_cycle.steps.length} />

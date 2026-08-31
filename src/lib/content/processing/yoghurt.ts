@@ -1632,4 +1632,3 @@ export const yoghurtContent = {
     }
 }
 
-  

@@ -1,61 +1,56 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from 'react';
-import {
-  Dialog,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { 
-  Loader2, 
-  UserPlus, 
-  Bot, 
-  ArrowLeft, 
-  Send, 
-  Briefcase, 
-  Star, 
-  CheckCircle2, 
+import {
+  Loader2,
+  UserPlus,
+  ArrowLeft,
+  Send,
+  Briefcase,
+  Star,
+  CheckCircle2,
   Sparkles,
   MessageSquare,
   Phone,
-  Mail,
   User,
   Check,
   X,
   MessageCircle,
   AlertCircle
-} from 'lucide-react';
-import { useAuth } from '@/context/auth-context';
-import { initializeFirebase } from '@/firebase';
-import { 
-  collection, 
-  doc, 
-  setDoc, 
-  getDocs, 
-  addDoc, 
-  onSnapshot, 
-  query, 
-  where, 
-  orderBy, 
+} from "lucide-react";
+import { useAuth } from "@/context/auth-context";
+import { initializeFirebase } from "@/firebase";
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  addDoc,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
   serverTimestamp,
   updateDoc,
   deleteDoc
-} from 'firebase/firestore';
+} from "firebase/firestore";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface Expert {
   id: string;

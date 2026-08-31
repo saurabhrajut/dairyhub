@@ -1,16 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Milk,
   Calculator,
-  FileSpreadsheet,
   Bot,
   ChevronRight,
   ChevronLeft,
@@ -21,7 +17,7 @@ import {
   Recycle,
   Lightbulb,
   PackageCheck,
-  Globe,
+  Globe
 } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 

@@ -2070,4 +2070,3 @@ export const rasgullaContent = {
     }
 }
 
-    

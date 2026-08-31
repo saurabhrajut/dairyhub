@@ -1,27 +1,65 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useAuth } from '@/context/auth-context';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "@/context/auth-context";
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useLanguage } from '@/context/language-context';
-import { Heart, Mail, MessageCircle, ChevronLeft, LogOut, Settings, HelpCircle, User, Loader2, Building2, ChevronRight, BookOpen, Droplet, Moon, Sun, Gift, Sparkles, Shield, CheckCircle2, Star, Play, Bookmark, MessageSquarePlus, Video, Trash2 } from 'lucide-react';
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { useLanguage } from "@/context/language-context";
+import {
+  Heart,
+  Mail,
+  MessageCircle,
+  ChevronLeft,
+  LogOut,
+  Settings,
+  HelpCircle,
+  User,
+  Loader2,
+  Building2,
+  ChevronRight,
+  BookOpen,
+  Droplet,
+  Moon,
+  Sun,
+  Gift,
+  Sparkles,
+  ShieldCheck,
+  CheckCircle2,
+  Star,
+  MessageSquarePlus,
+  Video,
+  Camera,
+  Edit3,
+  Globe
+} from "lucide-react";
 import type { Department } from '@/context/auth-context';
-import { useReadingMode } from '@/context/reading-mode-context';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
-import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { OnboardingTourModal } from '@/components/onboarding-tour-modal';
-import { useFavorites } from '@/context/favorites-context';
-import { UserFeedbackModal } from '@/components/user-feedback-modal';
-import { TutorialVideosModal } from '@/components/tutorial-videos-modal';
-import { BottomNav } from '@/components/bottom-nav';
+import { useReadingMode } from "@/context/reading-mode-context";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { OnboardingTourModal } from "@/components/onboarding-tour-modal";
+import { UserFeedbackModal } from "@/components/user-feedback-modal";
+import { TutorialVideosModal } from "@/components/tutorial-videos-modal";
+import { BottomNav } from "@/components/bottom-nav";
 
 // ============================================================
 // 🔑 RAZORPAY CONFIG
@@ -35,13 +73,6 @@ const DONATION_TIERS = [
   { amount: 1000, label: '₹1K',  emoji: '🏆', desc: 'Champion Sponsor' },
 ];
 
-const EditIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-        <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
-    </svg>
-);
-
 const themes = [
   { name: 'default', label: 'Default', color: 'bg-gray-400',   icon: Sun      },
   { name: 'sepia',   label: 'Sepia',   color: 'bg-[#C6B8A3]',  icon: BookOpen },
@@ -54,767 +85,659 @@ const themes = [
   { name: 'cream',   label: 'Cream',   color: 'bg-[#FFFBF0]',  icon: BookOpen },
 ] as const;
 
-const FRICTION          = 0.98;
-const BOUNCE_DAMPING    = 0.8;
-const COLLISION_DAMPING = 0.9;
-const CONTAINER_WIDTH   = 400;
-const CONTAINER_HEIGHT  = 300;
-
 function loadRazorpayScript(): Promise<boolean> {
-    return new Promise((resolve) => {
-        if ((window as any).Razorpay) { resolve(true); return; }
-        const existing = document.getElementById('razorpay-script');
-        if (existing) {
-            const poll = setInterval(() => {
-                if ((window as any).Razorpay) { clearInterval(poll); resolve(true); }
-            }, 100);
-            setTimeout(() => { clearInterval(poll); resolve(false); }, 10000);
-            return;
-        }
-        const script = document.createElement('script');
-        script.id      = 'razorpay-script';
-        script.src     = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.onload  = () => resolve(true);
-        script.onerror = () => resolve(false);
-        document.body.appendChild(script);
-    });
+  return new Promise((resolve) => {
+    if ((window as any).Razorpay) { resolve(true); return; }
+    const existing = document.getElementById('razorpay-script');
+    if (existing) {
+      const poll = setInterval(() => {
+        if ((window as any).Razorpay) { clearInterval(poll); resolve(true); }
+      }, 100);
+      setTimeout(() => { clearInterval(poll); resolve(false); }, 10000);
+      return;
+    }
+    const script = document.createElement('script');
+    script.id      = 'razorpay-script';
+    script.src     = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload  = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 }
 
 export default function ProfilePage() {
-    const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
-    const { language, setLanguage } = useLanguage();
-    const { toast } = useToast();
-    const router = useRouter();
-    const { theme, setTheme, isEnabled, setIsEnabled } = useReadingMode();
-    const { favorites, removeFavorite } = useFavorites();
+  const { user, loading, logout, updateUserProfile, updateUserPhoto } = useAuth();
+  const { language, setLanguage } = useLanguage();
+  const { toast } = useToast();
+  const router = useRouter();
+  const { theme, setTheme, isEnabled, setIsEnabled } = useReadingMode();
 
-    const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
-    const [isSettingsOpen, setIsSettingsOpen]           = useState(false);
-    const [isHelpOpen, setIsHelpOpen]                   = useState(false);
-    const [isTourOpen, setIsTourOpen]                   = useState(false);
-    const [isFeedbackOpen, setIsFeedbackOpen]           = useState(false);
-    const [isTutorialsOpen, setIsTutorialsOpen]         = useState(false);
-    const [isEditingName, setIsEditingName]             = useState(false);
-    const [tempName, setTempName]                       = useState('');
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen]           = useState(false);
+  const [isHelpOpen, setIsHelpOpen]                   = useState(false);
+  const [isTourOpen, setIsTourOpen]                   = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen]           = useState(false);
+  const [isTutorialsOpen, setIsTutorialsOpen]         = useState(false);
+  const [isEditingName, setIsEditingName]             = useState(false);
+  const [tempName, setTempName]                       = useState('');
 
-    const [selectedTier, setSelectedTier]         = useState<typeof DONATION_TIERS[0] | null>(null);
-    const [isPaymentLoading, setIsPaymentLoading] = useState(false);
-    const [paymentSuccess, setPaymentSuccess]     = useState(false);
-    const [lastPaymentId, setLastPaymentId]       = useState('');
+  const [selectedTier, setSelectedTier]         = useState<typeof DONATION_TIERS[0] | null>(null);
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+  const [paymentSuccess, setPaymentSuccess]     = useState(false);
+  const [lastPaymentId, setLastPaymentId]       = useState('');
 
-    const [balls, setBalls] = useState([
-        { id: 1, x: 60,  y: 50,  vx: 2,  vy: 1,  size: 64, gradient: 'linear-gradient(135deg, #C084FC, #A78BFA)' },
-        { id: 2, x: 250, y: 90,  vx: -1, vy: 2,  size: 48, gradient: 'linear-gradient(135deg, #F9A8D4, #EC4899)' },
-        { id: 3, x: 40,  y: 140, vx: 1,  vy: -1, size: 56, gradient: 'linear-gradient(135deg, #93C5FD, #60A5FA)' },
-        { id: 4, x: 300, y: 40,  vx: -2, vy: -1, size: 40, gradient: 'linear-gradient(135deg, #67E8F9, #22D3EE)' },
-        { id: 5, x: 280, y: 170, vx: 0,  vy: 2,  size: 52, gradient: 'linear-gradient(135deg, #FDE68A, #F59E0B)' },
-        { id: 6, x: 70,  y: 200, vx: 2,  vy: 0,  size: 44, gradient: 'linear-gradient(135deg, #86EFAC, #34D399)' },
-        { id: 7, x: 280, y: 70,  vx: -1, vy: 1,  size: 50, gradient: 'linear-gradient(135deg, #A5B4FC, #6366F1)' },
-        { id: 8, x: 320, y: 130, vx: 1,  vy: -2, size: 46, gradient: 'linear-gradient(135deg, #FDA4AF, #FB7185)' },
-    ]);
+  useEffect(() => {
+    if (!loading && !user) router.push('/login');
+    else if (user) setTempName(user.displayName || '');
+  }, [user, loading, router]);
 
-    const draggingRef = useRef<{ id: number; lastX: number; lastY: number } | null>(null);
-    const requestRef  = useRef<number>();
-    const ballsRef    = useRef(balls);
-    useEffect(() => { ballsRef.current = balls; }, [balls]);
-
-    const updatePhysics = () => {
-        const B = [...ballsRef.current];
-        B.forEach((ball, i) => {
-            if (draggingRef.current?.id === ball.id) return;
-            ball.x += ball.vx; ball.y += ball.vy;
-            ball.vx *= FRICTION; ball.vy *= FRICTION;
-            if (ball.x <= 0)                                 { ball.x = 0;                           ball.vx = -ball.vx * BOUNCE_DAMPING; }
-            else if (ball.x + ball.size >= CONTAINER_WIDTH)  { ball.x = CONTAINER_WIDTH - ball.size;  ball.vx = -ball.vx * BOUNCE_DAMPING; }
-            if (ball.y <= 0)                                 { ball.y = 0;                           ball.vy = -ball.vy * BOUNCE_DAMPING; }
-            else if (ball.y + ball.size >= CONTAINER_HEIGHT) { ball.y = CONTAINER_HEIGHT - ball.size; ball.vy = -ball.vy * BOUNCE_DAMPING; }
-            for (let j = i + 1; j < B.length; j++) {
-                const o = B[j];
-                const dx = (o.x + o.size/2) - (ball.x + ball.size/2);
-                const dy = (o.y + o.size/2) - (ball.y + ball.size/2);
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                const minD = (ball.size + o.size) / 2;
-                if (dist < minD) {
-                    const ang = Math.atan2(dy, dx), ovlp = minD - dist;
-                    const mx = Math.cos(ang)*ovlp/2, my = Math.sin(ang)*ovlp/2;
-                    ball.x -= mx; ball.y -= my; o.x += mx; o.y += my;
-                    const tvx = ball.vx, tvy = ball.vy;
-                    ball.vx = o.vx * COLLISION_DAMPING; ball.vy = o.vy * COLLISION_DAMPING;
-                    o.vx = tvx * COLLISION_DAMPING;     o.vy = tvy * COLLISION_DAMPING;
-                }
-            }
-        });
-        setBalls(B);
-        requestRef.current = requestAnimationFrame(updatePhysics);
-    };
-    useEffect(() => {
-        requestRef.current = requestAnimationFrame(updatePhysics);
-        return () => { if (requestRef.current) cancelAnimationFrame(requestRef.current); };
-    }, []);
-
-    const handleStart = (e: React.MouseEvent | React.TouchEvent, id: number) => {
-        const cx = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
-        const cy = 'touches' in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
-        draggingRef.current = { id, lastX: cx, lastY: cy };
-    };
-    const handleMove = (e: any) => {
-        if (!draggingRef.current) return;
-        const cx = e.touches ? e.touches[0].clientX : e.clientX;
-        const cy = e.touches ? e.touches[0].clientY : e.clientY;
-        const dx = cx - draggingRef.current.lastX, dy = cy - draggingRef.current.lastY;
-        const nb = [...ballsRef.current];
-        const ball = nb.find(b => b.id === draggingRef.current!.id);
-        if (ball) { ball.x += dx; ball.y += dy; ball.vx = dx * 1.5; ball.vy = dy * 1.5; }
-        draggingRef.current.lastX = cx; draggingRef.current.lastY = cy;
-    };
-    const handleEnd = () => { draggingRef.current = null; };
-    useEffect(() => {
-        window.addEventListener('mousemove', handleMove);
-        window.addEventListener('mouseup', handleEnd);
-        window.addEventListener('touchmove', handleMove, { passive: false });
-        window.addEventListener('touchend', handleEnd);
-        return () => {
-            window.removeEventListener('mousemove', handleMove);
-            window.removeEventListener('mouseup', handleEnd);
-            window.removeEventListener('touchmove', handleMove);
-            window.removeEventListener('touchend', handleEnd);
-        };
-    }, []);
-
-    useEffect(() => {
-        if (!loading && !user) router.push('/login');
-        else if (user) setTempName(user.displayName || '');
-    }, [user, loading, router]);
-
-    // ============================================================
-    // 💳 RAZORPAY PAYMENT
-    //
-    // FIX: prefill.contact HATA DIYA — yahi wajah thi ki Razorpay
-    // phone number ko naam ki jagah show karta tha.
-    //
-    // Ab sirf name aur email pass ho raha hai.
-    // name field mein app ka login naam directly aa raha hai.
-    // ============================================================
-    const handleRazorpayPayment = async () => {
-        if (!selectedTier) {
-            toast({ variant: 'destructive', title: 'Select an Amount', description: 'Please select a donation tier first.' });
-            return;
-        }
-
-        setIsPaymentLoading(true);
-        const scriptLoaded = await loadRazorpayScript();
-
-        if (!scriptLoaded) {
-            toast({ variant: 'destructive', title: 'Payment Error', description: 'Failed to load payment gateway. Please check your internet connection.' });
-            setIsPaymentLoading(false);
-            return;
-        }
-
-        const donorName = user?.displayName?.trim() || 'Dairy Hub User';
-
-        const options = {
-            key:      RAZORPAY_KEY_ID,
-            amount:   selectedTier.amount * 100,
-            currency: 'INR',
-
-            name: donorName,
-            description: 'Thanks from Dairy Hub Team',
-
-            image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E%20(1).png?alt=media&token=8b9c0609-762c-4e7b-bcfc-94b65976b54c',
-
-            prefill: {
-                name:  donorName,
-                email: user?.email || '',
-            },
-
-            readonly: {
-                name:  true,
-                email: true,
-            },
-
-            notes: {
-                userId:    user?.uid   || 'anonymous',
-                donorName: donorName,
-                email:     user?.email || '',
-            },
-
-            config: {
-                display: {
-                    language: 'en',
-                    hide: [
-                        { key: 'contact' },
-                    ],
-                },
-            },
-
-            theme: { color: '#A78BFA' },
-
-            handler: function (response: any) {
-                setLastPaymentId(response.razorpay_payment_id);
-                setPaymentSuccess(true);
-                setIsPaymentLoading(false);
-                toast({
-                    title: `🎉 ₹${selectedTier.amount} donation received!`,
-                    description: `Payment ID: ${response.razorpay_payment_id}`,
-                });
-            },
-
-            modal: {
-                ondismiss: () => {
-                    setIsPaymentLoading(false);
-                    toast({ title: 'Payment Cancelled', description: 'You closed the payment window.' });
-                },
-                escape: true,
-            },
-        };
-
-        try {
-            const rzp = new (window as any).Razorpay(options);
-            rzp.on('payment.failed', (response: any) => {
-                setIsPaymentLoading(false);
-                toast({
-                    variant: 'destructive',
-                    title: 'Payment Failed',
-                    description: response.error.description || 'Something went wrong. Please try again.',
-                });
-            });
-            rzp.open();
-        } catch {
-            setIsPaymentLoading(false);
-            toast({ variant: 'destructive', title: 'Error', description: 'Could not open payment window.' });
-        }
-    };
-
-    const resetDonation = () => {
-        setPaymentSuccess(false);
-        setSelectedTier(null);
-        setLastPaymentId('');
-    };
-
-    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!user || user.isAnonymous) {
-            toast({ variant: "destructive", title: "Action Not Allowed", description: "Guests cannot change profile picture." });
-            return;
-        }
-        if (event.target.files?.[0]) {
-            try {
-                await updateUserPhoto(event.target.files[0]);
-                toast({ title: "Profile picture updated!" });
-            } catch (error: any) {
-                toast({ variant: "destructive", title: "Upload Failed", description: error.message });
-            }
-        }
-    };
-
-    const handleSaveName = async () => {
-        if (!user || user.isAnonymous) { setIsEditingName(false); return; }
-        if (tempName.trim() && tempName.trim() !== user.displayName) {
-            try {
-                await updateUserProfile({ displayName: tempName.trim() });
-                setIsEditingName(false);
-                toast({ title: "Name updated!" });
-            } catch (error: any) {
-                toast({ variant: 'destructive', title: "Update failed", description: error.message });
-            }
-        } else { setIsEditingName(false); }
-    };
-
-    const handleLanguageChange = (lang: 'en' | 'hi') => {
-        setLanguage(lang);
-        toast({ title: "Language Updated", description: `Set to ${lang === 'hi' ? 'Hinglish' : 'English'}.` });
-    };
-
-    const handleDepartmentChange = async (dept: Department) => {
-        if (user && !user.isAnonymous) {
-            try {
-                await updateUserProfile({ department: dept });
-                toast({ title: "Department Updated" });
-            } catch (error: any) {
-                toast({ variant: 'destructive', title: "Update Failed", description: error.message });
-            }
-        }
-    };
-
-    const handleLogout = async () => {
-        try {
-            await logout();
-            router.push('/login');
-        } catch (error: any) {
-            toast({ variant: 'destructive', title: "Logout Failed", description: error.message });
-        }
-    };
-
-    const getDepartmentName = (deptKey?: Department) => {
-        if (!deptKey) return 'Not specified';
-        const names: Record<Department, string> = {
-            'process-access':     'Process Access',
-            'production-access':  'Production Access',
-            'quality-access':     'Quality Access',
-            'all-control-access': 'All Control Access',
-            'guest':              'Guest User',
-        };
-        return names[deptKey];
-    };
-
-    if (loading || !user) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100">
-                <Loader2 className="animate-spin h-8 w-8 text-purple-500" />
-            </div>
-        );
+  const handleRazorpayPayment = async () => {
+    if (!selectedTier) {
+      toast({ variant: 'destructive', title: 'Select an Amount', description: 'Please select a donation tier first.' });
+      return;
     }
 
+    setIsPaymentLoading(true);
+    const scriptLoaded = await loadRazorpayScript();
+
+    if (!scriptLoaded) {
+      toast({ variant: 'destructive', title: 'Payment Error', description: 'Failed to load payment gateway. Please check your internet connection.' });
+      setIsPaymentLoading(false);
+      return;
+    }
+
+    const donorName = user?.displayName?.trim() || 'Dairy Hub User';
+
+    const options = {
+      key:      RAZORPAY_KEY_ID,
+      amount:   selectedTier.amount * 100,
+      currency: 'INR',
+      name: donorName,
+      description: 'Thanks from Dairy Hub Team',
+      image: 'https://firebasestorage.googleapis.com/v0/b/dhenuguide.firebasestorage.app/o/EF9A49FE-8131-4DD5-9311-7FC058B1FD0E%20(1).png?alt=media&token=8b9c0609-762c-4e7b-bcfc-94b65976b54c',
+      prefill: {
+        name:  donorName,
+        email: user?.email || '',
+      },
+      readonly: {
+        name:  true,
+        email: true,
+      },
+      notes: {
+        userId:    user?.uid   || 'anonymous',
+        donorName: donorName,
+        email:     user?.email || '',
+      },
+      config: {
+        display: {
+          language: 'en',
+          hide: [
+            { key: 'contact' },
+          ],
+        },
+      },
+      theme: { color: '#2563EB' },
+      handler: function (response: any) {
+        setLastPaymentId(response.razorpay_payment_id);
+        setPaymentSuccess(true);
+        setIsPaymentLoading(false);
+        toast({
+          title: `🎉 ₹${selectedTier.amount} donation received!`,
+          description: `Payment ID: ${response.razorpay_payment_id}`,
+        });
+      },
+      modal: {
+        ondismiss: () => {
+          setIsPaymentLoading(false);
+          toast({ title: 'Payment Cancelled', description: 'You closed the payment window.' });
+        },
+        escape: true,
+      },
+    };
+
+    try {
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', (response: any) => {
+        setIsPaymentLoading(false);
+        toast({
+          variant: 'destructive',
+          title: 'Payment Failed',
+          description: response.error.description || 'Something went wrong. Please try again.',
+        });
+      });
+      rzp.open();
+    } catch {
+      setIsPaymentLoading(false);
+      toast({ variant: 'destructive', title: 'Error', description: 'Could not open payment window.' });
+    }
+  };
+
+  const resetDonation = () => {
+    setPaymentSuccess(false);
+    setSelectedTier(null);
+    setLastPaymentId('');
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user || user.isAnonymous) {
+      toast({ variant: "destructive", title: "Action Not Allowed", description: "Guests cannot change profile picture." });
+      return;
+    }
+    if (event.target.files?.[0]) {
+      try {
+        await updateUserPhoto(event.target.files[0]);
+        toast({ title: "Profile picture updated!" });
+      } catch (error: any) {
+        toast({ variant: "destructive", title: "Upload Failed", description: error.message });
+      }
+    }
+  };
+
+  const handleSaveName = async () => {
+    if (!user || user.isAnonymous) { setIsEditingName(false); return; }
+    if (tempName.trim() && tempName.trim() !== user.displayName) {
+      try {
+        await updateUserProfile({ displayName: tempName.trim() });
+        setIsEditingName(false);
+        toast({ title: "Name updated!" });
+      } catch (error: any) {
+        toast({ variant: 'destructive', title: "Update failed", description: error.message });
+      }
+    } else { setIsEditingName(false); }
+  };
+
+  const handleLanguageChange = (lang: 'en' | 'hi') => {
+    setLanguage(lang);
+    toast({ title: "Language Updated", description: `Set to ${lang === 'hi' ? 'Hinglish' : 'English'}.` });
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/login');
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: "Logout Failed", description: error.message });
+    }
+  };
+
+  const getDepartmentName = (deptKey?: Department) => {
+    if (!deptKey) return 'Dairy & Food Technology';
+    const names: Record<Department, string> = {
+      'process-access':     'Dairy Processing & Operations',
+      'production-access':  'Plant Production & Operations',
+      'quality-access':     'QA/QC Lab & Food Safety',
+      'all-control-access': 'Full Plant Control Access',
+      'guest':              'Guest Practitioner',
+    };
+    return names[deptKey];
+  };
+
+  if (loading || !user) {
     return (
-        <>
-        <style jsx>{`
-            @keyframes gradient-flow {
-                0%, 100% { background-position: 0% 50%; }
-                50%       { background-position: 100% 50%; }
-            }
-            @keyframes shimmer {
-                0%   { background-position: -200% center; }
-                100% { background-position:  200% center; }
-            }
-            .glass-card {
-                background: rgba(255, 255, 255, 0.7);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.5);
-                box-shadow: 0 8px 32px 0 rgba(167, 139, 250, 0.1);
-            }
-            .neon-border { position: relative; overflow: hidden; }
-            .neon-border::before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                padding: 2px;
-                border-radius: inherit;
-                background: linear-gradient(45deg, #A78BFA, #EC4899, #60A5FA, #A78BFA);
-                background-size: 300% 300%;
-                animation: gradient-flow 3s ease infinite;
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                pointer-events: none;
-            }
-            .tier-card {
-                transition: all 0.2s ease;
-                border: 2px solid transparent;
-            }
-            .tier-card:hover { transform: translateY(-2px); }
-            .tier-selected {
-                border-color: transparent !important;
-                background: linear-gradient(135deg, #A78BFA, #EC4899) !important;
-                color: white !important;
-                transform: translateY(-3px);
-                box-shadow: 0 8px 24px rgba(167, 139, 250, 0.4);
-            }
-            .tier-selected p { color: rgba(255,255,255,0.85) !important; }
-        `}</style>
-
-        <div className="max-w-md mx-auto min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-
-            {/* Header with Physics Balls */}
-            <div className="relative h-72 p-6 overflow-hidden select-none">
-                <div className="absolute inset-0 z-0">
-                    {balls.map(ball => (
-                        <div key={ball.id}
-                            onMouseDown={(e) => handleStart(e, ball.id)}
-                            onTouchStart={(e) => handleStart(e, ball.id)}
-                            className="absolute rounded-full cursor-grab active:cursor-grabbing"
-                            style={{
-                                width:      `${ball.size}px`,
-                                height:     `${ball.size}px`,
-                                left:       `${ball.x}px`,
-                                top:        `${ball.y}px`,
-                                background: ball.gradient,
-                                boxShadow:  draggingRef.current?.id === ball.id ? '0 12px 48px rgba(0,0,0,0.3)' : '0 8px 32px rgba(0,0,0,0.2)',
-                                transform:  draggingRef.current?.id === ball.id ? 'scale(1.1)' : 'scale(1)',
-                                zIndex:     draggingRef.current?.id === ball.id ? 20 : 10,
-                                touchAction: 'none',
-                            }}
-                        />
-                    ))}
-                </div>
-                <Link href="/" className="absolute top-6 left-6 z-20 cursor-pointer glass-card p-2 rounded-full hover:bg-white/50 transition-all">
-                    <ChevronLeft className="h-6 w-6 text-gray-700"/>
-                </Link>
-                <div className="flex flex-col items-center justify-center h-full relative z-10 pointer-events-none">
-                    <div className="relative neon-border rounded-full p-1 pointer-events-auto">
-                        <div className="relative">
-                            <img
-                                src={user.photoURL || 'https://placehold.co/128x128/E0E0E0/333?text=User'}
-                                alt="Profile"
-                                className="w-32 h-32 rounded-full border-4 border-white shadow-2xl object-cover"
-                            />
-                            {!user.isAnonymous && (
-                                <label htmlFor="fileInput" className="absolute bottom-0 right-0 bg-gradient-to-br from-purple-400 to-pink-400 p-2 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform">
-                                    <EditIcon />
-                                </label>
-                            )}
-                            <input type="file" id="fileInput" accept="image/*" className="hidden" onChange={handleFileChange} />
-                        </div>
-                    </div>
-                    {!user.isAnonymous && (
-                        <div className="mt-3 glass-card px-4 py-1 rounded-full flex items-center gap-2 pointer-events-auto">
-                            <Shield className="w-4 h-4 text-purple-500" />
-                            <span className="text-gray-700 text-sm font-semibold">Verified User</span>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Name Card */}
-            <div className="px-6 -mt-8 relative z-10">
-                <div className="glass-card p-6 rounded-2xl neon-border">
-                    <div className="flex items-center justify-center space-x-2 min-h-[36px]">
-                        {isEditingName ? (
-                            <div className="flex items-center space-x-2">
-                                <Input
-                                    type="text"
-                                    className="text-2xl font-bold text-gray-800 bg-white/50 text-center focus:ring-2 focus:ring-purple-400 h-10 border-purple-200"
-                                    value={tempName}
-                                    onChange={(e) => setTempName(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleSaveName()}
-                                    autoFocus
-                                />
-                                <Button onClick={handleSaveName} size="sm" className="bg-gradient-to-r from-purple-400 to-pink-400 text-white">Save</Button>
-                            </div>
-                        ) : (
-                            <div className="flex items-center space-x-2">
-                                <h1 className="text-2xl font-bold text-gray-800">{user.displayName || ''}</h1>
-                                {!user.isAnonymous && (
-                                    <button onClick={() => { setIsEditingName(true); setTempName(user.displayName || ''); }} className="text-gray-500 hover:text-purple-600">
-                                        <EditIcon />
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                    <p className="text-gray-600 text-sm text-center mt-2">{user.email}</p>
-                </div>
-            </div>
-
-            <div className="px-6 pb-6 mt-6 space-y-4">
-
-                {/* DONATION CARD */}
-                <Dialog open={isDonationModalOpen} onOpenChange={(open) => {
-                    setIsDonationModalOpen(open);
-                    if (!open) resetDonation();
-                }}>
-                    <div className="relative overflow-hidden p-6 rounded-2xl text-white shadow-xl bg-gradient-to-r from-pink-400 via-rose-400 to-red-400 neon-border">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ backgroundSize: '200% 100%', animation: 'shimmer 3s infinite' }}></div>
-                        <div className="relative z-10 text-center">
-                            <Sparkles className="w-8 h-8 mx-auto mb-2 text-yellow-200" />
-                            <h3 className="text-2xl font-bold">Support Dairy Hub's Mission</h3>
-                            <p className="text-sm mt-2 opacity-90">Your contribution keeps Dairy Hub free and constantly improving!</p>
-                            <DialogTrigger asChild>
-                                <Button className="mt-4 bg-white text-rose-500 font-bold py-2 px-6 rounded-full hover:bg-rose-50 transition-all hover:scale-105 shadow-lg">
-                                    <Heart className="mr-2 h-4 w-4"/> Donate Now
-                                </Button>
-                            </DialogTrigger>
-                        </div>
-                    </div>
-
-                    <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-                        <DialogHeader>
-                            <div className="flex justify-center mb-3">
-                                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-100 to-rose-200 flex items-center justify-center">
-                                    <Gift className="w-7 h-7 text-rose-500"/>
-                                </div>
-                            </div>
-                            <DialogTitle className="text-2xl font-bold text-center">Support Dairy Hub</DialogTitle>
-                            <DialogDescription className="text-center">
-                                Your support empowers us to build better tools for the community 🙏
-                            </DialogDescription>
-                        </DialogHeader>
-
-                        {paymentSuccess ? (
-                            <div className="py-8 text-center space-y-4">
-                                <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto" />
-                                <h3 className="text-xl font-bold text-gray-800">Thank You So Much! 🎉</h3>
-                                <p className="text-gray-600">
-                                    Your donation of <span className="font-bold text-rose-500">₹{selectedTier?.amount}</span> has been received.
-                                </p>
-                                {lastPaymentId && (
-                                    <p className="text-xs text-gray-400 font-mono bg-gray-50 px-3 py-2 rounded-lg">
-                                        Payment ID: {lastPaymentId}
-                                    </p>
-                                )}
-                                <p className="text-rose-600 font-semibold text-lg">Every contribution makes a difference! ❤️</p>
-                                <Button onClick={resetDonation} variant="outline" className="mt-2 border-rose-200 text-rose-500 hover:bg-rose-50">
-                                    Donate Again
-                                </Button>
-                            </div>
-                        ) : (
-                            <div className="py-4 space-y-5">
-                                <div>
-                                    <p className="text-sm font-semibold text-gray-700 mb-3 text-center">💝 Select a Donation Amount</p>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        {DONATION_TIERS.map((tier) => (
-                                            <button
-                                                key={tier.amount}
-                                                onClick={() => setSelectedTier(tier)}
-                                                className={cn(
-                                                    "tier-card p-4 rounded-2xl text-left bg-white border-2 border-rose-100 shadow-sm",
-                                                    selectedTier?.amount === tier.amount && "tier-selected"
-                                                )}
-                                            >
-                                                <span className="text-2xl block mb-1">{tier.emoji}</span>
-                                                <span className={cn("text-xl font-bold block", selectedTier?.amount === tier.amount ? "text-white" : "text-gray-800")}>
-                                                    {tier.label}
-                                                </span>
-                                                <p className="text-xs text-gray-500 mt-0.5">{tier.desc}</p>
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <Button
-                                    onClick={handleRazorpayPayment}
-                                    disabled={isPaymentLoading || !selectedTier}
-                                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 text-base rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all hover:scale-[1.02] shadow-lg disabled:opacity-50 disabled:scale-100"
-                                >
-                                    {isPaymentLoading ? (
-                                        <><Loader2 className="mr-2 h-5 w-5 animate-spin"/> Opening Payment Gateway...</>
-                                    ) : selectedTier ? (
-                                        <>❤️ Pay {selectedTier.label} via Razorpay</>
-                                    ) : (
-                                        <>Select an amount first</>
-                                    )}
-                                </Button>
-
-                                <p className="text-center text-xs text-gray-400">
-                                    💳 Cards · 📱 UPI · 🏦 NetBanking · 👝 Wallets — All major payment methods supported
-                                </p>
-                            </div>
-                        )}
-                    </DialogContent>
-                </Dialog>
-
-                {/* User Info Card */}
-                <div className="glass-card p-6 rounded-2xl neon-border">
-                    <h3 className="font-bold text-gray-700 mb-4 flex items-center gap-2">
-                        <User className="w-5 h-5 text-purple-500" /> Your Information
-                    </h3>
-                    <div className="space-y-3">
-                        {[
-                            { icon: Mail,      gradient: 'from-blue-300 to-blue-500',     value: user.email },
-                            { icon: User,      gradient: 'from-green-300 to-green-500',   value: user.gender || 'Not specified' },
-                            { icon: Building2, gradient: 'from-purple-300 to-purple-500', value: getDepartmentName(user.department) },
-                        ].map(({ icon: Icon, gradient, value }) => (
-                            <div key={value} className="flex items-center glass-card p-3 rounded-xl">
-                                <div className={`bg-gradient-to-br ${gradient} p-2 rounded-lg shadow-lg`}>
-                                    <Icon className="h-5 w-5 text-white"/>
-                                </div>
-                                <span className="ml-4 text-gray-700 capitalize">{value}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* ⭐ Saved Favorites & Quick Access */}
-                <div className="glass-card p-6 rounded-2xl neon-border space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h3 className="font-bold text-gray-700 flex items-center gap-2">
-                            <Bookmark className="w-5 h-5 text-amber-500 fill-amber-400" /> Saved Favorites & Quick Access
-                        </h3>
-                        <span className="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full">
-                            {favorites.length} saved
-                        </span>
-                    </div>
-
-                    {favorites.length === 0 ? (
-                        <div className="text-center py-5 text-xs text-gray-400 border border-dashed border-gray-200 rounded-xl">
-                            No favorite calculators or notes saved yet. Tap the bookmark icon on any topic to save it for quick access!
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                            {favorites.map((fav) => (
-                                <div
-                                    key={fav.id}
-                                    className="p-3 bg-white/80 border border-gray-100 rounded-xl flex items-center justify-between gap-2 shadow-sm hover:shadow-md transition-all group"
-                                >
-                                    <div className="flex items-center gap-2.5 min-w-0">
-                                        <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
-                                            <Bookmark className="w-4 h-4 fill-amber-500" />
-                                        </div>
-                                        <div className="truncate">
-                                            <p className="text-xs font-bold text-gray-800 truncate">{fav.title}</p>
-                                            <p className="text-[10px] text-gray-400 capitalize">{fav.category}</p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => removeFavorite(fav.id)}
-                                        className="p-1 text-gray-300 hover:text-rose-500 transition-colors"
-                                        title="Remove favorite"
-                                    >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                {/* Menu */}
-                <div className="glass-card rounded-2xl overflow-hidden neon-border">
-                    <ul className="divide-y divide-gray-200">
-                        <li onClick={() => setIsTutorialsOpen(true)} className="flex justify-between items-center p-4 hover:bg-blue-50 cursor-pointer transition-all">
-                            <span className="flex items-center gap-3 text-blue-900 font-bold">
-                                <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-2 rounded-lg shadow-lg"><Video className="w-5 h-5 text-white"/></div>
-                                Watch Video Tutorials 📺
-                            </span>
-                            <ChevronRight className="h-5 w-5 text-blue-500"/>
-                        </li>
-                        <li onClick={() => setIsFeedbackOpen(true)} className="flex justify-between items-center p-4 hover:bg-indigo-50 cursor-pointer transition-all">
-                            <span className="flex items-center gap-3 text-indigo-900 font-bold">
-                                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg shadow-lg"><MessageSquarePlus className="w-5 h-5 text-white"/></div>
-                                User Feedback & Suggestions 💬
-                            </span>
-                            <ChevronRight className="h-5 w-5 text-indigo-500"/>
-                        </li>
-                        <li onClick={() => setIsSettingsOpen(true)} className="flex justify-between items-center p-4 hover:bg-white/50 cursor-pointer transition-all">
-                            <span className="flex items-center gap-3 text-gray-700 font-medium">
-                                <div className="bg-gradient-to-br from-orange-300 to-orange-500 p-2 rounded-lg shadow-lg"><Settings className="w-5 h-5 text-white"/></div>
-                                Settings
-                            </span>
-                            <ChevronRight className="h-5 w-5 text-gray-400"/>
-                        </li>
-                        <li onClick={() => window.open('https://play.google.com/store/apps/details?id=in.co.dairyhub', '_blank')} className="flex justify-between items-center p-4 hover:bg-amber-50 cursor-pointer transition-all">
-                            <span className="flex items-center gap-3 text-amber-800 font-bold">
-                                <div className="bg-gradient-to-br from-amber-400 to-yellow-500 p-2 rounded-lg shadow-lg"><Star className="w-5 h-5 text-white fill-white"/></div>
-                                Rate Dairy Hub on Play Store ⭐
-                            </span>
-                            <ChevronRight className="h-5 w-5 text-amber-500"/>
-                        </li>
-                        <li onClick={() => setIsTourOpen(true)} className="flex justify-between items-center p-4 hover:bg-purple-50 cursor-pointer transition-all">
-                            <span className="flex items-center gap-3 text-purple-700 font-semibold">
-                                <div className="bg-gradient-to-br from-purple-400 to-indigo-500 p-2 rounded-lg shadow-lg"><Sparkles className="w-5 h-5 text-white"/></div>
-                                App Walkthrough & Guide
-                            </span>
-                            <ChevronRight className="h-5 w-5 text-purple-400"/>
-                        </li>
-                        <li onClick={() => setIsHelpOpen(true)} className="flex justify-between items-center p-4 hover:bg-white/50 cursor-pointer transition-all">
-                            <span className="flex items-center gap-3 text-gray-700 font-medium">
-                                <div className="bg-gradient-to-br from-blue-300 to-blue-500 p-2 rounded-lg shadow-lg"><HelpCircle className="w-5 h-5 text-white"/></div>
-                                Help & Support
-                            </span>
-                            <ChevronRight className="h-5 w-5 text-gray-400"/>
-                        </li>
-                        <li onClick={handleLogout} className="flex justify-between items-center p-4 hover:bg-red-50 cursor-pointer transition-all">
-                            <span className="flex items-center gap-3 text-red-500 font-medium">
-                                <div className="bg-gradient-to-br from-red-300 to-red-500 p-2 rounded-lg shadow-lg"><LogOut className="w-5 h-5 text-white"/></div>
-                                Logout
-                            </span>
-                            <ChevronRight className="h-5 w-5 text-red-400"/>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            {/* Settings Dialog */}
-            <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-                <DialogContent className="max-w-md">
-                    <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2"><Settings className="w-5 h-5"/>App Settings</DialogTitle>
-                        <DialogDescription>Change your app preferences here.</DialogDescription>
-                    </DialogHeader>
-                    <div className="py-4 space-y-6">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">App Language</label>
-                            <Select value={language} onValueChange={(v) => handleLanguageChange(v as 'en' | 'hi')}>
-                                <SelectTrigger><SelectValue/></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="en">English</SelectItem>
-                                    <SelectItem value="hi">Hinglish</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div>
-                            <Label className="block text-sm font-medium text-gray-700 mb-2">Reading Mode & Eye Protection</Label>
-                            <div className="flex items-center space-x-2 mb-4">
-                                <Switch id="reading-mode-switch" checked={isEnabled} onCheckedChange={setIsEnabled}/>
-                                <Label htmlFor="reading-mode-switch">Enable eye-friendly themes</Label>
-                            </div>
-                            {isEnabled && (
-                                <TooltipProvider>
-                                    <div className="flex justify-around items-center p-2 bg-muted rounded-lg">
-                                        {themes.map((t) => (
-                                            <Tooltip key={t.name}>
-                                                <TooltipTrigger asChild>
-                                                    <Button
-                                                        variant="ghost" size="icon"
-                                                        className={cn("w-8 h-8 rounded-full", theme === t.name ? 'ring-2 ring-primary ring-offset-2' : '')}
-                                                        onClick={() => setTheme(t.name)}
-                                                    >
-                                                        <div className={cn("w-5 h-5 rounded-full border", t.color)}/>
-                                                    </Button>
-                                                </TooltipTrigger>
-                                                <TooltipContent side="bottom"><p>{t.label}</p></TooltipContent>
-                                            </Tooltip>
-                                        ))}
-                                    </div>
-                                </TooltipProvider>
-                            )}
-                        </div>
-
-                        {/* Quick Actions in Settings */}
-                        <div className="pt-2 border-t space-y-2">
-                            <Button
-                                onClick={() => window.open('https://play.google.com/store/apps/details?id=in.co.dairyhub', '_blank')}
-                                className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs h-10 rounded-xl"
-                            >
-                                <Star className="w-4 h-4 mr-2 fill-white" /> Rate Us on Google Play Store ⭐
-                            </Button>
-
-                            <Button
-                                variant="outline"
-                                onClick={() => { setIsSettingsOpen(false); setIsTourOpen(true); }}
-                                className="w-full text-xs h-10 border-purple-300 text-purple-700 hover:bg-purple-50 font-semibold rounded-xl"
-                            >
-                                <Sparkles className="w-4 h-4 mr-2 text-purple-600" /> Restart Interactive Walkthrough Tour
-                            </Button>
-                        </div>
-                    </div>
-                </DialogContent>
-            </Dialog>
-
-            {/* Interactive Tour Modal */}
-            <OnboardingTourModal isOpen={isTourOpen} onClose={() => setIsTourOpen(false)} />
-
-            {/* Help Dialog */}
-            <Dialog open={isHelpOpen} onOpenChange={setIsHelpOpen}>
-                <DialogContent className="max-w-md">
-                    <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2"><HelpCircle className="w-5 h-5"/>Contact Support</DialogTitle>
-                        <DialogDescription>Get help from our team.</DialogDescription>
-                    </DialogHeader>
-                    <div className="py-4 space-y-4">
-                        <a href="https://wa.me/9119005734" target="_blank" rel="noopener noreferrer" className="block">
-                            <Button className="w-full bg-gradient-to-r from-green-400 to-green-500 text-white">
-                                <MessageCircle className="mr-2 h-5 w-5"/>WhatsApp
-                            </Button>
-                        </a>
-                        <a href="mailto:saurabhthakur8080@gmail.com" className="block">
-                            <Button className="w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white">
-                                <Mail className="mr-2 h-5 w-5"/>Email
-                            </Button>
-                        </a>
-                    </div>
-                </DialogContent>
-            </Dialog>
-
-            {/* User Feedback Modal */}
-            <UserFeedbackModal open={isFeedbackOpen} onOpenChange={setIsFeedbackOpen} />
-
-            {/* Video Tutorials Modal */}
-            <TutorialVideosModal open={isTutorialsOpen} onOpenChange={setIsTutorialsOpen} />
-
-            {/* Bottom Navigation */}
-            <BottomNav activeTab="profile" />
-        </div>
-        </>
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+        <Loader2 className="animate-spin h-9 w-9 text-blue-600" />
+      </div>
     );
+  }
+
+  return (
+    <>
+      <div className="max-w-md mx-auto min-h-screen pb-24 bg-gradient-to-b from-slate-100 via-slate-50 to-slate-100 text-slate-900 relative overflow-hidden font-sans">
+        
+        {/* LIGHT ELEGANT HERO HEADER */}
+        <div className="relative pt-6 pb-8 px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white rounded-b-3xl shadow-lg">
+          
+          {/* Top Bar Navigation */}
+          <div className="flex items-center justify-between mb-4">
+            <Link 
+              href="/" 
+              className="p-2.5 rounded-2xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white transition-all active:scale-95 flex items-center justify-center shadow-inner"
+            >
+              <ChevronLeft className="h-5 w-5 text-white" />
+            </Link>
+
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-bold uppercase tracking-wider shadow-inner">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+              Official Member
+            </div>
+
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="p-2.5 rounded-2xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white transition-all active:scale-95 flex items-center justify-center shadow-inner"
+            >
+              <Settings className="h-5 w-5 text-white" />
+            </button>
+          </div>
+
+          {/* AVATAR & USER PROFILE INFO */}
+          <div className="flex flex-col items-center text-center">
+            <div className="relative group">
+              <div className="w-24 h-24 rounded-3xl p-1 bg-white/30 backdrop-blur-sm shadow-xl">
+                <img
+                  src={user.photoURL || 'https://placehold.co/128x128/3B82F6/FFF?text=User'}
+                  alt="Profile"
+                  className="w-full h-full rounded-[20px] object-cover bg-white border-2 border-white shadow-md"
+                />
+              </div>
+
+              {!user.isAnonymous && (
+                <label 
+                  htmlFor="fileInput" 
+                  className="absolute -bottom-1 -right-1 bg-white hover:bg-slate-100 text-blue-600 p-2 rounded-xl shadow-lg cursor-pointer transition-transform hover:scale-110 border border-blue-100"
+                >
+                  <Camera className="w-3.5 h-3.5" />
+                </label>
+              )}
+              <input type="file" id="fileInput" accept="image/*" className="hidden" onChange={handleFileChange} />
+            </div>
+
+            {/* Editable Name & Email */}
+            <div className="mt-3.5 space-y-1 w-full max-w-xs">
+              {isEditingName ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Input
+                    type="text"
+                    className="text-center font-bold text-base bg-white text-slate-900 h-9 rounded-xl focus-visible:ring-white border-none shadow-md"
+                    value={tempName}
+                    onChange={(e) => setTempName(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSaveName()}
+                    autoFocus
+                  />
+                  <Button onClick={handleSaveName} size="sm" className="bg-white text-blue-700 hover:bg-slate-100 font-bold h-9 px-3 rounded-xl text-xs shadow-md">
+                    Save
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-1.5">
+                  <h1 className="text-lg font-extrabold text-white tracking-tight leading-tight drop-shadow-xs">
+                    {user.displayName || 'Dairy Practitioner'}
+                  </h1>
+                  {!user.isAnonymous && (
+                    <button 
+                      onClick={() => { setIsEditingName(true); setTempName(user.displayName || ''); }}
+                      className="text-blue-100 hover:text-white p-1 transition-colors"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              )}
+
+              <p className="text-xs text-blue-100 font-medium truncate">{user.email}</p>
+              
+              <div className="pt-1.5">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/20 backdrop-blur-md text-[11px] font-semibold text-white shadow-inner border border-white/20">
+                  <Building2 className="w-3.5 h-3.5 text-blue-200" />
+                  {getDepartmentName(user.department)}
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* MAIN BODY OPTIONS */}
+        <div className="p-5 space-y-4">
+
+          {/* ACCOUNT CREDENTIALS CARD */}
+          <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3">
+            <h3 className="font-extrabold text-xs text-slate-500 uppercase tracking-wider flex items-center gap-2">
+              <User className="w-4 h-4 text-blue-600" /> Professional Credentials
+            </h3>
+
+            <div className="space-y-2 text-xs">
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
+                <span className="text-slate-500 flex items-center gap-2 font-medium">
+                  <Mail className="w-4 h-4 text-blue-500" /> Registered Email
+                </span>
+                <span className="font-bold text-slate-800 truncate max-w-[180px]">{user.email}</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
+                <span className="text-slate-500 flex items-center gap-2 font-medium">
+                  <Globe className="w-4 h-4 text-teal-500" /> App Language
+                </span>
+                <span className="font-bold text-blue-600 uppercase">{language === 'hi' ? 'Hinglish' : 'English'}</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
+                <span className="text-slate-500 flex items-center gap-2 font-medium">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" /> Access Tier
+                </span>
+                <span className="font-extrabold text-emerald-600">100% Free Lifetime</span>
+              </div>
+            </div>
+          </div>
+
+          {/* APP OPTIONS MENU CARD */}
+          <div className="rounded-2xl bg-white border border-slate-200/80 overflow-hidden shadow-xs">
+            <div className="divide-y divide-slate-100">
+              
+              <button 
+                onClick={() => setIsTutorialsOpen(true)} 
+                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 text-left transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 border border-blue-100">
+                    <Video className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-blue-600 transition-colors">
+                      Watch Video Tutorials 📺
+                    </h4>
+                    <p className="text-[10px] text-slate-500">Step-by-step guides for plant machinery</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
+              <button 
+                onClick={() => setIsFeedbackOpen(true)} 
+                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 text-left transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100">
+                    <MessageSquarePlus className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">
+                      User Feedback & Suggestions 💬
+                    </h4>
+                    <p className="text-[10px] text-slate-500">Request new calculators & plant modules</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
+              <button 
+                onClick={() => setIsSettingsOpen(true)} 
+                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 text-left transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-amber-50 text-amber-600 border border-amber-100">
+                    <Settings className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-amber-600 transition-colors">
+                      App Preferences & Eye Protection
+                    </h4>
+                    <p className="text-[10px] text-slate-500">Eye-protection themes & Hinglish language</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
+              <button 
+                onClick={() => window.open('https://play.google.com/store/apps/details?id=in.co.dairyhub', '_blank')} 
+                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 text-left transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-yellow-50 text-yellow-600 border border-yellow-100">
+                    <Star className="w-4 h-4 fill-yellow-500" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-yellow-600 transition-colors">
+                      Rate Dairy Hub on Play Store ⭐
+                    </h4>
+                    <p className="text-[10px] text-slate-500">Support fellow dairy technologists</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
+              <button 
+                onClick={() => setIsTourOpen(true)} 
+                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 text-left transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600 border border-purple-100">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-purple-600 transition-colors">
+                      Interactive App Walkthrough
+                    </h4>
+                    <p className="text-[10px] text-slate-500">Replay guided tour of all dairy plant modules</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
+              <button 
+                onClick={() => setIsHelpOpen(true)} 
+                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 text-left transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-cyan-50 text-cyan-600 border border-cyan-100">
+                    <HelpCircle className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-cyan-600 transition-colors">
+                      Help & Direct Support
+                    </h4>
+                    <p className="text-[10px] text-slate-500">Contact team via WhatsApp or Email</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
+              <button 
+                onClick={handleLogout} 
+                className="w-full flex items-center justify-between p-4 hover:bg-rose-50 text-left transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-rose-50 text-rose-600 border border-rose-100">
+                    <LogOut className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs text-rose-600 group-hover:text-rose-700 transition-colors">
+                      Log Out Account
+                    </h4>
+                    <p className="text-[10px] text-slate-500">Sign out securely from this device</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-rose-400 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
+            </div>
+          </div>
+
+          {/* SUPPORTER BANNER (DONATION MODAL TRIGGER) */}
+          <Dialog open={isDonationModalOpen} onOpenChange={(open) => {
+            setIsDonationModalOpen(open);
+            if (!open) resetDonation();
+          }}>
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-pink-500 via-rose-500 to-rose-600 text-white shadow-md space-y-3 relative overflow-hidden">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0">
+                  <Heart className="w-5 h-5 text-white fill-white animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-xs text-white leading-tight">
+                    Support Dairy Hub Free Mission
+                  </h3>
+                  <p className="text-[11px] text-pink-100 mt-0.5">
+                    100% free app for all dairy students, lab technicians & plant engineers.
+                  </p>
+                </div>
+              </div>
+
+              <DialogTrigger asChild>
+                <Button className="w-full bg-white text-rose-600 hover:bg-pink-50 font-extrabold text-xs h-9 rounded-xl shadow-md border-none">
+                  <Heart className="mr-2 h-4 w-4 fill-rose-600" /> Support Community Development
+                </Button>
+              </DialogTrigger>
+            </div>
+
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-white text-slate-900 border-slate-200">
+              <DialogHeader>
+                <div className="flex justify-center mb-3">
+                  <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center">
+                    <Gift className="w-7 h-7 text-rose-500"/>
+                  </div>
+                </div>
+                <DialogTitle className="text-xl font-bold text-center text-slate-900">Support Dairy Hub</DialogTitle>
+                <DialogDescription className="text-center text-slate-500 text-xs">
+                  Your voluntary support empowers us to build better free tools for the dairy community 🙏
+                </DialogDescription>
+              </DialogHeader>
+
+              {paymentSuccess ? (
+                <div className="py-6 text-center space-y-4">
+                  <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto animate-bounce" />
+                  <h3 className="text-lg font-bold text-slate-900">Thank You So Much! 🎉</h3>
+                  <p className="text-xs text-slate-600">
+                    Your contribution of <span className="font-bold text-rose-600">₹{selectedTier?.amount}</span> has been received.
+                  </p>
+                  {lastPaymentId && (
+                    <p className="text-[11px] text-slate-500 font-mono bg-slate-50 p-2 rounded-lg border border-slate-200">
+                      Payment ID: {lastPaymentId}
+                    </p>
+                  )}
+                  <Button onClick={resetDonation} variant="outline" className="mt-2 border-slate-300 text-slate-700 hover:bg-slate-100">
+                    Donate Again
+                  </Button>
+                </div>
+              ) : (
+                <div className="py-2 space-y-4">
+                  <div>
+                    <p className="text-xs font-bold text-slate-700 mb-3 text-center">💝 Select Support Amount</p>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {DONATION_TIERS.map((tier) => (
+                        <button
+                          key={tier.amount}
+                          onClick={() => setSelectedTier(tier)}
+                          className={cn(
+                            "p-3 rounded-xl text-left bg-slate-50 border border-slate-200 transition-all",
+                            selectedTier?.amount === tier.amount && "bg-rose-500 border-rose-600 text-white shadow-md"
+                          )}
+                        >
+                          <span className="text-xl block mb-1">{tier.emoji}</span>
+                          <span className={cn("text-base font-extrabold block", selectedTier?.amount === tier.amount ? "text-white" : "text-slate-900")}>
+                            {tier.label}
+                          </span>
+                          <p className={cn("text-[10px] mt-0.5 line-clamp-1", selectedTier?.amount === tier.amount ? "text-rose-100" : "text-slate-500")}>
+                            {tier.desc}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={handleRazorpayPayment}
+                    disabled={isPaymentLoading || !selectedTier}
+                    className="w-full bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs h-11 rounded-xl shadow-md disabled:opacity-50"
+                  >
+                    {isPaymentLoading ? (
+                      <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Opening Gateway...</>
+                    ) : selectedTier ? (
+                      <>❤️ Pay {selectedTier.label} via Razorpay</>
+                    ) : (
+                      <>Select an amount first</>
+                    )}
+                  </Button>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
+
+        </div>
+
+        {/* SETTINGS DIALOG */}
+        <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+          <DialogContent className="max-w-md bg-white text-slate-900 border-slate-200">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-slate-900">
+                <Settings className="w-5 h-5 text-blue-600"/> App Preferences
+              </DialogTitle>
+              <DialogDescription className="text-slate-500 text-xs">Customize your reading themes & language.</DialogDescription>
+            </DialogHeader>
+
+            <div className="py-3 space-y-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">App Language</label>
+                <Select value={language} onValueChange={(v) => handleLanguageChange(v as 'en' | 'hi')}>
+                  <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-10 rounded-xl">
+                    <SelectValue/>
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border-slate-200 text-slate-900">
+                    <SelectItem value="en">English (Official)</SelectItem>
+                    <SelectItem value="hi">Hinglish (Hindi + English)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Reading Mode & Themes</Label>
+                <div className="flex items-center space-x-2 mb-3">
+                  <Switch id="reading-mode-switch" checked={isEnabled} onCheckedChange={setIsEnabled}/>
+                  <Label htmlFor="reading-mode-switch" className="text-xs text-slate-600">Enable eye-protection reading themes</Label>
+                </div>
+
+                {isEnabled && (
+                  <TooltipProvider>
+                    <div className="flex justify-around items-center p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                      {themes.map((t) => (
+                        <Tooltip key={t.name}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost" 
+                              size="icon"
+                              className={cn("w-8 h-8 rounded-full", theme === t.name ? 'ring-2 ring-blue-600 ring-offset-2 ring-offset-white' : '')}
+                              onClick={() => setTheme(t.name)}
+                            >
+                              <div className={cn("w-5 h-5 rounded-full border border-slate-300", t.color)}/>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="bg-slate-900 text-white text-[10px]">
+                            <p>{t.label}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      ))}
+                    </div>
+                  </TooltipProvider>
+                )}
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* INTERACTIVE TOUR MODAL */}
+        <OnboardingTourModal isOpen={isTourOpen} onClose={() => setIsTourOpen(false)} />
+
+        {/* HELP DIALOG */}
+        <Dialog open={isHelpOpen} onOpenChange={setIsHelpOpen}>
+          <DialogContent className="max-w-md bg-white text-slate-900 border-slate-200">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-slate-900"><HelpCircle className="w-5 h-5 text-blue-600"/>Contact Support</DialogTitle>
+              <DialogDescription className="text-slate-500 text-xs">Direct support from Dairy Hub technical team.</DialogDescription>
+            </DialogHeader>
+            <div className="py-4 space-y-3">
+              <a href="https://wa.me/9119005734" target="_blank" rel="noopener noreferrer" className="block">
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 rounded-xl">
+                  <MessageCircle className="mr-2 h-5 w-5"/> WhatsApp Direct Support
+                </Button>
+              </a>
+              <a href="mailto:saurabhthakur8080@gmail.com" className="block">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold h-11 rounded-xl">
+                  <Mail className="mr-2 h-5 w-5"/> Email Support
+                </Button>
+              </a>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* USER FEEDBACK MODAL */}
+        <UserFeedbackModal open={isFeedbackOpen} onOpenChange={setIsFeedbackOpen} />
+
+        {/* VIDEO TUTORIALS MODAL */}
+        <TutorialVideosModal open={isTutorialsOpen} onOpenChange={setIsTutorialsOpen} />
+
+        {/* BOTTOM NAVIGATION */}
+        <BottomNav activeTab="profile" />
+
+      </div>
+    </>
+  );
 }

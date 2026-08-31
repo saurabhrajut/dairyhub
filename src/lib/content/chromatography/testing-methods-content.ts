@@ -11,7 +11,6 @@ export const testingMethodsContent = {
       title: "Method 1: HPLC se Milk mein Aflatoxin M1 ka Determination",
       content: `<h4>1. Principle (Siddhant)</h4>
       <p>Aflatoxin M1 ek carcinogenic metabolite hai jo un cows ke milk mein paya jata hai jinhone Aflatoxin B1 contaminated feed khaya ho. Is method mein hum <strong>Immunoaffinity Column (IAC)</strong> use karte hain purification ke liye, aur phir <strong>Reverse-Phase HPLC</strong> ke saath <strong>Fluorescence Detector (FLD)</strong> use karte hain detection ke liye, kyunki Aflatoxins natural fluorescence show karte hain.</p>
-      
 
       <h4>2. Equipment aur Reagents</h4>
       <ul>
@@ -46,7 +45,6 @@ export const testingMethodsContent = {
       title: "Method 2: GC se Fatty Acid Profile (FAMEs) Analysis",
       content: `<h4>1. Principle (Siddhant)</h4>
       <p>Milk fat triglycerides (TG) se bana hota hai jo non-volatile hote hain aur directly GC (Gas Chromatography) par run nahi ho sakte. Is method mein hum pehle fat extract karte hain aur phir <strong>Transesterification</strong> process se unhe volatile <strong>Fatty Acid Methyl Esters (FAMEs)</strong> mein convert karte hain. Phir capillary GC column par separate karte hain.</p>
-      
 
       <h4>2. Application</h4>
       <p>Ye method Ghee adulteration check karne (vegetable oil detection), Omega-3 fatty acids measure karne, aur Butyric acid content check karne ke liye gold standard hai.</p>
@@ -101,7 +99,6 @@ export const testingMethodsContent = {
       title: "Method 1: Determination of Aflatoxin M1 in Milk by HPLC",
       content: `<h4>1. Principle</h4>
       <p>Aflatoxin M1 is a hepatocarcinogenic metabolite found in milk from livestock that have ingested Aflatoxin B1-contaminated feed. The method involves purification using an <strong>Immunoaffinity Column (IAC)</strong> containing specific antibodies, followed by quantification using <strong>Reverse-Phase HPLC</strong> with a <strong>Fluorescence Detector (FLD)</strong>, leveraging the natural fluorescence of the toxin.</p>
-      
 
       <h4>2. Equipment and Reagents</h4>
       <ul>
@@ -136,7 +133,6 @@ export const testingMethodsContent = {
       title: "Method 2: Fatty Acid Profiling (FAMEs) by GC-FID",
       content: `<h4>1. Principle</h4>
       <p>Milk fats are primarily triglycerides, which are high-molecular-weight and non-volatile, making them unsuitable for direct Gas Chromatography (GC). This method involves <strong>fat extraction</strong> followed by <strong>Transesterification</strong> to convert triglycerides into volatile <strong>Fatty Acid Methyl Esters (FAMEs)</strong>. These are then separated on a capillary column based on carbon chain length and unsaturation.</p>
-      
 
       <h4>2. Application Significance</h4>
       <p>This is the definitive method for verifying milk purity (detecting vegetable oil adulteration via phytosterols or fatty acid ratios), quantifying Omega-3/Omega-6 fatty acids, and measuring Butyric acid (C4:0) content.</p>

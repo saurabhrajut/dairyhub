@@ -4,11 +4,10 @@
  * @fileOverview A flow to convert text to speech.
  */
 
-import { ai } from '@/ai/genkit';
-import { googleAI } from '@genkit-ai/googleai';
+import { ai } from "@/ai/genkit";
+import { googleAI } from "@genkit-ai/googleai";
 import wav from 'wav';
-import { TextToSpeechInputSchema, type TextToSpeechInput, type TextToSpeechOutput } from './types';
-
+import { type TextToSpeechInput, type TextToSpeechOutput } from "./types";
 
 async function toWav(pcmData: Buffer, channels = 1, rate = 24000, sampleWidth = 2): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -20,7 +19,7 @@ async function toWav(pcmData: Buffer, channels = 1, rate = 24000, sampleWidth = 
 
         let bufs: any[] = [];
         writer.on('error', reject);
-        writer.on('data', function (d) {
+        writer.on('data', function (d: any) {
             bufs.push(d);
         });
         writer.on('end', function () {

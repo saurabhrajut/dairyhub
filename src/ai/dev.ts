@@ -1,4 +1,4 @@
-import { config } from 'dotenv';
+import { config } from "dotenv";
 config();
 
 import '@/ai/flows/generate-adulterant-detection-instructions.ts';

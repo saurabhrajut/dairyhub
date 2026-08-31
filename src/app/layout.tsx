@@ -1,32 +1,19 @@
-import { Inter, Space_Grotesk, Noto_Sans_Devanagari } from 'next/font/google';
 import './globals.css';
-import { cn } from '@/lib/utils';
-import { AuthProvider } from '@/context/auth-context';
-import { Toaster } from '@/components/ui/toaster';
-import { SubscriptionProvider } from '@/context/subscription-context';
-import { LanguageProvider } from '@/context/language-context';
+import { cn } from "@/lib/utils";
+import { AuthProvider } from "@/context/auth-context";
+import { Toaster } from "@/components/ui/toaster";
+import { SubscriptionProvider } from "@/context/subscription-context";
+import { LanguageProvider } from "@/context/language-context";
 import Script from 'next/script';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
-import { SplashScreenProvider } from '@/context/splash-screen-context';
-import { ReadingModeProvider } from '@/context/reading-mode-context';
+import { FirebaseClientProvider } from "@/firebase/client-provider";
+import { SplashScreenProvider } from "@/context/splash-screen-context";
+import { ReadingModeProvider } from "@/context/reading-mode-context";
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
+const inter = { variable: '--font-inter', className: '' };
+const spaceGrotesk = { variable: '--font-space-grotesk', className: '' };
+const notoDevanagari = { variable: '--font-noto-devanagari', className: '' };
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-space-grotesk',
-});
-
-const notoDevanagari = Noto_Sans_Devanagari({
-  subsets: ['latin'],
-  variable: '--font-noto-devanagari',
-  weight: ['400', '700'],
-});
-
-import { FavoritesProvider } from '@/context/favorites-context';
+import { FavoritesProvider } from "@/context/favorites-context";
 
 export const metadata = {
   title: 'Dairy Hub: Dairy Technology, Milk Standardization & QA Guide',
@@ -57,7 +44,8 @@ export const metadata = {
   },
 };
 
-import { AppBackButtonHandler } from '@/components/mobile/app-back-button-handler';
+import { AppBackButtonHandler } from "@/components/mobile/app-back-button-handler";
+import { AntiCopyGuard } from "@/components/security/anti-copy-guard";
 
 export default function RootLayout({
   children,
@@ -103,6 +91,7 @@ export default function RootLayout({
         </SplashScreenProvider>
         
         <Toaster />
+        <AntiCopyGuard />
         <AppBackButtonHandler />
         
         <Script id="chunk-error-handler">

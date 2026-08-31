@@ -1,9 +1,9 @@
 {
   "name": "nextn",
-  "version": "0.1.0",
+  "version": "1.1.2",
   "private": true,
   "scripts": {
-    "dev": "npx next dev",
+    "dev": "npx next dev --webpack",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "npx next build",
@@ -13,7 +13,12 @@
   },
   "dependencies": {
     "@capacitor-firebase/authentication": "latest",
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/app": "^8.1.1",
     "@capacitor/core": "latest",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/ios": "^8.4.2",
+    "@capacitor/share": "^8.0.1",
     "@genkit-ai/firebase": "^1.19.2",
     "@genkit-ai/googleai": "^1.19.2",
     "@genkit-ai/next": "^1.19.2",
@@ -65,11 +70,13 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.4.1",
     "@opentelemetry/exporter-jaeger": "^1.25.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/wav": "^1.0.4",
+    "baseline-browser-mapping": "^2.10.43",
     "dotenv": "^16.4.5",
     "genkit-cli": "^1.14.1",
     "postcss": "^8",

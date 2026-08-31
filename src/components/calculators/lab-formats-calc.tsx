@@ -1,11 +1,32 @@
 "use client";
 
 import React, { useState, useRef, useMemo } from "react";
-import { 
-  Printer, Download, FileText, Building2, MapPin, Calendar, 
-  Plus, Trash2, CheckCircle, Info, Loader2, FileDown,
-  ShieldCheck, ClipboardList, Beaker, FlaskConical, Droplet, TestTube, Scale,
-  Columns, RotateCw
+import {
+  Printer,
+  Download,
+  FileText,
+  Building2,
+  MapPin,
+  Calendar,
+  Plus,
+  Trash2,
+  CheckCircle,
+  Info,
+  Loader2,
+  FileDown,
+  ShieldCheck,
+  ClipboardList,
+  Beaker,
+  FlaskConical,
+  Droplet,
+  TestTube,
+  Scale,
+  Columns,
+  RotateCw,
+  UserCheck,
+  Clock,
+  PackageCheck,
+  AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +36,13 @@ import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { savePdfFile } from "@/lib/mobile-download";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +67,11 @@ type FormatType =
   | "incubation-shelf-life"
   | "glass-brittle-audit"
   | "pest-control-hygiene"
-  | "cip-sanitation-verification";
+  | "cip-sanitation-verification"
+  | "leave-application"
+  | "overtime-application"
+  | "material-issue-slip"
+  | "equipment-breakage-log";
 
 interface FormatInfo {
   id: FormatType;
@@ -190,6 +221,34 @@ const FORMATS_CATALOG: FormatInfo[] = [
     description: "Sanitizer concentration (Chlorine / PAA / 85°C Hot Water) and contact time validation sheet.",
     orientation: "landscape",
     icon: ShieldCheck
+  },
+  {
+    id: "leave-application",
+    title: "Leave Application Form",
+    description: "Official staff leave application form with applicant, contact & approval signatures.",
+    orientation: "portrait",
+    icon: UserCheck
+  },
+  {
+    id: "overtime-application",
+    title: "Monthly Overtime Verification Form",
+    description: "Monthly staff overtime duty hours verification form with daily log.",
+    orientation: "portrait",
+    icon: Clock
+  },
+  {
+    id: "material-issue-slip",
+    title: "Material Issue Slip",
+    description: "Official store material issue slip with items, code, rate, amount & 6 verification signatures.",
+    orientation: "landscape",
+    icon: PackageCheck
+  },
+  {
+    id: "equipment-breakage-log",
+    title: "Lab Glassware & Equipment Breakage Register",
+    description: "Incident report for broken glassware, damaged probes, cost & replacement tracking.",
+    orientation: "landscape",
+    icon: AlertTriangle
   }
 ];
 
@@ -317,6 +376,136 @@ export function LabFormatsCalc() {
   const [cipSanitationRows, setCipSanitationRows] = useState([
     { id: 1, equipment: "Milk Pasteurizer PHE", sanitizerType: "Hot Water 85°C", contactTime: "20 Mins", concPpm: "85°C Temp", swabRes: "SPC < 10 CFU", status: "Sanitized", analyst: "Rahul V." },
     { id: 2, equipment: "Siloline Piping", sanitizerType: "Peracetic Acid (PAA)", contactTime: "15 Mins", concPpm: "150 PPM", swabRes: "Coliform Nil", status: "Sanitized", analyst: "Rahul V." }
+  ]);
+
+  // ── Single Form States for Image Formats ──
+  const [leaveAppForm, setLeaveAppForm] = useState({
+    companyName: "YOUR COMPANY NAME",
+    companyAddress: "PLANT / UNIT LOCATION",
+    date: currentDate,
+    name: "Amit Kumar",
+    department: "Quality Control",
+    designation: "Lab Chemist",
+    fromDate: currentDate,
+    toDate: currentDate,
+    noOfDays: "1",
+    purpose: "Personal / Medical Checkup",
+    kindOfLeave: "CL",
+    addressOnLeave: "Contact Address on Leave",
+    addressOnLeaveLine2: "",
+    mobile1: "9876543210",
+    mobile2: "9812345678",
+    personInCharge1: "Rahul V. (Shift Chemist)",
+    personInCharge2: "",
+    personInCharge3: "",
+    applicantSign: "",
+    recommendedBy: "",
+    headOfDept: "",
+  });
+
+  const [overtimeFormHeader, setOvertimeFormHeader] = useState({
+    companyName: "YOUR COMPANY NAME",
+    companyAddress: "PLANT / UNIT LOCATION",
+    name: "Amit Kumar",
+    department: "Quality Control",
+    designation: "Lab Chemist",
+    employeeId: "EMP-104",
+    month: "August 2026",
+    employeeSign: "",
+    deptHeadSign: "",
+  });
+
+  const [overtimeTableRows, setOvertimeTableRows] = useState([
+    { id: 1, date: "2026-08-01", totalDutyHrs: "8.0", extraHours: "3.5", reason: "Raw milk dock tanker receiving overload" },
+    { id: 2, date: "2026-08-02", totalDutyHrs: "8.0", extraHours: "2.0", reason: "ETP wastewater sampling & titration" },
+    { id: 3, date: "2026-08-03", totalDutyHrs: "8.0", extraHours: "4.0", reason: "Pasteurizer CIP verification & micro swab" },
+    { id: 4, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+    { id: 5, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+    { id: 6, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+    { id: 7, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+    { id: 8, date: "", totalDutyHrs: "", extraHours: "", reason: "" },
+  ]);
+
+  const updateOvertimeTableRow = (id: number, field: string, val: string) => {
+    setOvertimeTableRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const addOvertimeTableRow = () => {
+    setOvertimeTableRows(prev => [...prev, { id: Date.now(), date: "", totalDutyHrs: "", extraHours: "", reason: "" }]);
+  };
+
+  const deleteOvertimeTableRow = (id: number) => {
+    if (overtimeTableRows.length > 1) {
+      setOvertimeTableRows(prev => prev.filter(r => r.id !== id));
+    }
+  };
+
+  const [materialIssueFormHeader, setMaterialIssueFormHeader] = useState({
+    companyName: "YOUR COMPANY NAME",
+    companyAddress: "PLANT / UNIT LOCATION",
+    sNo: "MIS-2026-089",
+    date: currentDate,
+    dept: "Quality Control Lab",
+    materialRequired: "",
+    authorisedBy: "",
+    receivedBy: "",
+    materialIssued: "",
+    issuedBy: "",
+    storeIncharge: "",
+  });
+
+  const [materialIssueTableItems, setMaterialIssueTableItems] = useState([
+    { id: 1, codeNo: "CH-014", items: "0.1N Sodium Hydroxide (NaOH)", units: "Bottles", qty: "2", rate: "250", amount: "500", remarks: "For Gerber Fat titration" },
+    { id: 2, codeNo: "GL-088", items: "10.75ml Milk Pipette (Class A)", units: "Pcs", qty: "5", rate: "120", amount: "600", remarks: "Dock lab stock replacement" },
+    { id: 3, codeNo: "CH-052", items: "Phenolphthalein Indicator Solution", units: "Bottle", qty: "1", rate: "180", amount: "180", remarks: "Acidity testing" },
+    { id: 4, codeNo: "", items: "", units: "", qty: "", rate: "", amount: "", remarks: "" },
+    { id: 5, codeNo: "", items: "", units: "", qty: "", rate: "", amount: "", remarks: "" },
+    { id: 6, codeNo: "", items: "", units: "", qty: "", rate: "", amount: "", remarks: "" },
+  ]);
+
+  const updateMaterialIssueItem = (id: number, field: string, val: string) => {
+    setMaterialIssueTableItems(prev => prev.map(item => {
+      if (item.id !== id) return item;
+      const updated = { ...item, [field]: val };
+      if (field === "qty" || field === "rate") {
+        const q = parseFloat(field === "qty" ? val : updated.qty) || 0;
+        const r = parseFloat(field === "rate" ? val : updated.rate) || 0;
+        if (q > 0 && r > 0) {
+          updated.amount = (q * r).toFixed(2);
+        }
+      }
+      return updated;
+    }));
+  };
+
+  const addMaterialIssueItem = () => {
+    setMaterialIssueTableItems(prev => [...prev, { id: Date.now(), codeNo: "", items: "", units: "", qty: "", rate: "", amount: "", remarks: "" }]);
+  };
+
+  const deleteMaterialIssueItem = (id: number) => {
+    if (materialIssueTableItems.length > 1) {
+      setMaterialIssueTableItems(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
+  const [leaveAppRows, setLeaveAppRows] = useState([
+    { id: 1, empName: "Amit Kumar", empId: "EMP-104", department: "Quality Control", designation: "Lab Chemist", leaveType: "Casual Leave (CL)", fromDate: "2026-08-01", toDate: "2026-08-02", totalDays: "2", reason: "Family Function", status: "Approved", approvedBy: "HOD / Manager" },
+    { id: 2, empName: "Ritu Sharma", empId: "EMP-112", department: "Plant Operations", designation: "Shift Officer", leaveType: "Sick Leave (SL)", fromDate: "2026-08-05", toDate: "2026-08-05", totalDays: "1", reason: "Fever / Medical Checkup", status: "Pending", approvedBy: "HOD / Manager" }
+  ]);
+
+  const [overtimeRows, setOvertimeRows] = useState([
+    { id: 1, empName: "Amit Kumar", empId: "EMP-104", shift: "Night Shift (C)", otDate: "2026-07-28", otHours: "4.0", workDescription: "Tanker receiving & adulteration screening overload", recommendedBy: "Rahul V.", status: "Approved", approvedBy: "Plant Head" },
+    { id: 2, empName: "M. Sharma", empId: "EMP-108", shift: "Morning (A)", otDate: "2026-07-29", otHours: "3.5", workDescription: "ETP Wastewater BOD/COD trial testing", recommendedBy: "Dr. Verma", status: "Approved", approvedBy: "Plant Head" }
+  ]);
+
+  const [materialIssueRows, setMaterialIssueRows] = useState([
+    { id: 1, issueNo: "IS-2026-042", itemName: "0.1N NaOH Reagent Powder", specification: "AR Grade (500g Bottle)", reqQty: "2 Bottles", issuedQty: "2 Bottles", requestedBy: "Amit K. (Chem Lab)", issuedBy: "Store In-charge", status: "Issued", remarks: "For Gerber Fat titration" },
+    { id: 2, issueNo: "IS-2026-043", itemName: "10.75ml Milk Pipette", specification: "Borosilicate Class A", reqQty: "5 Pcs", issuedQty: "5 Pcs", requestedBy: "Ritu S. (Dock Lab)", issuedBy: "Store In-charge", status: "Issued", remarks: "Replacement for broken unit" }
+  ]);
+
+  const [breakageRows, setBreakageRows] = useState([
+    { id: 1, incidentDate: "2026-07-25", itemName: "250ml Glass Measuring Cylinder", assetTag: "G-CYL-14", cost: "350", handledBy: "Ritu S.", cause: "Accidental slippage during washing", actionTaken: "Scrapped & Replaced", verifiedBy: "Dr. Verma" },
+    { id: 2, incidentDate: "2026-07-27", itemName: "Digital pH Meter Electrode", assetTag: "EQ-PH-02", cost: "2400", handledBy: "Amit K.", cause: "Glass bulb cracked on beaker rim", actionTaken: "New electrode installed & calibrated", verifiedBy: "Dr. Verma" }
   ]);
 
   // Find active format info
@@ -549,6 +738,22 @@ export function LabFormatsCalc() {
     setCipSanitationRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
   };
 
+  const updateLeaveAppRow = (id: number, field: string, val: string) => {
+    setLeaveAppRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateOvertimeRow = (id: number, field: string, val: string) => {
+    setOvertimeRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateMaterialIssueRow = (id: number, field: string, val: string) => {
+    setMaterialIssueRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
+  const updateBreakageRow = (id: number, field: string, val: string) => {
+    setBreakageRows(prev => prev.map(r => r.id === id ? { ...r, [field]: val } : r));
+  };
+
   // Add / Delete row utilities
   const addRow = () => {
     switch (selectedFormatId) {
@@ -611,6 +816,18 @@ export function LabFormatsCalc() {
         break;
       case "cip-sanitation-verification":
         setCipSanitationRows(prev => [...prev, { id: Date.now(), equipment: "", sanitizerType: "", contactTime: "", concPpm: "", swabRes: "Pass", status: "Sanitized", analyst: "" }]);
+        break;
+      case "leave-application":
+        setLeaveAppRows(prev => [...prev, { id: Date.now(), empName: "", empId: "", department: "", designation: "", leaveType: "Casual Leave (CL)", fromDate: currentDate, toDate: currentDate, totalDays: "1", reason: "", status: "Pending", approvedBy: "" }]);
+        break;
+      case "overtime-application":
+        setOvertimeRows(prev => [...prev, { id: Date.now(), empName: "", empId: "", shift: "General", otDate: currentDate, otHours: "2.0", workDescription: "", recommendedBy: "", status: "Approved", approvedBy: "" }]);
+        break;
+      case "material-issue-slip":
+        setMaterialIssueRows(prev => [...prev, { id: Date.now(), issueNo: `IS-2026-${String(prev.length + 1).padStart(3, '0')}`, itemName: "", specification: "", reqQty: "", issuedQty: "", requestedBy: "", issuedBy: "", status: "Issued", remarks: "" }]);
+        break;
+      case "equipment-breakage-log":
+        setBreakageRows(prev => [...prev, { id: Date.now(), incidentDate: currentDate, itemName: "", assetTag: "", cost: "", handledBy: "", cause: "", actionTaken: "", verifiedBy: "" }]);
         break;
     }
   };
@@ -676,6 +893,18 @@ export function LabFormatsCalc() {
         break;
       case "cip-sanitation-verification":
         if (cipSanitationRows.length > 1) setCipSanitationRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "leave-application":
+        if (leaveAppRows.length > 1) setLeaveAppRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "overtime-application":
+        if (overtimeRows.length > 1) setOvertimeRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "material-issue-slip":
+        if (materialIssueRows.length > 1) setMaterialIssueRows(prev => prev.filter(r => r.id !== id));
+        break;
+      case "equipment-breakage-log":
+        if (breakageRows.length > 1) setBreakageRows(prev => prev.filter(r => r.id !== id));
         break;
     }
   };
@@ -848,9 +1077,14 @@ export function LabFormatsCalc() {
               <Button size="sm" onClick={handlePrint} className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex gap-1">
                 <Printer className="w-4 h-4" /> Print
               </Button>
-              <Button size="sm" onClick={handleDownloadPdf} disabled={isDownloading} className="bg-teal-850 hover:bg-teal-900 text-white font-bold text-xs flex gap-1">
-                {isDownloading ? <Loader2 className="w-4 h-4 animate-spin"/> : <FileDown className="w-4 h-4"/>} 
-                Download PDF
+              <Button 
+                size="sm" 
+                onClick={handleDownloadPdf} 
+                disabled={isDownloading} 
+                className="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 hover:from-emerald-500 hover:via-teal-400 hover:to-cyan-500 text-white font-extrabold text-xs shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex gap-2 px-4 py-2 rounded-lg border border-teal-300/40 tracking-wide uppercase"
+              >
+                {isDownloading ? <Loader2 className="w-4 h-4 animate-spin text-amber-300"/> : <FileDown className="w-4 h-4 text-amber-300 animate-bounce"/>} 
+                <span className="drop-shadow">Download PDF</span>
               </Button>
             </div>
           </div>
@@ -890,9 +1124,9 @@ export function LabFormatsCalc() {
 
                   {/* Meta Details Row */}
                   <div className="grid grid-cols-3 border border-black p-2 bg-slate-50 text-[10px] font-bold gap-4">
-                    <div>DATE: <span className="font-normal border-b border-black border-dotted ml-1">{currentDate}</span></div>
-                    <div>LAB IN-CHARGE: <span className="font-normal border-b border-black border-dotted ml-1">_________________</span></div>
-                    <div>DOC REF NO: <span className="font-normal border-b border-black border-dotted ml-1">QA-LAB-{selectedFormat.id.toUpperCase()}-2026</span></div>
+                    <div>DATE: <span className="font-normal border-b border-black ml-1 px-1">{isContentOn ? currentDate : "_________________"}</span></div>
+                    <div>LAB IN-CHARGE: <span className="font-normal border-b border-black ml-1 px-1">_________________</span></div>
+                    <div>DOC REF NO: <span className="font-normal border-b border-black ml-1 px-1">{isContentOn ? `QA-LAB-${selectedFormat.id.toUpperCase()}-2026` : "_________________"}</span></div>
                   </div>
                 </div>
 
@@ -1049,9 +1283,9 @@ export function LabFormatsCalc() {
                           ))}
                           <tr className="bg-slate-50 font-bold text-black border-t-2 border-black">
                             <td className="border border-black px-1.5 py-1 text-left uppercase">Route Totals</td>
-                            <td className="border border-black px-1.5 py-1 text-center font-black">{rawMilkCanRows.reduce((s, r) => s + (parseInt(r.totalCans) || 0), 0)}</td>
-                            <td className="border border-black px-1.5 py-1 text-center font-black text-green-700">{rawMilkCanRows.reduce((s, r) => s + (parseInt(r.acceptedCans) || 0), 0)}</td>
-                            <td className="border border-black px-1.5 py-1 text-center font-black text-red-700">{rawMilkCanRows.reduce((s, r) => s + (parseInt(r.rejectedCans) || 0), 0)}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-black">{isContentOn ? rawMilkCanRows.reduce((s, r) => s + (parseInt(r.totalCans) || 0), 0) : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-black text-green-700">{isContentOn ? rawMilkCanRows.reduce((s, r) => s + (parseInt(r.acceptedCans) || 0), 0) : ""}</td>
+                            <td className="border border-black px-1.5 py-1 text-center font-black text-red-700">{isContentOn ? rawMilkCanRows.reduce((s, r) => s + (parseInt(r.rejectedCans) || 0), 0) : ""}</td>
                             <td colSpan={9} className="border border-black px-1.5 py-1 bg-slate-100"></td>
                           </tr>
                         </tbody>
@@ -2126,6 +2360,647 @@ export function LabFormatsCalc() {
                               </td>
                               <td className="border border-black p-0.5 text-center">
                                 <input value={cellVal(row.analyst)} onChange={(e) => updateCipSanitationRow(row.id, "analyst", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              {renderCustomBodyCells(row.id)}
+                              <td className="border border-black p-0.5 text-center print:hidden">
+                                <button onClick={() => deleteRow(row.id)} className="text-red-500 hover:text-red-700"><Trash2 className="w-3.5 h-3.5 mx-auto" /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  <datalist id="dairy-departments">
+                    <option value="Quality Control (QC / QA)" />
+                    <option value="Milk Processing & Production" />
+                    <option value="Maintenance & Engineering" />
+                    <option value="Stores & Inventory" />
+                    <option value="Raw Milk Reception (Dock)" />
+                    <option value="Packaging & Dispatch" />
+                    <option value="Utilities & Refrigeration" />
+                    <option value="Electrical & DG Operations" />
+                    <option value="ETP & WTP Operations" />
+                    <option value="HR & Administration" />
+                    <option value="Finance & Accounts" />
+                    <option value="Logistics & Transport" />
+                    <option value="Safety & EHS" />
+                  </datalist>
+
+                  {/* CASE 21: Staff Leave Application Form (Matching Image 1) */}
+                  {selectedFormatId === "leave-application" && (
+                    <div className="w-full max-w-2xl mx-auto bg-white p-6 sm:p-8 text-black border border-black shadow-none rounded-none font-sans text-xs">
+                      {/* Header */}
+                      <div className="text-center mb-4 space-y-1">
+                        <input
+                          value={leaveAppForm.companyName}
+                          onChange={(e) => setLeaveAppForm({ ...leaveAppForm, companyName: e.target.value })}
+                          className="w-full text-center text-xl sm:text-2xl font-black tracking-wide border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-black uppercase"
+                        />
+                        <input
+                          value={leaveAppForm.companyAddress}
+                          onChange={(e) => setLeaveAppForm({ ...leaveAppForm, companyAddress: e.target.value })}
+                          placeholder="PLANT / UNIT LOCATION"
+                          className="w-full text-center text-xs sm:text-sm font-semibold border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-slate-800"
+                        />
+                        <div className="pt-2">
+                          <span className="text-base sm:text-lg font-bold border-b-2 border-black tracking-wider uppercase px-2 py-0.5 inline-block">
+                            LEAVE APPLICATION FORM
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Top Right Date */}
+                      <div className="flex justify-end mb-4 font-bold text-xs">
+                        <div className="flex items-center gap-1">
+                          <span>DATE:</span>
+                          <input
+                            type="date"
+                            value={leaveAppForm.date}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, date: e.target.value })}
+                            className="border-b border-black border-t-0 border-x-0 rounded-none bg-transparent text-xs px-1 py-0.5 focus:ring-0 font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Form Fields */}
+                      <div className="space-y-3.5 text-xs sm:text-sm text-black">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[120px]">Name :</span>
+                          <input
+                            value={leaveAppForm.name}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, name: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[120px]">Department :</span>
+                          <input
+                            list="dairy-departments"
+                            value={leaveAppForm.department}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, department: e.target.value })}
+                            placeholder="e.g. Quality Control, Processing, Maintenance, Stores..."
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[120px]">Designation :</span>
+                          <input
+                            value={leaveAppForm.designation}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, designation: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="flex flex-wrap items-baseline gap-2 sm:gap-4">
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                            <span className="font-bold whitespace-nowrap min-w-[120px]">Leave Date From :</span>
+                            <input
+                              type="date"
+                              value={leaveAppForm.fromDate}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, fromDate: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono text-xs sm:text-sm"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[150px]">
+                            <span className="font-bold whitespace-nowrap">To :</span>
+                            <input
+                              type="date"
+                              value={leaveAppForm.toDate}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, toDate: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono text-xs sm:text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-baseline gap-2 sm:gap-4">
+                          <div className="flex items-baseline gap-2 w-full sm:w-48">
+                            <span className="font-bold whitespace-nowrap min-w-[120px]">No. of Days :</span>
+                            <input
+                              value={leaveAppForm.noOfDays}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, noOfDays: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono font-bold text-xs sm:text-sm text-center"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                            <span className="font-bold whitespace-nowrap">Purpose :</span>
+                            <input
+                              value={leaveAppForm.purpose}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, purpose: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap">Kind of leave (CL/EL/ML/W-OFF/Other)</span>
+                          <input
+                            value={leaveAppForm.kindOfLeave}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, kindOfLeave: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="space-y-2 pt-1">
+                          <div className="flex items-baseline gap-2">
+                            <span className="font-bold whitespace-nowrap">Contact Address on leave :</span>
+                            <input
+                              value={leaveAppForm.addressOnLeave}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, addressOnLeave: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                          <input
+                            value={leaveAppForm.addressOnLeaveLine2}
+                            onChange={(e) => setLeaveAppForm({ ...leaveAppForm, addressOnLeaveLine2: e.target.value })}
+                            placeholder=""
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                          />
+                        </div>
+
+                        <div className="flex flex-wrap items-baseline gap-4 pt-1">
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                            <span className="font-bold whitespace-nowrap">Mobile no. (1)</span>
+                            <input
+                              value={leaveAppForm.mobile1}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, mobile1: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono text-xs sm:text-sm"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                            <span className="font-bold whitespace-nowrap">(2)</span>
+                            <input
+                              value={leaveAppForm.mobile2}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, mobile2: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono text-xs sm:text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2 pt-1">
+                          <div className="flex items-baseline gap-2">
+                            <span className="font-bold whitespace-nowrap min-w-[210px]">Person in charge in absence (1)</span>
+                            <input
+                              value={leaveAppForm.personInCharge1}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, personInCharge1: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 pl-4">
+                            <span className="font-bold whitespace-nowrap min-w-[40px] text-right">(2)</span>
+                            <input
+                              value={leaveAppForm.personInCharge2}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, personInCharge2: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-2 pl-4">
+                            <span className="font-bold whitespace-nowrap min-w-[40px] text-right">(3)</span>
+                            <input
+                              value={leaveAppForm.personInCharge3}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, personInCharge3: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 text-xs sm:text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="pt-8 space-y-6">
+                          <div className="flex items-baseline gap-2 max-w-sm">
+                            <span className="font-bold whitespace-nowrap">Applicant sign</span>
+                            <input
+                              value={leaveAppForm.applicantSign}
+                              onChange={(e) => setLeaveAppForm({ ...leaveAppForm, applicantSign: e.target.value })}
+                              className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs text-center"
+                            />
+                          </div>
+
+                          <div className="flex flex-wrap items-baseline gap-6 pt-2">
+                            <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                              <span className="font-bold whitespace-nowrap">Recommended by</span>
+                              <input
+                                value={leaveAppForm.recommendedBy}
+                                onChange={(e) => setLeaveAppForm({ ...leaveAppForm, recommendedBy: e.target.value })}
+                                className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs text-center"
+                              />
+                            </div>
+                            <div className="flex items-baseline gap-2 flex-1 min-w-[200px]">
+                              <span className="font-bold whitespace-nowrap">Head of Dept.</span>
+                              <input
+                                value={leaveAppForm.headOfDept}
+                                onChange={(e) => setLeaveAppForm({ ...leaveAppForm, headOfDept: e.target.value })}
+                                className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold text-xs text-center"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* CASE 22: Monthly Overtime Verification Form (Matching Image 2) */}
+                  {selectedFormatId === "overtime-application" && (
+                    <div className="w-full max-w-2xl mx-auto bg-white p-6 sm:p-8 text-black border border-black shadow-none rounded-none font-sans text-xs">
+                      {/* Header */}
+                      <div className="text-center mb-4 space-y-1">
+                        <input
+                          value={overtimeFormHeader.companyName}
+                          onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, companyName: e.target.value })}
+                          className="w-full text-center text-xl sm:text-2xl font-black tracking-wide border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-black uppercase"
+                        />
+                        <input
+                          value={overtimeFormHeader.companyAddress}
+                          onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, companyAddress: e.target.value })}
+                          placeholder="PLANT / UNIT LOCATION"
+                          className="w-full text-center text-xs sm:text-sm font-semibold border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-slate-800"
+                        />
+                        <div className="pt-2">
+                          <span className="text-base sm:text-lg font-bold border-b-2 border-black tracking-wider uppercase px-2 py-0.5 inline-block">
+                            MONTHLY OVERTIME VERIFICATION FORM
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Header Info Box */}
+                      <div className="border border-black p-3 space-y-1.5 mb-4 text-xs">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Name</span>
+                          <span>:</span>
+                          <input
+                            value={overtimeFormHeader.name}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, name: e.target.value })}
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Department</span>
+                          <span>:</span>
+                          <input
+                            list="dairy-departments"
+                            value={overtimeFormHeader.department}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, department: e.target.value })}
+                            placeholder="e.g. Quality Control, Processing, Maintenance, Stores..."
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Designation</span>
+                          <span>:</span>
+                          <input
+                            value={overtimeFormHeader.designation}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, designation: e.target.value })}
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Employee ID</span>
+                          <span>:</span>
+                          <input
+                            value={overtimeFormHeader.employeeId}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, employeeId: e.target.value })}
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold w-28 shrink-0">Month</span>
+                          <span>:</span>
+                          <input
+                            value={overtimeFormHeader.month}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, month: e.target.value })}
+                            className="w-full border-b border-slate-300 border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Overtime Table */}
+                      <div className="w-full overflow-x-auto mb-4">
+                        <table className="w-full border-collapse border border-black text-xs text-black">
+                          <thead>
+                            <tr className="bg-slate-100 font-bold text-center">
+                              <th className="border border-black px-2 py-1.5 w-24">Date</th>
+                              <th className="border border-black px-2 py-1.5 w-28">Total Duty Hrs</th>
+                              <th className="border border-black px-2 py-1.5 w-28">Extra Hours</th>
+                              <th className="border border-black px-2 py-1.5 text-left">Reason For OT</th>
+                              <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {overtimeTableRows.map((row) => (
+                              <tr key={row.id}>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={row.date}
+                                    onChange={(e) => updateOvertimeTableRow(row.id, "date", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={row.totalDutyHrs}
+                                    onChange={(e) => updateOvertimeTableRow(row.id, "totalDutyHrs", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono font-bold">
+                                  <input
+                                    value={row.extraHours}
+                                    onChange={(e) => updateOvertimeTableRow(row.id, "extraHours", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono font-bold"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-left">
+                                  <input
+                                    value={row.reason}
+                                    onChange={(e) => updateOvertimeTableRow(row.id, "reason", e.target.value)}
+                                    className="w-full bg-transparent border-none text-xs p-1 focus:ring-0"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center print:hidden">
+                                  <button onClick={() => deleteOvertimeTableRow(row.id)} className="text-red-500 hover:text-red-700">
+                                    <Trash2 className="w-3.5 h-3.5 mx-auto" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Table Control Buttons */}
+                      <div className="flex items-center gap-2 mb-6 print:hidden">
+                        <Button onClick={addOvertimeTableRow} size="sm" variant="outline" className="text-xs h-8">
+                          <Plus className="w-3.5 h-3.5 mr-1" /> Add OT Row
+                        </Button>
+                      </div>
+
+                      {/* Footer Box Signatures */}
+                      <div className="border border-black p-4 space-y-4 text-xs">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[140px]">Employee Sign :</span>
+                          <input
+                            value={overtimeFormHeader.employeeSign}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, employeeSign: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-bold whitespace-nowrap min-w-[140px]">Department Head Sign :</span>
+                          <input
+                            value={overtimeFormHeader.deptHeadSign}
+                            onChange={(e) => setOvertimeFormHeader({ ...overtimeFormHeader, deptHeadSign: e.target.value })}
+                            className="w-full border-b border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-semibold"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* CASE 23: Material Issue Slip (Matching Image 3) */}
+                  {selectedFormatId === "material-issue-slip" && (
+                    <div className="w-full max-w-4xl mx-auto bg-white p-6 sm:p-8 text-black border border-black shadow-none rounded-none font-sans text-xs">
+                      {/* Header */}
+                      <div className="flex flex-wrap items-start justify-between border-b border-black pb-3 mb-3 gap-4">
+                        <div className="flex-1 text-center sm:text-left">
+                          <input
+                            value={materialIssueFormHeader.companyName}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, companyName: e.target.value })}
+                            className="w-full text-xl sm:text-2xl font-black tracking-wide border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-black uppercase"
+                          />
+                          <input
+                            value={materialIssueFormHeader.companyAddress}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, companyAddress: e.target.value })}
+                            placeholder="PLANT / UNIT LOCATION"
+                            className="w-full text-xs sm:text-sm font-semibold border-none bg-transparent focus:ring-1 focus:ring-blue-400 p-0 text-slate-800"
+                          />
+                          <div className="pt-2">
+                            <span className="text-base sm:text-lg font-bold border-b-2 border-black tracking-wider uppercase px-2 py-0.5 inline-block">
+                              MATERIAL ISSUE SLIP
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1 text-xs font-bold shrink-0 min-w-[160px]">
+                          <div className="flex items-baseline gap-1">
+                            <span className="min-w-[45px]">S.No.</span>
+                            <span>:</span>
+                            <input
+                              value={materialIssueFormHeader.sNo}
+                              onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, sNo: e.target.value })}
+                              className="w-full border-b border-dotted border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-1">
+                            <span className="min-w-[45px]">Date</span>
+                            <span>:</span>
+                            <input
+                              type="date"
+                              value={materialIssueFormHeader.date}
+                              onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, date: e.target.value })}
+                              className="w-full border-b border-dotted border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0 font-mono"
+                            />
+                          </div>
+                          <div className="flex items-baseline gap-1">
+                            <span className="min-w-[45px]">Dept.</span>
+                            <span>:</span>
+                            <input
+                              list="dairy-departments"
+                              value={materialIssueFormHeader.dept}
+                              onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, dept: e.target.value })}
+                              placeholder="e.g. Stores / QC / Processing / Maintenance"
+                              className="w-full border-b border-dotted border-black border-t-0 border-x-0 rounded-none bg-transparent px-1 py-0.5 focus:ring-0"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Subtext */}
+                      <p className="font-bold text-xs mb-2 text-black">Please issue me following items :-</p>
+
+                      {/* Table */}
+                      <div className="w-full overflow-x-auto mb-4">
+                        <table className="w-full border-collapse border border-black text-xs text-black">
+                          <thead>
+                            <tr className="bg-slate-100 font-bold text-center">
+                              <th className="border border-black px-2 py-1.5 w-20">Code No.</th>
+                              <th className="border border-black px-2 py-1.5 text-left">Items</th>
+                              <th className="border border-black px-2 py-1.5 w-20">Units</th>
+                              <th className="border border-black px-2 py-1.5 w-16">Qty.</th>
+                              <th className="border border-black px-2 py-1.5 w-20">Rate</th>
+                              <th className="border border-black px-2 py-1.5 w-24">Amount</th>
+                              <th className="border border-black px-2 py-1.5 text-left">Remarks</th>
+                              <th className="border border-black px-1 py-1 w-8 print:hidden">Del</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {materialIssueTableItems.map((item) => (
+                              <tr key={item.id}>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={item.codeNo}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "codeNo", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-left font-semibold">
+                                  <input
+                                    value={item.items}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "items", e.target.value)}
+                                    className="w-full bg-transparent border-none text-xs p-1 focus:ring-0 font-semibold"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center">
+                                  <input
+                                    value={item.units}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "units", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={item.qty}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "qty", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono">
+                                  <input
+                                    value={item.rate}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "rate", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center font-mono font-bold">
+                                  <input
+                                    value={item.amount}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "amount", e.target.value)}
+                                    className="w-full text-center bg-transparent border-none text-xs p-1 focus:ring-0 font-mono font-bold"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-left">
+                                  <input
+                                    value={item.remarks}
+                                    onChange={(e) => updateMaterialIssueItem(item.id, "remarks", e.target.value)}
+                                    className="w-full bg-transparent border-none text-xs p-1 focus:ring-0"
+                                  />
+                                </td>
+                                <td className="border border-black p-0 text-center print:hidden">
+                                  <button onClick={() => deleteMaterialIssueItem(item.id)} className="text-red-500 hover:text-red-700">
+                                    <Trash2 className="w-3.5 h-3.5 mx-auto" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Control Button */}
+                      <div className="flex items-center gap-2 mb-4 print:hidden">
+                        <Button onClick={addMaterialIssueItem} size="sm" variant="outline" className="text-xs h-8">
+                          <Plus className="w-3.5 h-3.5 mr-1" /> Add Item Row
+                        </Button>
+                      </div>
+
+                      {/* Bottom Verification 6-Box Row */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 border border-black text-center text-xs">
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Material Required</span>
+                          <input
+                            value={materialIssueFormHeader.materialRequired}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, materialRequired: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Authorised by</span>
+                          <input
+                            value={materialIssueFormHeader.authorisedBy}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, authorisedBy: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Received by</span>
+                          <input
+                            value={materialIssueFormHeader.receivedBy}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, receivedBy: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Material Issued</span>
+                          <input
+                            value={materialIssueFormHeader.materialIssued}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, materialIssued: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Issued by</span>
+                          <input
+                            value={materialIssueFormHeader.issuedBy}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, issuedBy: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                        <div className="border border-black p-2 flex flex-col justify-between min-h-[70px]">
+                          <span className="font-bold text-[10px]">Store Incharge</span>
+                          <input
+                            value={materialIssueFormHeader.storeIncharge}
+                            onChange={(e) => setMaterialIssueFormHeader({ ...materialIssueFormHeader, storeIncharge: e.target.value })}
+                            className="w-full text-center border-none bg-transparent p-0 text-[10px] focus:ring-0 font-semibold"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* CASE 24: Lab Glassware & Equipment Breakage Register (Landscape) */}
+                  {selectedFormatId === "equipment-breakage-log" && (
+                    <div className="w-full overflow-x-visible">
+                      <table className="w-full text-[9px] border-collapse border border-black text-black">
+                        <thead>
+                          <tr className="bg-slate-100 text-center font-bold">
+                            <th className="border border-black px-1.5 py-1 w-20">Date</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Item / Glassware Name</th>
+                            <th className="border border-black px-1.5 py-1 w-20">Asset / Tag No.</th>
+                            <th className="border border-black px-1.5 py-1 w-16">Est. Cost (₹)</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Handled By</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Cause of Breakage / Damage</th>
+                            <th className="border border-black px-1.5 py-1 text-left">Action Taken</th>
+                            <th className="border border-black px-1.5 py-1 w-24">Verified By</th>
+                            {renderCustomHeaderCols()}
+                            <th className="border border-black px-1.5 py-1 w-8 print:hidden">Del</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {breakageRows.map((row) => (
+                            <tr key={row.id}>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.incidentDate)} onChange={(e) => updateBreakageRow(row.id, "incidentDate", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-bold">
+                                <input value={cellVal(row.itemName)} onChange={(e) => updateBreakageRow(row.id, "itemName", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center font-mono">
+                                <input value={cellVal(row.assetTag)} onChange={(e) => updateBreakageRow(row.id, "assetTag", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono" />
+                              </td>
+                              <td className="border border-black p-0.5 text-right font-mono font-bold text-red-700">
+                                <input value={cellVal(row.cost)} onChange={(e) => updateBreakageRow(row.id, "cost", e.target.value)} className="w-full text-right bg-transparent border-none text-[9px] p-1 focus:ring-0 font-mono font-bold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.handledBy)} onChange={(e) => updateBreakageRow(row.id, "handledBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left">
+                                <input value={cellVal(row.cause)} onChange={(e) => updateBreakageRow(row.id, "cause", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0" />
+                              </td>
+                              <td className="border border-black p-0.5 text-left font-semibold">
+                                <input value={cellVal(row.actionTaken)} onChange={(e) => updateBreakageRow(row.id, "actionTaken", e.target.value)} className="w-full bg-transparent border-none text-[9px] p-1 focus:ring-0 font-semibold" />
+                              </td>
+                              <td className="border border-black p-0.5 text-center">
+                                <input value={cellVal(row.verifiedBy)} onChange={(e) => updateBreakageRow(row.id, "verifiedBy", e.target.value)} className="w-full text-center bg-transparent border-none text-[9px] p-1 focus:ring-0" />
                               </td>
                               {renderCustomBodyCells(row.id)}
                               <td className="border border-black p-0.5 text-center print:hidden">

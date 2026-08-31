@@ -6,15 +6,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/context/language-context";
 import { microbiologyContent } from "@/lib/content/microbiology-content";
@@ -39,9 +34,8 @@ import {
   BookOpen,
   ChevronRight,
   Beaker,
-  LayoutGrid,
+  LayoutGrid
 } from "lucide-react";
-
 
 // ─────────────────────────────────────────────
 // Language-aware UI label helpers
@@ -68,7 +62,6 @@ const LABELS = {
     topicsCount: (n: number) => `${n} topics`,
   },
 };
-
 
 const wrapTablesInScrollDiv = (container: HTMLElement) => {
   container.querySelectorAll("table").forEach((table) => {
@@ -192,7 +185,6 @@ const TestProcedure = ({ test, lang }: { test: any; lang: "hi" | "en" }) => {
   );
 };
 
-
 const SectionBody = ({ children }: { children: React.ReactNode }) => {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => { if (ref.current) wrapTablesInScrollDiv(ref.current); }, [children]);
@@ -212,7 +204,6 @@ const SectionBody = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
-
 
 // ─────────────────────────────────────────────
 // Helper: card wrapper for every topic view
@@ -258,9 +249,6 @@ const Section = ({
     </div>
   );
 };
-
-
-
 
 // ─────────────────────────────────────────────
 // Topic → Component map  (ALL sections)
@@ -344,7 +332,6 @@ const topicComponents: Record<
   },
 };
 
-
 // ─────────────────────────────────────────────
 // Topic group config — bilingual
 // ─────────────────────────────────────────────
@@ -416,7 +403,6 @@ const TOPIC_GROUPS_CONFIG = {
     },
   ],
 };
-
 
 // ─────────────────────────────────────────────
 // Main Modal Component
