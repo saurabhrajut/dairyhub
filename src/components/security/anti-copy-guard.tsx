@@ -5,6 +5,10 @@ import { toast } from "@/hooks/use-toast";
 import { ShieldAlert, Lock } from "lucide-react";
 
 export function AntiCopyGuard() {
+  if (process.env.NODE_ENV === 'development') {
+    return null;
+  }
+
   const lastToastTime = useRef<number>(0);
   const isLockedRef = useRef<boolean>(false);
   const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);

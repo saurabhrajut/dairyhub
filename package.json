@@ -3,7 +3,7 @@
   "version": "1.1.2",
   "private": true,
   "scripts": {
-    "dev": "npx next dev --webpack",
+    "dev": "npx next dev",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "npx next build",
@@ -54,7 +54,7 @@
     "jspdf": "^2.5.1",
     "lucide-react": "^0.475.0",
     "mammoth": "^1.8.0",
-    "next": "^16.0.10",
+    "next": "^15.2.9",
     "patch-package": "^8.0.0",
     "pdfjs-dist": "^4.5.136",
     "qrcode.react": "^4.0.1",

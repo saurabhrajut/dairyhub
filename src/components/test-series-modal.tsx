@@ -58,1240 +58,21 @@ import html2canvas from "html2canvas";
 import { savePdfFile, saveFile } from "@/lib/mobile-download";
 import { useToast } from "@/hooks/use-toast";
 
-export interface Question {
-  id: number;
-  question: string;
-  options: string[];
-  correctAnswer: number; // 0, 1, 2, 3
-  explanation: string;
-  category: string;
-}
+import {
+  Question,
+  DisciplineType,
+  TestModeType,
+  SeriesSetInfo,
+  TEST_SERIES_SETS,
+  ALL_DAIRY_QUESTIONS,
+  ALL_FOOD_QUESTIONS,
+  ALL_BIOTECH_QUESTIONS,
+  generateDynamicPaper,
+} from "@/lib/content/test-series";
 
-export type DisciplineType = "dairy" | "food" | "biotech";
-export type TestModeType = "full" | "mock"; // full = 120 Qs (120 Mins), mock = 30 Qs (30 Mins)
+export type { Question, DisciplineType, TestModeType, SeriesSetInfo };
+export { TEST_SERIES_SETS, ALL_DAIRY_QUESTIONS, ALL_FOOD_QUESTIONS, ALL_BIOTECH_QUESTIONS, generateDynamicPaper };
 
-export interface SeriesSetInfo {
-  id: number;
-  title: string;
-  subtitle: string;
-  badge: string;
-}
-
-export const TEST_SERIES_SETS: SeriesSetInfo[] = [
-  {
-    id: 1,
-    title: "Set 1: National GATE & ICAR Core Technical Exam Series",
-    subtitle: "Focus on ICAR AIEEA PG, ICAR NET, GATE XE/XL & Core Fundamentals",
-    badge: "GATE & ICAR CORE",
-  },
-  {
-    id: 2,
-    title: "Set 2: FSSAI CFSO/TO & Quality Assurance Master Series",
-    subtitle: "Focus on FSSAI Acts, Adulteration Tests, MBRT, Gerber & Lab Safety",
-    badge: "FSSAI & QA SPECIAL",
-  },
-  {
-    id: 3,
-    title: "Set 3: Plant Operations, Engineering & Utility Equipment Series",
-    subtitle: "Focus on Evaporators, Spray Dryers, CIP Automation & Utilities",
-    badge: "PLANT & ENGINEERING",
-  },
-  {
-    id: 4,
-    title: "Set 4: Chemistry, Microbiology & Processing Series",
-    subtitle: "Focus on Protein Chemistry, Starter Cultures & Product Processing",
-    badge: "CHEMISTRY & MICROBIOLOGY",
-  },
-  {
-    id: 5,
-    title: "Set 5: Grand All-India Mock Test Series (Comprehensive)",
-    subtitle: "Combined Full-Length Paper Set Covering All Technical Domains",
-    badge: "ALL-INDIA GRAND MOCK",
-  },
-];
-
-// =========================================================================
-// 100% UNIQUE QUESTION BANKS FOR DAIRY, FOOD & BIOTECH (ZERO REPEAT)
-// =========================================================================
-
-export const ALL_DAIRY_QUESTIONS: Omit<Question, "id">[] = [
-  // SET 1: GATE & ICAR Core Technical
-  {
-    question: "What is the primary protein fraction responsible for curd formation during chymosin (rennet) coagulation of milk?",
-    options: ["Alpha-s1 Casein", "Beta-Casein", "Kappa-Casein", "Gamma-Casein"],
-    correctAnswer: 2,
-    explanation: "Chymosin specifically cleaves the Phe105-Met106 peptide bond of Kappa-casein, destroying steric stabilization and causing casein micelles to aggregate.",
-    category: "Dairy Chemistry"
-  },
-  {
-    question: "In HTST pasteurization of milk, what is the minimum temperature-time combination prescribed by FSSAI?",
-    options: ["63°C for 30 minutes", "72°C for 15 seconds", "85°C for 5 seconds", "135°C for 2 seconds"],
-    correctAnswer: 1,
-    explanation: "FSSAI standards mandate HTST pasteurization at a minimum of 72°C (161°F) for at least 15 seconds to ensure destruction of Coxiella burnetii.",
-    category: "Dairy Engineering"
-  },
-  {
-    question: "Which enzyme is tested to verify the efficiency of milk pasteurization?",
-    options: ["Lipase", "Alkaline Phosphatase", "Peroxidase", "Lactase"],
-    correctAnswer: 1,
-    explanation: "Alkaline Phosphatase is slightly more heat resistant than pathogenic microorganisms (like Coxiella burnetii). Its complete destruction indicates effective pasteurization.",
-    category: "Quality Control"
-  },
-  {
-    question: "What is the characteristic flavor compound responsible for the typical buttery aroma in Dahi and cultured butter?",
-    options: ["Acetaldehyde", "Diacetyl", "Lactic Acid", "Acetone"],
-    correctAnswer: 1,
-    explanation: "Diacetyl (2,3-butanedione) is synthesized by Leuconostoc mesenteroides subsp. cremoris and Lactococcus lactis subsp. diacetylactis, producing buttery aroma.",
-    category: "Dairy Microbiology"
-  },
-  {
-    question: "Which defect in milk powder is caused by Maillard browning reactions during storage?",
-    options: ["Tallowy flavor", "Stale / Browning defect", "Rancidity", "Fishy off-flavor"],
-    correctAnswer: 1,
-    explanation: "Maillard reaction occurs between amino groups of lysine in casein and reducing sugar lactose at high ambient storage temperatures and elevated moisture.",
-    category: "Dairy Chemistry"
-  },
-  {
-    question: "What is the minimum Milk Fat percentage required by FSSAI for Standardized Milk in India?",
-    options: ["3.0%", "3.5%", "4.5%", "6.0%"],
-    correctAnswer: 2,
-    explanation: "FSSAI prescribes a minimum of 4.5% Milk Fat and 8.5% Milk SNF for Standardized Milk across India.",
-    category: "FSSAI Standards"
-  },
-  {
-    question: "The overrun in Ice Cream is calculated using which formula based on volume?",
-    options: [
-      "[(Volume of Ice Cream - Volume of Mix) / Volume of Mix] × 100",
-      "[(Volume of Mix - Volume of Ice Cream) / Volume of Ice Cream] × 100",
-      "[(Weight of Ice Cream - Weight of Mix) / Weight of Mix] × 100",
-      "[(Volume of Mix / Volume of Ice Cream)] × 100"
-    ],
-    correctAnswer: 0,
-    explanation: "Percent Overrun (by volume) = [(Vol of Ice Cream produced - Vol of liquid Mix used) / Vol of liquid Mix used] × 100.",
-    category: "Dairy Technology"
-  },
-  {
-    question: "Which homogenizer valve stage is primarily responsible for breaking down fat globule aggregates after initial size reduction?",
-    options: ["First Stage", "Second Stage", "Third Stage", "Homogenization bypass"],
-    correctAnswer: 1,
-    explanation: "The 1st stage valve operates at high pressure (150-200 bar) to disrupt fat globules. The 2nd stage valve operates at lower pressure (30-50 bar) to separate clustered fat globules.",
-    category: "Dairy Engineering"
-  },
-  {
-    question: "In Paneer manufacturing, what is the optimum milk coagulation temperature and pH for maximum yield and body?",
-    options: ["60°C and pH 6.0", "70°C and pH 5.0", "80-85°C and pH 5.30-5.35", "95°C and pH 4.6"],
-    correctAnswer: 2,
-    explanation: "Coagulating milk at 80-85°C with 1-2% citric acid at pH 5.30-5.35 yields Paneer with ideal moisture retention, smooth body, and low fat loss in whey.",
-    category: "Dairy Technology"
-  },
-  {
-    question: "What is the average specific gravity of fresh whole cow milk at 15.5°C?",
-    options: ["1.018 - 1.022", "1.028 - 1.032", "1.036 - 1.040", "1.045 - 1.050"],
-    correctAnswer: 1,
-    explanation: "Fresh cow milk has an average specific gravity of 1.028 - 1.032, whereas buffalo milk ranges from 1.030 - 1.034.",
-    category: "Dairy Physics"
-  },
-  {
-    question: "Which microorganism is responsible for 'ropy milk' defect characterized by viscous slimy strands?",
-    options: ["Alcaligenes viscolactis", "Bacillus cereus", "Pseudomonas putida", "Streptococcus agalactiae"],
-    correctAnswer: 0,
-    explanation: "Alcaligenes viscolactis (and some capsular strains of Klebsiella) produce extracellular mucopolysaccharides causing ropy or slimy milk.",
-    category: "Dairy Microbiology"
-  },
-  {
-    question: "Which packaging film is commonly used for UHT milk tetra aseptic packaging for barrier against oxygen and light?",
-    options: ["LDPE only", "Aluminum Foil layer in 6-layer laminate", "BOPP layer", "Cellophane"],
-    correctAnswer: 1,
-    explanation: "Aseptic Tetra Pak packaging comprises 6 layers: Polyethylene (waterproof/adhesion), Paperboard (stability), Polyethylene, Aluminum Foil (oxygen & light barrier), Polyethylene, PET/PE (sealant).",
-    category: "Packaging Tech"
-  },
-
-  // SET 2: FSSAI CFSO/TO & QA
-  {
-    question: "In the Gerber method for fat determination in milk, what is the specific gravity of the concentrated sulfuric acid required?",
-    options: ["1.500 - 1.520", "1.820 - 1.825", "1.140 - 1.150", "2.000 - 2.050"],
-    correctAnswer: 1,
-    explanation: "Gerber sulfuric acid must have a specific gravity of 1.820 to 1.825 at 20°C (approx 90-91% H2SO4) to dissolve proteins without charring fat.",
-    category: "QA & Adulteration"
-  },
-  {
-    question: "In Methylene Blue Reduction Test (MBRT), raw milk reducing methylene blue color in less than 30 minutes is classified as:",
-    options: ["Very Good", "Good", "Fair", "Very Poor / Bad"],
-    correctAnswer: 3,
-    explanation: "MBRT decolorization in < 30 mins indicates heavy bacterial contamination (> 10 million cfu/ml) and is graded as Very Poor.",
-    category: "Milk Quality"
-  },
-  {
-    question: "Which reagent is used in the Rosolic Acid test to detect neutralizing agents like Sodium Carbonate/Bicarbonate in milk?",
-    options: ["0.1% Rosolic acid in ethyl alcohol", "1% Phenolphthalein", "Methyl Red", "Bromothymol Blue"],
-    correctAnswer: 0,
-    explanation: "Rosolic acid solution gives a rose-red or deep pink color in the presence of added neutralizers (carbonates/hydroxides), whereas unadulterated milk remains brownish-orange.",
-    category: "Adulteration Tests"
-  },
-  {
-    question: "Addition of starch as an adulterant in milk is confirmed by the appearance of which color upon adding 1% Iodine solution?",
-    options: ["Deep Pink", "Canary Yellow", "Deep Blue", "Brick Red"],
-    correctAnswer: 2,
-    explanation: "Iodine reacts with amylose in starch to form a dark blue to purple starch-iodine inclusion complex.",
-    category: "Adulteration Tests"
-  },
-  {
-    question: "Which chemical reagent is used in the DMAB test for rapid detection of added Urea in synthetic milk?",
-    options: ["p-Dimethylaminobenzaldehyde", "Diphenylamine", "Resorcinol", "Phosphomolybdic acid"],
-    correctAnswer: 0,
-    explanation: "DMAB (p-Dimethylaminobenzaldehyde) in acidic medium reacts with urea to form a distinct bright yellow colored complex.",
-    category: "Adulteration Tests"
-  },
-  {
-    question: "What is the FSSAI maximum permissible limit for Aflatoxin M1 in raw and pasteurized milk?",
-    options: ["0.05 µg/kg", "0.5 µg/kg", "5.0 µg/kg", "10.0 µg/kg"],
-    correctAnswer: 1,
-    explanation: "FSSAI mandates a maximum tolerance limit of 0.5 µg/kg (0.5 ppb) for Aflatoxin M1 in milk.",
-    category: "FSSAI Safety"
-  },
-  {
-    question: "The Reichert-Meissl (RM) value of pure Ghee evaluates the presence of which specific fatty acids?",
-    options: [
-      "Insoluble long-chain fatty acids",
-      "Steam-volatile, water-soluble fatty acids (mainly Butyric and Caproic acid)",
-      "Unsaturated fatty acids (Oleic acid)",
-      "Phospholipids and Sterols"
-    ],
-    correctAnswer: 1,
-    explanation: "RM value measures the volume of 0.1N KOH required to neutralize steam-volatile water-soluble fatty acids distilled from 5g fat. Pure Ghee RM value is typically > 28.",
-    category: "Ghee Chemistry"
-  },
-  {
-    question: "Which indicator is used to detect the presence of synthetic detergent adulterants in milk?",
-    options: ["Methylene Blue in chloroform / anionic dye test", "Nessler reagent", "Curcumin", "Eosin Y"],
-    correctAnswer: 0,
-    explanation: "Anionic detergents form a chloroform-soluble blue complex with cationic methylene blue dye, turning the lower chloroform layer blue.",
-    category: "Adulteration Tests"
-  },
-  {
-    question: "What is the standard freezing point range of unadulterated fresh bovine milk measured using a Cryoscope?",
-    options: ["0.000°C to -0.200°C", "-0.520°C to -0.555°C", "-0.850°C to -0.900°C", "-1.200°C to -1.500°C"],
-    correctAnswer: 1,
-    explanation: "Pure cow/buffalo milk freezes in the tight range of -0.520°C to -0.555°C due to dissolved lactose and soluble salts.",
-    category: "Milk Physics"
-  },
-  {
-    question: "The California Mastitis Test (CMT) estimates the somatic cell count by reacting with which intracellular component?",
-    options: ["Bacterial cell wall peptidoglycan", "Nuclear DNA of somatic cells (leukocytes)", "Cell membrane phospholipids", "Mitochondrial ATP"],
-    correctAnswer: 1,
-    explanation: "CMT reagent (alkyl aryl sulfonate) lyses somatic cells, releasing nuclear DNA which forms a gel-like precipitate proportional to cell count.",
-    category: "Mastitis Diagnosis"
-  },
-
-  // SET 3: Plant Operations & Engineering
-  {
-    question: "In a triple-effect evaporator operating in a milk powder plant, what is the approximate steam economy achieved?",
-    options: ["0.8 kg water evaporated per kg steam", "1.5 kg water evaporated per kg steam", "2.4 to 2.8 kg water evaporated per kg steam", "5.0 kg water evaporated per kg steam"],
-    correctAnswer: 2,
-    explanation: "A triple-effect evaporator reuses vapor from preceding effects to heat subsequent effects, achieving ~2.4 to 2.8 kg evaporation per kg steam consumed.",
-    category: "Evaporation Tech"
-  },
-  {
-    question: "What is the standard 5-stage cleaning sequence in automatic Dairy CIP (Clean-In-Place) systems?",
-    options: [
-      "Cold Rinse -> Caustic Wash (1.5-2.0% NaOH @ 75°C) -> Intermediate Rinse -> Acid Wash (0.5-1.0% HNO3 @ 65°C) -> Final Sanitizing Rinse",
-      "Acid Wash -> Caustic Wash -> Hot Rinse -> Cold Rinse -> Steam",
-      "Steam -> Caustic Wash -> Acid Wash -> Detergent -> Sanitizer",
-      "Hot Rinse -> Detergent -> Sanitizer -> Cold Rinse -> Acid Wash"
-    ],
-    correctAnswer: 0,
-    explanation: "Standard Dairy CIP uses pre-rinse, hot alkali (NaOH to saponify fat/protein), intermediate rinse, warm acid (HNO3 to dissolve milkstone scale), and final rinse.",
-    category: "Dairy Engineering"
-  },
-  {
-    question: "In a Plate Heat Exchanger (PHE) pasteurizer, how is Regeneration Efficiency calculated?",
-    options: [
-      "[(Temp of Pasteurized Milk leaving regenerator - Temp of Raw Milk entering) / (Max Pasteurization Temp - Temp of Raw Milk entering)] × 100",
-      "[(Max Temp - Min Temp) / Max Temp] × 100",
-      "[(Flow Rate in - Flow Rate out) / Flow Rate in] × 100",
-      "[(Holding Time / Cooling Time)] × 100"
-    ],
-    correctAnswer: 0,
-    explanation: "Regeneration % measures the heat recovered between outgoing hot pasteurized milk and incoming cold raw milk, typically achieving 90-94% efficiency.",
-    category: "Heat Transfer"
-  },
-  {
-    question: "Which refrigerant is most widely used in large industrial dairy processing plants due to its high latent heat of vaporization?",
-    options: ["R-134a", "R-410A", "Anhydrous Ammonia (R-717)", "Carbon Dioxide (R-744)"],
-    correctAnswer: 2,
-    explanation: "Ammonia (R-717) has an exceptionally high latent heat of vaporization (~1370 kJ/kg), zero ODP, and zero GWP, making it ideal for central dairy refrigeration.",
-    category: "Refrigeration"
-  },
-  {
-    question: "In a continuous spray drying tower for milk, what type of atomizer uses high centrifugal speed (10,000 to 25,000 RPM)?",
-    options: ["High-pressure nozzle atomizer", "Pneumatic nozzle", "Rotary disc / wheel atomizer", "Ultrasonic transducer"],
-    correctAnswer: 2,
-    explanation: "Rotary wheel atomizers use high rotational speeds (10,000 - 25,000 RPM) to fling concentrated milk liquid into fine uniform droplets.",
-    category: "Drying Technology"
-  },
-  {
-    question: "What centrifugal force (g-force) range is generated inside a commercial dairy disc-bowl cream separator?",
-    options: ["100 - 500 g", "5,000 - 10,000 g", "50,000 - 100,000 g", "500,000 g"],
-    correctAnswer: 1,
-    explanation: "Disc stack cream separators spin at 4,000-6,000 RPM, generating 5,000 to 10,000 g centrifugal force to separate light fat globules from skim milk.",
-    category: "Separation Tech"
-  },
-  {
-    question: "What HEPA air filter efficiency is required in the Air Handling Unit (AHU) of aseptic dairy packaging rooms?",
-    options: ["85% at 5 µm", "95% at 1 µm", "99.97% at 0.3 µm", "100% at 0.01 µm"],
-    correctAnswer: 2,
-    explanation: "HEPA filters in aseptic filling cleanrooms must filter at least 99.97% of airborne particles 0.3 µm in size.",
-    category: "Plant Utilities"
-  },
-  {
-    question: "In a high-pressure milk homogenizer, what is the operating pressure range of the First Stage homogenizing valve?",
-    options: ["10 - 20 bar", "150 - 200 bar (15-20 MPa)", "500 - 800 bar", "1500 bar"],
-    correctAnswer: 1,
-    explanation: "The 1st stage valve operates at 150-200 bar to reduce fat globule diameter from ~3.5 µm down to < 1.0 µm via cavitation and shear.",
-    category: "Dairy Engineering"
-  },
-
-  // SET 4: Chemistry, Microbiology & Processing
-  {
-    question: "At what temperature does major whey protein Beta-Lactoglobulin undergo thermal denaturation, releasing free sulfhydryl (-SH) groups?",
-    options: ["55°C", "65°C", "78 - 85°C", "121°C"],
-    correctAnswer: 2,
-    explanation: "Beta-lactoglobulin unfolds around 78-85°C, exposing hidden cysteine -SH groups that impart cooked flavor to heated milk.",
-    category: "Dairy Chemistry"
-  },
-  {
-    question: "What is the standard ratio of starter cultures Streptococcus thermophilus and Lactobacillus delbrueckii subsp. bulgaricus in Yoghurt manufacturing?",
-    options: ["10:1", "1:1 (Equal proportions)", "1:5", "1:20"],
-    correctAnswer: 1,
-    explanation: "A 1:1 ratio ensures symbiotic acid and flavor production (protocooperation), yielding optimum lactic acid and acetalhehyde.",
-    category: "Fermented Products"
-  },
-  {
-    question: "What defect occurs in Yoghurt when whey liquid separates out on the surface during storage?",
-    options: ["Sandiness", "Syneresis (Wheying-off)", "Late blowing", "Rancidity"],
-    correctAnswer: 1,
-    explanation: "Syneresis is the shrinkage of the protein gel network resulting in whey expulsion, caused by low SNF, high disturbance during setting, or high acid.",
-    category: "Yoghurt Defect"
-  },
-  {
-    question: "During Mozzarella cheese manufacturing, at what curd pH does the curd exhibit characteristic stretchability in hot water (70-80°C)?",
-    options: ["pH 6.5 - 6.7", "pH 5.2 - 5.4", "pH 4.0 - 4.2", "pH 3.5"],
-    correctAnswer: 1,
-    explanation: "Demineralization of casein micelles at pH 5.2-5.4 creates dicalcium phosphate cross-links optimal for stretching into fibers.",
-    category: "Cheese Technology"
-  },
-  {
-    question: "In Ghee manufacturing, what ripening/cooling temperature range promotes optimum fat crystallization and uniform granular structure?",
-    options: ["4°C", "15°C", "26 - 28°C", "45°C"],
-    correctAnswer: 2,
-    explanation: "Holding Ghee at 26-28°C for 24-48 hours allows high-melting liquid glycerides to slowly form large, uniform fat granules.",
-    category: "Ghee Processing"
-  },
-  {
-    question: "Which native milk enzyme hydrolyzes milk fat into free fatty acids (butyric acid) if milk is improperly agitated?",
-    options: ["Lipoprotein Lipase (LPL)", "Alkaline Phosphatase", "Plasmin", "Catalase"],
-    correctAnswer: 0,
-    explanation: "Native Lipoprotein Lipase (LPL) hydrolyzes triglycerides at the fat globule interface, causing hydrolytic rancidity and bitter/soapy flavor.",
-    category: "Enzymology"
-  },
-  {
-    question: "In Shrikhand production, what is the concentrated curd mass called after draining whey through muslin cloth?",
-    options: ["Paneer", "Chakka", "Khoa", "Rabri"],
-    correctAnswer: 1,
-    explanation: "Chakka is the concentrated dahi obtained after partial removal of whey, containing ~60% moisture, used as the base for Shrikhand.",
-    category: "Traditional Dairy"
-  },
-  {
-    question: "What is the maximum permissible moisture content in FSSAI standardized Butter?",
-    options: ["12%", "16%", "20%", "25%"],
-    correctAnswer: 1,
-    explanation: "FSSAI standards stipulate a maximum of 16% moisture and a minimum of 80% milk fat in table butter.",
-    category: "Butter Standards"
-  },
-
-  // SET 5: Grand All-India Mock & Advanced Calculations
-  {
-    question: "Using Pearson Square method, how many kg of 40% fat cream and 0.5% fat skim milk are needed to standardize 1000 kg milk to 4.5% fat?",
-    options: [
-      "101.3 kg Cream & 898.7 kg Skim Milk",
-      "50 kg Cream & 950 kg Skim Milk",
-      "200 kg Cream & 800 kg Skim Milk",
-      "150 kg Cream & 850 kg Skim Milk"
-    ],
-    correctAnswer: 0,
-    explanation: "Parts Cream = (4.5 - 0.5) = 4.0. Parts Skim = (40 - 4.5) = 35.5. Total parts = 39.5. Cream % = (4/39.5)*1000 = 101.26 kg.",
-    category: "Standardization Math"
-  },
-  {
-    question: "What is the Glass Transition Temperature (Tg) of amorphous spray-dried lactose powder?",
-    options: ["101°C", "49°C", "-10°C", "180°C"],
-    correctAnswer: 1,
-    explanation: "Amorphous lactose has a Tg of ~49°C. Exceeding Tg due to moisture absorption causes sticky powder and caking in milk powder.",
-    category: "Dairy Physics"
-  },
-  {
-    question: "What is the specific heat capacity of skim milk (9% SNF) at 20°C?",
-    options: ["2.10 kJ/kg·K", "3.93 kJ/kg·K", "4.18 kJ/kg·K", "1.50 kJ/kg·K"],
-    correctAnswer: 1,
-    explanation: "Water is 4.18 kJ/kg·K. Skim milk with 9% dissolved solids has a specific heat capacity of approx 3.93 kJ/kg·K.",
-    category: "Thermodynamics"
-  },
-  {
-    question: "Which microfiltration membrane pore size is specifically utilized for cold physical removal of bacteria from milk?",
-    options: ["0.001 µm", "0.01 µm", "1.4 µm", "10 µm"],
-    correctAnswer: 2,
-    explanation: "Microfiltration with 1.4 µm ceramic membranes retains 99.5-99.9% of bacteria and spores without denaturing whey proteins.",
-    category: "Membrane Tech"
-  },
-  {
-    question: "Which natural polypeptide bacteriocin produced by Lactococcus lactis is GRAS-approved as a bio-preservative in cheese?",
-    options: ["Nisin", "Natamycin", "Reuterin", "Pediocin"],
-    correctAnswer: 0,
-    explanation: "Nisin is a polycyclic lantibiotic peptide (34 amino acids) that forms pores in Gram-positive bacterial membranes.",
-    category: "Bio-preservatives"
-  },
-  {
-    question: "What rheological behavior is exhibited by Sweetened Condensed Milk during storage?",
-    options: ["Newtonian fluid", "Thixotropic / Pseudoplastic with yield stress", "Dilatant (shear-thickening)", "Bingham plastic"],
-    correctAnswer: 1,
-    explanation: "Sweetened condensed milk shows shear-thinning (pseudoplastic) and thixotropic behavior due to reversible protein network structural breakdown.",
-    category: "Dairy Rheology"
-  },
-  {
-    question: "In UHT Direct Steam Injection (DSI) plant, what is the purpose of the vacuum flash vessel immediately after heating?",
-    options: [
-      "Cool milk instantaneously and remove condensed steam water equivalent to injected steam",
-      "Increase fat globule size",
-      "Preheat incoming milk",
-      "Add carbonation"
-    ],
-    correctAnswer: 0,
-    explanation: "Flash evaporation in a vacuum chamber instantly drops temperature and removes the exact amount of water added as culinary steam during injection.",
-    category: "UHT Engineering"
-  },
-  {
-    question: "What is the primary cause of 'sandiness' defect in Ice Cream and Condensed Milk?",
-    options: [
-      "Large Alpha-lactose monohydrate crystal growth (> 15 µm)",
-      "High milk fat content",
-      "Over-churning of butterfat",
-      "Presence of sucrose crystals"
-    ],
-    correctAnswer: 0,
-    explanation: "When lactose concentration exceeds saturation, it crystallizes into hard, tomahawk-shaped alpha-lactose monohydrate crystals (> 15-30 µm), causing gritty sandiness.",
-    category: "Product Defects"
-  },
-
-  // ADDITIONAL EXTENDED UNIQUE DAIRY QUESTIONS
-  {
-    question: "Which chemical test is used to detect the presence of added Formalin (formaldehyde) in milk as a preservative?",
-    options: ["Hehner Test (concentrated H2SO4 with FeCl3 forming violet ring)", "Rosolic acid test", "Resorcinol test", "Baudouin test"],
-    correctAnswer: 0,
-    explanation: "Hehner test forms a distinct violet or purple ring at the junction of milk and concentrated sulfuric acid containing trace ferric chloride.",
-    category: "Adulteration Tests"
-  },
-  {
-    question: "What is the maximum limit of titratable acidity (% Lactic Acid) allowed for fresh Cow Milk by FSSAI?",
-    options: ["0.15%", "0.25%", "0.35%", "0.50%"],
-    correctAnswer: 0,
-    explanation: "Fresh unadulterated cow milk has a natural titratable acidity of 0.13 - 0.15% lactic acid equivalent, mainly due to proteins, citrates, and phosphates.",
-    category: "Milk Chemistry"
-  },
-  {
-    question: "The Baudouin Test is used to detect adulteration of Ghee with which substance?",
-    options: ["Vanaspati (Hydrogenated Vegetable Oil containing Sesame Oil)", "Starch", "Mineral Oil", "Lard"],
-    correctAnswer: 0,
-    explanation: "Baudouin test detects Sesamin present in mandatory 5% sesame oil added to Vanaspati, forming a crimson red color with HCl and Furfural.",
-    category: "Adulteration Tests"
-  },
-  {
-    question: "Which major casein fraction exhibits high sensitivity to calcium precipitation and lacks carbohydrate moieties?",
-    options: ["Alpha-s1 Casein", "Kappa-Casein", "Beta-Lactoglobulin", "Alpha-Lactalbumin"],
-    correctAnswer: 0,
-    explanation: "Alpha-s1 casein contains 8-9 phosphate groups and precipitates readily in the presence of Ca2+ ions, unlike glycosylated Kappa-casein.",
-    category: "Protein Chemistry"
-  },
-  {
-    question: "In Khoa production, what is the moisture content range for 'Dhapa' variety Khoa used for making Gulab Jamun?",
-    options: ["20 - 25%", "37 - 44%", "15%", "50 - 60%"],
-    correctAnswer: 1,
-    explanation: "Dhapa Khoa has 37-44% moisture, loose body and smooth texture ideal for Gulab Jamun, while Pindi has ~31-33% moisture for Peda/Burfi.",
-    category: "Traditional Products"
-  },
-  {
-    question: "Which thermal processing index evaluates the extent of milk heat treatment by measuring undenatured whey protein nitrogen in mg per g powder?",
-    options: ["WPNI (Whey Protein Nitrogen Index)", "HMF Index", "F0 Value", "Insolubility Index"],
-    correctAnswer: 0,
-    explanation: "WPNI classifies skim milk powder: Low-Heat (> 6.0 mg/g), Medium-Heat (1.51 - 5.99 mg/g), and High-Heat (< 1.50 mg/g).",
-    category: "Powder Quality"
-  },
-  {
-    question: "What is the primary function of adding Sodium Citrate or Disodium Phosphate as emulsifying salts in Processed Cheese manufacture?",
-    options: [
-      "Solubilize casein by chelating calcium and converting insoluble paracaseinate to soluble sodium paracaseinate",
-      "Lower pH to 3.0",
-      "Act as sweetening agent",
-      "Inhibit yeast growth"
-    ],
-    correctAnswer: 0,
-    explanation: "Emulsifying salts sequester Ca2+ ions, transforming hydrophobic calcium paracaseinate matrix into smooth, emulsified sodium paracaseinate melt.",
-    category: "Cheese Chemistry"
-  },
-  {
-    question: "Which defect in Butter is caused by oxidation of unsaturated fatty acids catalysed by copper or iron ions?",
-    options: ["Tallowy / Metallic flavor defect", "Cheesy defect", "Ropy defect", "Bitty cream"],
-    correctAnswer: 0,
-    explanation: "Traces of heavy metals (Cu > 0.05 ppm, Fe > 0.5 ppm) accelerate free radical autoxidation of linoleic and oleic acids, generating metallic/tallowy flavor.",
-    category: "Butter Quality"
-  },
-  {
-    question: "What is the main carbohydrate present in Bovine Colostrum in higher concentration than regular milk?",
-    options: ["Oligosaccharides", "Lactose", "Sucrose", "Maltose"],
-    correctAnswer: 0,
-    explanation: "Colostrum contains significantly higher concentrations of sialylated and fucosylated immunomodulatory oligosaccharides, whereas lactose is lower.",
-    category: "Colostrum Chemistry"
-  },
-  {
-    question: "In Ultrafiltration of whey, what membrane cut-off (MWCO) is selected to retain whey proteins (Alpha-lactalbumin and Beta-lactoglobulin)?",
-    options: ["100 Da", "10,000 - 30,000 Da (10-30 kDa)", "500,000 Da", "5,000,000 Da"],
-    correctAnswer: 1,
-    explanation: "Alpha-lactalbumin (~14.2 kDa) and Beta-lactoglobulin (~18.4 kDa) are retained by 10-30 kDa MWCO membranes, letting lactose and salts pass through.",
-    category: "Membrane Tech"
-  },
-  {
-    question: "What enzyme is used in cold-sterilized or low-lactose milk processing to hydrolyze lactose into Glucose and Galactose?",
-    options: ["Beta-Galactosidase (Lactase)", "Alpha-Amylase", "Chymosin", "Glucoamylase"],
-    correctAnswer: 0,
-    explanation: "Beta-Galactosidase (Lactase derived from Kluyveromyces lactis or Aspergillus niger) cleaves lactose into glucose and galactose.",
-    category: "Dairy Enzymes"
-  },
-  {
-    question: "In Dahi manufacturing, what level of acidity (% Lactic Acid) indicates ideal setting and firm curd structure?",
-    options: ["0.2%", "0.75 - 0.90%", "2.5%", "4.0%"],
-    correctAnswer: 1,
-    explanation: "Dahi reaches optimal firm body and balanced mild acidic flavor at 0.75-0.90% titratable acidity (pH 4.4 - 4.6).",
-    category: "Fermented Products"
-  },
-  {
-    question: "Which thermal evaporator component creates high vacuum inside the vapor chamber to lower the boiling point of milk?",
-    options: ["Barometric Condenser with Steam Ejector or Vacuum Pump", "Homogenizer valve", "Plate heat exchanger", "Fluidized bed"],
-    correctAnswer: 0,
-    explanation: "Barometric condensers coupled with steam jet ejectors or liquid ring vacuum pumps pull vacuum (70-85 kPa), dropping milk boiling point to 50-65°C.",
-    category: "Evaporator Design"
-  },
-  {
-    question: "What is the principal phospholipid constituent of the Milk Fat Globule Membrane (MFGM)?",
-    options: ["Sphingomyelin, Phosphatidylcholine & Phosphatidylethanolamine", "Triacylglycerol", "Free cholesterol", "Lecithin only"],
-    correctAnswer: 0,
-    explanation: "MFGM trilayer is rich in polar lipids: Sphingomyelin (25-35%), Phosphatidylcholine (25-35%), and Phosphatidylethanolamine (20-30%).",
-    category: "MFGM Chemistry"
-  },
-  {
-    question: "Which heat treatment method applies 135-150°C for 2 to 5 seconds to achieve commercial sterility in liquid milk?",
-    options: ["LTLT Pasteurization", "HTST Pasteurization", "UHT (Ultra-High Temperature) Processing", "Thermization"],
-    correctAnswer: 2,
-    explanation: "UHT processing at 135-150°C for 2-5 seconds destroys all vegetative microorganisms and bacterial endospores (F0 > 5-6).",
-    category: "Thermal Processing"
-  },
-  {
-    question: "In continuous butter making machine (Fritz process), what phase transformation occurs during high-speed churning?",
-    options: [
-      "Phase inversion from Oil-in-Water (O/W) emulsion to Water-in-Oil (W/O) emulsion",
-      "Gelation of casein",
-      "Crystallization of lactose",
-      "Evaporation of moisture"
-    ],
-    correctAnswer: 0,
-    explanation: "High speed beaters rupture MFGM, releasing liquid fat that cements fat crystals into butter granules, inverting O/W cream to W/O butter.",
-    category: "Butter Technology"
-  },
-  {
-    question: "What is the minimum Milk Solids-Not-Fat (SNF) percentage prescribed by FSSAI for Double Toned Milk?",
-    options: ["8.5%", "9.0%", "10.0%", "11.0%"],
-    correctAnswer: 1,
-    explanation: "FSSAI standards mandate 1.5% Fat and 9.0% SNF for Double Toned Milk.",
-    category: "FSSAI Standards"
-  },
-  {
-    question: "Which microorganism causes 'late blowing' defect in Swiss and Gouda cheese characterized by gas cracks and butyric off-odor?",
-    options: ["Clostridium tyrobutyricum", "Lactococcus lactis", "Penicillium roqueforti", "Streptococcus thermophilus"],
-    correctAnswer: 0,
-    explanation: "Clostridium tyrobutyricum endospores survive pasteurization and ferment lactate into butyric acid, CO2, and H2 gas during ripening.",
-    category: "Cheese Microbiology"
-  },
-  {
-    question: "What is the purpose of adding starter culture Brevibacterium linens during surface-ripened cheese production (e.g. Tilsit, Brick)?",
-    options: [
-      "Produce reddish-orange smear coating and characteristic pungent aroma via protein hydrolysis",
-      "Inhibit mold",
-      "Coagulate milk",
-      "Form eyes"
-    ],
-    correctAnswer: 0,
-    explanation: "Brevibacterium linens forms an orange smear on washed-rind cheeses, secreting proteases and methanethiol for pungent flavor.",
-    category: "Cheese Ripening"
-  },
-  {
-    question: "What centrifugal separator efficiency is expected in modern hermetic disc-bowl cream separators regarding residual fat in skim milk?",
-    options: ["< 0.05% fat (0.03 - 0.05%)", "0.5% fat", "1.0% fat", "2.0% fat"],
-    correctAnswer: 0,
-    explanation: "Hermetic disk bowl cream separators achieve extreme skimming efficiency, leaving < 0.04-0.05% fat in skim milk.",
-    category: "Dairy Engineering"
-  }
-];
-
-export const ALL_FOOD_QUESTIONS: Omit<Question, "id">[] = [
-  // SET 1: Thermal Processing & Food Engineering
-  {
-    question: "What is the D-value (Decimal Reduction Time) in thermal processing of foods?",
-    options: [
-      "Time required to destroy 100% of bacterial spores at a given temperature",
-      "Time required to reduce the microbial population by 90% (1 log cycle) at a given temperature",
-      "Temperature change required to change the D-value by a factor of 10",
-      "Time required to heat the food to 121.1°C"
-    ],
-    correctAnswer: 1,
-    explanation: "D-value is the heating time in minutes at a specific constant temperature required to kill 90% (1-log cycle) of the microbial population.",
-    category: "Food Engineering"
-  },
-  {
-    question: "Which microorganism is used as the target reference organism for commercial sterility of low-acid canned foods (F0 = 3 minutes)?",
-    options: ["Escherichia coli", "Bacillus cereus", "Clostridium botulinum", "Salmonella enterica"],
-    correctAnswer: 2,
-    explanation: "Clostridium botulinum type A and B spores are the target for commercial sterility (12-D process) in low-acid foods (pH > 4.6).",
-    category: "Food Microbiology"
-  },
-  {
-    question: "What is water activity (aw) defined as in food thermodynamics?",
-    options: [
-      "Percentage of total moisture content",
-      "Ratio of vapor pressure of water in food to vapor pressure of pure water at the same temperature",
-      "Amount of free water in grams",
-      "Ratio of bound water to free water"
-    ],
-    correctAnswer: 1,
-    explanation: "Water activity aw = p / p0, measuring available water for chemical and microbial reactions.",
-    category: "Food Chemistry"
-  },
-  {
-    question: "In Modified Atmosphere Packaging (MAP) of fresh produce, what gas composition is typically maintained?",
-    options: ["High O2 (80%)", "Low O2 (2-5%), High CO2 (3-5%), Balance N2", "100% CO2", "100% O2"],
-    correctAnswer: 1,
-    explanation: "Lowering O2 (2-5%) and elevating CO2 (3-5%) slows down produce respiration and Senescence.",
-    category: "Food Packaging"
-  },
-  {
-    question: "Which enzyme causes rapid enzymatic browning in cut fruits and vegetables?",
-    options: ["Lipoxygenase", "Polyphenol Oxidase (PPO)", "Pectinase", "Amylase"],
-    correctAnswer: 1,
-    explanation: "Polyphenol Oxidase (PPO) oxidizes phenolic compounds into o-quinones, which polymerize to brown melanin pigments.",
-    category: "Food Biochemistry"
-  },
-  {
-    question: "Which preservation method uses high hydrostatic pressure (HPP) (400-600 MPa) to pasteurize food without heat?",
-    options: ["Pascalization", "Appertization", "Radappertization", "Tyndallization"],
-    correctAnswer: 0,
-    explanation: "Pascalization (High Pressure Processing - HPP) inactivates microbes by disrupting non-covalent hydrogen bonds.",
-    category: "Food Preservation"
-  },
-
-  // SET 2: FSSAI Regulations, QA & Oils
-  {
-    question: "What is the FSSAI maximum permissible limit for Total Polar Compounds (TPC) in frying oil before discard?",
-    options: ["10%", "15%", "25%", "40%"],
-    correctAnswer: 2,
-    explanation: "FSSAI mandates that repeated frying oil must be discarded when Total Polar Compounds (TPC) exceed 25%.",
-    category: "FSSAI Regulations"
-  },
-  {
-    question: "Which chemical value measures initial primary oxidation products (hydroperoxides) in fats and oils?",
-    options: ["Acid Value", "Peroxide Value (PV)", "Anisidine Value", "Reichert-Meissl Value"],
-    correctAnswer: 1,
-    explanation: "Peroxide Value (PV) measures milliequivalents of peroxide per kg of oil, indicating early lipid autoxidation.",
-    category: "Oil Chemistry"
-  },
-  {
-    question: "What is the main purpose of adding Sodium Benzoate preservative to acidic fruit juices (pH < 4.0)?",
-    options: ["Inhibit yeasts and molds", "Inhibit lactic acid bacteria only", "Prevent fat rancidity", "Enhance sweetness"],
-    correctAnswer: 0,
-    explanation: "Undissociated benzoic acid molecules penetrate yeast and mold cell walls in acidic media.",
-    category: "Food Additives"
-  },
-  {
-    question: "In sugar confectionery, what instrument is used to measure Total Soluble Solids (°Brix) of syrup?",
-    options: ["Viscometer", "Refractometer", "Texture Analyzer", "Pycnometer"],
-    correctAnswer: 1,
-    explanation: "Refractometers measure light refraction angle proportional to dissolved sucrose concentration in °Brix.",
-    category: "Quality Control"
-  },
-  {
-    question: "What is the critical control point (CCP) definition in HACCP Food Safety System?",
-    options: [
-      "Any step in food process",
-      "A step at which control can be applied to prevent, eliminate, or reduce a food safety hazard to acceptable levels",
-      "Quality inspection of final package",
-      "Daily floor washing"
-    ],
-    correctAnswer: 1,
-    explanation: "A CCP is a mandatory process step critical to prevent or eliminate safety hazards.",
-    category: "HACCP & Safety"
-  },
-  {
-    question: "Which wheat flour protein fraction gives bread dough its characteristic elasticity and gas retention strength?",
-    options: ["Albumin", "Globulin", "Glutenin", "Gliadin"],
-    correctAnswer: 2,
-    explanation: "Glutenin forms high molecular weight disulfide-bonded polymers responsible for dough elasticity.",
-    category: "Cereal Science"
-  },
-
-  // SET 3: Grains, Fruits & Advanced Food Tech
-  {
-    question: "What is the z-value in thermal bacteriology?",
-    options: [
-      "Temperature change required to change the D-value by a factor of 10 (1 log cycle)",
-      "Time in minutes to kill 90% microbes",
-      "Activation energy in kJ/mol",
-      "Decimal reduction time at 100°C"
-    ],
-    correctAnswer: 0,
-    explanation: "z-value is the temperature increase required to reduce D-value by 90% (1-log cycle). For C. botulinum spores, z ≈ 10°C (18°F).",
-    category: "Thermal Processing"
-  },
-  {
-    question: "Which processing operation involves brief steam/water heating of vegetables prior to freezing or canning to inactivate enzymes?",
-    options: ["Blanching", "Pasteurization", "Liofilization", "Tyndallization"],
-    correctAnswer: 0,
-    explanation: "Blanching inactivates spoilage enzymes (Catalase and Peroxidase) preventing flavor and color degradation during frozen storage.",
-    category: "Vegetable Processing"
-  },
-  {
-    question: "High Methoxyl (HM) Pectin gelation requires which specific conditions?",
-    options: [
-      "High Soluble Solids (> 65% sugar) and acidic pH (3.0 - 3.5)",
-      "Low sugar and high Calcium ions",
-      "Alkaline pH 9.0",
-      "Boiling temperature above 120°C"
-    ],
-    correctAnswer: 0,
-    explanation: "HM Pectin (degree of esterification > 50%) requires high soluble solids (> 65% Brix) and low pH (3.0-3.5) to form hydrophobic hydrogen-bonded junction zones.",
-    category: "Food Hydrocolloids"
-  },
-  {
-    question: "Which mycotoxin produced by Aspergillus flavus is a potent hepatocarcinogen strictly regulated in peanuts and corn?",
-    options: ["Aflatoxin B1", "Patulin", "Ochratoxin A", "Fumonisin"],
-    correctAnswer: 0,
-    explanation: "Aflatoxin B1 is the most toxic naturally occurring mycotoxin, regulated at max 10-15 ppb in food grains by FSSAI.",
-    category: "Food Safety"
-  },
-  {
-    question: "During rice parboiling, what gelatinization phenomenon enhances kernel hardness and milling recovery?",
-    options: [
-      "Starch gelatinization and migration of water-soluble B-vitamins (Thiamine) into endosperm",
-      "Protein degradation",
-      "Lipid oxidation",
-      "Fermentation"
-    ],
-    correctAnswer: 0,
-    explanation: "Parboiling (soaking, steaming, drying) gelatinizes starch granules, filling internal fissures and driving vitamins into the endosperm core.",
-    category: "Cereal Technology"
-  },
-  {
-    question: "What non-thermal technology utilizes high intensity short electric pulses (10-80 kV/cm) for cell membrane electroporation?",
-    options: ["Pulsed Electric Field (PEF)", "Ohmic Heating", "Irradiation", "Ultrasonic Extraction"],
-    correctAnswer: 0,
-    explanation: "PEF induces dielectric breakdown of microbial cell membranes (electroporation) without significant thermal damage.",
-    category: "Novel Food Processing"
-  },
-
-  // SET 4: Food Additives, Packaging & Fats
-  {
-    question: "What is the primary function of adding Phosphoric Acid during vegetable oil refining (Degumming)?",
-    options: [
-      "Convert non-hydratable phosphatides into hydratable gums for removal",
-      "Bleach dark pigments",
-      "Deodorize volatile fatty acids",
-      "Hydrogenate double bonds"
-    ],
-    correctAnswer: 0,
-    explanation: "Phosphoric acid chelates Ca/Mg ions bound to non-hydratable phosphatides (phosphatidic acid), turning them into water-soluble hydratable gums.",
-    category: "Edible Oil Refining"
-  },
-  {
-    question: "Which lacquer coating is applied inside tinplate cans used for sulfur-rich foods (e.g. fish, meat, pulses) to prevent black staining?",
-    options: ["Epoxy Phenolic / Zinc Oxide enamel (S-lacquer)", "Oleoresinous C-enamel", "Polyethylene film", "Varnish"],
-    correctAnswer: 0,
-    explanation: "Zinc Oxide in S-lacquer reacts with hydrogen sulfide released during retorting to form white Zinc Sulfide instead of unsightly black Iron Sulfide.",
-    category: "Food Packaging"
-  },
-  {
-    question: "What is the legal maximum limit for trans-fatty acids in edible fats and oils enforced by FSSAI?",
-    options: ["Not more than 2% by weight", "Not more than 5%", "Not more than 10%", "No limit"],
-    correctAnswer: 0,
-    explanation: "FSSAI capped trans-fatty acids in all fats and oils to a maximum of 2% by weight.",
-    category: "FSSAI Regulations"
-  },
-  {
-    question: "Which instrument measures dough rheological properties such as water absorption, arrival time, and dough stability during mixing?",
-    options: ["Farinograph", "Extensograph", "Amylograph", "Alveograph"],
-    correctAnswer: 0,
-    explanation: "Brabender Farinograph measures resistance of dough to mixing blades, yielding Farinograph Quality Number and absorption capacity.",
-    category: "Cereal Rheology"
-  },
-  {
-    question: "What is the primary mechanism of action of Sulfur Dioxide (SO2) / Sodium Metabisulfite in food preservation?",
-    options: [
-      "Inhibit enzymatic browning, non-enzymatic browning, and microbial growth in fruit pulps & wines",
-      "Increase pH",
-      "Enhance lipid oxidation",
-      "Promote Maillard reaction"
-    ],
-    correctAnswer: 0,
-    explanation: "SO2 forms bisulfite adducts with carbonyl groups, blocking Maillard browning, inactivating PPO, and destroying microbial thiamine/enzymes.",
-    category: "Food Preservatives"
-  },
-  {
-    question: "What chemical value measures secondary oxidation products (unsaturated aldehydes) in degraded oils?",
-    options: ["p-Anisidine Value (p-AV)", "Peroxide Value", "Reichert-Meissl Value", "Polenske Value"],
-    correctAnswer: 0,
-    explanation: "p-Anisidine Value measures 2-alkenals and 2,4-dienals forming yellow color with p-anisidine, reflecting past lipid oxidation history.",
-    category: "Lipid Chemistry"
-  },
-  {
-    question: "Which pathogen produces a potent, heat-stable emetic enterotoxin (Cereulide) in cooked rice left at room temperature?",
-    options: ["Bacillus cereus", "Clostridium perfringens", "Salmonella typhi", "Vibrio cholerae"],
-    correctAnswer: 0,
-    explanation: "Emetic strains of Bacillus cereus produce Cereulide, a cyclic dodecadepsipeptide resistant to 121°C autoclaving for 90 mins.",
-    category: "Foodborne Pathogens"
-  },
-  {
-    question: "What heat treatment classification corresponds to radiation doses between 1 kGy and 10 kGy used to kill non-spore pathogens?",
-    options: ["Radicidation", "Radurization", "Radappertization", "Thermoradiation"],
-    correctAnswer: 0,
-    explanation: "Radicidation (1 - 10 kGy) kills non-spore-forming pathogenic bacteria (Salmonella, Listeria) analogous to pasteurization.",
-    category: "Food Irradiation"
-  },
-
-  // SET 5: Grand Food Tech Mock & Advanced Chemistry
-  {
-    question: "What parameter defines the temperature required to reduce the D-value of a microorganism by 90% (1-log cycle)?",
-    options: ["z-value", "F-value", "C-value", "Q10 temperature coefficient"],
-    correctAnswer: 0,
-    explanation: "z-value is the slope reciprocal of the thermal death time curve, representing temperature dependence of microbial inactivation rate.",
-    category: "Bacteriology"
-  },
-  {
-    question: "In extrusion cooking, what parameter measures the thermal and mechanical energy input per unit mass of extrudate?",
-    options: ["Specific Mechanical Energy (SME)", "Overrun", "Expansion ratio", "Degree of gelatinization"],
-    correctAnswer: 0,
-    explanation: "SME (in Wh/kg or kJ/kg) quantifies motor power dissipated as viscous dissipation heat into dough inside the extruder barrel.",
-    category: "Extrusion Tech"
-  },
-  {
-    question: "What is the water activity (aw) minimum limit below which NO pathogenic or spoilage bacteria can grow?",
-    options: ["0.60", "0.75", "0.85", "0.91"],
-    correctAnswer: 3,
-    explanation: "Most spoilage bacteria require aw ≥ 0.91. Staphylococcus aureus can produce toxin down to aw 0.85 under aerobic conditions.",
-    category: "Microbial Kinetics"
-  },
-  {
-    question: "Which food hydrocolloid forms a thermoreversible gel upon cooling with Potassium (K+) ions?",
-    options: ["Kappa-Carrageenan", "Sodium Alginate", "Guar Gum", "Xanthan Gum"],
-    correctAnswer: 0,
-    explanation: "Kappa-carrageenan helices aggregate into rigid gel networks specifically promoted by Potassium (K+) cross-linking.",
-    category: "Food Gums"
-  },
-  {
-    question: "What structural modification occurs during Hydrogenation of vegetable oils resulting in high melting trans-fatty acids?",
-    options: [
-      "Isomerization of cis double bonds to trans spatial configuration",
-      "Complete saturation of glycerol backbone",
-      "Hydrolysis into free fatty acids",
-      "Polymerization of triglycerides"
-    ],
-    correctAnswer: 0,
-    explanation: "Partial hydrogenation over Ni catalyst causes reversible double bond double bond rotation, producing high-melting trans isomers (Elaidic acid).",
-    category: "Fat Modification"
-  },
-  {
-    question: "In canned food processing, what type of internal container corrosion produces hydrogen gas build-up without microbial growth?",
-    options: ["Hydrogen Swell", "Hard Swell", "Flat Sour", "Stack Burning"],
-    correctAnswer: 0,
-    explanation: "Hydrogen swell occurs when acid food attacks tinplate iron, releasing H2 gas that bulges can ends while remaining sterile.",
-    category: "Canning Defects"
-  },
-  {
-    question: "Which carbohydrate reaction is non-enzymatic, requires amino compounds, and proceeds rapidly at low water activity (aw 0.6 - 0.8)?",
-    options: ["Maillard Browning Reaction", "Caramelization", "Enzymatic browning", "Ascorbic acid oxidation"],
-    correctAnswer: 0,
-    explanation: "Maillard browning peaks at intermediate water activity (aw 0.6-0.8) where reactants are concentrated yet mobile.",
-    category: "Food Chemistry"
-  },
-  {
-    question: "What is the primary volatile compound responsible for pungent aroma in mustard oil?",
-    options: ["Allyl Isothiocyanate", "Allicin", "Capsaicin", "Piperine"],
-    correctAnswer: 0,
-    explanation: "Myrosinase enzyme hydrolyzes glucosinolate (Sinigrin) in mustard seeds to produce pungent Allyl Isothiocyanate.",
-    category: "Flavor Chemistry"
-  }
-];
-
-export const ALL_BIOTECH_QUESTIONS: Omit<Question, "id">[] = [
-  // SET 1: Recombinant DNA & Genetic Engineering
-  {
-    question: "Which type of restriction endonuclease cleaves DNA at specific palindromic recognition sequences without requiring ATP?",
-    options: ["Type I", "Type II", "Type III", "Type IV"],
-    correctAnswer: 1,
-    explanation: "Type II restriction endonucleases cleave phosphodiester bonds at or near specific palindromic recognition sequences, requiring only Mg2+ as cofactor.",
-    category: "Recombinant DNA"
-  },
-  {
-    question: "What selectable marker genes are present on pBR322 cloning vector for antibiotic selection?",
-    options: ["Ampicillin resistant (ampR) and Tetracycline resistant (tetR)", "KanR and LacZ", "NeoR and GFP", "PuromycinR"],
-    correctAnswer: 0,
-    explanation: "pBR322 carries ampR (beta-lactamase) and tetR genes, enabling insertional inactivation cloning.",
-    category: "Cloning Vectors"
-  },
-  {
-    question: "In blue-white screening using pUC19 vector, what causes white colonies to form on X-gal + IPTG agar plates?",
-    options: [
-      "Insertional inactivation of the lacZ alpha-peptide gene fragment",
-      "Functional beta-galactosidase expression",
-      "Ampicillin hydrolysis",
-      "Lysis of bacterial cells"
-    ],
-    correctAnswer: 0,
-    explanation: "Foreign DNA insertion into the Multiple Cloning Site (MCS) disrupts lacZ alpha-peptide coding sequence, preventing alpha-complementation. Cells remain white.",
-    category: "Molecular Screening"
-  },
-  {
-    question: "Which bacterial species is naturally capable of transferring T-DNA from its Ti plasmid into plant genomes?",
-    options: ["Agrobacterium tumefaciens", "Escherichia coli", "Bacillus thuringiensis", "Pseudomonas syringae"],
-    correctAnswer: 0,
-    explanation: "Agrobacterium tumefaciens transfers T-DNA bounded by 25-bp direct border repeats into plant nuclear genomes via Vir protein machinery.",
-    category: "Plant Biotech"
-  },
-  {
-    question: "In Polymerase Chain Reaction (PCR), what is the formula used to estimate primer Melting Temperature (Tm)?",
-    options: [
-      "Tm = 2(A + T) + 4(G + C)",
-      "Tm = 4(A + T) + 2(G + C)",
-      "Tm = (A + T + G + C) / 4",
-      "Tm = 65°C constant"
-    ],
-    correctAnswer: 0,
-    explanation: "Wallace rule estimates primer melting temperature: Tm = 2°C × (Count of A + T) + 4°C × (Count of G + C).",
-    category: "PCR Technology"
-  },
-  {
-    question: "Which enzyme synthesizes complementary DNA (cDNA) from an mRNA template using an oligo(dT) primer?",
-    options: ["DNA Polymerase I", "Reverse Transcriptase (RNA-dependent DNA Polymerase)", "Taq Polymerase", "RNA Polymerase II"],
-    correctAnswer: 1,
-    explanation: "Reverse transcriptase transcribes single-stranded mRNA into cDNA by binding to the poly-A tail via an oligo(dT) primer.",
-    category: "Enzymology"
-  },
-
-  // SET 2: Bioprocess Engineering & Kinetics
-  {
-    question: "In a stirred tank bioreactor (STR), what is the typical ratio of liquid height (H) to tank diameter (D)?",
-    options: ["0.5 : 1", "2 : 1 to 3 : 1", "10 : 1", "0.1 : 1"],
-    correctAnswer: 1,
-    explanation: "Industrial STRs maintain an aspect ratio (H/D) of 2:1 to 3:1 for optimal gas hold-up and power dissipation.",
-    category: "Bioreactor Design"
-  },
-  {
-    question: "What impeller type provides high radial shear stress ideal for gas dispersion in microbial fermenters?",
-    options: ["6-flat blade Rushton turbine", "Marine propeller", "Anchor impeller", "Helical ribbon"],
-    correctAnswer: 0,
-    explanation: "Rushton turbine generates radial flow and high shear, breaking sparged gas bubbles into small bubbles for high interfacial area.",
-    category: "Fermentation Eng"
-  },
-  {
-    question: "In Monod microbial growth kinetics, what does the saturation constant (Ks) represent?",
-    options: [
-      "Substrate concentration at which specific growth rate (µ) is equal to half of maximum growth rate (µmax / 2)",
-      "Maximum specific growth rate",
-      "Cell yield coefficient",
-      "Maintenance coefficient"
-    ],
-    correctAnswer: 0,
-    explanation: "Ks (g/L or mg/L) measures substrate affinity; lower Ks indicates higher enzyme/cell affinity for substrate.",
-    category: "Bioprocess Kinetics"
-  },
-  {
-    question: "In a Chemostat continuous culture operating at steady state, the specific growth rate (µ) is equal to:",
-    options: ["Dilution Rate (D)", "Maximum growth rate (µmax)", "Zero", "Double the feed rate"],
-    correctAnswer: 0,
-    explanation: "At steady state in a chemostat, cell growth equals cell loss in effluent, so µ = D (where D = Feed Flow rate F / Working Volume V).",
-    category: "Continuous Culture"
-  },
-  {
-    question: "What phenomenon occurs in a Chemostat when Dilution Rate (D) exceeds the maximum specific growth rate (µmax)?",
-    options: ["Washout", "Substrate inhibition", "Exponential accumulation", "Stationary phase"],
-    correctAnswer: 0,
-    explanation: "When D > µmax, cells are pumped out faster than they can divide, resulting in complete depletion of biomass (Washout).",
-    category: "Bioprocess Control"
-  },
-  {
-    question: "In thermal sterilization of fermentation media, what parameter quantifies the overall logarithmic cell kill (Del factor, ∇)?",
-    options: ["∇ = ln(N0 / Nt)", "∇ = D × t", "∇ = µmax × S", "∇ = kLa"],
-    correctAnswer: 0,
-    explanation: "Del factor ∇ = ln(Initial viable spores N0 / Desired final spores Nt) = integral of k(T) dt over time.",
-    category: "Media Sterilization"
-  },
-
-  // SET 3: Downstream Processing (DSP) & Separation
-  {
-    question: "Which high-pressure mechanical cell disruption equipment operates by forcing cell suspension through a narrow valve orifice at 50-150 MPa?",
-    options: ["High-Pressure Homogenizer (Manton-Gaulin)", "Bead Mill", "Ultrasonic probe", "Lyophilizer"],
-    correctAnswer: 0,
-    explanation: "High-pressure homogenizers disrupt microbial cells via extreme shear, impact against impact ring, and sudden pressure drop cavitation.",
-    category: "Cell Disruption"
-  },
-  {
-    question: "What parameter measures the equivalent settling area of a centrifuge relative to a gravity settling basin?",
-    options: ["Sigma Factor (Σ)", "G-force", "Reynolds number", "Schmidt number"],
-    correctAnswer: 0,
-    explanation: "Sigma factor Σ = (ω² V) / (g ln(r2/r1)), representing theoretical settling area of a centrifuge for scale-up.",
-    category: "Centrifugation"
-  },
-  {
-    question: "In Ultrafiltration membrane separation, what does MWCO stand for?",
-    options: ["Molecular Weight Cut-Off", "Maximum Water Concentration Output", "Membrane Wash Cycle Operation", "Mass Weight Coefficient"],
-    correctAnswer: 0,
-    explanation: "MWCO specifies the solute molecular weight (in Daltons) at which 90% of the solute is retained by the membrane.",
-    category: "Membrane Filtration"
-  },
-  {
-    question: "Which downstream chromatography separates proteins based on reversible electrostatic interactions with charged stationary matrix?",
-    options: ["Ion Exchange Chromatography (IEX)", "Hydrophobic Interaction (HIC)", "Size Exclusion (SEC)", "Affinity Chromatography"],
-    correctAnswer: 0,
-    explanation: "Anion exchangers (DEAE) bind negatively charged proteins, while Cation exchangers (CM/SP) bind positively charged proteins.",
-    category: "Downstream Separation"
-  },
-  {
-    question: "In Hydrophobic Interaction Chromatography (HIC), under what salt concentration conditions do target proteins bind to the matrix?",
-    options: [
-      "High lyotropic salt concentration (e.g. 1-2 M Ammonium Sulfate)",
-      "Zero salt (deionized water)",
-      "Acidic pH 2.0 without salt",
-      "High urea concentration"
-    ],
-    correctAnswer: 0,
-    explanation: "High salt promotes hydrophobic interactions by ordering water molecules around hydrophobic patches, driving protein binding.",
-    category: "Chromatography"
-  },
-  {
-    question: "In His-tagged recombinant protein purification using Ni-NTA agarose affinity chromatography, what molecule is added to elute the bound protein?",
-    options: ["Imidazole", "Glucose", "Ampicillin", "EDTA"],
-    correctAnswer: 0,
-    explanation: "Imidazole competes with the Histidine imidazole rings for coordination sites on nickel ions (Ni2+), eluting the His-tagged protein.",
-    category: "Protein Affinity"
-  },
-
-  // SET 4: Immunology & Molecular Diagnostics
-  {
-    question: "In Monoclonal Antibody production via Hybridoma technology (Kohler & Milstein), why is HAT medium used for selection?",
-    options: [
-      "Aminopterin blocks de novo purine/pyrimidine synthesis; only fused hybridomas with HGPRT gene from B-cells survive via salvage pathway",
-      "HAT kills all B-cells instantly",
-      "HAT acts as nutrient supplement",
-      "HAT induces cell fusion"
-    ],
-    correctAnswer: 0,
-    explanation: "Aminopterin blocks de novo nucleotide synthesis. Myeloma cells (HGPRT-) die. Unfused B-cells die naturally. Only HGPRT+ hybridomas survive.",
-    category: "Hybridoma Tech"
-  },
-  {
-    question: "Which ELISA format utilizes a primary capture antibody, sample antigen, and an enzyme-conjugated secondary detection antibody forming a sandwich?",
-    options: ["Sandwich ELISA", "Direct ELISA", "Competitive ELISA", "Indirect ELISA"],
-    correctAnswer: 0,
-    explanation: "Sandwich ELISA binds antigen between two specific antibodies (capture and detection), providing high specificity for complex samples.",
-    category: "Immunoassays"
-  },
-  {
-    question: "In Western Blotting, what electrical transfer method moves proteins from SDS-PAGE gel onto PVDF or Nitrocellulose membrane?",
-    options: ["Electroblotting (Tank or Semi-dry transfer)", "Capillary transfer", "Gravity flow", "Vacuum drying"],
-    correctAnswer: 0,
-    explanation: "An electric field perpendicular to the gel drives negatively charged SDS-bound proteins onto the binding membrane.",
-    category: "Molecular Blotting"
-  },
-  {
-    question: "In Flow Cytometry (FACS), what parameter correlates with cell size?",
-    options: ["Forward Scatter (FSC)", "Side Scatter (SSC)", "Fluorescence Intensity", "Absorbance at 280 nm"],
-    correctAnswer: 0,
-    explanation: "Forward Scattered light (FSC) diffracted at small angles (0.5 - 5°) is proportional to cell surface area or size.",
-    category: "Cell Analysis"
-  },
-  {
-    question: "What biophysical analytical technique measures real-time label-free biomolecular interactions via surface refractive index changes?",
-    options: ["Surface Plasmon Resonance (SPR / Biacore)", "NMR Spectroscopy", "X-ray Crystallography", "Mass Spectrometry"],
-    correctAnswer: 0,
-    explanation: "SPR measures changes in the angle of reflected polarized light caused by mass binding at a sensor chip gold surface.",
-    category: "Biophysical Methods"
-  },
-  {
-    question: "What enzyme catalyzes the conversion of Glucose into Gluconic acid and H2O2 in commercial enzymatic blood glucose biosensors?",
-    options: ["Glucose Oxidase (GOD)", "Hexokinase", "Glucose-6-Phosphate Dehydrogenase", "Lactate Dehydrogenase"],
-    correctAnswer: 0,
-    explanation: "Glucose oxidase oxidizes beta-D-glucose, generating hydrogen peroxide which is electrochemically detected at an electrode.",
-    category: "Biosensors"
-  },
-
-  // SET 5: Grand Biotech Mock & Systems Biology
-  {
-    question: "In CRISPR-Cas9 genome editing, what short 2-6 bp DNA motif adjacent to the target site is mandatory for Cas9 cleavage?",
-    options: ["Protospacer Adjacent Motif (PAM, 5'-NGG-3')", "TATA box", "Shine-Dalgarno sequence", "Poly-A signal"],
-    correctAnswer: 0,
-    explanation: "Cas9 requires PAM recognition (5'-NGG-3' for SpCas9) to unwind DNA and initiate sgRNA base-pairing.",
-    category: "Gene Editing"
-  },
-  {
-    question: "What is the theoretical yield coefficient (Yx/s) of bacterial biomass produced per gram of glucose substrate consumed under aerobic conditions?",
-    options: ["0.45 - 0.50 g biomass / g glucose", "1.0 g / g", "0.05 g / g", "2.5 g / g"],
-    correctAnswer: 0,
-    explanation: "Aerobic microbial growth on glucose typically yields ~0.4-0.5 g cell dry weight per gram glucose consumed.",
-    category: "Fermentation Yield"
-  },
-  {
-    question: "Which cDNA library screening method uses radio-labeled antibody probes to bind expressed recombinant proteins?",
-    options: ["Immunological Screening (Western/Expression screening)", "Plaque hybridization", "PCR screening", "Restriction digestion"],
-    correctAnswer: 0,
-    explanation: "Expression vectors (lambda gt11) produce protein products bound by specific antibodies on nitrocellulose filters.",
-    category: "Library Screening"
-  },
-  {
-    question: "During Freeze Drying (Lyophilization), at what stage is frozen ice removed directly via Sublimation under deep vacuum?",
-    options: ["Primary Drying", "Secondary Drying", "Freezing phase", "Annealing phase"],
-    correctAnswer: 0,
-    explanation: "Primary drying sublimes ice into water vapor below the triple point (pressure < 611 Pa, temp < 0°C).",
-    category: "Lyophilization"
-  },
-  {
-    question: "Which metabolic pathway engineering strategy overexpresses the rate-limiting enzyme to increase flux toward target bioproducts?",
-    options: ["Targeted Overexpression / Rate-limiting Step Alleviation", "Gene Knockout", "Antisense RNA", "Feed-batch control"],
-    correctAnswer: 0,
-    explanation: "Relieving bottleneck enzymes increases metabolic flux through synthetic pathways toward desired metabolites.",
-    category: "Metabolic Eng"
-  },
-  {
-    question: "What is the function of DpnI restriction enzyme in site-directed mutagenesis kits (QuikChange)?",
-    options: [
-      "Selectively digest methylated parental template DNA, leaving unmethylated synthesized mutant plasmid intact",
-      "Ligate mutant primers",
-      "Amplify plasmid",
-      "Denature DNA"
-    ],
-    correctAnswer: 0,
-    explanation: "DpnI specifically cleaves 5'-Gm6ATC-3' methylated target DNA isolated from E. coli, eliminating non-mutated parental plasmid.",
-    category: "Mutagenesis"
-  }
-];
-
-// Algorithmic Dynamic Question Generator with STRICT UNIQUE SELECTION (Zero Repetition)
-function generateDynamicPaper(
-  discipline: DisciplineType, 
-  testMode: TestModeType,
-  setNum: number,
-  paperSeed: number,
-  usedQuestionTexts: Set<string>
-): { questions: Question[]; paperId: string; totalQs: number; timeMins: number } {
-  let masterPool: Omit<Question, "id">[] = [];
-  if (discipline === "dairy") masterPool = ALL_DAIRY_QUESTIONS;
-  else if (discipline === "food") masterPool = ALL_FOOD_QUESTIONS;
-  else masterPool = ALL_BIOTECH_QUESTIONS;
-
-  const targetTotal = testMode === "mock" ? 30 : 120;
-  const timeMins = testMode === "mock" ? 30 : 120;
-
-  // 1. Strict deduplication of master pool by question text
-  const uniquePool: Omit<Question, "id">[] = [];
-  const seenTexts = new Set<string>();
-
-  for (const q of masterPool) {
-    const trimmed = q.question.trim();
-    if (!seenTexts.has(trimmed)) {
-      seenTexts.add(trimmed);
-      uniquePool.push(q);
-    }
-  }
-
-  // 2. Set Category Keyword Matching
-  const setKeywordsMap: Record<number, string[]> = {
-    1: ["gate", "icar", "core", "chemistry", "fundamental", "dna", "thermal"],
-    2: ["fssai", "adulteration", "qa", "quality", "mbrt", "gerber", "act", "standard", "safety", "oil", "regulations"],
-    3: ["engineering", "plant", "evaporator", "dryer", "cip", "utility", "refrigeration", "phe", "grain", "dsp", "separation"],
-    4: ["microbiology", "culture", "cheese", "butter", "ghee", "yoghurt", "fermentation", "protein", "additives", "packaging", "immuno"],
-    5: ["calculation", "membrane", "rheology", "packaging", "advanced", "grand", "mock", "systems", "yield"]
-  };
-  const keywords = setKeywordsMap[setNum] || [];
-
-  const isSetMatch = (q: Omit<Question, "id">) => {
-    const cat = q.category.toLowerCase();
-    const text = q.question.toLowerCase();
-    return keywords.some(kw => cat.includes(kw) || text.includes(kw));
-  };
-
-  // 3. Separate pool into Unseen (never attempted in current session) vs Seen
-  const unseenPool = uniquePool.filter(q => !usedQuestionTexts.has(q.question.trim()));
-  const seenPool = uniquePool.filter(q => usedQuestionTexts.has(q.question.trim()));
-
-  // Seed-influenced pseudo-random shuffle
-  const shuffleArray = <T,>(arr: T[]): T[] => {
-    const copy = [...arr];
-    for (let i = copy.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [copy[i], copy[j]] = [copy[j], copy[i]];
-    }
-    return copy;
-  };
-
-  const shuffledUnseen = shuffleArray(unseenPool);
-  const shuffledSeen = shuffleArray(seenPool);
-
-  const priorityUnseen = shuffledUnseen.filter(isSetMatch);
-  const otherUnseen = shuffledUnseen.filter(q => !isSetMatch(q));
-  const prioritySeen = shuffledSeen.filter(isSetMatch);
-  const otherSeen = shuffledSeen.filter(q => !isSetMatch(q));
-
-  // Combine into single ordered candidate list (Unseen Priority -> Unseen Other -> Seen Priority -> Seen Other)
-  const candidatePool = [
-    ...priorityUnseen,
-    ...otherUnseen,
-    ...prioritySeen,
-    ...otherSeen
-  ];
-
-  // 4. Select UP TO targetTotal strictly unique questions (NO MODULO LOOPING!)
-  const finalCount = Math.min(targetTotal, candidatePool.length);
-  const selectedBases = candidatePool.slice(0, finalCount);
-
-  // 5. Build final Question objects with randomized options
-  const generatedQuestions: Question[] = selectedBases.map((base, idx) => {
-    const shuffledOptions = [...base.options];
-    const originalCorrectText = base.options[base.correctAnswer];
-
-    // Fisher-Yates option shuffle
-    for (let j = shuffledOptions.length - 1; j > 0; j--) {
-      const k = Math.floor(Math.random() * (j + 1));
-      [shuffledOptions[j], shuffledOptions[k]] = [shuffledOptions[k], shuffledOptions[j]];
-    }
-    const newCorrectIdx = shuffledOptions.indexOf(originalCorrectText);
-
-    return {
-      id: idx + 1,
-      question: base.question,
-      options: shuffledOptions,
-      correctAnswer: newCorrectIdx >= 0 ? newCorrectIdx : 0,
-      explanation: base.explanation,
-      category: base.category
-    };
-  });
-
-  const tag = testMode === "mock" ? "MOCK" : "EXAM";
-  const paperId = `${discipline.toUpperCase()}-SET${setNum}-${tag}-${paperSeed}`;
-
-  return { questions: generatedQuestions, paperId, totalQs: generatedQuestions.length, timeMins };
-}
 
 export function TestSeriesModal({
   isOpen,
@@ -1327,6 +108,7 @@ export function TestSeriesModal({
   const [visited, setVisited] = useState<Record<number, boolean>>({});
 
   const { user } = useAuth();
+  const { toast } = useToast();
 
   // Candidate Profile State for Scorecard Certificate
   const [studentName, setStudentName] = useState<string>("DairyHub Scholar");
@@ -1485,7 +267,7 @@ export function TestSeriesModal({
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: "#0f172a",
         logging: false,
         width: 1000,
@@ -1528,7 +310,6 @@ export function TestSeriesModal({
       const candidateName = studentName.trim() || user?.displayName || "Scholar";
       const fileName = `DairyHub_Certificate_${candidateName.replace(/\s+/g, "_")}.pdf`;
 
-      pdf.save(fileName);
       await savePdfFile(pdf, fileName);
 
       toast({
@@ -1567,7 +348,7 @@ export function TestSeriesModal({
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: "#0f172a",
         logging: false,
         width: 1000,
@@ -1595,6 +376,11 @@ export function TestSeriesModal({
       });
     } catch (err) {
       console.error("Certificate PNG render error:", err);
+      toast({
+        title: "Download Failed",
+        description: "Unable to generate image. Please try PDF download instead.",
+        variant: "destructive",
+      });
     } finally {
       element.style.transform = prevTransform;
       element.style.transformOrigin = prevOrigin;
@@ -1822,24 +608,32 @@ export function TestSeriesModal({
     if (pct >= 85 || acc >= 90) {
       return {
         tierName: "Platinum Tier",
+        fullName: "PLATINUM TIER CERTIFICATE",
+        textColor: "text-amber-300",
         badgeClass: "bg-sky-500 text-slate-950 border-sky-300 font-black",
         icon: "👑"
       };
     } else if (pct >= 70 || acc >= 75) {
       return {
         tierName: "Gold Tier",
+        fullName: "GOLD TIER CERTIFICATE",
+        textColor: "text-amber-400",
         badgeClass: "bg-amber-500 text-slate-950 border-amber-300 font-black",
         icon: "🥇"
       };
     } else if (pct >= 50 || acc >= 60) {
       return {
         tierName: "Silver Tier",
+        fullName: "SILVER TIER CERTIFICATE",
+        textColor: "text-slate-200",
         badgeClass: "bg-slate-300 text-slate-950 border-white font-black",
         icon: "🥈"
       };
     } else {
       return {
         tierName: "Bronze Tier",
+        fullName: "BRONZE TIER CERTIFICATE",
+        textColor: "text-amber-500",
         badgeClass: "bg-amber-800 text-amber-100 border-amber-600 font-black",
         icon: "🥉"
       };
@@ -2670,13 +1464,13 @@ export function TestSeriesModal({
                       </div>
 
                       {/* Corner Ornaments */}
-                      <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-amber-400/90 rounded-tl-lg pointer-events-none" />
-                      <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-amber-400/90 rounded-tr-lg pointer-events-none" />
-                      <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-amber-400/90 rounded-bl-lg pointer-events-none" />
-                      <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-amber-400/90 rounded-br-lg pointer-events-none" />
+                      <div className="absolute top-3 left-3 w-8 h-8 border-t-4 border-l-4 border-amber-400 rounded-tl-lg pointer-events-none" />
+                      <div className="absolute top-3 right-3 w-8 h-8 border-t-4 border-r-4 border-amber-400 rounded-tr-lg pointer-events-none" />
+                      <div className="absolute bottom-3 left-3 w-8 h-8 border-b-4 border-l-4 border-amber-400 rounded-bl-lg pointer-events-none" />
+                      <div className="absolute bottom-3 right-3 w-8 h-8 border-b-4 border-r-4 border-amber-400 rounded-br-lg pointer-events-none" />
 
                       {/* Certificate Header */}
-                      <div className="flex items-center justify-between border-b border-amber-400/30 pb-4">
+                      <div className="flex items-center justify-between border-b-2 border-amber-400/80 pb-4">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 p-0.5 shadow-lg shrink-0">
                             <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center p-1">
@@ -2703,21 +1497,26 @@ export function TestSeriesModal({
 
                       {/* Certificate Main Title */}
                       <div className="text-center space-y-2 py-2">
-                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/20 via-amber-400/30 to-amber-500/20 border border-amber-400/50 px-4 py-1 rounded-full text-amber-300 font-black text-xs tracking-widest uppercase">
+                        <div className="inline-flex items-center gap-2 bg-slate-900/90 border-2 border-amber-400/80 px-4 py-1 rounded-full text-amber-300 font-black text-xs tracking-widest uppercase">
                           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                           Official Certificate of Achievement
                         </div>
 
-                        <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-400 uppercase tracking-tight">
-                          {currentTierInfo.tierName} Certificate
-                        </h2>
+                        {/* Left & Right Golden Accent Lines Flanking Bright Title */}
+                        <div className="flex items-center justify-center gap-3 sm:gap-4 my-2 py-1">
+                          <div className="h-1 w-16 sm:w-24 bg-gradient-to-r from-transparent via-amber-400 to-amber-300 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.8)] shrink-0" />
+                          <h2 className={cn("text-3xl font-black uppercase tracking-wider text-center drop-shadow-[0_2px_10px_rgba(245,158,11,0.6)] whitespace-nowrap", currentTierInfo.textColor)}>
+                            {currentTierInfo.icon} {currentTierInfo.fullName}
+                          </h2>
+                          <div className="h-1 w-16 sm:w-24 bg-gradient-to-l from-transparent via-amber-400 to-amber-300 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.8)] shrink-0" />
+                        </div>
 
                         <p className="text-xs text-slate-300 font-medium italic">
                           This official certificate is proudly awarded to
                         </p>
 
                         <div className="py-2">
-                          <h1 className="text-4xl font-extrabold text-white tracking-wide underline decoration-amber-400 underline-offset-8">
+                          <h1 className="text-4xl font-extrabold text-white tracking-wide underline decoration-amber-400 decoration-4 underline-offset-8">
                             {studentName.trim() || user?.displayName || "Dairy Technology Scholar"}
                           </h1>
                         </div>
@@ -2732,7 +1531,7 @@ export function TestSeriesModal({
                       </div>
 
                       {/* Official Performance Breakdown Metrics */}
-                      <div className="grid grid-cols-4 gap-3 bg-slate-900/90 p-4 rounded-2xl border border-amber-400/30 text-center shadow-lg">
+                      <div className="grid grid-cols-4 gap-3 bg-slate-900/90 p-4 rounded-2xl border-2 border-amber-400/80 text-center shadow-lg">
                         <div className="p-2 bg-slate-950/60 rounded-xl border border-amber-500/30">
                           <span className="text-[10px] text-slate-400 font-bold uppercase block">Final Score</span>
                           <span className="text-lg font-black text-amber-400">{stats.score} / {stats.maxScore}</span>
@@ -2754,7 +1553,7 @@ export function TestSeriesModal({
                       </div>
 
                       {/* Bottom Signatures & Seal Footer */}
-                      <div className="flex items-center justify-between pt-4 border-t border-amber-400/30 text-xs">
+                      <div className="flex items-center justify-between pt-4 border-t-2 border-amber-400/80 text-xs">
                         {/* Left: Issue Date */}
                         <div className="text-left">
                           <span className="text-[10px] text-slate-400 block uppercase font-mono">Date of Issue</span>
