@@ -44,8 +44,26 @@ export const TEST_SERIES_SETS: SeriesSetInfo[] = [
   },
   {
     id: 5,
-    title: "Set 5: Grand All-India Mock Test Series (Comprehensive)",
-    subtitle: "Combined Full-Length Paper Set Covering All Technical Domains",
-    badge: "ALL-INDIA GRAND MOCK",
+    title: "Set 5: Advanced Calculations & Science Series",
+    subtitle: "Focus on Pearson Square Math, Rheology, Thermodynamics & UHT",
+    badge: "CALCULATIONS & MATH",
+  },
+  {
+    id: 6,
+    title: "Set 6: Adulteration, Standards & Regulatory Series",
+    subtitle: "Focus on Chemical Adulteration Tests, WPNI, FSSAI Limits & MFGM",
+    badge: "ADULTERATION & STANDARDS",
+  },
+  {
+    id: 7,
+    title: "Set 7: Advanced Scientific & Brain-Twisting Series",
+    subtitle: "Focus on Colloid Science, Isoelectric Point, Rheology, Kinetics & Novel Processing",
+    badge: "ADVANCED SCIENTIFIC",
+  },
+  {
+    id: 8,
+    title: "Set 8: Advanced Industrial & Research Master Series",
+    subtitle: "Focus on Homogenization, Fouling, Crystallization, Rheology & Proteomics",
+    badge: "INDUSTRIAL MASTER",
   },
 ];

@@ -37,7 +37,10 @@ export function generateDynamicPaper(
     2: ["fssai", "adulteration", "qa", "quality", "mbrt", "gerber", "act", "standard", "safety", "oil", "regulations"],
     3: ["engineering", "plant", "evaporator", "dryer", "cip", "utility", "refrigeration", "phe", "grain", "dsp", "separation"],
     4: ["microbiology", "culture", "cheese", "butter", "ghee", "yoghurt", "fermentation", "protein", "additives", "packaging", "immuno"],
-    5: ["calculation", "membrane", "rheology", "packaging", "advanced", "grand", "mock", "systems", "yield"]
+    5: ["calculation", "pearson", "membrane", "rheology", "packaging", "advanced", "grand", "mock", "systems", "yield"],
+    6: ["adulteration", "formalin", "hehner", "titratable", "baudouin", "khoa", "wpni", "emulsifying", "tallowy", "colostrum"],
+    7: ["isoelectric", "rheology", "colloid", "bactofugation", "spectroscopic", "d-value", "z-value", "plasmin", "stokes", "osmotic", "infant", "pef", "hpp", "inulin", "turbiscan", "zeta"],
+    8: ["homogenization", "fouling", "sonocrystallization", "polenske", "saponification", "insolubility", "free fat", "sunlight", "syneresis", "mutarotation", "electrodialysis", "van slyke", "lactulose", "carrageenan", "adv", "cmp", "gmp"]
   };
   const keywords = setKeywordsMap[setNum] || [];
 

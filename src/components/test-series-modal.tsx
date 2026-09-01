@@ -108,6 +108,7 @@ export function TestSeriesModal({
   const [visited, setVisited] = useState<Record<number, boolean>>({});
 
   const { user } = useAuth();
+  const { toast } = useToast();
 
   // Candidate Profile State for Scorecard Certificate
   const [studentName, setStudentName] = useState<string>("DairyHub Scholar");
@@ -266,7 +267,7 @@ export function TestSeriesModal({
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: "#0f172a",
         logging: false,
         width: 1000,
@@ -309,7 +310,6 @@ export function TestSeriesModal({
       const candidateName = studentName.trim() || user?.displayName || "Scholar";
       const fileName = `DairyHub_Certificate_${candidateName.replace(/\s+/g, "_")}.pdf`;
 
-      pdf.save(fileName);
       await savePdfFile(pdf, fileName);
 
       toast({
@@ -348,7 +348,7 @@ export function TestSeriesModal({
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: "#0f172a",
         logging: false,
         width: 1000,
@@ -376,6 +376,11 @@ export function TestSeriesModal({
       });
     } catch (err) {
       console.error("Certificate PNG render error:", err);
+      toast({
+        title: "Download Failed",
+        description: "Unable to generate image. Please try PDF download instead.",
+        variant: "destructive",
+      });
     } finally {
       element.style.transform = prevTransform;
       element.style.transformOrigin = prevOrigin;
@@ -603,24 +608,32 @@ export function TestSeriesModal({
     if (pct >= 85 || acc >= 90) {
       return {
         tierName: "Platinum Tier",
+        fullName: "PLATINUM TIER CERTIFICATE",
+        textColor: "text-amber-300",
         badgeClass: "bg-sky-500 text-slate-950 border-sky-300 font-black",
         icon: "👑"
       };
     } else if (pct >= 70 || acc >= 75) {
       return {
         tierName: "Gold Tier",
+        fullName: "GOLD TIER CERTIFICATE",
+        textColor: "text-amber-400",
         badgeClass: "bg-amber-500 text-slate-950 border-amber-300 font-black",
         icon: "🥇"
       };
     } else if (pct >= 50 || acc >= 60) {
       return {
         tierName: "Silver Tier",
+        fullName: "SILVER TIER CERTIFICATE",
+        textColor: "text-slate-200",
         badgeClass: "bg-slate-300 text-slate-950 border-white font-black",
         icon: "🥈"
       };
     } else {
       return {
         tierName: "Bronze Tier",
+        fullName: "BRONZE TIER CERTIFICATE",
+        textColor: "text-amber-500",
         badgeClass: "bg-amber-800 text-amber-100 border-amber-600 font-black",
         icon: "🥉"
       };
@@ -1451,13 +1464,13 @@ export function TestSeriesModal({
                       </div>
 
                       {/* Corner Ornaments */}
-                      <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-amber-400/90 rounded-tl-lg pointer-events-none" />
-                      <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-amber-400/90 rounded-tr-lg pointer-events-none" />
-                      <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-amber-400/90 rounded-bl-lg pointer-events-none" />
-                      <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-amber-400/90 rounded-br-lg pointer-events-none" />
+                      <div className="absolute top-3 left-3 w-8 h-8 border-t-4 border-l-4 border-amber-400 rounded-tl-lg pointer-events-none" />
+                      <div className="absolute top-3 right-3 w-8 h-8 border-t-4 border-r-4 border-amber-400 rounded-tr-lg pointer-events-none" />
+                      <div className="absolute bottom-3 left-3 w-8 h-8 border-b-4 border-l-4 border-amber-400 rounded-bl-lg pointer-events-none" />
+                      <div className="absolute bottom-3 right-3 w-8 h-8 border-b-4 border-r-4 border-amber-400 rounded-br-lg pointer-events-none" />
 
                       {/* Certificate Header */}
-                      <div className="flex items-center justify-between border-b border-amber-400/30 pb-4">
+                      <div className="flex items-center justify-between border-b-2 border-amber-400/80 pb-4">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 p-0.5 shadow-lg shrink-0">
                             <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center p-1">
@@ -1484,21 +1497,26 @@ export function TestSeriesModal({
 
                       {/* Certificate Main Title */}
                       <div className="text-center space-y-2 py-2">
-                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/20 via-amber-400/30 to-amber-500/20 border border-amber-400/50 px-4 py-1 rounded-full text-amber-300 font-black text-xs tracking-widest uppercase">
+                        <div className="inline-flex items-center gap-2 bg-slate-900/90 border-2 border-amber-400/80 px-4 py-1 rounded-full text-amber-300 font-black text-xs tracking-widest uppercase">
                           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                           Official Certificate of Achievement
                         </div>
 
-                        <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-400 uppercase tracking-tight">
-                          {currentTierInfo.tierName} Certificate
-                        </h2>
+                        {/* Left & Right Golden Accent Lines Flanking Bright Title */}
+                        <div className="flex items-center justify-center gap-3 sm:gap-4 my-2 py-1">
+                          <div className="h-1 w-16 sm:w-24 bg-gradient-to-r from-transparent via-amber-400 to-amber-300 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.8)] shrink-0" />
+                          <h2 className={cn("text-3xl font-black uppercase tracking-wider text-center drop-shadow-[0_2px_10px_rgba(245,158,11,0.6)] whitespace-nowrap", currentTierInfo.textColor)}>
+                            {currentTierInfo.icon} {currentTierInfo.fullName}
+                          </h2>
+                          <div className="h-1 w-16 sm:w-24 bg-gradient-to-l from-transparent via-amber-400 to-amber-300 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.8)] shrink-0" />
+                        </div>
 
                         <p className="text-xs text-slate-300 font-medium italic">
                           This official certificate is proudly awarded to
                         </p>
 
                         <div className="py-2">
-                          <h1 className="text-4xl font-extrabold text-white tracking-wide underline decoration-amber-400 underline-offset-8">
+                          <h1 className="text-4xl font-extrabold text-white tracking-wide underline decoration-amber-400 decoration-4 underline-offset-8">
                             {studentName.trim() || user?.displayName || "Dairy Technology Scholar"}
                           </h1>
                         </div>
@@ -1513,7 +1531,7 @@ export function TestSeriesModal({
                       </div>
 
                       {/* Official Performance Breakdown Metrics */}
-                      <div className="grid grid-cols-4 gap-3 bg-slate-900/90 p-4 rounded-2xl border border-amber-400/30 text-center shadow-lg">
+                      <div className="grid grid-cols-4 gap-3 bg-slate-900/90 p-4 rounded-2xl border-2 border-amber-400/80 text-center shadow-lg">
                         <div className="p-2 bg-slate-950/60 rounded-xl border border-amber-500/30">
                           <span className="text-[10px] text-slate-400 font-bold uppercase block">Final Score</span>
                           <span className="text-lg font-black text-amber-400">{stats.score} / {stats.maxScore}</span>
@@ -1535,7 +1553,7 @@ export function TestSeriesModal({
                       </div>
 
                       {/* Bottom Signatures & Seal Footer */}
-                      <div className="flex items-center justify-between pt-4 border-t border-amber-400/30 text-xs">
+                      <div className="flex items-center justify-between pt-4 border-t-2 border-amber-400/80 text-xs">
                         {/* Left: Issue Date */}
                         <div className="text-left">
                           <span className="text-[10px] text-slate-400 block uppercase font-mono">Date of Issue</span>
