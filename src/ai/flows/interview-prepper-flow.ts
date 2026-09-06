@@ -1,4 +1,4 @@
-'use server';
+// 'use server';
 import { ai } from "@/ai/genkit";
 import { z } from "zod";
 import { InterviewPrepperInputSchema, InterviewPrepperOutputSchema, type InterviewPrepperInput, type InterviewPrepperOutput } from "./types";

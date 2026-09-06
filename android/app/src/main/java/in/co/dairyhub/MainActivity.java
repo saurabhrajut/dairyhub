@@ -14,7 +14,16 @@ public class MainActivity extends BridgeActivity {
         
         try {
             if (this.bridge != null && this.bridge.getWebView() != null) {
-                this.bridge.getWebView().setLayerType(WebView.LAYER_TYPE_HARDWARE, null);
+                WebView webView = this.bridge.getWebView();
+                webView.setLayerType(WebView.LAYER_TYPE_HARDWARE, null);
+                webView.setDownloadListener((url, userAgent, contentDisposition, mimetype, contentLength) -> {
+                    try {
+                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                        intent.setData(android.net.Uri.parse(url));
+                        startActivity(intent);
+                    } catch (Exception ignored) {
+                    }
+                });
             }
         } catch (Exception e) {
             // Ignore if webview not yet ready
