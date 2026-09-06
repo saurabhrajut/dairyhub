@@ -1,17 +1,15 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // 🚀 REQUIRED FOR ANDROID/CAPACITOR: Generates the static 'out' folder,
+  // 🚀 REQUIRED FOR ANDROID/CAPACITOR: Generates the static 'out' folder
+  output: 'export',
 
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '2mb',
-    },
-  },
+  allowedDevOrigins: ['192.168.2.103', '192.168.2.103:3000', '172.20.10.9', '172.20.10.9:3000', 'localhost:3000'],
+
   images: {
     // 🚀 Unoptimized must be true for static exports (Capacitor requirement)
     unoptimized: true,
@@ -54,58 +52,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  serverExternalPackages: ['handlebars', 'dotprompt'],
-};
-
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '2mb',
-    },
-  },
-
-  images: {
-    unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'firebasestudio.app',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'google.com',
-        pathname: '/**',
-      },
-    ],
-  },
-
   serverExternalPackages: ['handlebars', 'dotprompt'],
 };
 

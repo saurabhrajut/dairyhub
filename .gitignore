@@ -54,3 +54,7 @@ google-services.json
 .vscode/
 .idea/
 *.swp
+
+# android build outputs
+*.apk
+*.aab

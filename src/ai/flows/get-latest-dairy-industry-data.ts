@@ -1,5 +1,5 @@
 
-'use server';
+// 'use server';
 /**
  * @fileOverview A Genkit flow to fetch the latest data about the Indian Dairy Industry.
  *

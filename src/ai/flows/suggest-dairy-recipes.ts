@@ -1,5 +1,5 @@
 
-'use server';
+// 'use server';
 
 /**
  * @fileOverview Provides recipe suggestions based on the final milk composition.

@@ -1,5 +1,5 @@
 
-'use server';
+// 'use server';
 /**
  * @fileOverview A flow to generate instructions for detecting milk adulterants and preservatives.
  */

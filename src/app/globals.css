@@ -845,10 +845,48 @@ body.window-blurred-protection #pc-screenshot-guard-overlay {
     visibility: hidden !important;
   }
 }
+/* Festival Hoarding Running Line Animation */
+@keyframes festival-marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
 
+.festival-marquee-track {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  width: max-content !important;
+  animation: festival-marquee-scroll 55s linear infinite !important;
+  will-change: transform;
+}
 
+.festival-marquee-track:hover {
+  animation-play-state: paused !important;
+}
 
+.festival-marquee-block {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  flex-shrink: 0 !important;
+  align-items: center !important;
+}
 
+@keyframes festival-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 2px 14px -2px rgba(245, 158, 11, 0.3), 0 0 10px rgba(234, 88, 12, 0.25);
+  }
+  50% {
+    box-shadow: 0 4px 22px 2px rgba(245, 158, 11, 0.5), 0 0 16px rgba(234, 88, 12, 0.4);
+  }
+}
 
+.festival-today-glow {
+  animation: festival-glow-pulse 2.5s infinite ease-in-out;
+}
 
 

@@ -1,5 +1,5 @@
 
-'use server';
+// 'use server';
 /**
  * @fileOverview This file defines a Genkit flow for generating a daily dairy tip.
  *

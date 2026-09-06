@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 const Header = dynamic(() => import('@/components/header').then(m => ({ default: m.Header })), { ssr: false });
 const TopicGrid = dynamic(() => import('@/components/topic-grid').then(m => ({ default: m.TopicGrid })), { ssr: false, loading: () => <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div> });
 const DailyTip = dynamic(() => import('@/components/daily-tip').then(m => ({ default: m.DailyTip })), { ssr: false });
+const FestivalTicker = dynamic(() => import('@/components/festival-ticker').then(m => ({ default: m.FestivalTicker })), { ssr: false });
 const SarathiChatWidget = dynamic(() => import('@/components/sarathi-chat-widget').then(m => ({ default: m.SarathiChatWidget })), { ssr: false });
 import {
   FlaskConical,
@@ -100,6 +101,7 @@ export default function Home() {
         <Header />
         <main>
           <DailyTip />
+          <FestivalTicker />
           <div className="text-center my-6 cursor-pointer" onClick={handleBounce}>
             <h2 className={cn(
                 "font-headline text-2xl sm:text-3xl font-bold text-gray-800 text-pop-initial",

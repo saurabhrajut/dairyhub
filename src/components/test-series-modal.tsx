@@ -189,9 +189,9 @@ export function TestSeriesModal({
   const certContainerRef = React.useRef<HTMLDivElement>(null);
   const [certScale, setCertScale] = useState<number>(1);
   const [isGeneratingCert, setIsGeneratingCert] = useState<boolean>(false);
-  // Certificate View Mode: "fit" (scale to phone screen width) or "full" (100% resolution scrollable mode)
-  const [certViewMode, setCertViewMode] = useState<"fit" | "full">("fit");
-  const [isCertTouchDragging, setIsCertTouchDragging] = useState<boolean>(false);
+  // Certificate View Mode: "move" (Movable / swipeable 1000px wide mode) or "fit" (scaled to fit single screen)
+  const [certViewMode, setCertViewMode] = useState<"move" | "fit">("move");
+  const [isCertMouseDragging, setIsCertMouseDragging] = useState<boolean>(false);
   const certDragStartXRef = React.useRef<number>(0);
   const certDragScrollLeftRef = React.useRef<number>(0);
 
@@ -204,7 +204,7 @@ export function TestSeriesModal({
           const availableWidth = Math.max(280, containerWidth - 16);
           setCertScale(Math.min(1, availableWidth / 1000));
         } else {
-          // Full HD 100% scale for scrollable/swipeable view
+          // Movable Mode: 100% scale (1000px wide) so it can be moved/swiped left-right on touch
           setCertScale(1);
         }
       }
@@ -226,28 +226,41 @@ export function TestSeriesModal({
     }
   }, [testStatus, updateCertScale]);
 
-  // Touch & Mouse Drag Scroll Handlers for Smooth Certificate Swiping
+  // Touch & Mouse Drag Scroll Handlers for Smooth Certificate Swiping (Plant Formats Style)
   const scrollCertBy = (amount: number) => {
     if (certContainerRef.current) {
       certContainerRef.current.scrollBy({ left: amount, behavior: "smooth" });
     }
   };
 
-  const handleCertDragStart = (pageX: number) => {
+  const scrollToCertPosition = (position: "left" | "center" | "right") => {
     if (!certContainerRef.current) return;
-    setIsCertTouchDragging(true);
-    certDragStartXRef.current = pageX;
+    const maxScroll = certContainerRef.current.scrollWidth - certContainerRef.current.clientWidth;
+    if (position === "left") {
+      certContainerRef.current.scrollTo({ left: 0, behavior: "smooth" });
+    } else if (position === "center") {
+      certContainerRef.current.scrollTo({ left: Math.max(0, maxScroll / 2), behavior: "smooth" });
+    } else if (position === "right") {
+      certContainerRef.current.scrollTo({ left: maxScroll, behavior: "smooth" });
+    }
+  };
+
+  const handleCertMouseDown = (e: React.MouseEvent) => {
+    // Only drag with primary mouse button on desktop, never hijack touch
+    if (e.button !== 0 || !certContainerRef.current) return;
+    setIsCertMouseDragging(true);
+    certDragStartXRef.current = e.pageX;
     certDragScrollLeftRef.current = certContainerRef.current.scrollLeft;
   };
 
-  const handleCertDragMove = (pageX: number) => {
-    if (!isCertTouchDragging || !certContainerRef.current) return;
-    const walk = (pageX - certDragStartXRef.current) * 1.5;
+  const handleCertMouseMove = (e: React.MouseEvent) => {
+    if (!isCertMouseDragging || !certContainerRef.current) return;
+    const walk = (e.pageX - certDragStartXRef.current) * 1.5;
     certContainerRef.current.scrollLeft = certDragScrollLeftRef.current - walk;
   };
 
-  const handleCertDragEnd = () => {
-    setIsCertTouchDragging(false);
+  const handleCertMouseUp = () => {
+    setIsCertMouseDragging(false);
   };
 
   // Universal Mobile APK & Web Download Handler (PDF) with Exact Aspect Ratio Preservation
@@ -428,9 +441,10 @@ export function TestSeriesModal({
       const printWin = window.open('', '_blank', 'width=900,height=1000');
       if (!printWin) {
         toast({
-          title: "Popup Blocked ⚠️",
-          description: "Please tap the 'Download PDF Certificate' button above for direct mobile export.",
+          title: "Saving Certificate to Device... 🏆",
+          description: "Generating official PDF certificate directly for your mobile storage.",
         });
+        handleDownloadCertificatePdf();
         return;
       }
 
@@ -1259,7 +1273,7 @@ export function TestSeriesModal({
 
         {/* ================= VIEW 3: DETAILED SCORECARD & SOLUTION KEY ================= */}
         {testStatus === "scorecard" && (
-          <ScrollArea className="flex-1 p-4 sm:p-8 bg-slate-900">
+          <div className="flex-1 w-full max-w-full min-w-0 overflow-y-auto p-3 sm:p-6 md:p-8 bg-slate-900 custom-scrollbar overscroll-contain">
             <div className="max-w-5xl mx-auto space-y-6">
               {/* Scorecard Hero Banner */}
               <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 border border-indigo-500/30 text-white shadow-2xl text-center space-y-3">
@@ -1357,98 +1371,29 @@ export function TestSeriesModal({
                   </div>
                 </div>
 
-                {/* MOBILE & DESKTOP CERTIFICATE DISPLAY CONTROL BAR (VIEW MODES & MANUAL SCROLL ARROWS) */}
-                <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-3 shadow-md">
-                  {/* Mode Selector Toggles */}
-                  <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
-                    <button
-                      onClick={() => setCertViewMode("fit")}
-                      className={cn(
-                        "px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5",
-                        certViewMode === "fit"
-                          ? "bg-amber-500 text-slate-950 font-black shadow-md"
-                          : "text-slate-400 hover:text-white"
-                      )}
-                    >
-                      <Smartphone className="w-3.5 h-3.5" />
-                      <span>Fit Mobile Screen</span>
-                    </button>
-
-                    <button
-                      onClick={() => setCertViewMode("full")}
-                      className={cn(
-                        "px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5",
-                        certViewMode === "full"
-                          ? "bg-indigo-600 text-white font-black shadow-md"
-                          : "text-slate-400 hover:text-white"
-                      )}
-                    >
-                      <ZoomIn className="w-3.5 h-3.5" />
-                      <span>100% HD View (Swipe ↔️)</span>
-                    </button>
-                  </div>
-
-                  {/* Scroll Controls (Active on Mobile or Full HD View) */}
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-amber-300 font-extrabold flex items-center gap-1">
-                      <MoveHorizontal className="w-3.5 h-3.5 animate-pulse text-amber-400" />
-                      {certViewMode === "fit" ? "Fit-to-Screen Mode" : "Swipe Left / Right ↔️"}
-                    </span>
-
-                    {certViewMode === "full" && (
-                      <div className="flex items-center gap-1">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => scrollCertBy(-250)}
-                          className="h-8 px-2 bg-slate-900 border-slate-700 text-amber-400 hover:bg-amber-500 hover:text-slate-950 text-xs font-bold rounded-lg flex items-center gap-1"
-                        >
-                          <ChevronLeft className="w-4 h-4" /> Left
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => scrollCertBy(250)}
-                          className="h-8 px-2 bg-slate-900 border-slate-700 text-amber-400 hover:bg-amber-500 hover:text-slate-950 text-xs font-bold rounded-lg flex items-center gap-1"
-                        >
-                          Right <ChevronRight className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* THE RESPONSIVE HIGH-RES CERTIFICATE PREVIEW CONTAINER WITH TOUCH DRAG & SMOOTH SCROLL */}
+                {/* THE RESPONSIVE HIGH-RES CERTIFICATE PREVIEW CONTAINER WITH TOUCH PANNING (IDENTICAL TO PLANT FORMATS) */}
                 <div
                   ref={certContainerRef}
-                  className="w-full overflow-x-auto overflow-y-hidden py-3 px-1 custom-scrollbar flex justify-start sm:justify-center cursor-grab active:cursor-grabbing select-none"
+                  className={cn(
+                    "w-full overflow-x-auto print:overflow-visible touch-pan-x pb-4 pt-1 custom-scrollbar overscroll-x-contain",
+                    isCertMouseDragging ? "cursor-grabbing select-none" : "cursor-grab"
+                  )}
                   style={{
-                    touchAction: "pan-x pan-y",
-                    WebkitOverflowScrolling: "touch"
+                    touchAction: "pan-x",
+                    WebkitOverflowScrolling: "touch",
                   }}
-                  onTouchStart={(e) => handleCertDragStart(e.touches[0].pageX)}
-                  onTouchMove={(e) => handleCertDragMove(e.touches[0].pageX)}
-                  onTouchEnd={handleCertDragEnd}
-                  onMouseDown={(e) => handleCertDragStart(e.pageX)}
-                  onMouseMove={(e) => handleCertDragMove(e.pageX)}
-                  onMouseUp={handleCertDragEnd}
-                  onMouseLeave={handleCertDragEnd}
+                  onMouseDown={handleCertMouseDown}
+                  onMouseMove={handleCertMouseMove}
+                  onMouseUp={handleCertMouseUp}
+                  onMouseLeave={handleCertMouseUp}
                 >
-                  <div
-                    className="relative shadow-2xl rounded-2xl sm:rounded-3xl border-2 border-amber-400/60 overflow-hidden bg-slate-950 transition-all duration-300 shrink-0 my-1"
-                    style={{
-                      width: certScale < 1 ? `${Math.floor(1000 * certScale)}px` : "1000px",
-                      height: certScale < 1 ? `${Math.floor(707 * certScale)}px` : "707px",
-                    }}
-                  >
+                  <div className="inline-block min-w-[1000px] shrink-0">
                     <div
                       ref={certRef}
                       id="dairyhub-official-certificate"
-                      className="w-[1000px] h-[707px] min-w-[1000px] min-h-[707px] p-10 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-blue-950 border-8 border-double border-amber-400/90 text-white relative shadow-2xl overflow-hidden font-sans flex flex-col justify-between shrink-0 select-none"
+                      className="w-[1000px] h-[707px] min-w-[1000px] min-h-[707px] p-10 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-blue-950 border-8 border-double border-amber-400/90 text-white relative shadow-2xl overflow-hidden font-sans flex flex-col justify-between shrink-0 select-none my-1"
                       style={{
-                        transform: certScale < 1 ? `scale(${certScale})` : undefined,
-                        transformOrigin: "top left",
-                        backgroundImage: `radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.25) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.2) 0%, transparent 45%), radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.12) 0%, transparent 60%)`
+                        backgroundImage: `radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.25) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.2) 0%, transparent 45%), radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.12) 0%, transparent 60%)`,
                       }}
                     >
                       {/* REPEATING SMALL TILED SECURITY WATERMARK GRID ACROSS ENTIRE CERTIFICATE BACKGROUND */}
@@ -1562,11 +1507,90 @@ export function TestSeriesModal({
                           </span>
                         </div>
 
-                        {/* Center: Gold Emblem Stamp Seal with DAIRYHUB text */}
-                        <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 text-slate-950 font-black p-1.5 flex flex-col items-center justify-center text-center shadow-xl border-2 border-white/50 shrink-0">
-                          <span className="text-[8px] tracking-wider uppercase font-black leading-none text-slate-950 mb-0.5">DAIRYHUB</span>
-                          <ShieldCheck className="w-5 h-5 text-slate-950 my-0.5" />
-                          <span className="text-[7px] tracking-tight uppercase font-black leading-none text-slate-950">OFFICIAL SEAL</span>
+                        {/* Center: Royal 32-Point Chakra Cut Gold Certificate Seal */}
+                        <div className="relative w-24 h-24 flex items-center justify-center shrink-0 filter drop-shadow-[0_4px_14px_rgba(245,158,11,0.6)]">
+                          <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
+                            <defs>
+                              <linearGradient id="goldChakraOuter" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#fef08a" />
+                                <stop offset="25%" stopColor="#f59e0b" />
+                                <stop offset="50%" stopColor="#fbbf24" />
+                                <stop offset="75%" stopColor="#d97706" />
+                                <stop offset="100%" stopColor="#92400e" />
+                              </linearGradient>
+                              <linearGradient id="goldChakraInner" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor="#78350f" />
+                                <stop offset="40%" stopColor="#d97706" />
+                                <stop offset="70%" stopColor="#f59e0b" />
+                                <stop offset="100%" stopColor="#fef08a" />
+                              </linearGradient>
+                              <radialGradient id="centerDisc" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stopColor="#1e1b4b" />
+                                <stop offset="85%" stopColor="#0f172a" />
+                                <stop offset="100%" stopColor="#020617" />
+                              </radialGradient>
+                            </defs>
+
+                            {/* 32-Point Serrated Chakra Cut Outer Rosette */}
+                            <polygon
+                              points="50.00,1.00 54.26,6.71 59.56,1.94 62.63,8.37 68.75,4.73 70.51,11.64 77.22,9.26 77.60,16.37 84.65,15.35 83.63,22.40 90.74,22.78 88.36,29.49 95.27,31.25 91.63,37.37 98.06,40.44 93.29,45.74 99.00,50.00 93.29,54.26 98.06,59.56 91.63,62.63 95.27,68.75 88.36,70.51 90.74,77.22 83.63,77.60 84.65,84.65 77.60,83.63 77.22,90.74 70.51,88.36 68.75,95.27 62.63,91.63 59.56,98.06 54.26,93.29 50.00,99.00 45.74,93.29 40.44,98.06 37.37,91.63 31.25,95.27 29.49,88.36 22.78,90.74 22.40,83.63 15.35,84.65 16.37,77.60 9.26,77.22 11.64,70.51 4.73,68.75 8.37,62.63 1.94,59.56 6.71,54.26 1.00,50.00 6.71,45.74 1.94,40.44 8.37,37.37 4.73,31.25 11.64,29.49 9.26,22.78 16.37,22.40 15.35,15.35 22.40,16.37 22.78,9.26 29.49,11.64 31.25,4.73 37.37,8.37 40.44,1.94 45.74,6.71"
+                              fill="url(#goldChakraOuter)"
+                              stroke="#ca8a04"
+                              strokeWidth="0.8"
+                            />
+
+                            {/* Concentric Golden Outer Border Ring */}
+                            <circle cx="50" cy="50" r="41" fill="none" stroke="url(#goldChakraInner)" strokeWidth="1.5" />
+                            <circle cx="50" cy="50" r="38.5" fill="none" stroke="#fef08a" strokeWidth="0.6" strokeDasharray="1.2 1.2" />
+
+                            {/* Chakra Spokes (24 Spokes like Ashoka / Royal Chakra) */}
+                            {Array.from({ length: 24 }).map((_, i) => (
+                              <line
+                                key={i}
+                                x1="50"
+                                y1="50"
+                                x2={(50 + 38 * Math.cos((i * Math.PI) / 12)).toFixed(2)}
+                                y2={(50 + 38 * Math.sin((i * Math.PI) / 12)).toFixed(2)}
+                                stroke="#f59e0b"
+                                strokeWidth="0.5"
+                                strokeOpacity="0.4"
+                              />
+                            ))}
+
+                            {/* Center Deep Midnight / Indigo Disc with Gold Rim */}
+                            <circle cx="50" cy="50" r="34" fill="url(#centerDisc)" stroke="url(#goldChakraOuter)" strokeWidth="1.5" />
+                            <circle cx="50" cy="50" r="31.5" fill="none" stroke="#f59e0b" strokeWidth="0.5" strokeDasharray="1 1" />
+
+                            {/* Top Curved Text: DAIRYHUB (Rounded along the top circumference) */}
+                            <text x="36.85" y="26.99" transform="rotate(-29.8 36.85 26.99)" textAnchor="middle" dominantBaseline="central" fill="#fef08a" fontSize="5.2" fontWeight="900" fontFamily="sans-serif">D</text>
+                            <text x="40.40" y="25.30" transform="rotate(-21.3 40.40 25.30)" textAnchor="middle" dominantBaseline="central" fill="#fef08a" fontSize="5.2" fontWeight="900" fontFamily="sans-serif">A</text>
+                            <text x="44.15" y="24.15" transform="rotate(-12.8 44.15 24.15)" textAnchor="middle" dominantBaseline="central" fill="#fef08a" fontSize="5.2" fontWeight="900" fontFamily="sans-serif">I</text>
+                            <text x="48.04" y="23.57" transform="rotate(-4.3 48.04 23.57)" textAnchor="middle" dominantBaseline="central" fill="#fef08a" fontSize="5.2" fontWeight="900" fontFamily="sans-serif">R</text>
+                            <text x="51.96" y="23.57" transform="rotate(4.3 51.96 23.57)" textAnchor="middle" dominantBaseline="central" fill="#fef08a" fontSize="5.2" fontWeight="900" fontFamily="sans-serif">Y</text>
+                            <text x="55.85" y="24.15" transform="rotate(12.8 55.85 24.15)" textAnchor="middle" dominantBaseline="central" fill="#fef08a" fontSize="5.2" fontWeight="900" fontFamily="sans-serif">H</text>
+                            <text x="59.60" y="25.30" transform="rotate(21.3 59.60 25.30)" textAnchor="middle" dominantBaseline="central" fill="#fef08a" fontSize="5.2" fontWeight="900" fontFamily="sans-serif">U</text>
+                            <text x="63.15" y="26.99" transform="rotate(29.8 63.15 26.99)" textAnchor="middle" dominantBaseline="central" fill="#fef08a" fontSize="5.2" fontWeight="900" fontFamily="sans-serif">B</text>
+
+                            {/* Bottom Curved Text: OFFICIAL SEAL (Rounded along the bottom circumference) */}
+                            <text x="34.88" y="71.76" transform="rotate(34.8 34.88 71.76)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">O</text>
+                            <text x="37.15" y="73.18" transform="rotate(29.0 37.15 73.18)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">F</text>
+                            <text x="39.56" y="74.36" transform="rotate(23.2 39.56 74.36)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">F</text>
+                            <text x="42.08" y="75.29" transform="rotate(17.4 42.08 75.29)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">I</text>
+                            <text x="44.67" y="75.96" transform="rotate(11.6 44.67 75.96)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">C</text>
+                            <text x="47.32" y="76.36" transform="rotate(5.8 47.32 76.36)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">I</text>
+                            <text x="50.00" y="76.50" transform="rotate(0.0 50.00 76.50)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">A</text>
+                            <text x="52.68" y="76.36" transform="rotate(-5.8 52.68 76.36)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">L</text>
+                            <text x="55.33" y="75.96" transform="rotate(-11.6 55.33 75.96)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif"> </text>
+                            <text x="57.92" y="75.29" transform="rotate(-17.4 57.92 75.29)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">S</text>
+                            <text x="60.44" y="74.36" transform="rotate(-23.2 60.44 74.36)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">E</text>
+                            <text x="62.85" y="73.18" transform="rotate(-29.0 62.85 73.18)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">A</text>
+                            <text x="65.12" y="71.76" transform="rotate(-34.8 65.12 71.76)" textAnchor="middle" dominantBaseline="central" fill="#fde047" fontSize="4.2" fontWeight="900" fontFamily="sans-serif">L</text>
+                          </svg>
+
+                          {/* Center Shield Emblem (Completely separated, perfectly centered, no collision) */}
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+                            <ShieldCheck className="w-5 h-5 text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.9)]" />
+                          </div>
                         </div>
 
                         {/* Right: Signature */}
@@ -1673,7 +1697,7 @@ export function TestSeriesModal({
                 })}
               </div>
             </div>
-          </ScrollArea>
+          </div>
         )}
 
         {/* SUBMIT CONFIRMATION MODAL */}
