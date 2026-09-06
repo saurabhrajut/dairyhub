@@ -1,8 +1,11 @@
 import type { NextConfig } from 'next';
 
+const isAndroidBuild = process.env.BUILD_TARGET === 'android' || process.env.NEXT_EXPORT === 'true';
+
 const nextConfig: NextConfig = {
-  // 🚀 REQUIRED FOR ANDROID/CAPACITOR: Generates the static 'out' folder
-  output: 'export',
+  // 🚀 REQUIRED FOR ANDROID/CAPACITOR: Generates static 'out' when building for mobile
+  // For Firebase App Hosting / Web: standalone mode is required by @apphosting/adapter-nextjs
+  ...(isAndroidBuild ? { output: 'export' } : { output: 'standalone' }),
 
   /* config options here */
   typescript: {
