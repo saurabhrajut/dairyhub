@@ -1,5 +1,3 @@
-
-
 export const compositionalAnalysisContent = {
   hi: {
     main_title: "Dairy Products ka Compositional Analysis",

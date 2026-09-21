@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import {
   Calculator,
   Beaker,
-  FlaskConical,
   Droplet,
   Thermometer,
   Sparkles,
@@ -15,7 +14,8 @@ import {
   Briefcase,
   Bot,
   GraduationCap,
-  Rocket
+  Rocket,
+  Scale
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -104,10 +104,10 @@ export function ToolsHub({ onOpenModal }: ToolsHubProps) {
               🏆 NTA & GATE Style Live Exam
             </span>
             <h3 className="font-extrabold text-base text-white leading-tight">
-              Dairy & Food Tech Test Series (120 Qs)
+              Dairy & Food Tech Test Series (50 Qs)
             </h3>
             <p className="text-xs text-amber-100 mt-0.5">
-              Practice real-time exam center simulation with live timer, question palette, negative marking & detailed scorecard.
+              Practice real-time exam simulation with live timer, question palette, non-repeating dynamic question bank & official scorecard.
             </p>
           </div>
         </div>
@@ -117,7 +117,7 @@ export function ToolsHub({ onOpenModal }: ToolsHubProps) {
           className="bg-slate-950 hover:bg-slate-900 text-amber-400 font-black text-xs px-5 py-2.5 rounded-xl shrink-0 shadow-md flex items-center gap-1.5 transition-transform active:scale-95 border border-amber-400/40"
         >
           <Sparkles className="w-4 h-4 text-amber-400" />
-          Launch 120 Qs Test Series
+          Launch Test Series (50 MCQs)
           <ChevronRight className="w-4 h-4 text-amber-400" />
         </Button>
       </div>
@@ -148,6 +148,35 @@ export function ToolsHub({ onOpenModal }: ToolsHubProps) {
           <Sparkles className="w-4 h-4 text-amber-300" />
           Launch Saarthi AI Bot
           <ChevronRight className="w-4 h-4 text-white" />
+        </Button>
+      </div>
+
+      {/* FEATURED: Standardization I (Pearson Square & Blending) */}
+      <div className="p-4 bg-gradient-to-r from-sky-600 via-blue-600 to-cyan-700 text-white rounded-2xl shadow-lg border border-sky-400/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shrink-0 shadow-inner">
+            <Scale className="w-7 h-7 text-white" />
+          </div>
+          <div>
+            <span className="inline-flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider mb-1">
+              ⚖️ Core Dairy Calculator
+            </span>
+            <h3 className="font-extrabold text-base text-white leading-tight">
+              Standardization I (Basic Principles & Pearson Square)
+            </h3>
+            <p className="text-xs text-sky-100 mt-0.5">
+              Pearson Square method, single milk standardization, cream/skim milk blending, SMP & water balance calculations.
+            </p>
+          </div>
+        </div>
+
+        <Button
+          onClick={() => onOpenModal("std1")}
+          className="bg-white hover:bg-sky-50 text-blue-900 font-extrabold text-xs px-5 py-2.5 rounded-xl shrink-0 shadow-md flex items-center gap-1.5 transition-transform active:scale-95 border border-white/40"
+        >
+          <Scale className="w-4 h-4 text-blue-600" />
+          Open Standardization I
+          <ChevronRight className="w-4 h-4 text-blue-600" />
         </Button>
       </div>
 
@@ -209,34 +238,6 @@ export function ToolsHub({ onOpenModal }: ToolsHubProps) {
         </Button>
       </div>
 
-      {/* FEATURED: Non-Dairy Food Products Testing Launchpad Card */}
-      <div className="p-4 bg-gradient-to-r from-teal-800 via-emerald-900 to-indigo-950 text-white rounded-2xl shadow-lg border border-teal-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shrink-0 shadow-inner">
-            <FlaskConical className="w-7 h-7 text-emerald-300 animate-pulse" />
-          </div>
-          <div>
-            <span className="inline-flex items-center gap-1 bg-amber-400 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider mb-1">
-              🧪 Food Quality & Safety Testing Portal
-            </span>
-            <h3 className="font-extrabold text-base text-white leading-tight">
-              Food Products Quality & Safety Testing Launchpad
-            </h3>
-            <p className="text-xs text-teal-100 mt-0.5">
-              Comprehensive SOPs, scientific principles, adulteration tests & FSSAI limits for Cereals, Oils, Spices, Honey, Beverages & Meat.
-            </p>
-          </div>
-        </div>
-
-        <Button
-          onClick={() => onOpenModal("food-testing-launchpad")}
-          className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs px-5 py-2.5 rounded-xl shrink-0 shadow-md flex items-center gap-1.5 transition-transform active:scale-95 border border-amber-500/40"
-        >
-          <FlaskConical className="w-4 h-4 text-slate-950" />
-          Launch Food Testing Portal
-          <ChevronRight className="w-4 h-4 text-slate-950" />
-        </Button>
-      </div>
 
       {/* Interactive Quick Tools Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -21,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import { componentProps } from "@/lib/data";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, Scale, TrendingUp, TrendingDown, CheckCircle2, AlertTriangle, Plus, LayoutDashboard, FileText, ChevronRight, X, Video, Beaker } from "lucide-react";
+import { ArrowLeft, Blend, Milk, SlidersHorizontal, Combine, Bot, Calculator, Settings, ChevronsUp, Target, Droplets, Info, Weight, Thermometer, Scale, TrendingUp, TrendingDown, CheckCircle2, AlertTriangle, Plus, LayoutDashboard, FileText, ChevronRight, X, Video, Beaker, Sparkles, Award } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -40,15 +40,27 @@ import { Badge } from "@/components/ui/badge";
 
 import dynamic from "next/dynamic";
 
+const MostAdvancedStandardizationCalc = dynamic(() => import("./most-advanced-standardization-calc").then(m => ({ default: m.MostAdvancedStandardizationCalc })), { 
+  ssr: false, 
+  loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
+});
+
 const AdvancedStandardizationCalc = dynamic(() => import("./advanced-standardization-calc").then(m => ({ default: m.AdvancedStandardizationCalc })), { 
   ssr: false, 
   loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
 });
 
-type CalculatorType = 'fat-snf-clr-ts' | 'fat-blending' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'milk-blending' | 'clr-increase' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'two-component-standardization' | 'fat-snf-adjustment' | 'advanced-standardization';
+type CalculatorType = 'most-advanced-standardization' | 'fat-snf-clr-ts' | 'fat-blending' | 'reconstituted-milk' | 'recombined-milk' | 'clr-blending' | 'milk-blending' | 'clr-increase' | 'two-milk-blending-target' | 'clr-correction' | 'kg-fat-snf' | 'two-component-standardization' | 'fat-snf-adjustment' | 'advanced-standardization';
 
 // 1️⃣ FIX: calculatorsInfo mein 'color' property add karein
 const calculatorsInfo = {
+    'most-advanced-standardization': { 
+        title: "Most Advanced Standardization", 
+        subtitle: "Master Excel Engine",
+        icon: Sparkles, 
+        component: MostAdvancedStandardizationCalc,
+        color: "from-amber-500 via-orange-500 to-amber-700" 
+    },
     'advanced-standardization': { 
         title: "Multi-Solids Batch (Sweet Curd/Lassi)", 
         icon: Beaker, 
@@ -130,6 +142,7 @@ const calculatorsInfo = {
 };
 
 const std2VideoMap: Record<string, string> = {
+  'most-advanced-standardization': 'std2-batch',
   'advanced-standardization': 'std2-batch',
   'fat-snf-clr-ts': 'std2-fat-snf-clr',
   'milk-blending': 'std2-multi-milk',
@@ -162,39 +175,39 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      {/* ✅ Mobile Width Fix: w-[95vw] */}
-      <DialogContent className="w-screen h-[100dvh] max-w-screen max-h-[100dvh] rounded-none sm:w-[95vw] sm:h-[90vh] sm:max-w-4xl sm:max-h-[90vh] sm:rounded-2xl flex flex-col p-0 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
+      {/* ✅ Mobile Width Fix: flush 100dvh on mobile, centered modal on sm */}
+      <DialogContent className="left-0 top-0 translate-x-0 translate-y-0 w-full h-[100dvh] max-w-full max-h-[100dvh] rounded-none sm:left-[50%] sm:top-[50%] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[95vw] sm:h-[90vh] sm:max-w-5xl sm:max-h-[90vh] sm:rounded-2xl flex flex-col p-0 sm:p-6 gap-0 border-0 sm:border bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
         {activeCalculator && ActiveCalculatorComponent ? (
           <>
             {/* ✅ Header Update: Added Colorful Icon & Video Button */}
-            <DialogHeader className="flex flex-row items-center justify-between space-x-4 pr-6 shrink-0 p-4 sm:p-0">
-              <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-white/50">
-                  <ArrowLeft className="h-5 w-5" />
+            <DialogHeader className="flex flex-row items-center justify-between space-x-2 sm:space-x-4 pr-3 sm:pr-6 shrink-0 p-3 sm:p-0">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <Button variant="ghost" size="icon" onClick={handleBack} className="shrink-0 hover:bg-white/50 h-8 w-8 sm:h-10 sm:w-10">
+                  <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
-                <div className={cn("p-2 rounded-lg bg-gradient-to-br text-white shadow-md", calculatorsInfo[activeCalculator].color)}>
+                <div className={cn("p-1.5 sm:p-2 rounded-lg bg-gradient-to-br text-white shadow-md shrink-0", calculatorsInfo[activeCalculator].color)}>
                   {(() => {
                       const Icon = calculatorsInfo[activeCalculator].icon;
-                      return <Icon className="h-5 w-5" />;
+                      return <Icon className="h-4 w-4 sm:h-5 sm:w-5" />;
                   })()}
                 </div>
-                <div>
-                  <DialogTitle className="text-xl font-bold font-headline">{calculatorsInfo[activeCalculator].title}</DialogTitle>
-                  <DialogDescription>Calculate specific dairy parameters.</DialogDescription>
+                <div className="min-w-0">
+                  <DialogTitle className="text-base sm:text-xl font-bold font-headline truncate">{calculatorsInfo[activeCalculator].title}</DialogTitle>
+                  <DialogDescription className="text-xs truncate hidden sm:block">Calculate specific dairy parameters.</DialogDescription>
                 </div>
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => triggerVideoTutorial(std2VideoMap[activeCalculator] || 'std2-batch')}
-                className="shrink-0 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 border-blue-200 gap-1.5 rounded-full"
+                className="shrink-0 text-[11px] sm:text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 border-blue-200 gap-1 rounded-full px-2 sm:px-3 h-7 sm:h-8"
               >
-                <Video className="w-3.5 h-3.5 text-blue-600" /> Watch Video 📺
+                <Video className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600" /> <span className="hidden sm:inline">Watch Video</span> 📺
               </Button>
             </DialogHeader>
             
-            <ScrollArea className="h-full mt-4 pr-2 w-full min-w-0">
-              <div className="p-2 sm:p-0 px-1 w-full min-w-0">
+            <ScrollArea className="flex-1 mt-2 sm:mt-4 w-full min-w-0 max-w-full overflow-x-hidden">
+              <div className="p-2 sm:p-0 w-full min-w-0 max-w-full overflow-x-hidden">
                 <ActiveCalculatorComponent />
               </div>
             </ScrollArea>
@@ -226,28 +239,45 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
             <ScrollArea className="flex-1 mt-4 pr-2 w-full min-w-0">
               {/* ✅ Grid Layout Update: Colorful Buttons */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 p-4">
-                {Object.entries(calculatorsInfo).map(([key, { title, icon: Icon, color }]) => (
-                  <button
-                    key={key}
-                    onClick={() => setActiveCalculator(key as CalculatorType)}
-                    className="group relative flex flex-col items-center justify-center p-4 bg-white hover:shadow-xl rounded-2xl border-2 border-transparent hover:border-primary/20 text-center aspect-square transition-all duration-300 transform hover:scale-105"
-                  >
-                    {/* Gradient Circle */}
-                    <div className={cn(
-                        "p-4 rounded-full bg-gradient-to-br text-white mb-3 shadow-md transition-transform group-hover:scale-110", 
-                        color
-                    )}>
-                      <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
-                    </div>
-                    
-                    <span className="font-bold text-sm sm:text-base font-headline text-slate-700 group-hover:text-primary transition-colors">
-                        {title}
-                    </span>
+                {Object.entries(calculatorsInfo).map(([key, info]) => {
+                  const { title, icon: Icon, color } = info as any;
+                  const isMaster = key === 'most-advanced-standardization';
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setActiveCalculator(key as CalculatorType)}
+                      className={cn(
+                        "group relative flex flex-col items-center justify-center p-4 bg-white hover:shadow-xl rounded-2xl border-2 text-center aspect-square transition-all duration-300 transform hover:scale-105",
+                        isMaster
+                          ? "border-amber-400 shadow-md bg-gradient-to-b from-amber-50/40 via-white to-orange-50/30 ring-2 ring-amber-400/30"
+                          : "border-transparent hover:border-primary/20"
+                      )}
+                    >
+                      {isMaster && (
+                        <span className="absolute -top-2.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1">
+                          ⭐ Master Edition
+                        </span>
+                      )}
 
-                     {/* Flash Icon (Make sure Zap is imported from lucide-react) */}
-                     {/* <Zap className="absolute top-2 right-2 h-4 w-4 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity" /> */}
-                  </button>
-                ))}
+                      {/* Gradient Circle */}
+                      <div className={cn(
+                          "p-4 rounded-full bg-gradient-to-br text-white mb-3 shadow-md transition-transform group-hover:scale-110", 
+                          color
+                      )}>
+                        <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
+                      </div>
+                      
+                      <span className="font-bold text-sm sm:text-base font-headline text-slate-700 group-hover:text-primary transition-colors leading-tight">
+                          {title}
+                      </span>
+                      {isMaster && (
+                        <span className="text-[10px] font-bold text-amber-700 mt-1">
+                          Master Excel Matrix Engine
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </ScrollArea>
           </>

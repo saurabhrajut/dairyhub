@@ -71,7 +71,8 @@ const ResumeMakerModal = dynamic(() => import("./calculators/resume-maker-modal"
 const TestSeriesModal = dynamic(() => import("./test-series-modal").then(m => ({ default: m.TestSeriesModal })), { ssr: false });
 const SarathiChatWidget = dynamic(() => import("./sarathi-chat-widget").then(m => ({ default: m.SarathiChatWidget })), { ssr: false });
 const JobLaunchpadModal = dynamic(() => import("./job-launchpad-modal").then(m => ({ default: m.JobLaunchpadModal })), { ssr: false });
-const FoodTestingLaunchpadModal = dynamic(() => import("./food-testing-launchpad-modal").then(m => ({ default: m.FoodTestingLaunchpadModal })), { ssr: false });
+const FoodTestingModal = dynamic(() => import("./info-modals/food-testing-modal").then(m => ({ default: m.FoodTestingModal })), { ssr: false });
+const FoodTestingLaunchpadModal = FoodTestingModal;
 
 type Topic = {
   id: string;
@@ -89,13 +90,13 @@ type Topic = {
 const qualityAccessTopics = [
   'test-series', 'industry', 'fssai-standards', 'quality-concept', 'microbiology', 'audits', 'validation-verification',
   'expert-support', 'calibration', 'lab-equipments', 'milk-chemistry', 'lab-calculations', 'production-calculations',
-  'adulteration', 'solutions-prep', 'compositional-analysis', 'water-testing', 'packaging-testing', 'chromatography',
+  'adulteration', 'solutions-prep', 'compositional-analysis', 'food-testing', 'water-testing', 'packaging-testing', 'chromatography',
   'std1', 'std2', 'milk-handling', 'cip-process', 'etp', 'about-us', 'pest-control'
 ];
 
 const productionAccessTopics = [
   'test-series', 'industry', 'fssai-standards', 'quality-concept', 'audits', 'validation-verification', 'expert-support',
-  'milk-chemistry', 'production-calculations', 'std1', 'std2', 'processing', 'milk-handling',
+  'milk-chemistry', 'production-calculations', 'food-testing', 'std1', 'std2', 'processing', 'milk-handling',
   'products-processing',
   'cip-process', 'etp', 'about-us', 'pest-control'
 ];
@@ -112,7 +113,7 @@ const departmentAccess: Record<string, string[]> = {
 };
 
 const topics: Topic[] = [
-  { id: 'test-series', title: 'Test Series', description: '120 Qs Live Exam Practice', category: 'quality', icon: GraduationCap, badge: 'New Live', modal: TestSeriesModal, isPro: false, color: 'from-amber-500 via-orange-500 to-red-600', iconColor: 'text-white' },
+  { id: 'test-series', title: 'Test Series', description: '50 Qs Dynamic Exam Practice', category: 'quality', icon: GraduationCap, badge: 'Live CBT Exam', modal: TestSeriesModal, isPro: false, color: 'from-amber-500 via-orange-500 to-red-600', iconColor: 'text-white' },
   { id: 'industry', title: 'Dairy Industry', description: 'Overview & Trends', category: 'production', icon: Factory, badge: 'New', modal: DairyIndustryModal, isPro: false, color: 'from-blue-500 via-indigo-500 to-purple-600', iconColor: 'text-white' },
   { id: 'fssai-standards', title: 'FSSAI Standards', description: 'Official Dairy Standards', category: 'quality', icon: ShieldCheck, badge: 'New', modal: FssaiStandardsModal, isPro: false, color: 'from-emerald-500 via-teal-500 to-cyan-600', iconColor: 'text-white' },
   { id: 'quality-concept', title: 'Quality Concepts', description: 'HACCP, TQM, ISO', category: 'quality', icon: CheckSquare, modal: QualityConceptModal, isPro: true, color: 'from-cyan-500 via-sky-500 to-blue-600', iconColor: 'text-white' },
@@ -128,6 +129,7 @@ const topics: Topic[] = [
   { id: 'adulteration', title: 'Adulteration', description: 'Detection & Prevention', category: 'quality', icon: ReagentIcon, badge: 'Updated', modal: AdulterationModal, isPro: true, color: 'from-yellow-500 via-amber-500 to-orange-600', iconColor: 'text-white' },
   { id: 'solutions-prep', title: 'Solutions Preparation', description: 'Reagents & Calculators', category: 'quality', icon: Beaker, modal: SolutionsPrepModal, isPro: true, color: 'from-green-500 via-emerald-500 to-teal-600', iconColor: 'text-white' },
   { id: 'compositional-analysis', title: 'Compositional Analysis', description: 'Chemical tests for products', category: 'quality', icon: TestTube, modal: CompositionalAnalysisModal, isPro: true, color: 'from-indigo-500 via-blue-500 to-purple-600', iconColor: 'text-white' },
+  { id: 'food-testing', title: 'Food Testing', description: 'FSSAI Cereals, Beverages & SOPs', category: 'quality', icon: FlaskConical, badge: 'New', modal: FoodTestingModal, isPro: false, color: 'from-emerald-500 via-teal-500 to-cyan-600', iconColor: 'text-white' },
   { id: 'water-testing', title: 'Water Testing', description: 'WTP/ETP Analysis', category: 'quality', icon: Droplet, modal: WaterTestingModal, isPro: true, color: 'from-blue-500 via-cyan-500 to-sky-600', iconColor: 'text-white' },
   { id: 'packaging-testing', title: 'Packaging Testing', description: 'Quality tests for materials', category: 'quality', icon: PackageCheck, modal: PackagingMaterialTestingModal, isPro: true, color: 'from-yellow-500 via-amber-500 to-orange-600', iconColor: 'text-white' },
   { id: 'chromatography', title: 'Chromatography', description: 'HPLC, GC, TLC & More', category: 'quality', icon: HplcIcon, badge: 'New', modal: ChromatographyModal, isPro: false, color: 'from-pink-100 to-rose-200', iconColor: 'text-white' },
@@ -160,6 +162,11 @@ export function TopicGrid({ activeTab = "home" }: TopicGridProps) {
   const filteredTopics = topics.filter((topic) => {
     // Hide Test Series from Home Screen Grid cards - accessible only via Tools Hub
     if (topic.id === "test-series") {
+      return false;
+    }
+
+    // Hide Standardization I from Main Page (Home) - accessible only via Tools Hub
+    if (topic.id === "std1" && activeTab !== "bookmarks") {
       return false;
     }
 

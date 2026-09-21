@@ -24,7 +24,13 @@ import {
   Archive,
   Search,
   ChevronRight,
-  LayoutGrid
+  LayoutGrid,
+  Wheat,
+  Cookie,
+  UtensilsCrossed,
+  GlassWater,
+  Bean,
+  Drumstick
 } from "lucide-react";
 import { IceCreamIcon, PaneerIcon } from "@/components/icons";
 import { useLanguage } from "@/context/language-context";
@@ -159,63 +165,74 @@ const SafeHTML = ({ html }: { html: string }) => {
   );
 };
 
-const Procedure = ({ test }: { test: TestDetail }) => (
-  <AccordionItem value={test.title.replace(/\s+/g, "-").toLowerCase()}>
-    <AccordionTrigger className="text-left hover:no-underline px-1">
-      <div className="flex flex-col text-left pr-4 min-w-0 max-w-full">
-        <span className="font-bold text-sm sm:text-lg text-slate-800 break-words">
-          {test.title}
-        </span>
-        <span className="text-xs text-muted-foreground font-normal mt-1 leading-snug break-words">
-          {test.purpose}
-        </span>
-      </div>
-    </AccordionTrigger>
-    <AccordionContent className="px-0 sm:px-1 pb-4 min-w-0">
-      {/* ✅ Triple-layered overflow protection */}
-      <div
-        className="w-full min-w-0"
-        style={{ maxWidth: "100%", overflow: "hidden" }}
-      >
+const isHtml = (str?: string) => Boolean(str && /<[a-z][\s\S]*>/i.test(str));
+const stripHtml = (html?: string) => (html ? html.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim() : '');
+
+const Procedure = ({ test }: { test: TestDetail }) => {
+  const hasHtmlPurpose = isHtml(test.purpose);
+  return (
+    <AccordionItem value={test.title.replace(/\s+/g, "-").toLowerCase()}>
+      <AccordionTrigger className="text-left hover:no-underline px-1">
+        <div className="flex flex-col text-left pr-4 min-w-0 max-w-full">
+          <span className="font-bold text-sm sm:text-lg text-slate-800 break-words">
+            {test.title}
+          </span>
+          <span className="text-xs text-muted-foreground font-normal mt-1 leading-snug break-words">
+            {hasHtmlPurpose ? stripHtml(test.purpose).slice(0, 160) + "..." : test.purpose}
+          </span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="px-0 sm:px-1 pb-4 min-w-0">
+        {/* ✅ Triple-layered overflow protection */}
         <div
-          className="min-w-0"
-          style={{
-            maxWidth: "calc(100vw - 48px)",
-            overflow: "hidden",
-          }}
+          className="w-full min-w-0"
+          style={{ maxWidth: "100%", overflow: "hidden" }}
         >
           <div
-            className="
-              max-w-none text-slate-700 min-w-0
-              [&_h4]:text-primary [&_h4]:font-semibold [&_h4]:mt-6 [&_h4]:mb-2 [&_h4]:text-sm sm:[&_h4]:text-base
-              [&_p]:text-xs sm:[&_p]:text-sm [&_p]:mb-3 [&_p]:leading-relaxed
-              [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:mb-4 [&_ul]:text-xs sm:[&_ul]:text-sm [&_li]:mb-1.5
-              [&_ol]:list-decimal [&_ol]:pl-4 [&_ol]:mb-4 [&_ol]:text-xs sm:[&_ol]:text-sm [&_li]:mb-1.5
-              [&_pre]:bg-slate-100/80 [&_pre]:p-2 [&_pre]:rounded-lg [&_pre]:text-[10px] sm:[&_pre]:text-sm [&_pre]:border [&_pre]:border-slate-200 [&_pre]:text-indigo-800 [&_pre]:my-3
-              [&_code]:font-mono [&_code]:text-[10px] sm:[&_code]:text-sm
-              [&_table]:text-[10px] sm:[&_table]:text-sm [&_table]:border-collapse
-              [&_th]:border [&_th]:border-slate-300 [&_th]:bg-slate-100 [&_th]:p-1 sm:[&_th]:p-2 [&_th]:text-left [&_th]:text-[10px] sm:[&_th]:text-sm
-              [&_td]:border [&_td]:border-slate-300 [&_td]:p-1 sm:[&_td]:p-2 [&_td]:text-[10px] sm:[&_td]:text-sm
-              [&_strong]:text-slate-900
-              [&_img]:max-w-full [&_img]:h-auto
-            "
+            className="min-w-0"
+            style={{
+              maxWidth: "calc(100vw - 48px)",
+              overflow: "hidden",
+            }}
           >
-            <SafeHTML html={test.procedure} />
+            <div
+              className="
+                max-w-none text-slate-700 min-w-0
+                [&_h4]:text-primary [&_h4]:font-semibold [&_h4]:mt-6 [&_h4]:mb-2 [&_h4]:text-sm sm:[&_h4]:text-base
+                [&_p]:text-xs sm:[&_p]:text-sm [&_p]:mb-3 [&_p]:leading-relaxed
+                [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:mb-4 [&_ul]:text-xs sm:[&_ul]:text-sm [&_li]:mb-1.5
+                [&_ol]:list-decimal [&_ol]:pl-4 [&_ol]:mb-4 [&_ol]:text-xs sm:[&_ol]:text-sm [&_li]:mb-1.5
+                [&_pre]:bg-slate-100/80 [&_pre]:p-2 [&_pre]:rounded-lg [&_pre]:text-[10px] sm:[&_pre]:text-sm [&_pre]:border [&_pre]:border-slate-200 [&_pre]:text-indigo-800 [&_pre]:my-3
+                [&_code]:font-mono [&_code]:text-[10px] sm:[&_code]:text-sm
+                [&_table]:text-[10px] sm:[&_table]:text-sm [&_table]:border-collapse
+                [&_th]:border [&_th]:border-slate-300 [&_th]:bg-slate-100 [&_th]:p-1 sm:[&_th]:p-2 [&_th]:text-left [&_th]:text-[10px] sm:[&_th]:text-sm
+                [&_td]:border [&_td]:border-slate-300 [&_td]:p-1 sm:[&_td]:p-2 [&_td]:text-[10px] sm:[&_td]:text-sm
+                [&_strong]:text-slate-900
+                [&_img]:max-w-full [&_img]:h-auto
+              "
+            >
+              {hasHtmlPurpose && (
+                <div className="mb-4">
+                  <SafeHTML html={test.purpose} />
+                </div>
+              )}
+              <SafeHTML html={test.procedure} />
 
-            {test.reference && (
-              <div className="mt-5 p-2 sm:p-3 bg-blue-50/50 rounded-lg border border-blue-100">
-                <p className="text-[10px] sm:text-xs text-blue-800 m-0 break-words">
-                  <strong className="text-blue-900">Reference:</strong>{" "}
-                  {test.reference}
-                </p>
-              </div>
-            )}
+              {test.reference && (
+                <div className="mt-5 p-2 sm:p-3 bg-blue-50/50 rounded-lg border border-blue-100">
+                  <p className="text-[10px] sm:text-xs text-blue-800 m-0 break-words">
+                    <strong className="text-blue-900">Reference:</strong>{" "}
+                    {test.reference}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </AccordionContent>
-  </AccordionItem>
-);
+      </AccordionContent>
+    </AccordionItem>
+  );
+};
 
 // ─────────────────────────────────────────────
 // Topic Groups Configuration
