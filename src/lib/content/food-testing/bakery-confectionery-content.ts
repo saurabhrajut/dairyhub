@@ -89,6 +89,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Audit Checklist"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Biscuits aur bread ke liye oven drying temperature aur time different kyun hota hai?",
+        "answer": "1. Biscuits low-moisture (< 5%) baked products hain jahan moisture bound capillary form mein hoti hai — 105°C par 4 ghante mein free water complete evaporate ho jaata hai bina sugar caramelization ke.\n2. Bread high-moisture (~38-40%) starchy crumb hai jisme crust remove karke homogenized crumb ko 105°C par constant weight tak dry kiya jaata hai.\n3. High-sugar candies aur cakes ke liye 70°C vacuum oven use hota hai taaki invert sugar aur fructose decompose na ho."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Drying Temperature",
+        "value": "105°C ± 1°C",
+        "reason": "Standard isothermal drying avoiding carbohydrate pyrolysis"
+    },
+    {
+        "parameter": "Crumb Sampling",
+        "value": "Center of Loaf",
+        "reason": "Avoids baked crust which has artificially low moisture"
+    }
+]
   },
 
   // 2. CHEMICAL TEST: Reducing & Total Sugars in Confectionery & Chocolate
@@ -181,6 +200,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Calculation Formula"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Lane-Eynon method mein Fehling's A aur B alag-alag store kyun karte hain aur boiling par titration kyun karte hain?",
+        "answer": "1. Fehling's A (copper sulphate) aur Fehling's B (alkaline sodium potassium tartrate) ko mix karke rakhne par tartrate copper ko slow auto-reduce kar deta hai. Fresh 1:1 mixing zaroori hai.\n2. Boiling temperature (100°C) par cuprous oxide (Cu2O) precipitation reaction rate fast hota hai, jisse sharp methylene blue indicator endpoint milta hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Titration Condition",
+        "value": "Continuous Boiling",
+        "reason": "Maintains constant cuprous oxide reduction kinetics"
+    },
+    {
+        "parameter": "Inversion Acid",
+        "value": "Dilute HCl at 68-70°C",
+        "reason": "Inverts non-reducing sucrose into reducing glucose + fructose"
+    }
+]
   },
 
   // 3. MICROBIOLOGICAL TEST: Salmonella & Enterobacteriaceae in Chocolate & Bakery
@@ -272,6 +310,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Polyvalent O Antisera"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Chocolate mein Salmonella testing ke liye Buffered Peptone Water (BPW) with Tween 80 kyun zaroori hai?",
+        "answer": "1. Chocolate mein high fat (~30-35%) aur low water activity bacterial cells ko hydrophobic lipid coat mein trap kar deti hai.\n2. 1% Tween 80 surfactant fat emulsion ko disperse karta hai taaki dry-stressed sub-lethally injured Salmonella cells rehydrate ho sakein aur pre-enrichment broth mein proliferate kar sakein."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Pre-enrichment",
+        "value": "BPW + 1% Tween 80, 37°C",
+        "reason": "Resuscitation of stressed Salmonella in high-fat cocoa matrix"
+    },
+    {
+        "parameter": "Statutory Limit",
+        "value": "Absent in 25g",
+        "reason": "Strict zero-tolerance food safety mandate under FSSAI"
+    }
+]
   },
 
   // 4. CHEMICAL TEST: Fat Content & Acid Value in Bakery Fats
@@ -369,6 +426,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["0.1N KOH"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Baked products mein direct Soxhlet ke bajaye acid hydrolysis kyun anivarya hai?",
+        "answer": "1. Baking ke dauran gelatinized starch aur denatured proteins fat ke saath amylose-lipid inclusion complexes bana lete hain.\n2. Direct non-polar solvent extraction (petroleum ether / hexane) se 20-30% fat extract nahi hota.\n3. Dilute HCl acid digestion starch helix ko tod kar 100% bound fat ko release karti hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Acid Digestion",
+        "value": "8 N HCl at 70-80°C",
+        "reason": "Hydrolyzes amylose-lipid complexes to liberate bound fat"
+    },
+    {
+        "parameter": "Solvent Mixture",
+        "value": "Diethyl Ether : Pet Ether (1:1)",
+        "reason": "Extracts both polar and neutral lipid fractions quantitatively"
+    }
+]
   },
 
   // 5. CHEMICAL TEST: Peroxide Value & Rancidity Assessment
@@ -465,6 +541,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Calculation Sheet"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Peroxide value testing dark room / subdued light mein kyun ki jaati hai?",
+        "answer": "1. Potassium iodide (KI) solution light-sensitive hota hai — direct daylight ya fluorescent light iodide ions (I-) ko air oxidation se free iodine mein convert kar sakti hai, resulting in false high blank.\n2. Acetic acid : isooctane medium fat ko dissolve karta hai aur hydroperoxides ki iodide ke saath stoichiometric reaction ko promote karta hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Reaction Environment",
+        "value": "Darkness, exactly 1 min",
+        "reason": "Prevents photolytic oxidation of iodide ions"
+    },
+    {
+        "parameter": "Statutory Threshold",
+        "value": "Max 10.0 meq/kg",
+        "reason": "Primary lipid oxidation limit per FSSAI regulations"
+    }
+]
   },
 
   // 6. PHYSICAL TEST: Water Activity (aw) Measurement
@@ -559,6 +654,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Classification Chart"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Water activity (aw) biscuit crispness aur microbial stability ko kaise control karti hai?",
+        "answer": "1. Biscuits ka critical crispness limit aw ~0.35-0.40 hota hai. Isse upar starch-protein glassy state se rubbery state mein transition hota hai (glass transition T_g), aur biscuit soggy ho jaata hai.\n2. aw < 0.60 hone par koi bhi mold, yeast ya bacteria metabolically multiply nahi kar sakta."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Measuring Principle",
+        "value": "Chilled-Mirror Dewpoint",
+        "reason": "Primary thermodynamic equilibrium vapor pressure determination"
+    },
+    {
+        "parameter": "Chamber Temperature",
+        "value": "25.0°C ± 0.2°C",
+        "reason": "Strict temperature control eliminates vapor pressure drift"
+    }
+]
   },
 
   // 7. CHEMICAL TEST: Ash Content & Alkalinity of Ash
@@ -656,6 +770,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Compliance Records"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Dutch cocoa powder mein ash alkalinity kyun test ki jaati hai?",
+        "answer": "1. Cocoa beans ki natural acidity (pH 5.2-5.6) ko neutralize karne aur rich dark color dene ke liye Dutch processing mein potassium carbonate (K2CO3) use hota hai.\n2. FSSAI limit: Alkalinity of soluble ash maximum 5.0% (as K2CO3 on fat-free dry basis) honi chahiye taaki excessive chemical treatment na ho."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Muffle Temperature",
+        "value": "550°C - 600°C",
+        "reason": "Complete organic matter incineration without potassium salt volatilization"
+    },
+    {
+        "parameter": "Titrant",
+        "value": "0.1 N HCl (Methyl Orange)",
+        "reason": "Measures total alkaline potassium carbonate equivalents"
+    }
+]
   },
 
   // 8. MICROBIOLOGICAL TEST: Yeast & Mold Count
@@ -749,6 +882,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Colony Counter"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Bakery fungal counting mein DRBC medium par 25°C par 5 din kyun rakhte hain?",
+        "answer": "1. Food-borne molds (Aspergillus, Penicillium, Eurotium) slow-growing hote hain aur mature spore head formation ke liye 5 din required hote hain.\n2. Dichloran aur Rose Bengal fast-spreading mucoraceous molds ki colony size ko restrict karte hain taaki crowding na ho."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Incubation Temp",
+        "value": "25°C ± 1°C",
+        "reason": "Optimum growth range for psychrotrophic and mesophilic fungi"
+    },
+    {
+        "parameter": "Incubation Period",
+        "value": "5 days",
+        "reason": "Ensures full morphological colony differentiation"
+    }
+]
   },
 
   // 9. CHEMICAL TEST: Preservative Analysis (Sorbic & Benzoic Acid)
@@ -846,6 +998,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Calculation Sheet"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Sorbic acid aur Benzoic acid ko alag-alag UV wavelengths par kyun measure karte hain?",
+        "answer": "1. Sorbic acid ek conjugated diene carboxylic acid hai jiska UV absorbance maximum 254 nm par hota hai.\n2. Benzoic acid ek aromatic ring system hai jiska primary absorption maximum 227 nm par hota hai. HPLC photodiode array detector (DAD) dono ko simultaneously baseline resolve karta hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Sorbic Acid Wavelength",
+        "value": "254 nm",
+        "reason": "Molar absorptivity peak of conjugated diene chromophore"
+    },
+    {
+        "parameter": "Benzoic Acid Wavelength",
+        "value": "227 nm",
+        "reason": "Characteristic benzene ring UV absorption peak"
+    }
+]
   },
 
   // 10. CHEMICAL TEST: Aflatoxin B1 in Cereal-Based Products
@@ -944,6 +1115,25 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Safety Certificate"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Cocoa aur nuts mein Aflatoxin B1 test mein Immunoaffinity Column (IAC) kyun zaroori hai?",
+        "answer": "1. Cocoa aur nuts mein polyphenols, tannins aur natural pigments high amounts mein hote hain jo direct HPLC mein fluorescent interference paida karte hain.\n2. IAC columns par immobilized monoclonal antibodies sirf Aflatoxins ko bind karti hain aur saare matrix interferents wash ho jaate hain."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "IAC Specificity",
+        "value": "Monoclonal Anti-Aflatoxin",
+        "reason": "Selective extraction with 95%+ recovery from complex cocoa matrix"
+    },
+    {
+        "parameter": "FSSAI Limit",
+        "value": "Max 15 µg/kg (ppb) B1",
+        "reason": "Strict statutory liver carcinogen limit"
+    }
+]
   },
 
   // 11. PHYSICAL TEST: Texture Analysis (Hardness, Fracturability)
@@ -1038,6 +1228,312 @@ export const BAKERY_CONFECTIONERY_TESTS: FoodTestItem[] = [
         controlPoint: "Quality Gate: CV >15% indicates process inconsistency - investigate.",
         reagentsInvolved: ["Statistical Software"]
       }
+    ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Texture Analyzer par 3-point bend test biscuit snap quality ko kaise quantify karta hai?",
+        "answer": "1. Biscuit ko do parallel supports par rakh kar center mein blade probe se compress kiya jaata hai.\n2. Peak fracture force (Newtons) biscuit ki structural hardness measure karti hai; fracture tak ka displacement biscuit ki brittleness/crispness batata hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Probe Type",
+        "value": "3-Point Bending Rig",
+        "reason": "Simulates incisor teeth snapping force on biscuits"
+    },
+    {
+        "parameter": "Test Speed",
+        "value": "1.0 mm/s",
+        "reason": "Standard deformation rate avoiding viscoelastic relaxation"
+    }
+]
+  }
+,
+// 12. CHEMICAL TEST: Acid Insoluble Ash
+  {
+    id: "bakery-chem-7",
+    category: "Bakery & Confectionery",
+    testType: "Chemical",
+    productName: "Biscuits, Cookies, Bread, Rusk, Cakes",
+    testName: "Acid Insoluble Ash (AIA / Sand & Silica Contamination)",
+    shortSummary: "Measures extraneous sand, silica, and grinding stone dust in baked products via 10% dilute HCl digestion.",
+    detailedScientificRationale:
+      "Acid Insoluble Ash (AIA) quantifies silica, quartz, and earthy grit derived from poorly cleaned grain flour, contaminated dusting starches, or stone wear during milling. FSSAI specifies strict statutory limits (Biscuits: Max 0.05%, Bread: Max 0.10%). Excess grit causes dental damage and gastrointestinal irritation.",
+    detailedTestPrinciple:
+      "Total ash obtained at 550°C is boiled with 10% dilute hydrochloric acid. Physiological bone and plant minerals dissolve into soluble chlorides, while insoluble crystalline silica particles remain. The residue is filtered through ashless filter paper (Whatman 41), washed acid-free, re-ignited at 600°C, and weighed.",
+    chemicalEquation: "Mineral Residue + 10% HCl ⟶ Soluble Chlorides (Ca, Mg, K) + Insoluble Silica (Sand) [Gravimetric Ash]",
+    formulaBreakdown: {
+      formula: "% Acid Insoluble Ash (dry basis) = [ (W_aia) / Sample Weight ] × [ 100 / (100 - M) ] × 100",
+      variables: [
+        { symbol: "W_aia", description: "Weight of final re-ignited silica ash residue (g)" },
+        { symbol: "Sample Weight", description: "Initial biscuit/bread sample mass taken (g)" },
+        { symbol: "M", description: "Moisture content of sample (%)" }
+      ],
+      derivation: "Standard gravimetric acid-digestion method per IS 1011 and IS 1483.",
+      factorOrigin: "10% HCl selectively dissolves biological minerals without attacking quartz silica.",
+      unitAnalysis: "% AIA = [g silica / g dry sample] × 100",
+      practicalExample: "Sample = 5.00g Biscuits, Moisture = 3.5%, W_aia = 0.0018g. % AIA = (0.0018 / 5.00) × [100 / 96.5] × 100 = 0.037% (Within FSSAI Max 0.05% limit) ✓"
+    },
+    referenceStandard: "IS 1011:2002 / IS 1483:1988 / FSSAI Manual 03",
+    reagentsAndApparatus: [
+      "10% v/v Dilute Hydrochloric Acid",
+      "Whatman No. 41 / 42 Ashless Filter Paper",
+      "Muffle Furnace (600°C)",
+      "Silver Nitrate Solution (0.1 N) for acid-free washing check"
+    ],
+    prescribedLimit: "Biscuits: Max 0.05% | Bread: Max 0.10% | Cakes: Max 0.10%",
+    riskIfFailed: "Dental damage from mineral grit, uncleaned raw flour adulteration.",
+    procedureSteps: [
+      "Ash 5.00g sample in a silica crucible at 550°C for 4 hours.",
+      "Add 25 ml 10% dilute HCl to the ash, cover with watch glass, boil on water bath for 15 minutes.",
+      "Filter through Whatman 41 ashless paper; wash with boiling distilled water until filtrate tests negative with 0.1N AgNO3.",
+      "Fold filter paper, place back into crucible, dry on hot plate, and incinerate in muffle furnace at 600°C for 1 hour.",
+      "Cool in desiccator for 30 minutes and weigh the silica ash."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Ashing", title: "Organic Combustion", action: "Ash 5g sample at 550°C.", scientificMechanism: "Destroys organic matter.", controlPoint: "Carbon-free ash." },
+      { stepNumber: 2, phaseName: "Acid Digestion", title: "HCl Treatment", action: "Boil ash with 10% HCl for 15 min.", scientificMechanism: "Dissolves physiological salts.", controlPoint: "Water bath." },
+      { stepNumber: 3, phaseName: "Filtration & Re-ashing", title: "Silica Isolation", action: "Filter on Whatman 41 and re-ash at 600°C.", scientificMechanism: "Isolates pure quartz silica.", controlPoint: "Ashless paper." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Biscuits mein AIA ki limit itni strict (0.05%) kyun hoti hai?",
+        answer: "Biscuits fine refined flour (maida) aur shortening se bante hain jisme natural mineral content bahut low hota hai. Agar AIA 0.05% se upar jaata hai to ye saaf darshata hai ki chakki stone wear hua hai, dusting flour mein mitti thi, ya cheap mineral filler add kiya gaya hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Statutory Limit", value: "Max 0.05% (Biscuits)", "reason": "Strict consumer safety limit against mineral grit and sand" }
+    ]
+  },
+
+  // 13. MICROBIOLOGICAL TEST: Bacterial Rope Spores Spoilage Test
+  {
+    id: "bakery-micro-3",
+    category: "Bakery & Confectionery",
+    testType: "Microbiological",
+    productName: "Bread, Buns, Pav, Rusk",
+    testName: "Bacterial Rope Spores Spoilage Test (Heat-Shock Method for Bacillus subtilis)",
+    shortSummary: "Heat-shock screening of flour and dough to detect thermoresistant Bacillus subtilis endospores causing sticky, melon-smelling rope bread spoilage.",
+    detailedScientificRationale:
+      "Bread baking core temperature reaches ~98-100°C, which kills vegetative bacteria and molds but fails to destroy endospores of Bacillus subtilis and Bacillus licheniformis. During warm and humid storage (28-35°C), surviving spores germinate, producing aggressive extracellular amylases and proteases. The bread crumb undergoes enzymatic liquefaction, turning sticky, brown, and forming slimy silken ropes with a sickening sweet cantaloupe melon odor. Early screening prevents catastrophic commercial bakery batch spoilage.",
+    detailedTestPrinciple:
+      "Flour or dough suspension is subjected to a heat-shock treatment at 80°C for 15 minutes. This thermal shock selectively destroys all vegetative cells while heat-activating spore germination. Serial dilutions are pour-plated into Dextrose Tryptone Agar (DTA) containing bromocresol purple and incubated at 37°C for 48 hours to enumerate rope-producing spore-forming units.",
+    chemicalEquation: "Bacterial Endospore + Heat Shock (80°C, 15 min) ⟶ Germination ⟶ DTA Culture (37°C, 48h) ⟶ Rope Colony Count",
+    formulaBreakdown: {
+      formula: "Rope Spore Count (Spores/g) = [ Total Colonies on Plate × Dilution Factor ] / Sample Volume (ml)",
+      variables: [
+        { symbol: "Colonies", description: "Characteristic acid-producing slimy Bacillus colonies on DTA" },
+        { symbol: "Dilution Factor", description: "Reciprocal of serial dilution plated (e.g., 10, 100)" }
+      ],
+      derivation: "Standard heat-shock thermal activation protocol for bacterial endospore enumeration.",
+      factorOrigin: "80°C for 15 min eliminates vegetative flora without inactivating dipicolinic-acid protected endospores.",
+      unitAnalysis: "Spores / g of flour or bread",
+      practicalExample: "10g flour heat-shocked, 10^-1 dilution shows 1 colony on DTA ⟶ Rope Spores = 10 spores/g (Safe flour threshold < 20 spores/g) ✓"
+    },
+    referenceStandard: "IS 1483:1988 / Compendium of Methods for the Microbiological Examination of Foods",
+    reagentsAndApparatus: [
+      "Dextrose Tryptone Agar (DTA) with Bromocresol Purple",
+      "Sterile Ringer Solution / Buffered Peptone Water",
+      "Water Bath calibrated at exactly 80°C ± 0.5°C",
+      "Incubator maintained at 37°C ± 1°C"
+    ],
+    prescribedLimit: "Finished Bread: Strictly Negative / Absent | Raw Bakery Flour: < 20 spores/g",
+    riskIfFailed: "Crumb liquefaction, slimy ropiness, melon-like off-odor, food poisoning risk.",
+    procedureSteps: [
+      "Aseptically blend 10.0g flour or bread crumb in 90 ml sterile diluent (10^-1 dilution).",
+      "Immerse dilution tubes in water bath at 80°C for exactly 15 minutes (timing starts when internal tube temperature reaches 80°C).",
+      "Immediately chill tubes in ice water bath to arrest further thermal stress.",
+      "Pipette 1.0 ml aliquots into sterile Petri dishes; pour 15 ml molten DTA agar (45°C); mix gently and allow to solidify.",
+      "Incubate plates inverted at 37°C for 48 hours.",
+      "Count yellow-haloed colonies with mucoid or wrinkled surfaces characteristic of Bacillus subtilis."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Heat Shock", title: "Selective Spore Activation", action: "Heat dilution at 80°C for 15 min.", scientificMechanism: "Kills vegetative cells and triggers spore germination.", controlPoint: "80°C water bath." },
+      { stepNumber: 2, phaseName: "Plating", title: "DTA Pour Plating", action: "Pour Dextrose Tryptone Agar.", scientificMechanism: "Provides selective nutrients and pH indicator.", controlPoint: "Molten agar at 45°C." },
+      { stepNumber: 3, phaseName: "Incubation", title: "Colony Growth", action: "Incubate at 37°C for 48 hours.", scientificMechanism: "Allows vegetative colony development.", controlPoint: "Enumerate yellow colonies." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Bread baking ke baad bhi rope bacteria survive kyun kar jaate hain?",
+        answer: "Bacillus subtilis bacteria dipicolinic acid aur calcium ions se protected thick keratin-like spore coat banate hain jo high heat (> 100°C) ko withstand kar leti hai. Bread baking ke dauran crust 200°C hoti hai lekin crumb ka core temperature 98-100°C se upar nahi jaata, jisse endospores survive kar jaate hain."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Heat Shock Temp", value: "80°C ± 0.5°C", "reason": "Destroys vegetative cells while preserving and heat-activating endospores" },
+      { parameter: "Finished Bread Threshold", value: "Zero / Absent", "reason": "Mandatory statutory compliance to prevent commercial rope spoilage" }
+    ]
+  },
+
+  // 14. CHEMICAL TEST: Calcium Propionate Preservative in Bread
+  {
+    id: "bakery-chem-8",
+    category: "Bakery & Confectionery",
+    testType: "Chemical",
+    productName: "Bread, Buns, Pav, Rusk",
+    testName: "Preservative Assay: Calcium Propionate in Bread (Steam Distillation Titrimetry)",
+    shortSummary: "Quantifies added calcium propionate antimycotic preservative in bread to verify FSSAI compliance (Max 5000 mg/kg).",
+    detailedScientificRationale:
+      "Calcium propionate is added to commercial bread formulations to suppress fungal mold growth (Rhizopus stolonifer, Penicillium) and inhibit rope bacilli endospores. Propionate functions by entering bacterial and fungal cells in undissociated acid form at bread crumb pH (< 5.5), disrupting carbohydrate metabolism and amino acid transport. Statutory limits (max 5000 mg/kg) prevent chemical over-preservation and bitter pungent taste.",
+    detailedTestPrinciple:
+      "Acidified bread homogenate is steam-distilled to volatilize propionic acid. The distillate is collected in cold water and titrated against standardized 0.1 N sodium hydroxide using phenolphthalein indicator. Results are expressed as calcium propionate or propionic acid.",
+    chemicalEquation: "Ca(C3H5O2)2 + H2SO4 ⟶ 2 C2H5COOH (Steam Volatile ↑) + CaSO4 ; C2H5COOH + NaOH ⟶ C2H5COONa + H2O",
+    formulaBreakdown: {
+      formula: "Calcium Propionate (mg/kg or ppm) = [ (V × N × 93.1) / Sample Weight (g) ] × 1000",
+      variables: [
+        { symbol: "V", description: "Titre volume of 0.1 N NaOH consumed by distillate (ml)" },
+        { symbol: "N", description: "Exact normality of standardized NaOH titrant" },
+        { symbol: "93.1", description: "Equivalent weight factor of Calcium Propionate (186.22 / 2)" }
+      ],
+      derivation: "Standard steam distillation acidimetry per IS 1483 and AOAC 950.36.",
+      factorOrigin: "1 ml of 1.0 N NaOH neutralizes 0.0931 g of calcium propionate.",
+      unitAnalysis: "mg / kg (ppm)",
+      practicalExample: "Sample = 10.0g Bread, V = 3.20 ml of 0.1000 N NaOH. Propionate = (3.20 × 0.1000 × 93.1 / 10.0) × 1000 = 2979 mg/kg (Passes FSSAI Max 5000 mg/kg limit) ✓"
+    },
+    referenceStandard: "IS 1483:1988 / AOAC 950.36 / FSSAI Manual 03",
+    reagentsAndApparatus: [
+      "10% Phosphoric Acid / 2 N Sulphuric Acid",
+      "Standardized 0.1 N NaOH Titrant",
+      "Phenolphthalein Indicator Solution (1% w/v)",
+      "Markham Steam Distillation Apparatus / Kjeldahl Still"
+    ],
+    prescribedLimit: "FSSAI Statutory Limit: Maximum 5000 mg/kg (0.5% w/w as Calcium Propionate)",
+    riskIfFailed: "Overdose causes bitter pungent chemical flavor; underdose leads to premature mold spoilage.",
+    procedureSteps: [
+      "Homogenize 10.0g bread crumb with 50 ml distilled water.",
+      "Transfer to steam distillation flask, acidify with 10 ml 10% phosphoric acid.",
+      "Steam distill rapidly, collecting 200 ml distillate in a conical flask cooled in ice water.",
+      "Boil distillate gently for 1 minute to expel dissolved CO2 gas.",
+      "Add 3 drops phenolphthalein indicator and titrate with 0.1 N NaOH to faint pink endpoint.",
+      "Run an identical reagent blank distillation and subtract blank volume."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Acidification", title: "Volatilization Pretreatment", action: "Acidify homogenate with H3PO4.", scientificMechanism: "Converts calcium propionate salt to free volatile propionic acid.", controlPoint: "Acidic pH < 2.0." },
+      { stepNumber: 2, phaseName: "Steam Distillation", title: "Vapor Stripping", action: "Collect 200 ml steam distillate.", scientificMechanism: "Carries propionic acid vapor into receiver.", controlPoint: "Ice-cold condenser." },
+      { stepNumber: 3, phaseName: "Titration", title: "Neutralization Quantitation", action: "Titrate with 0.1N NaOH.", scientificMechanism: "Stoichiometrically neutralizes propionic acid.", controlPoint: "Permanent pink endpoint." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Calcium propionate bread mein pH 5.5 se upar hone par kaam kyun nahi karta?",
+        answer: "Propionic acid ka pKa 4.88 hota hai. Ye sirf un-dissociated (free acid) state mein hi microbial cell wall ke phospholipid bilayer ko penetrate kar paata hai. Agar bread crumb pH > 6.0 ho to 95% propionate negatively charged ions (C3H5O2-) mein dissociate ho jaata hai jo cell wall ko cross nahi kar paate, jisse preservative effect zero ho jaata hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Statutory Ceiling", value: "5000 mg/kg (0.5%)", "reason": "Maximum permitted safety and taste threshold per FSSAI regulations" }
+    ]
+  },
+
+  // 15. PHYSICAL TEST: Particle Size Fineness in Chocolate
+  {
+    id: "bakery-phys-4",
+    category: "Bakery & Confectionery",
+    testType: "Physical",
+    productName: "Chocolates, Compound Chocolate, Cocoa Butter Mass",
+    testName: "Particle Size Fineness in Chocolate (Micrometer & Hegman Gauge Method)",
+    shortSummary: "Measures grinding and conching fineness in chocolate to ensure maximum particle size is below human sensory grittiness threshold (< 20-25 µm).",
+    detailedScientificRationale:
+      "The human palate can discern solid particles larger than 25-30 microns as gritty or chalky. In premium chocolate manufacture, cocoa solids and sugar crystals are ground and refined using five-roll refiners and conches. Measuring fineness guarantees that solid particles are ground to 15-20 microns, suspended uniformly in molten cocoa butter for a velvety, smooth, melt-in-mouth texture.",
+    detailedTestPrinciple:
+      "Molten chocolate (40°C) is diluted 1:1 with light paraffin oil to reduce viscosity without dissolving sugar crystals. A drop is placed on a digital micrometer screw gauge or precision dual-channel Hegman grindometer gauge, and the depth at which particle scratches first appear is read in microns.",
+    chemicalEquation: "Solid Particle Matrix (Sugar + Cocoa Solids) ⟶ Mechanical Calibrated Shear ⟶ Micro-Depth Dispersion (µm)",
+    formulaBreakdown: {
+      formula: "Fineness (µm) = Micrometer Reading (with sample) - Zero Tare Reading",
+      variables: [
+        { symbol: "Reading", description: "Direct optical or digital readout in micrometers (µm)" }
+      ],
+      derivation: "Standard IOCCC Method 105-1996 for cocoa and chocolate products.",
+      factorOrigin: "Threshold of tactile grittiness detection by human tongue papillae is 25-30 µm.",
+      unitAnalysis: "microns (µm)",
+      practicalExample: "Digital Micrometer: Zero = 0.0 µm, Sample reading = 18.2 µm ⟶ Fineness = 18.2 µm (Premium Conched Chocolate < 20 µm) ✓"
+    },
+    referenceStandard: "IS 1163:1992 / IOCCC Method 105-1996 / ISO 1524",
+    reagentsAndApparatus: [
+      "Digital Outside Micrometer with ratchet stop (0.001 mm resolution)",
+      "Hegman Precision Grindometer Gauge (0 - 50 µm range) with scraper",
+      "Light Liquid Paraffin Oil (refining diluent)",
+      "Water Bath at 45°C ± 1°C"
+    ],
+    prescribedLimit: "High Quality Chocolate: < 20 µm | Standard Commercial: < 25 µm | Compound: < 30 µm",
+    riskIfFailed: "Gritty, sandy mouthfeel, poor flow behavior in enrobing and moulding.",
+    procedureSteps: [
+      "Melt chocolate sample completely in a water bath at 45°C.",
+      "Mix equal parts (1:1) of melted chocolate with liquid paraffin on a clean glass plate.",
+      "Clean micrometer anvils and verify zero setting.",
+      "Place a small drop of diluted mixture onto the anvil.",
+      "Close the spindle gently using the ratchet mechanism (3 clicks) to avoid crushing crystalline sugar particles.",
+      "Read the thickness in micrometers (µm); repeat across 5 independent drops and take the average."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Melting", title: "Thermal Liquefaction", action: "Melt chocolate at 45°C.", scientificMechanism: "Liquefies cocoa butter crystal polymorphs.", controlPoint: "45°C water bath." },
+      { stepNumber: 2, phaseName: "Dilution", title: "Viscosity Reduction", action: "Dilute 1:1 with paraffin oil.", scientificMechanism: "Prevents sugar dissolution while thinning suspension.", controlPoint: "Uniform mixing." },
+      { stepNumber: 3, phaseName: "Measurement", title: "Micrometer Gauging", action: "Measure between anvils with ratchet stop.", scientificMechanism: "Reads largest solid particle diameter.", controlPoint: "Zero calibration." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Chocolate fineness check mein paani kyun use nahi kar sakte, paraffin oil kyun lete hain?",
+        answer: "Chocolate mein sugar crystals (sucrose) solid crystalline state mein hote hain. Agar paani use kiya to sugar turant dissolve ho jayegi aur particle size measurement impossible ho jayega. Light paraffin oil hydrophobic hota hai jo sugar ko dissolve kiye bina chocolate matrix ko thin out karta hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Sensory Threshold", value: "< 20 - 25 µm", "reason": "Maximum particle size before human tongue detects tactile grittiness" }
+    ]
+  },
+
+  // 16. CHEMICAL TEST: Sulphur Dioxide (SO2) Residue in Confectionery
+  {
+    id: "bakery-chem-9",
+    category: "Bakery & Confectionery",
+    testType: "Chemical",
+    productName: "Hard Boiled Candies, Toffees, Sugar Confectionery, Candied Fruits",
+    testName: "Sulphur Dioxide (SO2) Residue in Confectionery (Optimized Monier-Williams Method)",
+    shortSummary: "Quantifies sulphite bleaching agent residues in sugar candies via acid distillation into hydrogen peroxide and titration against 0.01 N NaOH.",
+    detailedScientificRationale:
+      "Sulphites (sodium metabisulphite) are used as bleaching agents and antioxidants in glucose syrups, invert sugar, and desiccated coconut used in confectionery manufacturing. However, sulphur dioxide is a potent respiratory allergen that can trigger severe bronchospasm in sensitive asthmatic individuals. FSSAI regulations mandate a strict ceiling of Max 70 mg/kg (ppm) SO2 in hard-boiled sugar confectionery.",
+    detailedTestPrinciple:
+      "The confectionery sample is acidified with hydrochloric acid and boiled under reflux with a continuous stream of pure nitrogen gas. Released sulphur dioxide gas is swept through a chilled absorption tube containing neutral 3% hydrogen peroxide (H2O2). The H2O2 oxidizes SO2 into Sulphuric Acid (H2SO4), which is then titrated with standardized 0.01 N NaOH using methyl red indicator.",
+    chemicalEquation: "SO3(2-) + 2H+ ⟶ SO2 ↑ + H2O ; SO2 + H2O2 ⟶ H2SO4 ; H2SO4 + 2NaOH ⟶ Na2SO4 + 2H2O",
+    formulaBreakdown: {
+      formula: "SO2 (mg/kg or ppm) = [ (V_sample - V_blank) × N × 32.03 × 1000 ] / Sample Weight (g)",
+      variables: [
+        { symbol: "V_sample", description: "Volume of 0.01 N NaOH consumed in titration (ml)" },
+        { symbol: "V_blank", description: "Volume of 0.01 N NaOH consumed by reagent blank (ml)" },
+        { symbol: "32.03", description: "Milliequivalent mass of SO2 (64.06 / 2)" }
+      ],
+      derivation: "Optimized Monier-Williams procedure per AOAC 990.28 and FSSAI Manual 03.",
+      factorOrigin: "1 ml of 0.01 N NaOH neutralizes exactly 0.3203 mg of SO2.",
+      unitAnalysis: "mg SO2 / kg sample = ppm",
+      practicalExample: "Sample = 50.0g Candy, V = 4.20 ml 0.0100N NaOH, Blank = 0.10 ml. SO2 = [ (4.10 × 0.0100 × 32.03 × 1000) / 50.0 ] = 26.26 ppm (Well within FSSAI Max 70 ppm limit) ✓"
+    },
+    referenceStandard: "AOAC 990.28 / FSSAI Manual 03 (Food Additives) / IS 1008",
+    reagentsAndApparatus: [
+      "Optimized Monier-Williams Distillation Apparatus with N2 Gas Purge",
+      "3% Hydrogen Peroxide Solution (neutralized to methyl red)",
+      "Concentrated Hydrochloric Acid (AR Grade)",
+      "Standardized 0.01 N Sodium Hydroxide Solution"
+    ],
+    prescribedLimit: "FSSAI Statutory Limit: Maximum 70 mg/kg (ppm) in Hard Boiled Sugar Confectionery",
+    riskIfFailed: "Severe respiratory bronchospasm in asthmatic consumers, allergen labeling violation.",
+    procedureSteps: [
+      "Dissolve 50.0g crushed candy in 200 ml deoxygenated water inside the Monier-Williams distillation flask.",
+      "Add 90 ml 4 N HCl through the dropping funnel.",
+      "Bubble high-purity nitrogen gas through the solution at 200 ml/min.",
+      "Immerse delivery tube into 30 ml neutral 3% H2O2 absorption solution.",
+      "Boil under reflux for exactly 105 minutes under continuous nitrogen purge.",
+      "Wash receiver tube into the flask; add 3 drops methyl red indicator and titrate with 0.01 N NaOH to yellow endpoint."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Acidification", title: "SO2 Gas Liberation", action: "Acidify with HCl under N2 purge.", scientificMechanism: "Releases gaseous SO2 from bound sulphite salts.", controlPoint: "Nitrogen flow 200 ml/min." },
+      { stepNumber: 2, phaseName: "Oxidation", title: "Peroxide Trapping", action: "Trap in 3% H2O2 solution.", scientificMechanism: "Oxidizes volatile SO2 to non-volatile H2SO4.", controlPoint: "Neutral H2O2 receiver." },
+      { stepNumber: 3, phaseName: "Titration", title: "Alkalimetric Titration", action: "Titrate with 0.01N NaOH to yellow.", scientificMechanism: "Quantifies H2SO4 stoichiometrically.", controlPoint: "Methyl red endpoint." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Monier-Williams test mein pure nitrogen gas stream kyun zaroori hai?",
+        answer: "Nitrogen carrier gas atmospheric oxygen ko distillation flask se displace karta hai. Agar oxygen mojud rahi to SO2 gas receiver tak pahunchne se pehle hi flask ke andar sulphuric acid mein oxidize ho jayegi jo non-volatile hone ke kaaran distill nahi ho payegi, jisse recovery 50% gir jayegi."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Statutory Ceiling", value: "70 mg/kg (ppm)", "reason": "Allergen safety limit for sugar confectionery under FSSAI" }
     ]
   }
 ];

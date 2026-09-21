@@ -91,6 +91,34 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Calculation Formula"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "130°C par 60 minutes vs 105°C par 4 hours — difference kya hai?",
+        "answer": "1. 130°C rapid air oven method wheat flours ke liye ISO 712 aur IS 4333 standard method hai jisme 60 minutes mein saara free interstitial water vaporize ho jaata hai bina starch pyrolysis ke.\n2. 105°C method whole grains aur coarse seeds ke liye use hota hai taaki volatile oils ka thermal degradation na ho.\n3. Desiccator cooling with active silica gel zaroori hai kyunki oven-dried flour intensely hygroscopic hota hai aur room air se moisture absorb kar leta hai."
+    },
+    {
+        "question": "Moisture statutory limits se exceed hone par kya risks hain?",
+        "answer": "1. Atta mein moisture > 14.0% hone par thermodynamic water activity (a_w > 0.65) badh jaati hai.\n2. Aspergillus flavus mold proliferate karta hai aur carcinogenic Aflatoxins (B1, B2) banata hai.\n3. Native germ lipases activate ho kar triglycerides ko FFA mein convert karte hain, jisse atta sour aur rancid ho jaata hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Oven Temperature",
+        "value": "130°C ± 2°C",
+        "reason": "Rapid vaporization of capillary water below caramelization threshold"
+    },
+    {
+        "parameter": "Drying Time",
+        "value": "60 minutes",
+        "reason": "Complete moisture desorption without carbohydrate polymer degradation"
+    },
+    {
+        "parameter": "Desiccator Cooling",
+        "value": "30 - 45 min",
+        "reason": "Prevents hygroscopic atmospheric moisture reabsorption"
+    }
+]
   },
 
   // 2. CHEMICAL TEST: Wet & Dry Gluten Content in Flours
@@ -181,6 +209,34 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Hot Air Oven"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Gluten washing ke liye 2% NaCl solution kyun use kiya jaata hai?",
+        "answer": "1. 2% NaCl ionic strength provide karta hai jo gluten protein matrix ko stabilize karta hai aur peptization (dissolution) ko prevent karta hai.\n2. Pure distilled water ya soft tap water mein electrostatic repulsion gluten strands ko disperse kar deti hai jisse gluten loss ho jaata hai.\n3. Hydrophobic interactions strengthen hoti hain, resulting in a cohesive, elastic rubber-like gluten ball."
+    },
+    {
+        "question": "Wet Gluten aur Dry Gluten ka ratio lagbhag 3:1 kyun hota hai?",
+        "answer": "1. Gluten protein matrix hydrophilic amino acid residues se bana hai jo apne dry mass ka ~200% paani bind karte hain.\n2. Isliye Wet Gluten hamesha Dry Gluten ka lagbhag 2.8 - 3.2 times hota hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Wash Solution",
+        "value": "2% w/v NaCl",
+        "reason": "Prevents gluten peptization and solubilization during washing"
+    },
+    {
+        "parameter": "Drying Temperature",
+        "value": "130°C",
+        "reason": "Dehydrates wet gluten ball to constant dry wafer weight"
+    },
+    {
+        "parameter": "Iodine Endpoint Check",
+        "value": "0.005 N Lugol's",
+        "reason": "Confirms zero residual starch in washings"
+    }
+]
   },
 
   // 3. CHEMICAL TEST: Alcoholic Acidity in Flours
@@ -274,6 +330,30 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Calculation Formula"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Alcoholic Acidity ke liye 90% neutral ethanol hi kyun use hota hai?",
+        "answer": "1. Neutral alcohol selectively lipid breakdown se nikli Free Fatty Acids (FFA) ko extract karta hai.\n2. Aqueous extraction cereal mineral phytates aur phosphates ko dissolve kar degi jisse false high acidity titrate hogi.\n3. Acidity ko % H2SO4 ke equivalent factor (0.002452 g per ml 0.05N NaOH) mein standard Indian Specifications (IS 1155) ke anusaar express kiya jaata hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Extraction Solvent",
+        "value": "90% Neutral Ethanol",
+        "reason": "Selectively extracts free fatty acids without dissolving phytates"
+    },
+    {
+        "parameter": "Extraction Time",
+        "value": "24 hours",
+        "reason": "Ensures complete diffusion and equilibrium extraction of lipolytic acids"
+    },
+    {
+        "parameter": "Titrant",
+        "value": "0.05 N NaOH",
+        "reason": "Standardized alkaline titrant using phenolphthalein indicator"
+    }
+]
   },
 
   // 4. CHEMICAL TEST: Total Ash & Acid Insoluble Ash (AIA) in Flours
@@ -368,6 +448,30 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Muffle Furnace"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Muffle furnace ka temperature 550°C - 600°C hi kyun rakhte hain?",
+        "answer": "1. 550°C par saara carbonaceous organic matter CO2 aur H2O mein complete oxidize ho jaata hai.\n2. Agar temperature 650°C se exceed ho to sodium chloride aur potassium chloride volatilize hone lagte hain, jisse ash content artificially kam aayega.\n3. 10% dilute HCl physiological minerals (Ca, Mg phosphates) ko dissolve karta hai, leaving only insoluble crystalline sand and silica (AIA)."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Muffle Temperature",
+        "value": "550°C - 600°C",
+        "reason": "Complete organic carbon oxidation without alkali chloride volatilization"
+    },
+    {
+        "parameter": "HCl Digestion",
+        "value": "10% v/v HCl",
+        "reason": "Dissolves biological minerals leaving sand and quartz silica"
+    },
+    {
+        "parameter": "Filter Paper",
+        "value": "Whatman 41/42 Ashless",
+        "reason": "Leaves < 0.0001g ash on burning for zero blank distortion"
+    }
+]
   },
 
   // 5. PHYSICAL TEST: Sedimentation Value (Zeleny Test) in Wheat Flour
@@ -458,6 +562,25 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Zeleny Chart"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Zeleny Sedimentation Test bread-making quality kaise batata hai?",
+        "answer": "1. Lactic acid aur SDS solution mein glutenin proteins hydrate hokar swell hote hain aur voluminous flocculent structures banate hain.\n2. Strong gluten proteins sedimentation ko resist karte hain aur unka sediment volume high (> 30 ml) rehta hai.\n3. Weak gluten proteins disperse ho kar collapse ho jaate hain aur low volume (< 20 ml) dete hain."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Reagent Medium",
+        "value": "Lactic Acid + SDS",
+        "reason": "Induces selective swelling of glutenin polymers"
+    },
+    {
+        "parameter": "Sedimentation Time",
+        "value": "5 minutes",
+        "reason": "Standardized gravitational settling interval for layer reading"
+    }
+]
   },
 
   // 6. PHYSICAL TEST: Falling Number Determination in Wheat & Flour
@@ -549,6 +672,25 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Perten Software"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Falling Number sprouted grains mein kam kyun ho jaata hai?",
+        "answer": "1. Pre-harvest rain se grain mein alpha-amylase enzyme thousand-fold synthesize hota hai.\n2. 100°C boiling water bath mein starch gelatinize hote hi alpha-amylase tezi se starch paste ko liquefy kar deta hai.\n3. Paste patla hone par viscometer stirrer quickly fall karta hai, resulting in Falling Number < 200 seconds."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Bath Temperature",
+        "value": "100°C Boiling Water",
+        "reason": "Rapid starch gelatinization and optimal alpha-amylase liquefaction"
+    },
+    {
+        "parameter": "Stirring Strokes",
+        "value": "60 strokes",
+        "reason": "Uniform mechanical slurry suspension prior to free-fall timing"
+    }
+]
   },
 
   // 7. PHYSICAL TEST: Particle Size Fineness & Sieving Test in Flours
@@ -637,6 +779,25 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Sieving Report"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Particle size granularity chapati quality ko kaise affect karti hai?",
+        "answer": "1. Coarse particles (> 425 micron) water absorption slow karte hain aur chapati dry aur brittle banti hai.\n2. Fine particles (< 150 micron) rapid hydration karte hain lekin excessive fines dough ko sticky banate hain.\n3. IS 1155 standard: Min 98% atta must pass through 40-mesh (425 micron) sieve."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Top Sieve",
+        "value": "IS 425 µm (40 mesh)",
+        "reason": "FSSAI threshold: minimum 98% passing required"
+    },
+    {
+        "parameter": "Bottom Sieve",
+        "value": "IS 150 µm (100 mesh)",
+        "reason": "FSSAI threshold: maximum 50% retained"
+    }
+]
   },
 
   // 8. MICROBIOLOGICAL TEST: Yeast & Mold Count in Flours & Grains
@@ -728,6 +889,25 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["Colony Counter"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "DRBC Agar aur Chloramphenicol ka kya role hai?",
+        "answer": "1. Dichloran Rose Bengal Chloramphenicol (DRBC) selective medium hai jo bacterial growth ko suppress karta hai.\n2. Dichloran aur Rose Bengal fast-spreading molds (jaise Rhizopus) ki colony diameter ko restrict karte hain taaki slow-growing colonies accurately count ho sakein."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Incubation Temp",
+        "value": "25°C ± 1°C",
+        "reason": "Optimal growth temperature for food-borne yeasts and molds"
+    },
+    {
+        "parameter": "Incubation Period",
+        "value": "5 days",
+        "reason": "Allows mature colony development for accurate enumeration"
+    }
+]
   },
 
   // 9. CHEMICAL TEST: Aflatoxin B1 & Total Aflatoxins in Grains & Flours
@@ -822,6 +1002,25 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         reagentsInvolved: ["HPLC Calibration Curve"]
       }
     ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Immunoaffinity Column (IAC) aur Kobra Cell kyun use hote hain?",
+        "answer": "1. Immunoaffinity column par immobilized monoclonal antibodies sirf Aflatoxins (B1, B2, G1, G2) ko capture karte hain aur complex cereal matrix ko wash out karte hain.\n2. Kobra cell electrochemically bromine generate karta hai jo Aflatoxin B1 aur G1 ko derivatize karke fluorescence intensity ko 50-fold enhance karta hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Extraction Solvent",
+        "value": "Methanol:Water (80:20)",
+        "reason": "Quantitative recovery of mycotoxins from cereal matrix"
+    },
+    {
+        "parameter": "Fluorescence Detection",
+        "value": "Ex 365 nm / Em 440 nm",
+        "reason": "Selective wavelength for derivatized aflatoxin fluorophores"
+    }
+]
   },
 
   // 10. PHYSICAL TEST: Extraneous Matter, Damaged & Weeviled Grains in Raw Grains
@@ -911,6 +1110,495 @@ export const CEREALS_GRAINS_TESTS: FoodTestItem[] = [
         controlPoint: "Quality Gate: Weeviled grains > 1.0% or Stones > 0.5% = consignment rejection.",
         reagentsInvolved: ["Grain Inspection Report"]
       }
+    ]
+  ,
+    factorsExplanation: [
+    {
+        "question": "Weeviled aur damaged grains ki inspection kyun critical hai?",
+        "answer": "1. Insect weevils (Sitophilus oryzae) endosperm ko andar se hollow kar dete hain jisse test weight (hectolitre weight) gir jaata hai.\n2. Damaged grains mein fungal contamination aur uric acid build-up ho jaata hai jo statutory limits exceed kar sakta hai."
+    }
+],
+    factorsSummaryTable: [
+    {
+        "parameter": "Sample Size",
+        "value": "500 g representative",
+        "reason": "Statistically valid lot sampling per IS 4333 Part 1"
+    },
+    {
+        "parameter": "Inspection Method",
+        "value": "Manual sorting & magnification",
+        "reason": "Accurate physical segregation of foreign matter"
+    }
+]
+  }
+,
+// 11. CHEMICAL TEST: Crude Protein Determination (Macro Kjeldahl)
+  {
+    id: "cereal-chem-5",
+    category: "Cereal & Grain Products",
+    testType: "Chemical",
+    productName: "Wheat, Atta, Maida, Suji, Besan, Rice, Oats",
+    testName: "Crude Protein Determination (Macro Kjeldahl Nitrogen Digestion Method)",
+    shortSummary: "Quantifies total nitrogen to determine crude protein content using specific nitrogen-to-protein conversion factors (Wheat: 5.70, Pulses/Besan: 6.25, Rice: 5.95).",
+    detailedScientificRationale:
+      "Protein content governs the nutritional value, gluten matrix formation, and technical functionality of flours. In wheat, storage proteins (gliadins and glutenins) form the gluten complex upon hydration. In pulses like Bengal gram (Besan), protein is naturally high (FSSAI mandate: min 22.0% dry basis). Measuring protein verifies compliance with statutory standards and unmasks adulteration with low-protein starches or adulterant flours.",
+    detailedTestPrinciple:
+      "Flour is digested with concentrated H2SO4 at 420°C in the presence of K2SO4 and CuSO4 catalysts. Organic nitrogen is converted into ammonium sulphate. Alkali (40% NaOH) is added to liberate ammonia gas, which is steam distilled into 4% boric acid and titrated against standardized 0.1 N HCl.",
+    chemicalEquation: "Organic Nitrogen + H2SO4 ⟶ (NH4)2SO4 ⟶ + 2NaOH ⟶ 2NH3 ↑ + Na2SO4 ⟶ + H3BO3 ⟶ NH4:H2BO3 ⟶ + HCl ⟶ NH4Cl",
+    formulaBreakdown: {
+      formula: "% Crude Protein (dry basis) = [ % Nitrogen × Factor ] × [ 100 / (100 - M) ]",
+      variables: [
+        { symbol: "% Nitrogen", description: "[(V_sample - V_blank) × N_acid × 1.4007] / Sample Mass (g)" },
+        { symbol: "Factor", description: "Specific Nitrogen conversion factor (Wheat: 5.70, Besan/Pulses: 6.25, Rice: 5.95)" },
+        { symbol: "M", description: "Moisture content of flour sample (%)" }
+      ],
+      derivation: "Based on Kjeldahl nitrogen release. Factor 5.70 is derived because wheat gluten protein contains 17.54% Nitrogen (100 / 17.54 = 5.70). Factor 6.25 applies to standard proteins containing 16.0% Nitrogen (100 / 16.0 = 6.25).",
+      factorOrigin: "Wheat proteins are rich in glutamine and glutamic acid (higher amido nitrogen), requiring factor 5.70 per ISO 20483 and IS 7219.",
+      unitAnalysis: "% Protein = [g protein / g dry sample] × 100",
+      practicalExample: "Sample = 1.0000g Atta, Moisture = 11.5%, V_sample = 15.2 ml 0.1N HCl, V_blank = 0.2 ml. % N = 2.101%. % Protein = 2.101 × 5.70 = 11.98% (dry basis 13.54%) ✓"
+    },
+    referenceStandard: "IS 7219:1973 / AOAC 979.09 / ISO 20483 / FSSAI Manual 03",
+    reagentsAndApparatus: [
+      "Concentrated H2SO4 (98%, nitrogen-free)",
+      "Catalyst Mixture: K2SO4 : CuSO4.5H2O (9:1 w/w)",
+      "40% w/v Sodium Hydroxide Solution",
+      "4% w/v Boric Acid Solution with Mixed Indicator",
+      "Standardized 0.1 N Hydrochloric Acid Titrant",
+      "Kjeldahl Digestion Block (420°C) and Steam Distillation Unit"
+    ],
+    prescribedLimit: "Atta: Min 10.0% (dry basis) | Maida: Min 10.0% | Besan: Min 22.0% (dry basis)",
+    riskIfFailed: "Severe nutritional non-compliance, defective gluten network, chapati tearing, or fraudulent dilution with starches.",
+    procedureSteps: [
+      "Accurately weigh 1.0000g flour into a dry 250 ml Kjeldahl digestion flask.",
+      "Add 7.0g catalyst mixture (K2SO4 + CuSO4) and 15 ml concentrated H2SO4.",
+      "Digest on heating block at 420°C for 60-90 minutes until digest is completely clear emerald green.",
+      "Cool digest, dilute cautiously with 50 ml distilled water, and connect to distillation unit.",
+      "Add 50 ml 40% NaOH; steam distill liberated NH3 into 25 ml 4% boric acid receiver for 4 minutes.",
+      "Titrate collected distillate with standardized 0.1 N HCl to violet-pink endpoint; run blank simultaneously."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Digestion", title: "Acid Catalyzed Cleavage", action: "Heat at 420°C with H2SO4 + catalyst until clear green.", scientificMechanism: "Converts organic amine nitrogen to (NH4)2SO4.", controlPoint: "420°C digestion block." },
+      { stepNumber: 2, phaseName: "Distillation", title: "Alkaline Steam Stripping", action: "Add 40% NaOH and steam distill NH3 into 4% boric acid.", scientificMechanism: "Displaces ammonia into volatile gaseous form.", controlPoint: "Receiver temperature < 30°C." },
+      { stepNumber: 3, phaseName: "Titration", title: "Quantitative Acidimetry", action: "Titrate with 0.1N HCl to endpoint.", scientificMechanism: "Neutralizes ammonium borate complex stoichiometrically.", controlPoint: "Calibrated burette." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Wheat ke liye factor 5.70 aur Besan ke liye 6.25 kyun use hota hai?",
+        answer: "Wheat gluten proteins (gliadins and glutenins) mein glutamic acid aur glutamine amides bahut high proportion mein hote hain, jisse wheat protein mein nitrogen content 17.54% hota hai (100 / 17.54 = 5.70). Agar standard factor 6.25 lagaya to wheat protein 10% overestimate ho jayega. Besan (chickpea) ek legume hai jisme average 16.0% nitrogen hota hai, isliye 6.25 factor lagta hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Wheat Factor", value: "5.70", reason: "Accounts for 17.54% high amido nitrogen in wheat gluten" },
+      { parameter: "Besan / Pulses Factor", value: "6.25", reason: "Standard 16.0% nitrogen in pulse globulin proteins" },
+      { parameter: "Rice Factor", value: "5.95", reason: "Specific 16.8% nitrogen content in rice glutelin" }
+    ]
+  },
+
+  // 12. CHEMICAL TEST: Crude Fiber Determination
+  {
+    id: "cereal-chem-6",
+    category: "Cereal & Grain Products",
+    testType: "Chemical",
+    productName: "Wheat, Atta, Maida, Suji, Besan, Oats, Poha",
+    testName: "Crude Fiber Determination (Sequential Acid & Alkali Digestion Method)",
+    shortSummary: "Determines insoluble structural cellulose and lignin from grain bran layers to distinguish whole wheat flour from refined maida.",
+    detailedScientificRationale:
+      "Crude fiber consists of structural plant cell wall polysaccharides (cellulose, hemicelluloses, lignin) concentrated in the outer pericarp and seed coat (bran). In genuine whole wheat atta, crude fiber ranges from 1.8% to 2.5% (dry basis). In refined maida, fiber is virtually absent (max 0.3%). Fiber quantification prevents adulteration with non-grain husks or dilution with refined flours.",
+    detailedTestPrinciple:
+      "Defatted sample is boiled sequentially in 1.25% (0.255 N) H2SO4 to hydrolyze starch and soluble sugars, followed by 1.25% (0.313 N) NaOH to saponify fats and dissolve proteins. The remaining indigestible organic residue is dried, weighed, and incinerated in a muffle furnace at 550°C. Mass loss on ashing quantifies Crude Fiber.",
+    chemicalEquation: "Flour Matrix + H2SO4 (1.25%) + NaOH (1.25%) ⟶ Soluble Fraction + Insoluble Fiber Residue ⟶ Incineration (550°C) ⟶ CO2 ↑ + Mineral Ash",
+    formulaBreakdown: {
+      formula: "% Crude Fiber (dry basis) = [ (W1 - W2) / Sample Weight ] × [ 100 / (100 - M) ] × 100",
+      variables: [
+        { symbol: "W1", description: "Weight of Gooch crucible + dried fiber residue (g)" },
+        { symbol: "W2", description: "Weight of Gooch crucible + incinerated mineral ash (g)" },
+        { symbol: "M", description: "Moisture percentage of sample (%)" }
+      ],
+      derivation: "Standard Weende gravimetric procedure measuring combustible organic cell wall residue.",
+      factorOrigin: "1.25% acid and 1.25% alkali simulate mammalian gastrointestinal digestive cleavage.",
+      unitAnalysis: "% Crude Fiber = [g combustible fiber / g dry sample] × 100",
+      practicalExample: "Sample = 2.0000g Atta, Moisture = 11.0%, W1 - W2 = 0.0410g. % Fiber (as is) = 2.05%. % Fiber (dry basis) = 2.05 × [100 / 89.0] = 2.30% (Passes FSSAI Max 2.5% limit) ✓"
+    },
+    referenceStandard: "IS 1155:1968 / AOAC 962.09 / FSSAI Manual 03",
+    reagentsAndApparatus: [
+      "1.25% w/v H2SO4 Solution (0.255 N)",
+      "1.25% w/v NaOH Solution (0.313 N)",
+      "Fibertec / Reflux Condenser Apparatus",
+      "Gooch Crucible or Sintered Glass Filter (Porosity 2)"
+    ],
+    prescribedLimit: "Atta: Max 2.5% (dry basis) | Maida: Max 0.3% | Suji: Max 0.5% | Besan: Max 3.0%",
+    riskIfFailed: "Admixture with excessive woody bran/husk or adulteration with refined maida.",
+    procedureSteps: [
+      "Extract 2.0000g sample with petroleum ether to remove lipids.",
+      "Boil with 200 ml 1.25% H2SO4 for exactly 30 minutes under reflux.",
+      "Filter through fine linen / sintered crucible and wash acid-free with boiling water.",
+      "Boil residue with 200 ml 1.25% NaOH for exactly 30 minutes under reflux.",
+      "Filter, wash with hot water and ethanol, dry at 105°C to constant weight (W1).",
+      "Incinerate in muffle furnace at 550°C for 2 hours, cool in desiccator, and reweigh (W2)."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Acid Hydrolysis", title: "Carbohydrate Solubilization", action: "Boil with 1.25% H2SO4 for 30 min.", scientificMechanism: "Hydrolyzes starch and sugars.", controlPoint: "Reflux temperature." },
+      { stepNumber: 2, phaseName: "Alkali Hydrolysis", title: "Protein & Lipid Solubilization", action: "Boil with 1.25% NaOH for 30 min.", scientificMechanism: "Saponifies lipids and hydrolyzes proteins.", controlPoint: "Alkali strength." },
+      { stepNumber: 3, phaseName: "Combustion", title: "Gravimetric Ashing", action: "Incinerate at 550°C for 2 hours.", scientificMechanism: "Burns combustible fiber polymers.", controlPoint: "Analytical balance." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Crude fiber test mein petroleum ether se defatting kyun zaroori hai?",
+        answer: "Lipids agar sample mein mojud rahein to alkali digestion mein heavy foaming paida hoti hai jo reflux condenser se overflow kar sakti hai, aur un-saponified waxes fiber residue mein jud kar false high reading dete hain."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Acid Digestion", value: "1.25% H2SO4, 30 min", reason: "Hydrolyzes starch, dextrins and soluble hemicelluloses" },
+      { parameter: "Alkali Digestion", value: "1.25% NaOH, 30 min", reason: "Dissolves storage proteins and saponifies residual fatty acids" }
+    ]
+  },
+
+  // 13. CHEMICAL TEST: Uric Acid Content
+  {
+    id: "cereal-chem-7",
+    category: "Cereal & Grain Products",
+    testType: "Chemical",
+    productName: "Wheat, Atta, Maida, Suji, Besan, Rice, Oats, Poha",
+    testName: "Uric Acid Content Determination (Storage Insect Weevil & Filth Index)",
+    shortSummary: "Quantifies metabolic insect excreta via spectrophotometry at 292 nm to detect hidden weevil and beetle infestation in grains and flours.",
+    detailedScientificRationale:
+      "Stored grain insect pests (Tribolium castaneum, Sitophilus oryzae, Rhyzopertha dominica) excrete insoluble nitrogenous waste as Uric Acid. While dead adult insects can be removed by pre-cleaning sieves and aspirators, microscopic insect excreta remain pulverized inside milled flour. FSSAI mandates a strict ceiling of Max 100 mg/kg (ppm) uric acid.",
+    detailedTestPrinciple:
+      "Uric acid is extracted from flour into alkaline buffer solution. Uric acid possesses a characteristic conjugated double-bond UV absorption peak at 292 nm. The sample is treated with the enzyme Uricase, which selectively oxidizes uric acid into non-absorbing allantoin. The difference in absorbance before and after enzymatic digestion (ΔA_292) directly quantifies uric acid content.",
+    chemicalEquation: "Uric Acid (A292 Peak) + O2 + 2H2O ⟶ [Uricase] ⟶ Allantoin (Non-absorbing) + CO2 + H2O2",
+    formulaBreakdown: {
+      formula: "Uric Acid (mg/kg or ppm) = [ (A_initial - A_final) × V_extract × Factor ] / Sample Mass (g)",
+      variables: [
+        { symbol: "A_initial", description: "Initial absorbance of extract at 292 nm" },
+        { symbol: "A_final", description: "Final absorbance after complete uricase enzyme digestion" },
+        { symbol: "Factor", description: "Calibration factor derived from pure potassium urate standards" }
+      ],
+      derivation: "Based on Beer-Lambert Law: A = ε × c × l at 292 nm with enzymatic blanking.",
+      factorOrigin: "Uricase enzyme specificity guarantees zero interference from non-uric UV-absorbing cereal purines.",
+      unitAnalysis: "mg uric acid / kg sample = ppm (parts per million)",
+      practicalExample: "Sample = 5.0g Atta, ΔA_292 = 0.085. Standard factor = 1250. Uric Acid = 21.25 mg/kg (Well within FSSAI Max 100 mg/kg limit) ✓"
+    },
+    referenceStandard: "AOAC 969.46 / FSSAI Manual 03 (Cereals)",
+    reagentsAndApparatus: [
+      "Borate Buffer (pH 9.2)",
+      "Purified Uricase Enzyme Solution (from Candida utilis)",
+      "Standard Uric Acid / Potassium Urate Stock Solution",
+      "UV-Vis Spectrophotometer with 10mm quartz cuvettes (292 nm)"
+    ],
+    prescribedLimit: "FSSAI Statutory Limit: Not more than 100 mg/kg (ppm)",
+    riskIfFailed: "Severe insect pest infestation, unhygienic grain storage, filth contamination.",
+    procedureSteps: [
+      "Weigh 5.00g flour into centrifuge tube, add 30 ml borate buffer (pH 9.2), shake mechanically for 20 min.",
+      "Centrifuge at 4000 rpm for 15 min; collect clear supernatant.",
+      "Transfer 3.0 ml aliquot into quartz cuvette; record initial absorbance at 292 nm (A_initial).",
+      "Add 0.1 ml active uricase enzyme solution, incubate at 37°C for 20 min until absorbance stabilizes.",
+      "Record final absorbance at 292 nm (A_final) and calculate uric acid from standard calibration curve."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Extraction", title: "Alkaline Buffer Solubilization", action: "Extract with borate buffer at pH 9.2.", scientificMechanism: "Dissolves insoluble urate salts.", controlPoint: "Buffer pH 9.2." },
+      { stepNumber: 2, phaseName: "Enzymatic Destruction", title: "Uricase Cleavage", action: "Digest with uricase enzyme at 37°C.", scientificMechanism: "Specifically converts uric acid to allantoin.", controlPoint: "Complete digestion." },
+      { stepNumber: 3, phaseName: "UV Photometry", title: "Differential Absorbance", action: "Measure ΔA at 292 nm.", scientificMechanism: "Quantifies uric acid via molar extinction drop.", controlPoint: "Quartz cuvette." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Uric acid test mein direct 292 nm reading kyun nahi le sakte, uricase enzyme kyun zaroori hai?",
+        answer: "Cereals mein soluble purines, pyrimidines aur phenolic acids hote hain jo 290-300 nm UV region mein absorb karte hain. Direct UV reading lene se false high result aayega. Uricase enzyme selectively sirf uric acid ko destroy karta hai, isliye enzyme add karne se pehle aur baad ka absorbance difference (ΔA_292) pure uric acid ko accurately quantify karta hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Wavelength", value: "292 nm", reason: "Characteristic absorption maximum of conjugated purine ring in uric acid" },
+      { parameter: "Extraction pH", value: "9.2 (Borate)", reason: "Ensures complete solubility of uric acid as monovalent urate anion" }
+    ]
+  },
+
+  // 14. CHEMICAL TEST: Metanil Yellow Adulteration
+  {
+    id: "cereal-chem-8",
+    category: "Cereal & Grain Products",
+    testType: "Chemical",
+    productName: "Besan (Gram Flour), Atta, Suji",
+    testName: "Detection of Metanil Yellow & Non-Permitted Azo Dyes in Besan / Atta",
+    shortSummary: "Colorimetric acid spot test and TLC to detect carcinogenic synthetic azo dye Metanil Yellow fraudulently added to besan.",
+    detailedScientificRationale:
+      "Metanil yellow (Sodium 4-(4-anilinophenylazo)benzenesulphonate) is a non-permitted toxic industrial azo dye. Unscrupulous manufacturers add it to adulterated besan (cut with low-grade dal or wheat flour) to replicate the natural deep yellow tint of pure Bengal gram. Metanil yellow consumption causes neurotoxicity, testicular damage, and bladder carcinogenesis. FSSAI maintains a zero-tolerance absolute prohibition.",
+    detailedTestPrinciple:
+      "Metanil yellow is an azo dye containing an -N=N- chromophore. Addition of concentrated hydrochloric acid (HCl) protonates the azo nitrogen, forming an intensely colored magenta-pink quinonoid resonant structure. Natural turmeric and carotenoid pigments fade or decompose, whereas synthetic metanil yellow pink color persists even upon subsequent dilution with water.",
+    chemicalEquation: "Metanil Yellow (Yellow Azo) + Conc HCl ⟶ Quinonoid Protonated Complex (Intense Magenta Pink Color)",
+    formulaBreakdown: {
+      formula: "Qualitative Confirmation: Pink/Magenta Color with Conc. HCl = Metanil Yellow Positive (Adulterated)",
+      variables: [
+        { symbol: "Color Reaction", description: "Development of persistent magenta pink hue with conc HCl" },
+        { symbol: "Dilution Check", description: "Color persists on addition of distilled water (confirms synthetic azo dye)" }
+      ],
+      derivation: "Standard DGHS / FSSAI spot qualitative chemical test for non-permitted water-soluble dyes.",
+      factorOrigin: "Natural turmeric turns red in alkaline media but discharges in acid water; metanil yellow retains magenta under acid.",
+      unitAnalysis: "Qualitative (Positive / Negative)",
+      practicalExample: "5.0g Besan + 5 ml warm water + 2 ml Conc HCl ⟶ No magenta pink color; pale yellow remains ⟶ Negative for Metanil Yellow (Pure Besan) ✓"
+    },
+    referenceStandard: "FSSAI Manual 03 / DGHS Manual / IS 2400:1976",
+    reagentsAndApparatus: [
+      "Concentrated Hydrochloric Acid (AR Grade)",
+      "Petroleum Ether (60-80°C)",
+      "Thin Layer Chromatography (TLC) Silica Gel 60 F254 plates",
+      "Solvent System: Petroleum ether : Benzene : Ethanol (50:25:25)"
+    ],
+    prescribedLimit: "FSSAI Statutory Mandate: Strictly Negative (Zero Tolerance)",
+    riskIfFailed: "Severe toxic adulteration, chronic neurotoxicity, bladder carcinogenesis, immediate seizure and legal prosecution.",
+    procedureSteps: [
+      "Take 5.0g besan sample in a 50 ml test tube and add 10 ml warm distilled water; shake well to form a suspension.",
+      "Carefully add 2-3 ml concentrated hydrochloric acid down the side of the test tube.",
+      "Observe the color development at the interface immediately.",
+      "If a vibrant magenta / pinkish-red color develops, dilute with 5 ml distilled water. If the magenta color persists, Metanil Yellow is confirmed positive.",
+      "Verify doubtful samples by TLC using silica gel plate with standard Metanil Yellow reference spot."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Extraction", title: "Aqueous Suspension", action: "Mix 5g besan with 10 ml warm water.", scientificMechanism: "Extracts water-soluble synthetic dyes.", controlPoint: "Homogeneous slurry." },
+      { stepNumber: 2, phaseName: "Acid Protonation", title: "Conc HCl Addition", action: "Add 2 ml conc HCl down tube wall.", scientificMechanism: "Protonates azo group to magenta quinonoid structure.", controlPoint: "Use fume hood." },
+      { stepNumber: 3, phaseName: "Dilution Verification", title: "Water Addition Check", action: "Add 5 ml water; observe color persistence.", scientificMechanism: "Differentiates synthetic azo dye from natural curcuminoids.", controlPoint: "Persistent pink = Adulterated." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Metanil yellow acid daalne par pink kyun hota hai aur natural haldi se alag kaise behave karta hai?",
+        answer: "Metanil yellow ka chemical structure azo bond (-N=N-) par concentrated HCl ke protons attract karta hai, jisse electron delocalization quinonoid resonance form mein shift hoti hai jo bright magenta/pink dikhti hai. Natural haldi (curcumin) alkaline soap solution mein red hoti hai lekin acid mein neutral yellow rehti hai. Agar HCl daalne par pink color banta hai aur paani daalne par fade nahi hota, to ye 100% synthetic Metanil Yellow adulteration hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Reagent", value: "Conc. HCl", reason: "Protonates azo linkage into intensely colored magenta quinonoid resonance form" },
+      { parameter: "Threshold", value: "Zero Tolerance (Negative)", reason: "Statutory toxic chemical adulterant ban under FSSAI" }
+    ]
+  },
+
+  // 15. CHEMICAL TEST: Khesari Dal Adulteration
+  {
+    id: "cereal-chem-9",
+    category: "Cereal & Grain Products",
+    testType: "Chemical",
+    productName: "Besan (Bengal Gram Flour)",
+    testName: "Detection of Khesari Dal (Lathyrus sativus / BOAA Neurotoxin) in Besan",
+    shortSummary: "Chemical color test to detect neurotoxic Khesari dal (lathyrus) containing BOAA adulterated into chickpea besan.",
+    detailedScientificRationale:
+      "Khesari dal (Lathyrus sativus) is an inexpensive pulse containing the neurotoxic non-protein amino acid beta-N-oxalyl-alpha,beta-diaminopropionic acid (BOAA / ODAP). Regular consumption causes Neurolathyrism, an irreversible neurological disorder characterized by spastic paralysis of the lower limbs. Adulteration of pure chana besan with khesari flour is strictly prohibited by FSSAI.",
+    detailedTestPrinciple:
+      "Sample is extracted with dilute hydrochloric acid. Unique phytochemical glycosides and amines present in Lathyrus sativus react with concentrated hydrochloric acid under boiling conditions, developing an intense pink-to-crimson color. Pure chana besan yields only a pale brownish-yellow color without pink coloration.",
+    chemicalEquation: "Lathyrus Phytocompounds + Conc HCl + Heat (100°C) ⟶ Distinct Pink / Crimson Chromophore",
+    formulaBreakdown: {
+      formula: "Qualitative Confirmation: Intense Pink/Crimson Color on boiling with HCl = Khesari Dal Positive",
+      variables: [
+        { symbol: "Color Response", description: "Pink/red development indicates presence of Lathyrus sativus" }
+      ],
+      derivation: "Standard statutory test per IS 2400 (Specification for Besan) and FSSAI Manual 03.",
+      factorOrigin: "ODAP / BOAA phytochemical co-extracts develop characteristic color reaction under strong acid hydrolysis.",
+      unitAnalysis: "Qualitative (Positive / Negative)",
+      practicalExample: "1.0g Besan + 10 ml 10% HCl, heated in boiling water bath for 15 min ⟶ Clear yellow, no pink hue ⟶ Negative for Khesari Dal ✓"
+    },
+    referenceStandard: "IS 2400:1976 / FSSAI Manual 03 (Cereals & Pulses)",
+    reagentsAndApparatus: [
+      "10% Dilute Hydrochloric Acid",
+      "Concentrated Hydrochloric Acid (AR Grade)",
+      "Boiling Water Bath (100°C)",
+      "Borosilicate Glass Test Tubes"
+    ],
+    prescribedLimit: "FSSAI Statutory Mandate: Strictly Negative (Zero Tolerance)",
+    riskIfFailed: "Neurolathyrism, permanent spastic lower limb paralysis, immediate product recall.",
+    procedureSteps: [
+      "Weigh 1.0g besan sample into a boiling test tube.",
+      "Add 10 ml of 10% dilute HCl and shake thoroughly.",
+      "Immerse the tube in a boiling water bath (100°C) for exactly 15 minutes.",
+      "Observe the color: development of a persistent pink, red, or crimson tint indicates presence of Khesari dal.",
+      "Pure Bengal gram flour produces a light yellow or light brownish color."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Acid Digestion", title: "10% HCl Extraction", action: "Add 10 ml 10% HCl to 1g sample.", scientificMechanism: "Extracts characteristic lathyrus marker compounds.", controlPoint: "Acid ratio." },
+      { stepNumber: 2, phaseName: "Thermal Activation", title: "Boiling Water Bath", action: "Heat at 100°C for 15 minutes.", scientificMechanism: "Accelerates chromophore development.", controlPoint: "Water bath at 100°C." },
+      { stepNumber: 3, phaseName: "Color Assessment", title: "Visual Inspection", action: "Check for pink / crimson hue.", scientificMechanism: "Positive indicates presence of neurotoxic Lathyrus sativus.", controlPoint: "Zero tolerance." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Khesari dal besan mein kyun ban hai aur iska health impact kya hai?",
+        answer: "Khesari dal mein BOAA (beta-N-oxalyl-amino-alanine) neurotoxin hota hai jo spinal cord ke motor neurons ko irreversibly damage kar deta hai. Continuous consumption se Neurolathyrism bimari hoti hai jisme pairon ka paralysis ho jaata hai aur insaan bina lathi ke chal nahi paata. Isliye FSSAI ke Food Safety Regulations ke tehat Khesari dal ki bikri aur kisi bhi food mein milawat 100% banned hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Active Neurotoxin", value: "BOAA / ODAP", reason: "Causes motor neuron degeneration and permanent spastic paraplegia" },
+      { parameter: "Statutory Status", value: "Strictly Prohibited", reason: "Zero tolerance ban under FSSAI Food Safety Regulations" }
+    ]
+  },
+
+  // 16. CHEMICAL TEST: Added Chalk / Calcium Carbonate
+  {
+    id: "cereal-chem-10",
+    category: "Cereal & Grain Products",
+    testType: "Chemical",
+    productName: "Atta, Maida, Suji, Besan",
+    testName: "Detection of Added Chalk / Calcium Carbonate / Lime in Flour",
+    shortSummary: "Rapid chemical effervescence test with dilute HCl to detect fraudulent addition of mineral chalk (CaCO3) in flours.",
+    detailedScientificRationale:
+      "Chalk (calcium carbonate), limestone powder, or slaked lime are fraudulently added to wheat atta, maida, and suji to artificially whiten dark flours and increase bulk bag weight at zero cost. Mineral chalk is indigestible in excess, alters stomach pH, and dramatically elevates Total Ash values beyond statutory ceilings. Dilute acid testing instantly confirms chalk adulteration.",
+    detailedTestPrinciple:
+      "Carbonate salts react rapidly with dilute hydrochloric acid to produce calcium chloride, water, and vigorous carbon dioxide gas effervescence: CaCO3 + 2HCl ⟶ CaCl2 + H2O + CO2 ↑. The release of effervescent CO2 gas bubbles confirms the presence of added chalk.",
+    chemicalEquation: "CaCO3 (Chalk Adulterant) + 2HCl (Dilute) ⟶ CaCl2 + H2O + CO2 ↑ (Vigorous Effervescence)",
+    formulaBreakdown: {
+      formula: "Qualitative Effervescence: Immediate gas bubbling upon HCl addition = Chalk / Carbonate Positive",
+      variables: [
+        { symbol: "CO2 Gas Release", description: "Brisk bubbling / foaming upon acid contact indicates inorganic carbonates" }
+      ],
+      derivation: "Standard acid-base displacement releasing volatile carbon dioxide gas.",
+      factorOrigin: "Flours contain only organic carbon; inorganic carbonates do not naturally exist in unfortified whole grain.",
+      unitAnalysis: "Qualitative (Positive / Negative)",
+      practicalExample: "2.0g Atta + 5 ml 10% HCl ⟶ No gas evolution, smooth suspension ⟶ Negative for added chalk ✓"
+    },
+    referenceStandard: "IS 1155:1968 / FSSAI Manual 03",
+    reagentsAndApparatus: [
+      "10% Dilute Hydrochloric Acid (HCl)",
+      "Watch Glass or Porcelain Spotting Plate",
+      "Glass Rod"
+    ],
+    prescribedLimit: "FSSAI Statutory Mandate: Negative (No added inorganic carbonates permitted)",
+    riskIfFailed: "Mineral adulteration, deceptive weight fraud, elevated ash content.",
+    procedureSteps: [
+      "Place 2.0g flour sample onto a clean watch glass or white porcelain spotting plate.",
+      "Add 3-5 drops of 10% dilute hydrochloric acid directly onto the flour mound.",
+      "Observe immediately under good lighting for brisk effervescence (gas bubbling).",
+      "Vigorous bubbling and foaming indicates added chalk (CaCO3) or mineral carbonates.",
+      "Pure unadulterated flour produces no effervescence."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Dosing", title: "Flour Mound Placement", action: "Place 2g sample on watch glass.", scientificMechanism: "Exposes flour surface for acid contact.", controlPoint: "Dry spotting plate." },
+      { stepNumber: 2, phaseName: "Acid Contact", title: "Dilute HCl Addition", action: "Add 5 drops 10% HCl.", scientificMechanism: "Carbonates decompose releasing CO2 gas.", controlPoint: "Immediate observation." },
+      { stepNumber: 3, phaseName: "Evaluation", title: "Effervescence Check", action: "Check for bubbling.", scientificMechanism: "Bubbling confirms CaCO3 adulteration.", controlPoint: "Negative = Pure." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Added chalk aate ki quality aur bakery performance ko kaise kharab karta hai?",
+        answer: "Chalk (calcium carbonate) aate ki natural slightly acidic pH (~6.0-6.4) ko alkaline bana deta hai. Alkalinity badhne se yeast fermentation ruk jaati hai, dough elasticity khatam ho jaati hai aur roti karkash banti hai. Iske alawa Total Ash 2.0% statutory limit se upar nikal jaata hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Reagent", value: "10% Dilute HCl", reason: "Instantly reacts with carbonates to release visible CO2 gas bubbles" },
+      { parameter: "Statutory Status", value: "Negative", reason: "Zero added mineral carbonates permitted in standardized flours" }
+    ]
+  },
+
+  // 17. CHEMICAL TEST: Fortificant Iron Assay
+  {
+    id: "cereal-chem-11",
+    category: "Cereal & Grain Products",
+    testType: "Chemical",
+    productName: "Fortified Atta (+F), Fortified Maida, Fortified Rice",
+    testName: "Determination of Fortificant Iron (o-Phenanthroline Colorimetric Spectrophotometry)",
+    shortSummary: "Quantifies added elemental or chelated iron at 510 nm to verify compliance with national FSSAI +F fortification mandates (28.0 - 42.5 mg/kg).",
+    detailedScientificRationale:
+      "Under national food fortification standards (FSSAI +F logo), wheat atta and maida are fortified with iron (as Sodium Iron EDTA, Ferrous Fumarate, or Ferric Pyrophosphate) to eradicate microcytic nutritional anemia. The statutory mandated level is 28.0 mg to 42.5 mg Iron per kg of flour. Spectrophotometric determination ensures precise doser addition without sub-potent or toxic over-fortification.",
+    detailedTestPrinciple:
+      "Flour is dry-ashed at 550°C and dissolved in dilute HCl. Hydroxylamine hydrochloride is added to reduce all ferric (Fe3+) ions to ferrous (Fe2+) ions. 1,10-ortho-phenanthroline reagent is added in acetate buffer (pH 4.5), forming a stable orange-red coordination complex tris(1,10-phenanthroline)iron(II) [Fe(phen)3]2+. Absorbance is measured spectrophotometrically at 510 nm against an iron calibration curve.",
+    chemicalEquation: "Fe3+ + NH2OH.HCl ⟶ Fe2+ ; Fe2+ + 3(C12H8N2) ⟶ [Fe(C12H8N2)3]2+ (Orange-Red Complex, λmax = 510 nm)",
+    formulaBreakdown: {
+      formula: "Iron Content (mg/kg or ppm) = [ C × V_total × Dilution ] / Sample Mass (g)",
+      variables: [
+        { symbol: "C", description: "Iron concentration from standard curve (µg/ml)" },
+        { symbol: "V_total", description: "Total volumetric solution made up (ml, typically 100 ml)" },
+        { symbol: "Sample Mass", description: "Initial flour sample taken for ashing (g, typically 5.00g)" }
+      ],
+      derivation: "Based on Beer-Lambert Law for tris-ortho-phenanthroline iron complex.",
+      factorOrigin: "Complex molar absorptivity ε = 11,100 L·mol⁻¹·cm⁻¹ at precisely 510 nm.",
+      unitAnalysis: "mg Iron / kg flour = ppm",
+      practicalExample: "Sample = 5.00g Fortified Atta, V = 100 ml. Absorbance at 510 nm = 0.380 (corresponds to 1.75 µg/ml on curve). Iron = (1.75 × 100) / 5.00 = 35.0 mg/kg (Complies with FSSAI 28.0 - 42.5 mg/kg +F range) ✓"
+    },
+    referenceStandard: "AOAC 944.02 / FSSAI Fortification Regulations / Manual 03",
+    reagentsAndApparatus: [
+      "Hydroxylamine Hydrochloride Solution (10% w/v)",
+      "1,10-Ortho-phenanthroline Monohydrate Solution (0.1% w/v)",
+      "Sodium Acetate Buffer Solution (pH 4.5)",
+      "Standard Iron Stock Solution (100 µg/ml Fe)",
+      "UV-Vis Spectrophotometer with 10mm glass/quartz cells (510 nm)"
+    ],
+    prescribedLimit: "FSSAI +F Mandate: 28.0 to 42.5 mg Iron per kg (ppm)",
+    riskIfFailed: "Fortification regulatory non-compliance, loss of +F certification, or trace mineral toxicity if overdosed.",
+    procedureSteps: [
+      "Weigh 5.00g fortified flour into silica crucible; pre-char on flame and incinerate at 550°C in muffle furnace for 4 hours.",
+      "Dissolve ash in 10 ml 1:1 dilute HCl on boiling water bath; filter through Whatman 41 into 100 ml volumetric flask; make up to mark.",
+      "Pipette 10 ml aliquot into 50 ml volumetric flask.",
+      "Add 1.0 ml 10% hydroxylamine hydrochloride; mix and wait 5 minutes to complete Fe3+ reduction.",
+      "Add 5.0 ml sodium acetate buffer (pH 4.5) and 2.0 ml 0.1% ortho-phenanthroline solution; make up to 50 ml with water.",
+      "Allow color development for 15 minutes; measure absorbance at 510 nm against reagent blank.",
+      "Read concentration from standard curve prepared with 0 to 5 µg/ml Iron standards."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Ashing & Solubilization", title: "Dry Ash Dissolution", action: "Ash 5g at 550°C, dissolve in HCl.", scientificMechanism: "Mineralizes flour matrix and liberates iron salts.", controlPoint: "Ashing temperature." },
+      { stepNumber: 2, phaseName: "Reduction", title: "Ferrous State Reduction", action: "Add hydroxylamine hydrochloride.", scientificMechanism: "Reduces all Fe3+ to reactive Fe2+ state.", controlPoint: "Wait 5 minutes." },
+      { stepNumber: 3, phaseName: "Chromophore Formation", title: "Phenanthroline Complexation", action: "Add buffer pH 4.5 + phenanthroline.", scientificMechanism: "Forms stable orange-red [Fe(phen)3]2+ complex.", controlPoint: "pH 4.5 buffer." },
+      { stepNumber: 4, phaseName: "Spectrophotometry", title: "510 nm Quantitation", action: "Read absorbance at 510 nm.", scientificMechanism: "Quantifies iron via standard curve.", controlPoint: "Calibrated spectrophotometer." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Hydroxylamine hydrochloride kyun daalte hain aur wavelength 510 nm hi kyun chuni gayi?",
+        answer: "1,10-ortho-phenanthroline sirf divalent ferrous (Fe2+) state ke saath stable colored complex banata hai. Cereal ash mein iron oxidized ferric (Fe3+) state mein hota hai jo phenanthroline ke saath react nahi karta. Hydroxylamine Fe3+ ko quantitatively Fe2+ mein reduce karta hai. Tris-phenanthroline iron(II) complex ka optical absorption maximum precisely 510 nm par hota hai jahan molar absorptivity highest hoti hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Wavelength", value: "510 nm", reason: "Molar absorptivity peak of orange-red tris-phenanthroline iron(II) complex" },
+      { parameter: "Buffer pH", value: "4.5", reason: "Maintains optimal pH for quantitative complex stability" },
+      { parameter: "Reducing Agent", value: "Hydroxylamine HCl", reason: "Quantitatively reduces Fe3+ to reactive Fe2+ state" }
+    ]
+  },
+
+  // 18. CHEMICAL TEST: Fortificant Folic Acid Assay
+  {
+    id: "cereal-chem-12",
+    category: "Cereal & Grain Products",
+    testType: "Chemical",
+    productName: "Fortified Atta (+F), Fortified Maida",
+    testName: "Determination of Fortificant Folic Acid (Reverse Phase HPLC-UV Method)",
+    shortSummary: "HPLC assay to quantify added pteroylglutamic acid (Folic Acid / Vitamin B9) to verify FSSAI +F mandate (75 - 125 µg/100g).",
+    detailedScientificRationale:
+      "Folic Acid (Vitamin B9) fortification of wheat flour prevents Neural Tube Defects (NTD, such as spina bifida and anencephaly) in developing fetuses. FSSAI statutory regulations mandate fortification with 75 µg to 125 µg Folic Acid per 100 g of wheat flour. Precision reverse-phase HPLC with UV detection separates added synthetic folic acid from interfering cereal matrix components.",
+    detailedTestPrinciple:
+      "Folic acid is extracted in potassium phosphate buffer (pH 7.0) with thermal treatment to release bound vitamins. Clean-up is performed on a C18 Solid Phase Extraction (SPE) cartridge. Separation is achieved on a reverse-phase C18 analytical column using isocratic phosphate buffer-acetonitrile mobile phase with UV detection at 280 nm.",
+    chemicalEquation: "Folic Acid Extract ⟶ C18 SPE Cleanup ⟶ RP-HPLC (C18 Column, Isocratic Elution) ⟶ UV Detection (280 nm)",
+    formulaBreakdown: {
+      formula: "Folic Acid (µg/100g) = [ (Area_sample / Area_std) × C_std × V_extract × 100 ] / Sample Mass (g)",
+      variables: [
+        { symbol: "Area_sample", description: "Peak area of folic acid in sample chromatogram" },
+        { symbol: "Area_std", description: "Peak area of certified folic acid working standard" },
+        { symbol: "C_std", description: "Concentration of standard solution (µg/ml)" }
+      ],
+      derivation: "Standard HPLC chromatographic external standard quantitation.",
+      factorOrigin: "Folic acid displays intense conjugated pteridine ring UV absorbance at 280 nm.",
+      unitAnalysis: "µg Folic Acid / 100g flour",
+      practicalExample: "Sample = 5.00g Fortified Atta, Peak Area ratio yields 5.0 µg total extracted in 50 ml. Folic Acid = (5.0 / 5.00) × 100 = 100.0 µg/100g (Right in optimal FSSAI 75 - 125 µg/100g range) ✓"
+    },
+    referenceStandard: "AOAC 944.12 / FSSAI Manual 03 / European Standard EN 14131",
+    reagentsAndApparatus: [
+      "HPLC System with Isocratic Pump, Autosampler, and UV-Vis Detector (280 nm)",
+      "C18 Reverse Phase Analytical Column (250 × 4.6 mm, 5 µm particle size)",
+      "C18 Solid Phase Extraction (SPE) Cartridges (500 mg)",
+      "Certified Reference Standard: Folic Acid (Pteroylglutamic acid, >98% purity)"
+    ],
+    prescribedLimit: "FSSAI +F Mandate: 75 to 125 µg per 100g of flour",
+    riskIfFailed: "Fortification non-compliance, vulnerability to neural tube birth defects in public nutrition programs.",
+    procedureSteps: [
+      "Weigh 5.00g fortified flour, add 40 ml 0.1 M potassium phosphate buffer (pH 7.0), shake in dark for 30 minutes.",
+      "Heat at 60°C in water bath for 15 minutes to maximize vitamin release; cool and centrifuge at 4000 rpm for 15 min.",
+      "Condition C18 SPE cartridge with methanol and water; load 10 ml supernatant; wash with water and elute folic acid with 5 ml 50% methanol.",
+      "Filter eluate through 0.45 µm PTFE syringe filter into amber autosampler vial.",
+      "Inject 20 µl into HPLC: mobile phase 0.05 M KH2PO4 (pH 3.5) : Acetonitrile (88:12 v/v) at 1.0 ml/min flow rate, UV detection at 280 nm.",
+      "Quantify against certified folic acid calibration curve (0.1 to 2.0 µg/ml)."
+    ],
+    flowchartSteps: [
+      { stepNumber: 1, phaseName: "Extraction", title: "Phosphate Buffer Extraction", action: "Extract 5g sample at pH 7.0 in dark.", scientificMechanism: "Stabilizes light-sensitive pteroylglutamate ring.", controlPoint: "Amber glassware." },
+      { stepNumber: 2, phaseName: "SPE Purification", title: "C18 Cartridge Cleanup", action: "Retain folic acid on SPE; wash and elute.", scientificMechanism: "Eliminates polar sugars and non-polar flour lipids.", controlPoint: "SPE elution." },
+      { stepNumber: 3, phaseName: "Chromatography", title: "Isocratic HPLC Separation", action: "Separate on C18 column at 280 nm.", scientificMechanism: "Resolves folic acid from endogenous folates.", controlPoint: "Retention time match." }
+    ],
+    factorsExplanation: [
+      {
+        question: "Folic acid testing amber glassware mein kyun ki jaati hai aur pH control kyun zaroori hai?",
+        answer: "Folic acid (pteroylglutamic acid) intensely light-sensitive (photolabile) hoti hai — direct fluorescent light ya daylight mein ye biologically inactive p-aminobenzoylglutamic acid aur pterin-6-carboxylic acid mein photodegrade ho jaati hai. Amber glassware photodegradation ko rokti hai. pH 7.0 buffer extraction mein folic acid ko fully ionized carboxylate form mein stable rakhta hai."
+      }
+    ],
+    factorsSummaryTable: [
+      { parameter: "Wavelength", value: "280 nm", reason: "UV absorption peak of pteridine ring in folic acid" },
+      { parameter: "Light Protection", value: "Amber Glassware", reason: "Prevents photolytic degradation into inactive pterin fragments" },
+      { parameter: "Mobile Phase", value: "KH2PO4 Buffer : ACN (88:12)", reason: "Ensures sharp chromatographic resolution on C18 stationary phase" }
     ]
   }
 ];

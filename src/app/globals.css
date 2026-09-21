@@ -860,11 +860,12 @@ body.window-blurred-protection #pc-screenshot-guard-overlay {
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   width: max-content !important;
-  animation: festival-marquee-scroll 55s linear infinite !important;
+  animation: festival-marquee-scroll 20s linear infinite !important;
   will-change: transform;
 }
 
-.festival-marquee-track:hover {
+.festival-marquee-track:hover,
+.festival-marquee-track:active {
   animation-play-state: paused !important;
 }
 
