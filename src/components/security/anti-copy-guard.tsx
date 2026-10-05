@@ -5,13 +5,11 @@ import { toast } from "@/hooks/use-toast";
 import { ShieldAlert, Lock } from "lucide-react";
 
 export function AntiCopyGuard() {
-  if (process.env.NODE_ENV === 'development') {
-    return null;
-  }
-
   const lastToastTime = useRef<number>(0);
   const isLockedRef = useRef<boolean>(false);
   const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const isDev = process.env.NODE_ENV === 'development';
 
   const showWarningToast = (message: string) => {
     const now = Date.now();
@@ -56,6 +54,7 @@ export function AntiCopyGuard() {
   };
 
   useEffect(() => {
+    if (isDev) return;
     const isInputElement = (target: EventTarget | null): boolean => {
       if (!target || !(target instanceof HTMLElement)) return false;
       const tagName = target.tagName.toLowerCase();
@@ -272,7 +271,11 @@ export function AntiCopyGuard() {
       clearInterval(devToolsInterval);
       if (blurTimeoutRef.current) clearTimeout(blurTimeoutRef.current);
     };
-  }, []);
+  }, [isDev]);
+
+  if (isDev) {
+    return null;
+  }
 
   return (
     <>
