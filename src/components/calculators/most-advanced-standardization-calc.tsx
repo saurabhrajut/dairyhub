@@ -47,6 +47,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -301,9 +308,13 @@ export function MostAdvancedStandardizationCalc() {
   const [targetFat, setTargetFat] = useState<number>(3.0);
   const [targetSnf, setTargetSnf] = useState<number>(8.5);
   const [targetAcidity, setTargetAcidity] = useState<number>(0.14);
+  const [calculationMode, setCalculationMode] = useState<"dynamic" | "target">("dynamic");
+  const [targetBatchQty, setTargetBatchQty] = useState<number>(10000);
+  const [targetBatchUnit, setTargetBatchUnit] = useState<"Ltr" | "Kg">("Ltr");
   const [formulaFatFactor, setFormulaFatFactor] = useState<number>(0.20);
   const [formulaConstant, setFormulaConstant] = useState<number>(0.29);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [isAdditionsCopied, setIsAdditionsCopied] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"table" | "cards">("cards");
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
@@ -320,12 +331,15 @@ export function MostAdvancedStandardizationCalc() {
     fatDiff: number;
     snfDiff: number;
     isExact: boolean;
+    isTargetBatchMode?: boolean;
     allocations: {
       id: string;
       name: string;
       qty: number;
       fat: number;
       snf: number;
+      isLocked?: boolean;
+      unit?: string;
     }[];
   } | null>(null);
 
@@ -375,9 +389,11 @@ export function MostAdvancedStandardizationCalc() {
       targetSnf: s,
       targetAcidity: a,
       expectedClr: expClr,
+      targetBatchQty,
+      targetBatchUnit,
       description: `Target Formulation: ${f}% Fat, ${s}% SNF, ${a}% Acidity`
     };
-  }, [targetFat, targetSnf, targetAcidity, activeFormula]);
+  }, [targetFat, targetSnf, targetAcidity, targetBatchQty, targetBatchUnit, activeFormula]);
 
   // Handle cell edits in spreadsheet
   const handleUpdateCell = useCallback(
@@ -487,12 +503,15 @@ export function MostAdvancedStandardizationCalc() {
     setTargetFat(3.0);
     setTargetSnf(8.5);
     setTargetAcidity(0.14);
+    setCalculationMode("dynamic");
+    setTargetBatchQty(10000);
+    setTargetBatchUnit("Ltr");
     setFormulaFatFactor(0.20);
     setFormulaConstant(0.29);
     setOptimizerResult(null);
     toast({
       title: "Template Reset 🔄",
-      description: "Default master batch (11,300 L Base Milk 1) restored."
+      description: "Default master batch (11,300 L Base Milk) restored."
     });
   }, [toast]);
 
@@ -507,7 +526,23 @@ export function MostAdvancedStandardizationCalc() {
     setOptimizerResult(null);
     toast({
       title: "All Additions Zeroed 🧹",
-      description: "1st Base Milk ko chhodkar sabhi streams ki quantity 0 kar di gayi hai."
+      description: "All addition stream quantities reset to 0 while keeping Base Milk intact."
+    });
+  }, [toast]);
+
+  // Zero out ALL rows so user can calculate purely based on Target Batch Quantity
+  const handleZeroAllRows = useCallback(() => {
+    setRows((prev) =>
+      prev.map((r) => ({
+        ...r,
+        qty: 0,
+        isLocked: false
+      }))
+    );
+    setOptimizerResult(null);
+    toast({
+      title: "All Streams Zeroed (0) 🧹",
+      description: "All stream quantities set to 0. Ready for fresh batch calculation."
     });
   }, [toast]);
 
@@ -570,8 +605,9 @@ export function MostAdvancedStandardizationCalc() {
     // ─────────────────────────────────────────────
     // ACIDITY ADJUSTMENT & NEUTRALIZATION SYSTEM
     // ─────────────────────────────────────────────
-    // Milk average density: 1.03 kg/L => batch weight in kg
-    const batchWeightKg = totalQty * 1.03;
+    // Milk average density: 1.03 kg/L => conversion between Ltr and Kg
+    const batchWeightKg = targetBatchUnit === "Kg" ? totalQty : totalQty * 1.03;
+    const batchVolumeLtr = targetBatchUnit === "Kg" ? (totalQty > 0 ? totalQty / 1.03 : 0) : totalQty;
     const excessAcidityPercent = Math.max(0, acidityDiff);
     // Excess Lactic Acid in grams = (excessAcidity% / 100) * batchWeightKg * 1000
     const totalExcessLacticAcidGrams = Number(((excessAcidityPercent / 100) * batchWeightKg * 1000).toFixed(2));
@@ -651,6 +687,10 @@ export function MostAdvancedStandardizationCalc() {
       isAcidityCompliant,
       isBatchPerfect,
       batchWeightKg: Number(batchWeightKg.toFixed(1)),
+      batchVolumeLtr: Number(batchVolumeLtr.toFixed(1)),
+      targetBatchQty,
+      targetBatchUnit,
+      unit: targetBatchUnit,
       totalExcessLacticAcidGrams,
       totalExcessLacticAcidKg,
       gramsNaOH: Number(gramsNaOH.toFixed(1)),
@@ -667,7 +707,8 @@ export function MostAdvancedStandardizationCalc() {
       baseSnfPct,
       baseAcidityPct,
       totalCost: Math.round(totalCost),
-      costPerLiter
+      costPerLiter,
+      costPerUnit: costPerLiter
     };
   }, [
     rows,
@@ -677,7 +718,9 @@ export function MostAdvancedStandardizationCalc() {
     costSkimMilk,
     costCream,
     costSmp,
-    costWater
+    costWater,
+    targetBatchQty,
+    targetBatchUnit
   ]);
 
   // Helper to determine row unit cost for optimizer ranking
@@ -704,7 +747,7 @@ export function MostAdvancedStandardizationCalc() {
   };
 
   // ─────────────────────────────────────────────
-  // ⚡ ALWAYS-SOLVE ROW-LOCKING BATCH OPTIMIZER ENGINE
+  // ⚡ ALWAYS-SOLVE BATCH OPTIMIZER ENGINE (WITH TARGET BATCH QUANTITY & UNIT SUPPORT)
   // ─────────────────────────────────────────────
   const solveUniversalBalance = useCallback(() => {
     const isRowLocked = (r: BatchIngredientRow) => Boolean(r.isLocked ?? r.isBase);
@@ -723,9 +766,9 @@ export function MostAdvancedStandardizationCalc() {
       }
     });
 
-    // Smart Fallback: If user didn't explicitly click Lock on any row,
+    // Smart Fallback for unconstrained mode: If user didn't explicitly click Lock on any row,
     // automatically treat rows with qty > 0 as fixed base milk, and rows with qty === 0 as auto-solve streams!
-    if (lockedQty <= 0) {
+    if (lockedQty <= 0 && targetBatchQty <= 0) {
       const rowsWithQty = rows.filter((r) => r.qty > 0);
       if (rowsWithQty.length > 0) {
         lockedRows = rowsWithQty;
@@ -738,26 +781,264 @@ export function MostAdvancedStandardizationCalc() {
       }
     }
 
+    const Ft = currentTarget.targetFat;
+    const St = currentTarget.targetSnf;
+
+    // ─────────────────────────────────────────────────────────────
+    // MODE A: TARGET BATCH QUANTITY MODE (calculationMode === "target")
+    // ─────────────────────────────────────────────────────────────
+    if (calculationMode === "target") {
+      if (targetBatchQty <= 0) {
+        return {
+          status: "error" as const,
+          error: "Please enter a valid Target Batch Quantity (e.g. 10,000 Ltr) in settings or toolbar."
+        };
+      }
+
+      if (lockedQty > 0 && lockedQty >= targetBatchQty) {
+        return {
+          status: "error" as const,
+          error: `Locked Base Milk quantity (${lockedQty.toLocaleString()} ${targetBatchUnit}) is greater than or equal to Target Batch Size (${targetBatchQty.toLocaleString()} ${targetBatchUnit}). Please increase Target Batch Quantity or unlock the row.`
+        };
+      }
+
+      const availableRows = lockedQty === 0 
+        ? (unlockedRows.length > 0 ? unlockedRows : rows)
+        : unlockedRows;
+
+      if (availableRows.length === 0) {
+        return {
+          status: "error" as const,
+          error: "Please unlock (🔓) at least one ingredient stream so the optimizer can calculate its required quantity."
+        };
+      }
+
+      // Prepare available streams with standard dairy fallbacks if empty
+      const preparedStreams = availableRows.map((u) => {
+        let f = u.fat;
+        let s = u.snf;
+        const lower = u.name.toLowerCase();
+        if (f === 0 && s === 0) {
+          if (lower.includes("cream")) { f = 40.0; s = 5.4; }
+          else if (lower.includes("skim")) { f = 0.05; s = 8.8; }
+          else if (lower.includes("smp") || lower.includes("powder")) { f = 1.0; s = 95.0; }
+          else if (lower.includes("water")) { f = 0.0; s = 0.0; }
+          else if (lower.includes("cow")) { f = 3.5; s = 8.5; }
+          else if (lower.includes("buffalo")) { f = 6.5; s = 9.0; }
+          else { f = 4.5; s = 8.5; }
+        }
+        return {
+          ...u,
+          fat: f,
+          snf: s,
+          cost: getIngredientCost(u.name)
+        };
+      });
+
+      // Quantity to allocate from unlocked streams
+      const Q_to_allocate = lockedQty === 0 ? targetBatchQty : (targetBatchQty - lockedQty);
+
+      // Remaining fat & snf deficit to hit targetBatchQty
+      const totalTargetFatKg = (targetBatchQty * Ft) / 100;
+      const totalTargetSnfKg = (targetBatchQty * St) / 100;
+      const neededFatKg = totalTargetFatKg - lockedKgFat;
+      const neededSnfKg = totalTargetSnfKg - lockedKgSnf;
+
+      const targetFtForStreams = (neededFatKg / Q_to_allocate) * 100;
+      const targetStForStreams = (neededSnfKg / Q_to_allocate) * 100;
+
+      // Evaluator helper for target batch mode
+      const evalTargetBatchCandidate = (
+        qMap: Map<string, number>,
+        strategy: string,
+        tier: number,
+        explanation?: string
+      ) => {
+        let allocatedQ = 0;
+        let allocatedKgFat = 0;
+        let allocatedKgSnf = 0;
+        let totalCost = 0;
+
+        preparedStreams.forEach((u) => {
+          const q = qMap.get(u.id) ?? 0;
+          if (q > 0) {
+            allocatedQ += q;
+            allocatedKgFat += (q * u.fat) / 100;
+            allocatedKgSnf += (q * u.snf) / 100;
+            totalCost += q * u.cost;
+          }
+        });
+
+        const finalQty = lockedQty + allocatedQ;
+        const finalKgFat = lockedKgFat + allocatedKgFat;
+        const finalKgSnf = lockedKgSnf + allocatedKgSnf;
+        const finalFat = finalQty > 0 ? Number(((finalKgFat / finalQty) * 100).toFixed(2)) : 0;
+        const finalSnf = finalQty > 0 ? Number(((finalKgSnf / finalQty) * 100).toFixed(2)) : 0;
+        const fatDiff = Number((finalFat - Ft).toFixed(2));
+        const snfDiff = Number((finalSnf - St).toFixed(2));
+        const isExact = Math.abs(fatDiff) <= 0.02 && Math.abs(snfDiff) <= 0.02;
+
+        let penalty = 0;
+        preparedStreams.forEach((u) => {
+          const q = qMap.get(u.id) ?? 0;
+          if (q > 0 && u.name.toLowerCase().includes("water")) {
+            penalty += 20000;
+          }
+        });
+
+        const totalError = Math.abs(fatDiff) * 3 + Math.abs(snfDiff);
+
+        return {
+          quantities: qMap,
+          strategy,
+          explanation: explanation || strategy,
+          cost: totalCost + penalty,
+          rawCost: totalCost,
+          totalError,
+          finalQty,
+          finalFat,
+          finalSnf,
+          fatDiff,
+          snfDiff,
+          isExact,
+          tier
+        };
+      };
+
+      type TargetCandidate = ReturnType<typeof evalTargetBatchCandidate>;
+      const targetCandidates: TargetCandidate[] = [];
+
+      // 1. Dual-stream exact Pearson Square
+      for (let i = 0; i < preparedStreams.length; i++) {
+        for (let j = i + 1; j < preparedStreams.length; j++) {
+          const u1 = preparedStreams[i];
+          const u2 = preparedStreams[j];
+          if (Math.abs(u1.fat - u2.fat) > 0.05) {
+            const w1 = (targetFtForStreams - u2.fat) / (u1.fat - u2.fat);
+            const w2 = 1 - w1;
+            if (w1 >= -0.005 && w2 >= -0.005 && w1 <= 1.005) {
+              const q1 = formatPrecision(Math.max(0, Math.min(1, w1)) * Q_to_allocate);
+              const q2 = formatPrecision(Math.max(0, Q_to_allocate - q1));
+
+              const qMap = new Map<string, number>();
+              rows.forEach((r) => qMap.set(r.id, 0));
+              qMap.set(u1.id, q1);
+              qMap.set(u2.id, q2);
+
+              const activeList = [
+                { name: u1.name, q: q1 },
+                { name: u2.name, q: q2 }
+              ].filter((x) => x.q > 0);
+
+              const strat = activeList.map((x) => `${x.name}: ${x.q.toLocaleString()} ${targetBatchUnit}`).join(" + ");
+              const desc = `Target Batch ${targetBatchQty.toLocaleString()} ${targetBatchUnit} (${Ft}% Fat): Mix ${strat}.`;
+              targetCandidates.push(evalTargetBatchCandidate(qMap, strat, 1, desc));
+            }
+          }
+        }
+      }
+
+      // 2. Triple-stream Simultaneous Linear Balance
+      for (let i = 0; i < preparedStreams.length; i++) {
+        for (let j = i + 1; j < preparedStreams.length; j++) {
+          for (let k = j + 1; k < preparedStreams.length; k++) {
+            const u1 = preparedStreams[i];
+            const u2 = preparedStreams[j];
+            const u3 = preparedStreams[k];
+
+            const a1 = u1.fat - u3.fat;
+            const b1 = u2.fat - u3.fat;
+            const c1 = targetFtForStreams - u3.fat;
+
+            const a2 = u1.snf - u3.snf;
+            const b2 = u2.snf - u3.snf;
+            const c2 = targetStForStreams - u3.snf;
+
+            const det = a1 * b2 - a2 * b1;
+            if (Math.abs(det) > 1e-6) {
+              const w1 = (c1 * b2 - c2 * b1) / det;
+              const w2 = (a1 * c2 - a2 * c1) / det;
+              const w3 = 1 - w1 - w2;
+
+              if (w1 >= -0.005 && w2 >= -0.005 && w3 >= -0.005) {
+                const q1Raw = Math.max(0, w1) * Q_to_allocate;
+                const q2Raw = Math.max(0, w2) * Q_to_allocate;
+                const q3Raw = Math.max(0, w3) * Q_to_allocate;
+                const sumRaw = q1Raw + q2Raw + q3Raw;
+                if (sumRaw > 0) {
+                  const scale = Q_to_allocate / sumRaw;
+                  const q1 = formatPrecision(q1Raw * scale);
+                  const q2 = formatPrecision(q2Raw * scale);
+                  const q3 = formatPrecision(Math.max(0, Q_to_allocate - q1 - q2));
+
+                  const qMap = new Map<string, number>();
+                  rows.forEach((r) => qMap.set(r.id, 0));
+                  qMap.set(u1.id, q1);
+                  qMap.set(u2.id, q2);
+                  qMap.set(u3.id, q3);
+
+                  const activeList = [
+                    { name: u1.name, q: q1 },
+                    { name: u2.name, q: q2 },
+                    { name: u3.name, q: q3 }
+                  ].filter((x) => x.q > 0);
+
+                  const strat = activeList.map((x) => `${x.name}: ${x.q.toLocaleString()} ${targetBatchUnit}`).join(" + ");
+                  const desc = `Target Batch ${targetBatchQty.toLocaleString()} ${targetBatchUnit} (${Ft}% Fat, ${St}% SNF): Mix ${strat}.`;
+                  targetCandidates.push(evalTargetBatchCandidate(qMap, strat, 1, desc));
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Rank candidates
+      targetCandidates.sort((c1, c2) => {
+        if (c1.isExact !== c2.isExact) return c1.isExact ? -1 : 1;
+        if (Math.abs(c1.totalError - c2.totalError) > 0.005) return c1.totalError - c2.totalError;
+        if (c1.tier !== c2.tier) return c1.tier - c2.tier;
+        return c1.cost - c2.cost;
+      });
+
+      if (targetCandidates.length > 0) {
+        const best = targetCandidates[0];
+        return {
+          status: "success" as const,
+          quantities: best.quantities,
+          strategy: best.strategy,
+          explanation: best.explanation,
+          finalQty: best.finalQty,
+          finalFat: best.finalFat,
+          finalSnf: best.finalSnf,
+          fatDiff: best.fatDiff,
+          snfDiff: best.snfDiff,
+          isExact: best.isExact,
+          isTargetBatchMode: true,
+          lockedQty
+        };
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // MODE B: DYNAMIC BASE-MILK DRIVEN BALANCE ("As Originally")
+    // Batch volume expands dynamically to balance milk in tank
+    // ─────────────────────────────────────────────────────────────
     if (lockedQty <= 0) {
       return {
         status: "error" as const,
-        error: "Kripya Base Milk me quantity darj karein taaki optimizer calculate kar sake."
+        error: "Please enter your Base Milk quantity in the table, or switch to 'Target Batch Qty' mode to formulate from scratch."
       };
     }
 
     if (unlockedRows.length === 0) {
       return {
         status: "error" as const,
-        error: "Kam se kam 1 ingredient row ko Unlock (🔓) karein taaki optimizer uski required quantity calculate karke show kar sake."
+        error: "Please unlock (🔓) at least one ingredient row so the optimizer can calculate the required addition."
       };
     }
 
-    const Ft = currentTarget.targetFat;
-    const St = currentTarget.targetSnf;
-
     // Deficit: Target Kg required at current locked volume minus actual Kg present
-    // Negative deficit = excess in locked milk, needs dilution
-    // Positive deficit = shortfall in locked milk, needs fortification
     const deficitFat = (lockedQty * Ft) / 100 - lockedKgFat;
     const deficitSnf = (lockedQty * St) / 100 - lockedKgSnf;
 
@@ -795,7 +1076,7 @@ export function MostAdvancedStandardizationCalc() {
       };
     });
 
-    // Evaluator helper for any candidate quantity vector
+    // Evaluator helper for candidate quantity vector
     const evaluateSolution = (
       qMap: Map<string, number>,
       strategy: string,
@@ -828,19 +1109,16 @@ export function MostAdvancedStandardizationCalc() {
 
       // Penalties to prefer realistic plant formulations
       let penalty = 0;
-      // Penalize huge water additions if dairy streams are unlocked
       preparedUnlocked.forEach((u) => {
         const q = qMap.get(u.id) ?? 0;
         if (q > 0 && u.name.toLowerCase().includes("water")) {
           penalty += 20000;
         }
       });
-      // Penalize abnormal addition volume
       if (addedQty > lockedQty * 1.5) {
         penalty += 15000;
       }
 
-      // Weighted total error: Fat error is weighted 2.5x as it's the primary pricing standard
       const totalError = Math.abs(fatDiff) * 2.5 + Math.abs(snfDiff);
 
       return {
@@ -877,7 +1155,9 @@ export function MostAdvancedStandardizationCalc() {
         finalSnf: St,
         fatDiff: 0,
         snfDiff: 0,
-        isExact: true
+        isExact: true,
+        isTargetBatchMode: false,
+        lockedQty
       };
     }
 
@@ -897,7 +1177,6 @@ export function MostAdvancedStandardizationCalc() {
           const x1 = (deficitFat * b2 - deficitSnf * a2) / det;
           const x2 = (a1 * deficitSnf - b1 * deficitFat) / det;
 
-          // Physically feasible non-negative solutions
           if (x1 >= -0.05 && x2 >= -0.05) {
             const q1 = formatPrecision(Math.max(0, x1));
             const q2 = formatPrecision(Math.max(0, x2));
@@ -907,8 +1186,8 @@ export function MostAdvancedStandardizationCalc() {
             qMap.set(u1.id, q1);
             qMap.set(u2.id, q2);
 
-            const strat = `${u1.name}: ${q1.toLocaleString()} L/Kg + ${u2.name}: ${q2.toLocaleString()} L/Kg`;
-            const desc = `Target Fat (${Ft}%) aur SNF (${St}%) achieve karne ke liye ${u1.name} (${q1.toLocaleString()} L/Kg) aur ${u2.name} (${q2.toLocaleString()} L/Kg) add karein.`;
+            const strat = `${u1.name}: ${q1.toLocaleString()} ${targetBatchUnit} + ${u2.name}: ${q2.toLocaleString()} ${targetBatchUnit}`;
+            const desc = `To achieve Target Fat (${Ft}%) and SNF (${St}%): Add ${u1.name} (${q1.toLocaleString()} ${targetBatchUnit}) and ${u2.name} (${q2.toLocaleString()} ${targetBatchUnit}).`;
             candidates.push(evaluateSolution(qMap, strat, 1, desc));
           }
         }
@@ -920,7 +1199,6 @@ export function MostAdvancedStandardizationCalc() {
       const a = (u.fat - Ft) / 100;
       const b = (u.snf - St) / 100;
 
-      // 1. Solve for Exact Target Fat:
       if (Math.abs(a) > 1e-5) {
         const x = deficitFat / a;
         if (x >= 0) {
@@ -929,13 +1207,12 @@ export function MostAdvancedStandardizationCalc() {
           unlockedRows.forEach((row) => qMap.set(row.id, 0));
           qMap.set(u.id, q);
 
-          const strat = `${u.name}: ${q.toLocaleString()} L/Kg (Target Fat: ${Ft}%)`;
-          const desc = `${u.name} (${q.toLocaleString()} L/Kg) se Target Fat (${Ft}%) achieve hoga.`;
+          const strat = `${u.name}: ${q.toLocaleString()} ${targetBatchUnit} (Target Fat: ${Ft}%)`;
+          const desc = `Add ${u.name} (${q.toLocaleString()} ${targetBatchUnit}) to achieve Target Fat (${Ft}%).`;
           candidates.push(evaluateSolution(qMap, strat, 2, desc));
         }
       }
 
-      // 2. Solve for Exact Target SNF:
       if (Math.abs(b) > 1e-5) {
         const x = deficitSnf / b;
         if (x >= 0) {
@@ -944,15 +1221,14 @@ export function MostAdvancedStandardizationCalc() {
           unlockedRows.forEach((row) => qMap.set(row.id, 0));
           qMap.set(u.id, q);
 
-          const strat = `${u.name}: ${q.toLocaleString()} L/Kg (Target SNF: ${St}%)`;
-          const desc = `${u.name} (${q.toLocaleString()} L/Kg) se Target SNF (${St}%) achieve hoga.`;
+          const strat = `${u.name}: ${q.toLocaleString()} ${targetBatchUnit} (Target SNF: ${St}%)`;
+          const desc = `Add ${u.name} (${q.toLocaleString()} ${targetBatchUnit}) to achieve Target SNF (${St}%).`;
           candidates.push(evaluateSolution(qMap, strat, 2, desc));
         }
       }
     }
 
-    // ── Tier 3: Constrained Non-Negative Multi-Stream Quadratic Minimization (NNLS) ──
-    // Solves for the optimal combination of unlocked streams when exact dual balance is constrained
+    // ── Tier 3: Quadratic Minimization (NNLS) ──
     for (let i = 0; i < preparedUnlocked.length; i++) {
       for (let j = i + 1; j < preparedUnlocked.length; j++) {
         const u1 = preparedUnlocked[i];
@@ -1003,17 +1279,12 @@ export function MostAdvancedStandardizationCalc() {
           qMap.set(u2.id, q2);
 
           const strat = `${u1.name}: ${q1.toLocaleString()} + ${u2.name}: ${q2.toLocaleString()} (Optimal Balance)`;
-          const desc = `Unlocked streams se best possible optimal formulation calculate karke fill ki gayi hai.`;
+          const desc = "Optimal formulation applied using unlocked streams to closely match target specifications.";
           candidates.push(evaluateSolution(qMap, strat, 3, desc));
         }
       }
     }
 
-    // Rank Candidates:
-    // 1. Exact Dual Balance (isExact: true) ALWAYS first
-    // 2. Lowest tier
-    // 3. Lowest total weighted error
-    // 4. Lowest cost / realistic volume
     candidates.sort((c1, c2) => {
       if (c1.isExact !== c2.isExact) {
         return c1.isExact ? -1 : 1;
@@ -1028,20 +1299,21 @@ export function MostAdvancedStandardizationCalc() {
     });
 
     if (candidates.length === 0) {
-      // Fallback: If no candidate was generated, return 0 for all unlocked rows
       const qMap = new Map<string, number>();
       unlockedRows.forEach((u) => qMap.set(u.id, 0));
       return {
         status: "success" as const,
         quantities: qMap,
         strategy: "Unlocked streams verified. No additional stream required.",
-        explanation: "Unlocked rows verify ho gayi hain, base milk specs target ke anusaar theek hain.",
+        explanation: "Unlocked streams verified. Current milk composition meets target requirements without additional ingredients.",
         finalQty: lockedQty,
         finalFat: Number(((lockedKgFat / lockedQty) * 100).toFixed(2)),
         finalSnf: Number(((lockedKgSnf / lockedQty) * 100).toFixed(2)),
         fatDiff: Number(((lockedKgFat / lockedQty) * 100 - Ft).toFixed(2)),
         snfDiff: Number(((lockedKgSnf / lockedQty) * 100 - St).toFixed(2)),
-        isExact: false
+        isExact: false,
+        isTargetBatchMode: false,
+        lockedQty
       };
     }
 
@@ -1056,9 +1328,11 @@ export function MostAdvancedStandardizationCalc() {
       finalSnf: best.finalSnf,
       fatDiff: best.fatDiff,
       snfDiff: best.snfDiff,
-      isExact: best.isExact
+      isExact: best.isExact,
+      isTargetBatchMode: false,
+      lockedQty
     };
-  }, [rows, currentTarget, getIngredientCost]);
+  }, [rows, currentTarget, calculationMode, targetBatchQty, targetBatchUnit, getIngredientCost]);
 
   // Execute 1-Click Auto-Balance on the Spreadsheet
   const handleAutoBalanceBatch = useCallback(() => {
@@ -1074,27 +1348,24 @@ export function MostAdvancedStandardizationCalc() {
       return;
     }
 
-    // Set row quantities: ONLY unlocked rows are updated!
-    // Locked rows are STRICTLY 100% UNTOUCHED!
+    // Set row quantities:
+    // If targetBatchMode with 0 locked milk: all rows in the spreadsheet get their calculated values!
+    // Otherwise locked rows stay untouched.
     const allocatedStreamsList: {
       id: string;
       name: string;
       qty: number;
       fat: number;
       snf: number;
+      isLocked?: boolean;
+      unit?: string;
     }[] = [];
 
     const updatedRows = rows.map((r) => {
       const isLocked = Boolean(r.isLocked ?? r.isBase);
-      // STRICT RULE: Never touch locked rows!
-      if (isLocked) {
-        return r;
-      }
-
-      const calculatedQty = sol.quantities.get(r.id) ?? 0;
+      const lower = r.name.toLowerCase();
       let f = r.fat;
       let s = r.snf;
-      const lower = r.name.toLowerCase();
       if (f === 0 && s === 0) {
         if (lower.includes("cream")) {
           f = 40.0;
@@ -1108,12 +1379,30 @@ export function MostAdvancedStandardizationCalc() {
         }
       }
 
+      const streamUnit = lower.includes("smp") || lower.includes("powder") ? "Kg" : targetBatchUnit;
+
+      if (isLocked && r.qty > 0 && sol.lockedQty > 0) {
+        allocatedStreamsList.push({
+          id: r.id,
+          name: r.name,
+          qty: r.qty,
+          fat: r.fat,
+          snf: r.snf,
+          isLocked: true,
+          unit: streamUnit
+        });
+        return r;
+      }
+
+      const calculatedQty = sol.quantities.get(r.id) ?? 0;
       allocatedStreamsList.push({
         id: r.id,
         name: r.name,
         qty: calculatedQty,
         fat: f,
-        snf: s
+        snf: s,
+        isLocked: false,
+        unit: streamUnit
       });
 
       return {
@@ -1141,6 +1430,7 @@ export function MostAdvancedStandardizationCalc() {
       fatDiff: sol.fatDiff,
       snfDiff: sol.snfDiff,
       isExact: sol.isExact,
+      isTargetBatchMode: sol.isTargetBatchMode,
       allocations: allocatedStreamsList
     });
 
@@ -1148,15 +1438,15 @@ export function MostAdvancedStandardizationCalc() {
     if (sol.isExact) {
       toast({
         title: "Batch Perfectly Balanced! 🎯",
-        description: `Target: ${currentTarget.targetFat}% F / ${currentTarget.targetSnf}% S achieved. ${sol.strategy}`
+        description: `Target: ${currentTarget.targetFat}% F / ${currentTarget.targetSnf}% S achieved for ${sol.finalQty.toLocaleString()} ${targetBatchUnit}.`
       });
     } else {
       toast({
-        title: "Optimized with Unlocked Rows 🥛",
+        title: "Optimized Formulation Applied 🥛",
         description: `Filled: ${sol.strategy}. Result: ${sol.finalFat}% Fat / ${sol.finalSnf}% SNF.`
       });
     }
-  }, [rows, solveUniversalBalance, currentTarget, activeFormula, toast]);
+  }, [rows, solveUniversalBalance, currentTarget, activeFormula, targetBatchUnit, toast]);
 
   // Cream Separation Calculations
   const creamSeparationSummary = useMemo(() => {
@@ -1202,8 +1492,74 @@ export function MostAdvancedStandardizationCalc() {
   }, [batchSummary, currentTarget, creamSeparationFat, creamSeparationSnf, costCream]);
 
   // ─────────────────────────────────────────────
-  // 📋 EXPORT ENGINES (EXCEL, CSV, PRINT, WHATSAPP)
+  // 📋 EXPORT ENGINES (EXCEL, CSV, PRINT, WHATSAPP, ADDITIONS RECIPE)
   // ─────────────────────────────────────────────
+  const handleCopyAdditions = useCallback(() => {
+    // If optimizerResult is available, use it; otherwise use active computedRows
+    const activeStreams = optimizerResult
+      ? optimizerResult.allocations.filter((a) => a.qty > 0)
+      : batchSummary.computedRows
+          .filter((r) => r.qty > 0)
+          .map((r) => ({
+            id: r.id,
+            name: r.name,
+            qty: r.qty,
+            fat: r.fat,
+            snf: r.snf,
+            isLocked: Boolean(r.isLocked ?? r.isBase),
+            unit: r.name.toLowerCase().includes("smp") || r.name.toLowerCase().includes("powder") ? "Kg" : targetBatchUnit
+          }));
+
+    if (activeStreams.length === 0) {
+      toast({
+        title: "No Additions Found",
+        description: "Please run Auto-Balance or enter stream quantities in the table first."
+      });
+      return;
+    }
+
+    const additions = activeStreams.filter((s) => !s.isLocked);
+    const inTank = activeStreams.filter((s) => s.isLocked);
+
+    let text = `🥛 DAIRY STANDARDIZATION BATCH SHEET\n`;
+    text += `Target Product: ${currentTarget.name}\n`;
+    text += `Standard Target: ${currentTarget.targetFat}% Fat | ${currentTarget.targetSnf}% SNF\n`;
+    text += `Calculation Mode: ${optimizerResult?.isTargetBatchMode ? "Target Batch Quantity (Fixed)" : "Base Milk Addition (Dynamic)"}\n`;
+    text += `Total Batch Quantity: ${(optimizerResult ? optimizerResult.finalQty : batchSummary.totalQty).toLocaleString()} ${targetBatchUnit}\n`;
+    text += `------------------------------------\n`;
+
+    if (inTank.length > 0) {
+      text += `📍 BASE MILK IN TANK:\n`;
+      inTank.forEach((item) => {
+        text += `• ${item.name}: ${item.qty.toLocaleString()} ${item.unit || targetBatchUnit} (${item.fat}% Fat, ${item.snf}% SNF)\n`;
+      });
+      text += `\n`;
+    }
+
+    text += `➕ REQUIRED ADDITIONS:\n`;
+    const toAdd = additions.length > 0 ? additions : activeStreams;
+    toAdd.forEach((item, idx) => {
+      text += `${idx + 1}. ${item.name}: ${item.qty.toLocaleString()} ${item.unit || targetBatchUnit} (${item.fat}% Fat, ${item.snf}% SNF)\n`;
+    });
+
+    text += `------------------------------------\n`;
+    text += `🎯 FINAL BATCH SUMMARY:\n`;
+    text += `• Total Volume/Weight: ${(optimizerResult ? optimizerResult.finalQty : batchSummary.totalQty).toLocaleString()} ${targetBatchUnit}\n`;
+    text += `• Resulting Fat: ${optimizerResult ? optimizerResult.finalFat : batchSummary.weightedFat}% (Target: ${currentTarget.targetFat}%)\n`;
+    text += `• Resulting SNF: ${optimizerResult ? optimizerResult.finalSnf : batchSummary.weightedSnf}% (Target: ${currentTarget.targetSnf}%)\n`;
+    text += `• Status: ${optimizerResult?.isExact || (batchSummary.isFatMatched && batchSummary.isSnfMatched) ? "Target 100% Matched ✓" : "Standardized"}\n`;
+    text += `------------------------------------\n`;
+    text += `Generated by DairyHub Standardization Calculator`;
+
+    navigator.clipboard.writeText(text);
+    setIsAdditionsCopied(true);
+    toast({
+      title: "Batch Additions Copied! 📋",
+      description: "Batch additions recipe copied to clipboard. Ready to paste anywhere."
+    });
+    setTimeout(() => setIsAdditionsCopied(false), 2500);
+  }, [optimizerResult, batchSummary, currentTarget, targetBatchUnit, toast]);
+
   const handleCopyExcelTsv = useCallback(() => {
     let tsv = "S.No\tComponent / Source\tQTY (L/Kg)\tFat%\tkg fat\tSnf%\tkg snf\tClr\tAcidity%\tkg Acidity\n";
 
@@ -1307,6 +1663,11 @@ Generated via DairyHub Advanced Standardization Engine`;
             <span className="text-[10px] font-mono text-sky-300 bg-sky-950/70 border border-sky-800/40 px-2 py-0.5 rounded-lg shrink-0">
               CLR: {currentTarget.expectedClr} ({activeFormula.a}F+{activeFormula.b})
             </span>
+
+            {/* Live Target Batch Qty & Unit Pill */}
+            <span className="text-[10px] font-mono font-bold text-emerald-300 bg-emerald-950/70 border border-emerald-800/40 px-2 py-0.5 rounded-lg shrink-0">
+              📦 Batch: {targetBatchQty > 0 ? `${targetBatchQty.toLocaleString()} ${targetBatchUnit}` : `By Input (${targetBatchUnit})`}
+            </span>
           </div>
 
           {/* Right: Dropdown Settings Button */}
@@ -1322,7 +1683,7 @@ Generated via DairyHub Advanced Standardization Engine`;
             )}
           >
             <Settings2 className="w-3.5 h-3.5 text-amber-400" />
-            <span>Target & Formula</span>
+            <span>Target, Qty & Formula</span>
             {isSettingsOpen ? (
               <ChevronUp className="w-3.5 h-3.5" />
             ) : (
@@ -1334,15 +1695,15 @@ Generated via DairyHub Advanced Standardization Engine`;
         {/* Collapsible Dropdown Content */}
         {isSettingsOpen && (
           <div className="pt-2.5 border-t border-slate-800 animate-fadeIn space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-slate-950/80 rounded-xl border border-slate-800">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 p-3 bg-slate-950/80 rounded-xl border border-slate-800">
               {/* 1. Custom Target Product Standard */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1">
-                    🎯 Custom Target Standard
+                    🎯 Target Product Standard
                   </span>
                   <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-700/50">
-                    Target CLR: <strong>{currentTarget.expectedClr}</strong>
+                    CLR: <strong>{currentTarget.expectedClr}</strong>
                   </span>
                 </div>
 
@@ -1429,7 +1790,110 @@ Generated via DairyHub Advanced Standardization Engine`;
                 </div>
               </div>
 
-              {/* 2. Custom SNF Formula */}
+              {/* 2. Calculation Mode & Target Batch Options */}
+              <div className="space-y-2 bg-emerald-950/20 p-2.5 rounded-xl border border-emerald-900/40">
+                <div className="flex items-center justify-between flex-wrap gap-1">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                    ⚙️ Calculation Mode & Quantity
+                  </span>
+                  <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-700">
+                    <button
+                      type="button"
+                      onClick={() => setCalculationMode("dynamic")}
+                      className={cn(
+                        "px-2 py-0.5 text-[9px] font-bold rounded transition-colors",
+                        calculationMode === "dynamic"
+                          ? "bg-emerald-500 text-slate-950 font-black shadow-xs"
+                          : "text-slate-400 hover:text-white"
+                      )}
+                    >
+                      🥛 Dynamic Base Milk
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCalculationMode("target")}
+                      className={cn(
+                        "px-2 py-0.5 text-[9px] font-bold rounded transition-colors",
+                        calculationMode === "target"
+                          ? "bg-emerald-500 text-slate-950 font-black shadow-xs"
+                          : "text-slate-400 hover:text-white"
+                      )}
+                    >
+                      🎯 Fixed Target Qty
+                    </button>
+                  </div>
+                </div>
+
+                {calculationMode === "target" ? (
+                  <>
+                    <div className="grid grid-cols-3 gap-2 pt-1">
+                      <div className="col-span-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800">
+                        <label className="text-[10px] text-emerald-300 font-bold block mb-0.5">Target Batch Qty</label>
+                        <Input
+                          type="number"
+                          step="any"
+                          inputMode="decimal"
+                          value={targetBatchQty === 0 ? "" : targetBatchQty}
+                          placeholder="e.g. 10000"
+                          onFocus={(e) => e.target.select()}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setTargetBatchQty(val === "" ? 0 : Math.max(0, parseFloat(val) || 0));
+                          }}
+                          className="h-7 text-xs font-mono font-black text-emerald-400 bg-slate-950 border-slate-700 focus:border-emerald-500 text-right px-2"
+                        />
+                      </div>
+                      <div className="bg-slate-900 p-1.5 rounded-xl border border-slate-800">
+                        <label className="text-[10px] text-teal-300 font-bold block mb-0.5">Unit (Ltr/Kg)</label>
+                        <Select
+                          value={targetBatchUnit}
+                          onValueChange={(val: "Ltr" | "Kg") => setTargetBatchUnit(val)}
+                        >
+                          <SelectTrigger className="h-7 text-xs font-mono font-black text-white bg-slate-950 border-slate-700 focus:border-emerald-500 px-2">
+                            <SelectValue placeholder="Unit" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-slate-900 border-slate-700 text-white">
+                            <SelectItem value="Ltr" className="font-bold text-xs text-white">Ltr (Liters)</SelectItem>
+                            <SelectItem value="Kg" className="font-bold text-xs text-white">Kg (Kilograms)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* Quick Batch Size Chips */}
+                    <div className="flex items-center gap-1 flex-wrap pt-0.5">
+                      <span className="text-[9px] text-slate-400 font-medium">Quick Qty:</span>
+                      {[1000, 2000, 5000, 10000, 15000, 20000].map((qty) => (
+                        <button
+                          key={qty}
+                          type="button"
+                          onClick={() => setTargetBatchQty(qty)}
+                          className={cn(
+                            "text-[9px] font-bold px-1.5 py-0.5 rounded-md transition-all border",
+                            targetBatchQty === qty
+                              ? "bg-emerald-500 text-slate-950 border-emerald-400 font-black shadow-xs"
+                              : "bg-slate-800/80 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white"
+                          )}
+                        >
+                          {qty >= 1000 ? `${qty / 1000}k` : qty} {targetBatchUnit}
+                        </button>
+                      ))}
+                    </div>
+
+                    <p className="text-[9px] text-emerald-200/80 leading-tight pt-0.5">
+                      💡 <strong>Fixed Batch Mode:</strong> Calculates the exact stream quantities required to produce precisely {targetBatchQty.toLocaleString()} {targetBatchUnit} matching target Fat & SNF.
+                    </p>
+                  </>
+                ) : (
+                  <div className="p-2 bg-slate-900/80 rounded-xl border border-slate-800 text-[10px] text-slate-300 space-y-1">
+                    <p>
+                      🥛 <strong>Dynamic Base Milk Mode (Standard):</strong> Enter your available milk quantity in the spreadsheet table. The optimizer will calculate required additions (e.g. Skim Milk, SMP, Cream) to balance the batch without restricting total volume.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Custom SNF Formula */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-sky-400 flex items-center gap-1">
@@ -1631,14 +2095,91 @@ Generated via DairyHub Advanced Standardization Engine`;
                   ⚡ Auto-Balance
                 </Button>
 
+                {/* Calculation Mode Toggle (Dynamic Base Milk vs Fixed Target Qty) */}
+                <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => setCalculationMode("dynamic")}
+                    className={cn(
+                      "px-2 sm:px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg transition-all flex items-center gap-1",
+                      calculationMode === "dynamic"
+                        ? "bg-white text-indigo-950 shadow-xs font-black"
+                        : "text-slate-600 hover:text-slate-900"
+                    )}
+                    title="Dynamic Base Milk: Calculate additions for milk in tank (volume expands naturally)"
+                  >
+                    🥛 Dynamic (Base Milk)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCalculationMode("target")}
+                    className={cn(
+                      "px-2 sm:px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg transition-all flex items-center gap-1",
+                      calculationMode === "target"
+                        ? "bg-white text-indigo-950 shadow-xs font-black"
+                        : "text-slate-600 hover:text-slate-900"
+                    )}
+                    title="Fixed Target Batch: Formulate exact stream quantities for a specific batch size"
+                  >
+                    🎯 Target Batch Qty
+                  </button>
+                </div>
+
+                {/* Inline Target Batch Input when in Target mode */}
+                {calculationMode === "target" && (
+                  <div className="flex items-center gap-1 bg-amber-50 px-1.5 py-0.5 rounded-xl border border-amber-300">
+                    <span className="text-[10px] font-extrabold text-amber-900 pl-0.5">Target:</span>
+                    <Input
+                      type="number"
+                      step="any"
+                      inputMode="decimal"
+                      value={targetBatchQty === 0 ? "" : targetBatchQty}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setTargetBatchQty(v === "" ? 0 : Math.max(0, parseFloat(v) || 0));
+                      }}
+                      placeholder="10000"
+                      className="h-6 sm:h-7 w-16 sm:w-20 text-xs font-mono font-black text-amber-950 bg-white border-amber-300 px-1.5 text-right"
+                      title="Set desired final batch quantity"
+                    />
+                  </div>
+                )}
+
+                {/* Toolbar Unit Dropdown */}
+                <div className="flex items-center gap-1 bg-slate-100 px-1 py-0.5 rounded-xl border border-slate-200">
+                  <span className="text-[10px] font-extrabold text-slate-600 pl-1">Unit:</span>
+                  <Select
+                    value={targetBatchUnit}
+                    onValueChange={(val: "Ltr" | "Kg") => setTargetBatchUnit(val)}
+                  >
+                    <SelectTrigger className="h-6 sm:h-7 text-[10px] sm:text-xs font-black bg-white border-slate-300 w-20 sm:w-24 rounded-lg px-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-slate-200 text-slate-900">
+                      <SelectItem value="Ltr" className="font-bold text-xs text-slate-900">Ltr (Liter)</SelectItem>
+                      <SelectItem value="Kg" className="font-bold text-xs text-slate-900">Kg (Kilo)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleZeroAllRows}
+                  className="h-7 sm:h-8 text-[11px] sm:text-xs font-bold text-rose-700 hover:text-rose-900 hover:bg-rose-50 gap-1 rounded-xl"
+                  title="Set all stream quantities to zero"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-rose-600" /> Zero All (0)
+                </Button>
+
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={handleZeroAllExceptBase1}
-                  className="h-7 sm:h-8 text-[11px] sm:text-xs font-bold text-slate-600 hover:text-red-700 gap-1 rounded-xl"
-                  title="1st Base Milk ko chhodkar sabhi streams ki quantity 0 karein"
+                  className="h-7 sm:h-8 text-[11px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 gap-1 rounded-xl"
+                  title="Reset addition streams to zero while keeping Base Milk"
                 >
-                  <RotateCcw className="w-3.5 h-3.5 text-rose-500" /> Zero All
+                  <RotateCcw className="w-3.5 h-3.5 text-slate-400" /> Zero Streams
                 </Button>
 
                 <Button
@@ -1646,6 +2187,7 @@ Generated via DairyHub Advanced Standardization Engine`;
                   variant="ghost"
                   onClick={handleResetToDefault}
                   className="h-7 sm:h-8 text-[11px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 gap-1 rounded-xl"
+                  title="Reset entire template to default"
                 >
                   <RotateCcw className="w-3.5 h-3.5" /> Reset
                 </Button>
@@ -1718,49 +2260,81 @@ Generated via DairyHub Advanced Standardization Engine`;
             </div>
           </div>
 
-          {/* OPTIMIZER RESULT BANNER (PERSISTENT HIGH-ACCURACY DISPLAY) */}
+          {/* OPTIMIZER RESULT BANNER (PERSISTENT HIGH-ACCURACY DISPLAY & BATCH ADDITIONS) */}
           {optimizerResult && (
             <div
               className={cn(
-                "p-3.5 sm:p-4 rounded-2xl border shadow-sm transition-all animate-in fade-in slide-in-from-top-2 duration-300 w-full",
+                "p-4 sm:p-5 rounded-2xl border shadow-lg transition-all animate-in fade-in slide-in-from-top-2 duration-300 w-full space-y-3.5",
                 optimizerResult.isExact
-                  ? "bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 border-emerald-500/60 text-white"
-                  : "bg-gradient-to-r from-slate-900 via-amber-950/80 to-slate-900 border-amber-500/60 text-white"
+                  ? "bg-gradient-to-br from-slate-950 via-emerald-950/70 to-slate-900 border-emerald-500/60 text-white"
+                  : "bg-gradient-to-br from-slate-950 via-amber-950/60 to-slate-900 border-amber-500/60 text-white"
               )}
             >
-              <div className="flex items-center justify-between gap-2 pb-2 border-b border-white/10">
+              {/* Header: Title, Status Badge & Prominent Copy Action */}
+              <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10 flex-wrap">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
                     className={cn(
-                      "px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shrink-0",
-                      optimizerResult.isExact ? "bg-emerald-500 text-slate-950" : "bg-amber-500 text-slate-950"
+                      "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shrink-0 shadow-xs",
+                      optimizerResult.isExact ? "bg-emerald-400 text-slate-950" : "bg-amber-400 text-slate-950"
                     )}
                   >
                     {optimizerResult.isExact ? "🎯 100% Target Matched" : "⚡ Optimal Allocation"}
                   </span>
-                  <span className="text-xs sm:text-sm font-extrabold text-white">
+                  <span className="text-sm sm:text-base font-black text-white tracking-tight">
                     {optimizerResult.title}
                   </span>
                 </div>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setOptimizerResult(null)}
-                  className="h-6 w-6 p-0 text-white/60 hover:text-white rounded-md shrink-0"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </Button>
+
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-white/10 border-white/20 text-slate-300 text-[10px] font-semibold hidden sm:inline-flex">
+                    {optimizerResult.isTargetBatchMode ? "🎯 Target Batch Mode" : "🥛 Dynamic Base Milk"}
+                  </Badge>
+                  <Button
+                    size="sm"
+                    onClick={handleCopyAdditions}
+                    className={cn(
+                      "h-8 px-3 text-xs font-black rounded-xl shadow-md gap-1.5 active:scale-95 transition-all border",
+                      isAdditionsCopied
+                        ? "bg-emerald-400 text-slate-950 border-emerald-300"
+                        : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 border-emerald-400/50"
+                    )}
+                    title="Copy required additions recipe to clipboard"
+                  >
+                    {isAdditionsCopied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 stroke-[3] text-slate-950" />
+                        Copied! ✓
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-slate-950" />
+                        📋 Copy Additions
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setOptimizerResult(null)}
+                    className="h-8 w-8 p-0 text-white/60 hover:text-white hover:bg-white/10 rounded-xl shrink-0"
+                    title="Close result"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
 
-              {/* Metric Chips */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2.5">
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
+              {/* Composition Metric Chips */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div className="bg-black/50 p-2.5 rounded-xl border border-white/10">
                   <div className="text-[10px] text-slate-400 font-medium">Target Standard</div>
                   <div className="text-xs sm:text-sm font-mono font-black text-amber-400">
                     {currentTarget.targetFat}% F | {currentTarget.targetSnf}% S
                   </div>
+                  <div className="text-[10px] text-slate-400 truncate">{currentTarget.name}</div>
                 </div>
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
+                <div className="bg-black/50 p-2.5 rounded-xl border border-white/10">
                   <div className="text-[10px] text-slate-400 font-medium">Achieved Composition</div>
                   <div
                     className={cn(
@@ -1770,42 +2344,87 @@ Generated via DairyHub Advanced Standardization Engine`;
                   >
                     {optimizerResult.finalFat}% F | {optimizerResult.finalSnf}% S
                   </div>
+                  <div className="text-[10px] text-emerald-400">
+                    {optimizerResult.isExact ? "✓ 100% matched" : "Optimal"}
+                  </div>
                 </div>
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
+                <div className="bg-black/50 p-2.5 rounded-xl border border-white/10">
                   <div className="text-[10px] text-slate-400 font-medium">Variance vs Target</div>
                   <div className="text-xs sm:text-sm font-mono font-black text-amber-300">
                     {optimizerResult.fatDiff > 0 ? `+${optimizerResult.fatDiff}` : optimizerResult.fatDiff}% F | {optimizerResult.snfDiff > 0 ? `+${optimizerResult.snfDiff}` : optimizerResult.snfDiff}% S
                   </div>
+                  <div className="text-[10px] text-slate-400">Tolerance: ±0.01%</div>
                 </div>
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
-                  <div className="text-[10px] text-slate-400 font-medium">Final Batch Volume</div>
+                <div className="bg-black/50 p-2.5 rounded-xl border border-white/10">
+                  <div className="text-[10px] text-slate-400 font-medium">Final Batch {targetBatchUnit === "Kg" ? "Weight" : "Volume"}</div>
                   <div className="text-xs sm:text-sm font-mono font-black text-white">
-                    {optimizerResult.finalQty.toLocaleString()} L
+                    {optimizerResult.finalQty.toLocaleString()} {targetBatchUnit}
                   </div>
+                  <div className="text-[10px] text-slate-400">Total Standardized Batch</div>
                 </div>
               </div>
 
-              {/* Stream Allocations Detail (What got filled in the rows) */}
-              <div className="mt-2.5 pt-2 border-t border-white/10 flex flex-wrap items-center gap-2">
-                <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider">
-                  Filled into Unlocked Rows:
-                </span>
-                {optimizerResult.allocations.map((a, aIdx) => (
-                  <span
-                    key={`${a.id}-${aIdx}`}
-                    className="text-xs font-mono font-bold px-2 py-0.5 rounded-lg bg-white/10 border border-white/20 text-white flex items-center gap-1.5"
-                  >
-                    <span className="text-amber-300 font-sans">{a.name}:</span>
-                    <strong className={a.qty > 0 ? "text-emerald-300 font-black" : "text-slate-400 font-normal"}>
-                      {a.qty > 0 ? `${a.qty.toLocaleString()} L/Kg` : "0 (Not needed)"}
-                    </strong>
+              {/* 🥛 EXACT INGREDIENTS TO ADD (FINAL RESULT DISPLAY) */}
+              <div className="bg-black/60 rounded-xl p-3 border border-white/10 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="text-xs font-black text-amber-300 flex items-center gap-1.5 uppercase tracking-wide">
+                    <Milk className="w-4 h-4 text-amber-400" />
+                    Required Ingredients To Add In Batch:
+                  </div>
+                  <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">
+                    Spreadsheet rows have also been auto-updated
                   </span>
-                ))}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                  {optimizerResult.allocations
+                    .filter((a) => a.qty > 0)
+                    .map((a, aIdx) => (
+                      <div
+                        key={`${a.id}-${aIdx}`}
+                        className={cn(
+                          "p-3 rounded-xl border transition-all flex flex-col justify-between gap-1.5 shadow-xs",
+                          a.isLocked
+                            ? "bg-slate-900/90 border-slate-700/80 text-slate-200"
+                            : "bg-gradient-to-r from-emerald-950/90 via-slate-900/90 to-teal-950/90 border-emerald-500/50 text-white"
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="font-extrabold text-xs text-white truncate">
+                            {a.name}
+                          </span>
+                          <Badge
+                            className={cn(
+                              "text-[9px] px-2 py-0.5 font-bold",
+                              a.isLocked
+                                ? "bg-slate-700 text-slate-200"
+                                : "bg-emerald-500 text-slate-950 font-black shadow-xs"
+                            )}
+                          >
+                            {a.isLocked ? "In Tank (Base)" : "➕ Add This"}
+                          </Badge>
+                        </div>
+                        <div className="flex items-baseline justify-between pt-1 border-t border-white/10">
+                          <span className="text-base sm:text-lg font-mono font-black text-emerald-300">
+                            {a.qty.toLocaleString()} <span className="text-xs text-slate-300 font-sans">{a.unit || targetBatchUnit}</span>
+                          </span>
+                          <span className="text-[11px] font-mono font-bold text-amber-300">
+                            {a.fat}% F · {a.snf}% S
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
               </div>
 
-              <p className="text-[11px] text-slate-300/95 pt-2 leading-relaxed">
-                💡 <strong>Optimizer Detail:</strong> {optimizerResult.explanation}
-              </p>
+              <div className="flex items-center justify-between pt-1 text-[11px] text-slate-300/90 leading-relaxed flex-wrap gap-2">
+                <span>
+                  💡 <strong>Optimizer Detail:</strong> {optimizerResult.explanation}
+                </span>
+                <span className="text-emerald-400 text-[10px] font-semibold">
+                  ✓ Ready to copy & paste into plant log, WhatsApp, or ERP
+                </span>
+              </div>
             </div>
           )}
 
@@ -1851,7 +2470,7 @@ Generated via DairyHub Advanced Standardization Engine`;
                           </span>
                         </th>
                         <th className="py-2.5 px-3 text-left min-w-[140px]">Component / Stream Name</th>
-                        <th className="py-2.5 px-3 text-right min-w-[105px]">QTY (L / Kg)</th>
+                        <th className="py-2.5 px-3 text-right min-w-[105px]">QTY ({targetBatchUnit})</th>
                         <th className="py-2.5 px-2 text-right min-w-[80px]">Fat %</th>
                         <th className="py-2.5 px-2.5 text-right min-w-[90px] bg-amber-50/50 text-amber-900 font-mono">
                           Kg Fat
@@ -2052,7 +2671,16 @@ Generated via DairyHub Advanced Standardization Engine`;
                           Grand Total
                         </td>
                         <td className="py-2.5 px-3 text-right text-white font-mono text-xs sm:text-sm">
-                          {batchSummary.totalQty.toLocaleString()}
+                          {batchSummary.totalQty.toLocaleString()} {targetBatchUnit}
+                          {targetBatchUnit === "Ltr" ? (
+                            <span className="block text-[9px] text-slate-400 font-normal">
+                              (~{(batchSummary.totalQty * 1.03).toFixed(0)} kg)
+                            </span>
+                          ) : (
+                            <span className="block text-[9px] text-slate-400 font-normal">
+                              (~{(batchSummary.totalQty / 1.03).toFixed(0)} L)
+                            </span>
+                          )}
                         </td>
                         <td className="py-2.5 px-2 text-right text-amber-300 font-mono text-xs sm:text-sm">
                           {batchSummary.weightedFat}%
@@ -2156,7 +2784,7 @@ Generated via DairyHub Advanced Standardization Engine`;
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <div>
-                      <label className="text-[10px] text-slate-500 font-bold block mb-0.5">QTY (L/Kg)</label>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-0.5">QTY ({targetBatchUnit})</label>
                       <Input
                         type="number"
                         step="any"
@@ -2245,8 +2873,11 @@ Generated via DairyHub Advanced Standardization Engine`;
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 pt-1 border-t border-slate-800 text-xs font-mono">
               <div className="bg-slate-800/60 p-2 rounded-xl">
-                <span className="text-[10px] text-slate-400 font-sans block">Total Batch QTY</span>
-                <strong className="text-white text-sm">{batchSummary.totalQty.toLocaleString()} L</strong>
+                <span className="text-[10px] text-slate-400 font-sans block">Total Batch QTY ({targetBatchUnit})</span>
+                <strong className="text-white text-sm">{batchSummary.totalQty.toLocaleString()} {targetBatchUnit}</strong>
+                <span className="text-[10px] text-slate-400 block">
+                  {targetBatchUnit === "Ltr" ? `~${(batchSummary.totalQty * 1.03).toFixed(0)} kg wt` : `~${(batchSummary.totalQty / 1.03).toFixed(0)} L vol`}
+                </span>
               </div>
               <div className="bg-amber-950/40 p-2 rounded-xl border border-amber-700/30">
                 <span className="text-[10px] text-amber-300 font-sans block">Final Fat %</span>
@@ -2453,8 +3084,8 @@ Generated via DairyHub Advanced Standardization Engine`;
             </div>
           </div>
 
-          {/* 🎯 DIAGNOSTICS TILES */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 w-full min-w-0 max-w-full">
+          {/* 🎯 DIAGNOSTICS TILES (4-METRIC BALANCED GRID) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full min-w-0 max-w-full">
             {/* Card 1: Fat Balance */}
             <Card className="rounded-2xl border-slate-200 shadow-xs bg-white w-full min-w-0 max-w-full">
               <CardHeader className="p-3 bg-amber-50/80 rounded-t-2xl border-b border-amber-100">
@@ -2611,25 +3242,6 @@ Generated via DairyHub Advanced Standardization Engine`;
                   </strong>
                 </div>
               </CardContent>
-            </Card>
-
-            {/* Card 5: Quick Auto-Balance Call-to-Action */}
-            <Card className="rounded-2xl border-amber-300 shadow-xs bg-gradient-to-br from-amber-50 via-white to-orange-50 flex flex-col justify-between p-3 w-full min-w-0 max-w-full">
-              <div className="space-y-1">
-                <span className="text-[10px] font-black uppercase text-amber-800 tracking-wider flex items-center gap-1">
-                  <Zap className="w-3 h-3 text-amber-600 fill-amber-500" />
-                  Auto-Balance
-                </span>
-                <p className="text-[11px] text-slate-700 leading-snug">
-                  🔒 <strong>Locked rows</strong> (Base Milk) remain untouched. 🔓 <strong>Unlocked rows</strong> are auto-balanced.
-                </p>
-              </div>
-              <Button
-                onClick={handleAutoBalanceBatch}
-                className="w-full mt-2 h-7 sm:h-8 text-xs font-black bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-xl shadow-xs gap-1"
-              >
-                ⚡ Run Optimizer
-              </Button>
             </Card>
           </div>
         </TabsContent>

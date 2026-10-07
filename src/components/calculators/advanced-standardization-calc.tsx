@@ -404,6 +404,8 @@ export function AdvancedStandardizationCalc() {
   const [selectedPresetId, setSelectedPresetId] = useState<string>("sweet-curd");
   const [targetBatchVolume, setTargetBatchVolume] = useState<number>(1000);
   const [targetUnit, setTargetUnit] = useState<"liters" | "kg">("liters");
+  const [calculationMode, setCalculationMode] = useState<"dynamic" | "target">("dynamic");
+  const [isAdditionsCopied, setIsAdditionsCopied] = useState<boolean>(false);
   const [customDensity, setCustomDensity] = useState<number>(1.065);
   const [autoDensity, setAutoDensity] = useState<boolean>(true);
 
@@ -445,11 +447,20 @@ export function AdvancedStandardizationCalc() {
     stabDiff: number;
     tsDiff: number;
     isExact: boolean;
+    isTargetBatchMode?: boolean;
+    baseMilkQty?: number;
     allocations: {
       id: string;
       name: string;
       qty: number;
       ts: number;
+      fat?: number;
+      snf?: number;
+      sugar?: number;
+      stabilizer?: number;
+      costRate?: number;
+      isLocked?: boolean;
+      unit?: string;
     }[];
   } | null>(null);
 
@@ -864,26 +875,12 @@ export function AdvancedStandardizationCalc() {
   }, [handleSelectPreset, toast]);
 
   // ─────────────────────────────────────────────
-  // ⚡ 1-CLICK MULTI-SOLIDS MASS BALANCE SOLVER
+  // ⚡ 1-CLICK MULTI-SOLIDS MASS BALANCE SOLVER (DUAL MODES)
   // ─────────────────────────────────────────────
   const handleAutoSolveBatch = useCallback(() => {
-    const W = targetWeightKg;
-    if (W <= 0) {
-      toast({
-        title: "Target Batch Size Required",
-        description: "Please specify target batch quantity greater than 0.",
-        variant: "destructive"
-      });
-      return;
-    }
+    const isTargetMode = calculationMode === "target";
 
-    // 1. Calculate Required Solids Mass (kg)
-    const reqFatKg = (W * targetFat) / 100;
-    const reqSnfKg = (W * targetSnf) / 100;
-    const reqSugarKg = (W * targetSugar) / 100;
-    const reqStabKg = (W * targetStabilizer) / 100;
-
-    // 2. Identify Locked vs Unlocked streams
+    // 1. Identify rows and roles
     const lockedRows = rows.filter((r) => r.isLocked);
     let lockedQty = 0;
     let lockedFatKg = 0;
@@ -900,122 +897,212 @@ export function AdvancedStandardizationCalc() {
       lockedStabKg += (q * r.stabilizer) / 100;
     });
 
-    const netWeightRemaining = Math.max(0, W - lockedQty);
-    const deficitFatKg = Math.max(0, reqFatKg - lockedFatKg);
-    const deficitSnfKg = Math.max(0, reqSnfKg - lockedSnfKg);
-    const deficitSugarKg = Math.max(0, reqSugarKg - lockedSugarKg);
-    const deficitStabKg = Math.max(0, reqStabKg - lockedStabKg);
-
-    // 3. Find Unlocked Candidate Streams
-    const unlockedRows = rows.filter((r) => !r.isLocked);
-
-    // Find Sugar row (highest sugar content)
-    const sugarRow = unlockedRows.find(
+    // Find stream candidates
+    const sugarRow = rows.find(
       (r) => r.sugar >= 90 || r.role === "sweetener" || r.name.toLowerCase().includes("sugar")
     );
-    // Find Stabilizer row
-    const stabRow = unlockedRows.find(
+    const stabRow = rows.find(
       (r) => r.stabilizer >= 50 || r.role === "stabilizer" || r.name.toLowerCase().includes("stab")
     );
-    // Find Fat booster (Cream / Butteroil)
-    const creamRow = unlockedRows.find(
+    const creamRow = rows.find(
       (r) => r.fat >= 25 || r.role === "fat_booster" || r.name.toLowerCase().includes("cream")
     );
-    // Find SNF booster (SMP / WMP)
-    const smpRow = unlockedRows.find(
+    const smpRow = rows.find(
       (r) => r.snf >= 70 || r.role === "snf_booster" || r.name.toLowerCase().includes("smp")
     );
-    // Find Base Liquid Milk row
-    const baseMilkRow = unlockedRows.find(
+    const waterRow = rows.find(
+      (r) => r.role === "diluent" || r.name.toLowerCase().includes("water")
+    );
+    const baseMilkRow = rows.find(
       (r) =>
         r.isBase ||
         r.role === "base_milk" ||
-        (r !== sugarRow && r !== stabRow && r !== creamRow && r !== smpRow && r.fat < 10 && r.snf < 15 && !r.name.toLowerCase().includes("water"))
-    );
-    // Find Water row
-    const waterRow = unlockedRows.find(
-      (r) => r.role === "diluent" || r.name.toLowerCase().includes("water")
+        (r !== sugarRow && r !== stabRow && r !== creamRow && r !== smpRow && r !== waterRow && r.fat < 10 && r.snf < 15)
     );
 
-    // 4. Solve dry solids first
-    let sugarAllocated = 0;
-    if (sugarRow && deficitSugarKg > 0) {
-      const sugarPct = sugarRow.sugar || 100;
-      sugarAllocated = Number(((deficitSugarKg * 100) / sugarPct).toFixed(2));
-    }
-
-    let stabAllocated = 0;
-    if (stabRow && deficitStabKg > 0) {
-      const stabPct = stabRow.stabilizer || 100;
-      stabAllocated = Number(((deficitStabKg * 100) / stabPct).toFixed(2));
-    }
-
-    // Remaining liquid space
-    const liquidWeightNeeded = Math.max(0, netWeightRemaining - sugarAllocated - stabAllocated);
-
-    // Base Milk Specs
+    // Stream specs
     const bFat = baseMilkRow ? baseMilkRow.fat : 4.0;
     const bSnf = baseMilkRow ? baseMilkRow.snf : 8.5;
-
-    // Fat Booster Specs
     const cFat = creamRow ? creamRow.fat : 40.0;
     const cSnf = creamRow ? creamRow.snf : 5.4;
-
-    // SNF Booster Specs
-    const sSnf = smpRow ? smpRow.snf : 96.0;
     const sFat = smpRow ? smpRow.fat : 1.0;
+    const sSnf = smpRow ? smpRow.snf : 96.0;
+    const sugPct = sugarRow ? (sugarRow.sugar || 100) : 100;
+    const stabPct = stabRow ? (stabRow.stabilizer || 100) : 100;
 
-    // Fat & SNF delivered by base liquid milk if it occupied the full liquid weight
-    const baseFatDelivered = (liquidWeightNeeded * bFat) / 100;
-    const baseSnfDelivered = (liquidWeightNeeded * bSnf) / 100;
-
-    const fatGap = deficitFatKg - baseFatDelivered;
-    const snfGap = deficitSnfKg - baseSnfDelivered;
-
+    let totalAllocatedBatch = 0;
+    let sugarAllocated = 0;
+    let stabAllocated = 0;
     let creamAllocated = 0;
     let smpAllocated = 0;
     let baseMilkAllocated = 0;
     let waterAllocated = 0;
 
-    if (creamRow && fatGap > 0) {
-      const denomF = (cFat - bFat) / 100;
-      if (denomF > 0) creamAllocated = Number((fatGap / denomF).toFixed(2));
+    if (!isTargetMode) {
+      // ═════════════════════════════════════════════════
+      // 🥛 DYNAMIC MODE (EXPANDS FROM IN-TANK BASE MILK)
+      // ═════════════════════════════════════════════════
+      const existingBaseQty = (baseMilkRow && baseMilkRow.qty > 0)
+        ? baseMilkRow.qty
+        : (lockedQty > 0 ? lockedQty : (rows.find((r) => r.qty > 0 && r !== sugarRow && r !== stabRow)?.qty || 0));
+
+      const effectiveBaseQty = existingBaseQty > 0 ? existingBaseQty : (targetBatchVolume > 0 ? targetBatchVolume : 1000);
+
+      // Desired dry solids ratios
+      const fSugar = targetSugar / sugPct;
+      const fStab = targetStabilizer / stabPct;
+      const L_frac = Math.max(0.1, 1 - fSugar - fStab);
+
+      // Linear balance on liquid phase:
+      const RF = targetFat - L_frac * bFat;
+      const RS = targetSnf - L_frac * bSnf;
+      const M11 = cFat - bFat;
+      const M12 = sFat - bFat;
+      const M21 = cSnf - bSnf;
+      const M22 = sSnf - bSnf;
+
+      const det = M11 * M22 - M12 * M21;
+      let xc = 0;
+      let xs = 0;
+
+      if (Math.abs(det) > 1e-6) {
+        xc = (RF * M22 - RS * M12) / det;
+        xs = (M11 * RS - M21 * RF) / det;
+      }
+
+      // Handle non-negative constraints
+      if (xc >= 0 && xs >= 0) {
+        const xb = Math.max(0.05, L_frac - xc - xs);
+        totalAllocatedBatch = effectiveBaseQty / xb;
+        baseMilkAllocated = effectiveBaseQty;
+        creamAllocated = Number((xc * totalAllocatedBatch).toFixed(2));
+        smpAllocated = Number((xs * totalAllocatedBatch).toFixed(2));
+      } else if (xc < 0 && xs >= 0) {
+        xc = 0;
+        const xb = Math.min(L_frac, Math.max(0.05, targetFat / bFat));
+        totalAllocatedBatch = effectiveBaseQty / xb;
+        baseMilkAllocated = effectiveBaseQty;
+        creamAllocated = 0;
+        const snfReq = (totalAllocatedBatch * targetSnf) / 100;
+        const snfFromBase = (effectiveBaseQty * bSnf) / 100;
+        smpAllocated = Math.max(0, Number(((snfReq - snfFromBase) / (sSnf / 100)).toFixed(2)));
+      } else {
+        xs = 0;
+        const xb = Math.min(L_frac, Math.max(0.05, targetSnf / bSnf));
+        totalAllocatedBatch = effectiveBaseQty / xb;
+        baseMilkAllocated = effectiveBaseQty;
+        smpAllocated = 0;
+        const fatReq = (totalAllocatedBatch * targetFat) / 100;
+        const fatFromBase = (effectiveBaseQty * bFat) / 100;
+        creamAllocated = Math.max(0, Number(((fatReq - fatFromBase) / (cFat / 100)).toFixed(2)));
+      }
+
+      sugarAllocated = Number(((totalAllocatedBatch * targetSugar) / sugPct).toFixed(2));
+      stabAllocated = Number(((totalAllocatedBatch * targetStabilizer) / stabPct).toFixed(2));
+
+      const liquidTotal = baseMilkAllocated + creamAllocated + smpAllocated + sugarAllocated + stabAllocated;
+      if (waterRow && liquidTotal < totalAllocatedBatch) {
+        waterAllocated = Number((totalAllocatedBatch - liquidTotal).toFixed(2));
+      }
+    } else {
+      // ═════════════════════════════════════════════════
+      // 🎯 TARGET BATCH MODE (EXACT SPECIFIED VOLUME)
+      // ═════════════════════════════════════════════════
+      const W = targetWeightKg > 0 ? targetWeightKg : 1000;
+      totalAllocatedBatch = W;
+
+      const reqFatKg = (W * targetFat) / 100;
+      const reqSnfKg = (W * targetSnf) / 100;
+      const reqSugarKg = (W * targetSugar) / 100;
+      const reqStabKg = (W * targetStabilizer) / 100;
+
+      const netWeightRemaining = Math.max(0, W - lockedQty);
+      const deficitFatKg = Math.max(0, reqFatKg - lockedFatKg);
+      const deficitSnfKg = Math.max(0, reqSnfKg - lockedSnfKg);
+      const deficitSugarKg = Math.max(0, reqSugarKg - lockedSugarKg);
+      const deficitStabKg = Math.max(0, reqStabKg - lockedStabKg);
+
+      if (sugarRow && deficitSugarKg > 0) {
+        sugarAllocated = Number(((deficitSugarKg * 100) / sugPct).toFixed(2));
+      }
+      if (stabRow && deficitStabKg > 0) {
+        stabAllocated = Number(((deficitStabKg * 100) / stabPct).toFixed(2));
+      }
+
+      const liquidWeightNeeded = Math.max(0, netWeightRemaining - sugarAllocated - stabAllocated);
+
+      const baseFatDelivered = (liquidWeightNeeded * bFat) / 100;
+      const baseSnfDelivered = (liquidWeightNeeded * bSnf) / 100;
+
+      const fatGap = deficitFatKg - baseFatDelivered;
+      const snfGap = deficitSnfKg - baseSnfDelivered;
+
+      if (creamRow && fatGap > 0) {
+        const denomF = (cFat - bFat) / 100;
+        if (denomF > 0) creamAllocated = Number((fatGap / denomF).toFixed(2));
+      }
+
+      if (smpRow && snfGap > 0) {
+        const denomS = (sSnf - bSnf) / 100;
+        if (denomS > 0) smpAllocated = Number((snfGap / denomS).toFixed(2));
+      }
+
+      baseMilkAllocated = Math.max(0, Number((liquidWeightNeeded - creamAllocated - smpAllocated).toFixed(2)));
+
+      const currentSum = lockedQty + sugarAllocated + stabAllocated + creamAllocated + smpAllocated + baseMilkAllocated;
+      if (waterRow && currentSum < W) {
+        waterAllocated = Number((W - currentSum).toFixed(2));
+      }
     }
 
-    if (smpRow && snfGap > 0) {
-      const denomS = (sSnf - bSnf) / 100;
-      if (denomS > 0) smpAllocated = Number((snfGap / denomS).toFixed(2));
-    }
-
-    baseMilkAllocated = Math.max(0, liquidWeightNeeded - creamAllocated - smpAllocated);
-
-    // If liquidWeightNeeded exceeds base milk + adjusters, fill with water if water row exists
-    const currentSum =
-      lockedQty + sugarAllocated + stabAllocated + creamAllocated + smpAllocated + baseMilkAllocated;
-    if (waterRow && currentSum < W) {
-      waterAllocated = Number((W - currentSum).toFixed(2));
-    }
-
-    // 5. Update rows with new allocated quantities
-    const newAllocations: { id: string; name: string; qty: number; ts: number }[] = [];
+    // 5. Update rows state
+    const newAllocations: {
+      id: string;
+      name: string;
+      qty: number;
+      ts: number;
+      fat?: number;
+      snf?: number;
+      sugar?: number;
+      stabilizer?: number;
+      costRate?: number;
+      isLocked?: boolean;
+      unit?: string;
+    }[] = [];
 
     const updatedRows = rows.map((r) => {
-      if (r.isLocked) return r;
+      let alloc = r.qty;
+      const isStreamLocked = Boolean(r.isLocked);
 
-      let alloc = 0;
-      if (sugarRow && r.id === sugarRow.id) alloc = sugarAllocated;
-      else if (stabRow && r.id === stabRow.id) alloc = stabAllocated;
-      else if (creamRow && r.id === creamRow.id) alloc = creamAllocated;
-      else if (smpRow && r.id === smpRow.id) alloc = smpAllocated;
-      else if (baseMilkRow && r.id === baseMilkRow.id) alloc = baseMilkAllocated;
-      else if (waterRow && r.id === waterRow.id) alloc = waterAllocated;
+      if (!isStreamLocked) {
+        if (sugarRow && r.id === sugarRow.id) alloc = sugarAllocated;
+        else if (stabRow && r.id === stabRow.id) alloc = stabAllocated;
+        else if (creamRow && r.id === creamRow.id) alloc = creamAllocated;
+        else if (smpRow && r.id === smpRow.id) alloc = smpAllocated;
+        else if (baseMilkRow && r.id === baseMilkRow.id) alloc = baseMilkAllocated;
+        else if (waterRow && r.id === waterRow.id) alloc = waterAllocated;
+      }
+
+      const streamUnit =
+        targetUnit === "kg"
+          ? "Kg"
+          : r.role === "sweetener" || r.role === "stabilizer" || r.role === "snf_booster" || r.name.toLowerCase().includes("smp") || r.name.toLowerCase().includes("sugar") || r.name.toLowerCase().includes("stab")
+          ? "Kg"
+          : "Ltr";
 
       if (alloc > 0) {
         newAllocations.push({
           id: r.id,
           name: r.name,
           qty: alloc,
-          ts: r.ts
+          ts: r.ts,
+          fat: r.fat,
+          snf: r.snf,
+          sugar: r.sugar,
+          stabilizer: r.stabilizer,
+          costRate: r.costRate,
+          isLocked: isStreamLocked || Boolean(r.isBase),
+          unit: streamUnit
         });
       }
 
@@ -1027,9 +1114,7 @@ export function AdvancedStandardizationCalc() {
 
     setRows(updatedRows);
 
-    // Verification metrics
-    const totalAllocatedBatch =
-      lockedQty + sugarAllocated + stabAllocated + creamAllocated + smpAllocated + baseMilkAllocated + waterAllocated;
+    // Compute final verified metrics
     const finalFatKg =
       lockedFatKg +
       (creamAllocated * cFat) / 100 +
@@ -1040,13 +1125,16 @@ export function AdvancedStandardizationCalc() {
       (creamAllocated * cSnf) / 100 +
       (smpAllocated * sSnf) / 100 +
       (baseMilkAllocated * bSnf) / 100;
-    const finalSugarKg = lockedSugarKg + (sugarAllocated * (sugarRow?.sugar || 100)) / 100;
-    const finalStabKg = lockedStabKg + (stabAllocated * (stabRow?.stabilizer || 100)) / 100;
+    const finalSugarKg = lockedSugarKg + (sugarAllocated * sugPct) / 100;
+    const finalStabKg = lockedStabKg + (stabAllocated * stabPct) / 100;
 
-    const calcFatPct = totalAllocatedBatch > 0 ? (finalFatKg / totalAllocatedBatch) * 100 : 0;
-    const calcSnfPct = totalAllocatedBatch > 0 ? (finalSnfKg / totalAllocatedBatch) * 100 : 0;
-    const calcSugarPct = totalAllocatedBatch > 0 ? (finalSugarKg / totalAllocatedBatch) * 100 : 0;
-    const calcStabPct = totalAllocatedBatch > 0 ? (finalStabKg / totalAllocatedBatch) * 100 : 0;
+    const actualTotal =
+      lockedQty + sugarAllocated + stabAllocated + creamAllocated + smpAllocated + baseMilkAllocated + waterAllocated;
+
+    const calcFatPct = actualTotal > 0 ? (finalFatKg / actualTotal) * 100 : 0;
+    const calcSnfPct = actualTotal > 0 ? (finalSnfKg / actualTotal) * 100 : 0;
+    const calcSugarPct = actualTotal > 0 ? (finalSugarKg / actualTotal) * 100 : 0;
+    const calcStabPct = actualTotal > 0 ? (finalStabKg / actualTotal) * 100 : 0;
     const calcTsPct = calcFatPct + calcSnfPct + calcSugarPct + calcStabPct;
 
     const diffF = Number((calcFatPct - targetFat).toFixed(2));
@@ -1065,10 +1153,10 @@ export function AdvancedStandardizationCalc() {
       timestamp: Date.now(),
       status: exact ? "exact" : "optimal",
       title: exact ? "100% Target Matched 🎯" : "Optimal Mass Allocation Balanced ⚡",
-      explanation: exact
-        ? `Batch recipe balanced using linear mass conservation. Hit exact ${targetFat}% Fat, ${targetSnf}% SNF, ${targetSugar}% Sugar and ${targetTsSum}% Total Solids.`
-        : `Allocated available streams to get within 0.05% tolerance of target standards.`,
-      finalQty: Math.round(totalAllocatedBatch),
+      explanation: isTargetMode
+        ? `Formulated for exact target batch size of ${Math.round(actualTotal).toLocaleString()} ${targetUnit}. Hit ${calcFatPct.toFixed(2)}% Fat, ${calcSnfPct.toFixed(2)}% SNF, ${calcSugarPct.toFixed(2)}% Sugar.`
+        : `Dynamic batch expanded naturally from ${baseMilkAllocated.toLocaleString()} ${targetUnit} in-tank base milk. Total batch volume: ${Math.round(actualTotal).toLocaleString()} ${targetUnit}.`,
+      finalQty: Math.round(actualTotal),
       finalFat: Number(calcFatPct.toFixed(2)),
       finalSnf: Number(calcSnfPct.toFixed(2)),
       finalSugar: Number(calcSugarPct.toFixed(2)),
@@ -1080,21 +1168,127 @@ export function AdvancedStandardizationCalc() {
       stabDiff: diffStab,
       tsDiff: diffTs,
       isExact: exact,
+      isTargetBatchMode: isTargetMode,
+      baseMilkQty: baseMilkAllocated,
       allocations: newAllocations
     });
 
     toast({
       title: exact ? "Batch Perfectly Balanced! 🎯" : "Batch Recipe Optimized ⚡",
-      description: `Target Volume: ${W} kg/L | TS: ${calcTsPct.toFixed(2)}% | Fat: ${calcFatPct.toFixed(2)}% | SNF: ${calcSnfPct.toFixed(2)}%`
+      description: `${isTargetMode ? "Target Batch" : "Dynamic In-Tank Batch"}: ${Math.round(actualTotal).toLocaleString()} ${targetUnit} | TS: ${calcTsPct.toFixed(2)}% | Fat: ${calcFatPct.toFixed(2)}% | SNF: ${calcSnfPct.toFixed(2)}%`
     });
   }, [
+    calculationMode,
     rows,
     targetWeightKg,
+    targetBatchVolume,
+    targetUnit,
     targetFat,
     targetSnf,
     targetSugar,
     targetStabilizer,
     targetTsSum,
+    toast
+  ]);
+
+  // ─────────────────────────────────────────────
+  // 📋 DEDICATED COPY RECIPE ADDITIONS ENGINE
+  // ─────────────────────────────────────────────
+  const handleCopyAdditions = useCallback(() => {
+    const activeStreams = optimizerResult
+      ? optimizerResult.allocations.filter((a) => a.qty > 0)
+      : rows
+          .filter((r) => r.qty > 0)
+          .map((r) => ({
+            id: r.id,
+            name: r.name,
+            qty: r.qty,
+            fat: r.fat,
+            snf: r.snf,
+            sugar: r.sugar,
+            stabilizer: r.stabilizer,
+            ts: r.ts,
+            costRate: r.costRate,
+            isLocked: Boolean(r.isLocked || r.isBase),
+            unit:
+              targetUnit === "kg"
+                ? "Kg"
+                : r.role === "sweetener" || r.role === "stabilizer" || r.role === "snf_booster" || r.name.toLowerCase().includes("smp") || r.name.toLowerCase().includes("sugar") || r.name.toLowerCase().includes("stab")
+                ? "Kg"
+                : "Ltr"
+          }));
+
+    if (activeStreams.length === 0) {
+      toast({
+        title: "No Additions Found",
+        description: "Please run Auto-Balance or enter stream quantities in the table first."
+      });
+      return;
+    }
+
+    const additions = activeStreams.filter((s) => !s.isLocked);
+    const inTank = activeStreams.filter((s) => s.isLocked);
+
+    const selectedPresetObj = PRODUCT_PRESETS.find((p) => p.id === selectedPresetId);
+    const productName = selectedPresetObj?.name || "Standardized Batch";
+
+    let text = `🥛 MULTI-SOLIDS BATCH RECIPE SHEET\n`;
+    text += `Target Product: ${productName}\n`;
+    text += `Target Specs: ${targetFat}% Fat | ${targetSnf}% SNF | ${targetSugar}% Sugar | ${targetStabilizer}% Stabilizer | ${targetTsSum}% Total Solids\n`;
+    text += `Calculation Mode: ${optimizerResult?.isTargetBatchMode ? "Target Batch Quantity (Fixed)" : "Dynamic Base Milk (Expanded)"}\n`;
+    text += `Total Batch Quantity: ${(optimizerResult ? optimizerResult.finalQty : batchSummary.totalQty).toLocaleString()} ${targetUnit === "kg" ? "Kg" : "Ltr"} (Density: ${effectiveDensity} kg/L)\n`;
+    text += `------------------------------------\n`;
+
+    if (inTank.length > 0) {
+      text += `📍 BASE MILK IN TANK:\n`;
+      inTank.forEach((item) => {
+        text += `• ${item.name}: ${item.qty.toLocaleString()} ${item.unit || (targetUnit === "kg" ? "Kg" : "Ltr")} (${item.fat ?? 0}% Fat, ${item.snf ?? 0}% SNF)\n`;
+      });
+      text += `\n`;
+    }
+
+    text += `➕ REQUIRED ADDITIONS TO ADD IN BATCH:\n`;
+    const toAdd = additions.length > 0 ? additions : activeStreams;
+    toAdd.forEach((item) => {
+      let specStr = "";
+      if ((item.sugar ?? 0) > 0) specStr += `${item.sugar}% Sugar `;
+      if ((item.stabilizer ?? 0) > 0) specStr += `${item.stabilizer}% Stabilizer `;
+      if ((item.fat ?? 0) > 0) specStr += `${item.fat}% Fat `;
+      if ((item.snf ?? 0) > 0) specStr += `${item.snf}% SNF `;
+      if (!specStr && (item.ts ?? 0) > 0) specStr += `${item.ts}% TS `;
+      text += `• ${item.name}: ${item.qty.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${item.unit || "Kg"}${specStr ? ` (${specStr.trim()})` : ""}\n`;
+    });
+
+    text += `------------------------------------\n`;
+    text += `🎯 FINAL BATCH SUMMARY:\n`;
+    text += `• Total Batch Size: ${(optimizerResult ? optimizerResult.finalQty : batchSummary.totalQty).toLocaleString()} ${targetUnit === "kg" ? "Kg" : "Ltr"}\n`;
+    text += `• Solved Fat: ${optimizerResult ? optimizerResult.finalFat : batchSummary.weightedFat}% (Target: ${targetFat}%)\n`;
+    text += `• Solved SNF: ${optimizerResult ? optimizerResult.finalSnf : batchSummary.weightedSnf}% (Target: ${targetSnf}%)\n`;
+    text += `• Solved Sugar: ${optimizerResult ? optimizerResult.finalSugar : batchSummary.weightedSugar}% (Target: ${targetSugar}%)\n`;
+    text += `• Total Solids (TS): ${optimizerResult ? optimizerResult.finalTs : batchSummary.weightedTs}% (Target: ${targetTsSum}%)\n`;
+    text += `• Status: ${optimizerResult ? (optimizerResult.isExact ? "100% Target Matched 🎯" : "Optimal Allocation ⚡") : (batchSummary.isBatchCompliant ? "100% Compliant 🎯" : "Custom Blend")}\n`;
+    text += `• Generated by DairyHub Multi-Solids Standardizer\n`;
+
+    navigator.clipboard.writeText(text);
+    setIsAdditionsCopied(true);
+    setTimeout(() => setIsAdditionsCopied(false), 2500);
+
+    toast({
+      title: "Additions Copied to Clipboard! 📋",
+      description: `Complete batch recipe for ${productName} copied. Ready to paste in WhatsApp, Excel, or logs.`
+    });
+  }, [
+    optimizerResult,
+    rows,
+    targetUnit,
+    selectedPresetId,
+    targetFat,
+    targetSnf,
+    targetSugar,
+    targetStabilizer,
+    targetTsSum,
+    effectiveDensity,
+    batchSummary,
     toast
   ]);
 
@@ -1298,9 +1492,11 @@ Generated via DairyHub Master Multi-Solids Engine`;
               🎯 TS: {targetTsSum}% ({targetFat}%F | {targetSnf}%S | {targetSugar}%Sug | {targetAcidity}%LA)
             </span>
 
-            {/* Density & Volume Pill */}
-            <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/70 border border-cyan-800/40 px-2 py-0.5 rounded-lg shrink-0">
-              {targetBatchVolume} {targetUnit.toUpperCase()} ({targetWeightKg.toFixed(0)} kg @ {effectiveDensity} kg/L)
+            {/* Mode & Volume Pill */}
+            <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-950/70 border border-cyan-800/40 px-2 py-0.5 rounded-lg shrink-0">
+              {calculationMode === "target"
+                ? `🎯 Target: ${targetBatchVolume} ${targetUnit.toUpperCase()} (${targetWeightKg.toFixed(0)} kg)`
+                : `🥛 Dynamic: Base Milk In Tank (${effectiveDensity} kg/L)`}
             </span>
           </div>
 
@@ -1435,15 +1631,43 @@ Generated via DairyHub Master Multi-Solids Engine`;
               </p>
             </div>
 
-            {/* 4. Batch Size, Units & Density */}
-            <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 space-y-1.5">
+            {/* 4. Calculation Mode, Batch Size & Units */}
+            <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 space-y-2">
               <Label className="text-[11px] font-bold text-cyan-300 flex items-center justify-between">
-                <span>📦 Batch Size & Units:</span>
+                <span>⚙️ Mode & Batch Size:</span>
                 <span className="text-[10px] text-slate-400">Density: {effectiveDensity} kg/L</span>
               </Label>
+              <div className="grid grid-cols-2 gap-1 p-0.5 bg-slate-900 rounded-lg border border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setCalculationMode("dynamic")}
+                  className={cn(
+                    "py-1 px-1.5 text-[10px] font-bold rounded-md transition-all flex items-center justify-center gap-1",
+                    calculationMode === "dynamic"
+                      ? "bg-purple-600 text-white shadow-xs"
+                      : "text-slate-400 hover:text-white"
+                  )}
+                >
+                  <Milk className="w-3 h-3" /> Dynamic Base
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCalculationMode("target")}
+                  className={cn(
+                    "py-1 px-1.5 text-[10px] font-bold rounded-md transition-all flex items-center justify-center gap-1",
+                    calculationMode === "target"
+                      ? "bg-purple-600 text-white shadow-xs"
+                      : "text-slate-400 hover:text-white"
+                  )}
+                >
+                  <Scale className="w-3 h-3" /> Target Qty
+                </button>
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-[9px] text-slate-400 block">Batch Volume</span>
+                  <span className="text-[9px] text-slate-400 block">
+                    {calculationMode === "target" ? "Target Batch Qty" : "Reference Base Vol"}
+                  </span>
                   <Input
                     type="number"
                     step="50"
@@ -1586,7 +1810,7 @@ Generated via DairyHub Master Multi-Solids Engine`;
             </Button>
           </div>
 
-          {/* ⚡ ACTION BAR: 1-Click Auto Solve, View Switcher, Share, Zero, Reset */}
+          {/* ⚡ ACTION BAR: 1-Click Auto Solve, Mode Switcher, Share, Zero, Reset */}
           <div className="flex flex-col gap-2.5 bg-white p-2.5 sm:p-3.5 rounded-2xl border border-slate-200 shadow-xs w-full min-w-0 max-w-full">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 flex-wrap">
@@ -1595,8 +1819,61 @@ Generated via DairyHub Master Multi-Solids Engine`;
                   className="h-8 sm:h-9 px-3.5 sm:px-5 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 text-white font-black text-xs sm:text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
                 >
                   <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300 animate-pulse" />
-                  <span>⚡ Auto-Solve & Balance Batch</span>
+                  <span>⚡ Auto-Balance Batch</span>
                 </Button>
+
+                {/* Calculation Mode Toggle */}
+                <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-300 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setCalculationMode("dynamic")}
+                    className={cn(
+                      "px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all flex items-center gap-1.5",
+                      calculationMode === "dynamic"
+                        ? "bg-purple-600 text-white shadow-xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    )}
+                    title="Dynamic Formulation: Expands naturally from available base milk in tank"
+                  >
+                    <Milk className="w-3.5 h-3.5" />
+                    <span>Dynamic (Base Milk)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCalculationMode("target")}
+                    className={cn(
+                      "px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all flex items-center gap-1.5",
+                      calculationMode === "target"
+                        ? "bg-purple-600 text-white shadow-xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    )}
+                    title="Target Quantity Formulation: Formulate exact batch volume/weight"
+                  >
+                    <Scale className="w-3.5 h-3.5" />
+                    <span>Target Batch Qty</span>
+                  </button>
+                </div>
+
+                {calculationMode === "target" && (
+                  <div className="flex items-center gap-1.5 bg-purple-50 px-2 py-1 rounded-xl border border-purple-200">
+                    <span className="text-[11px] font-bold text-purple-900">Target:</span>
+                    <Input
+                      type="number"
+                      value={targetBatchVolume}
+                      onChange={(e) => setTargetBatchVolume(Number(e.target.value) || 0)}
+                      className="h-7 w-20 text-xs bg-white border-purple-300 font-mono font-bold text-purple-950 px-1.5"
+                    />
+                    <Select value={targetUnit} onValueChange={(val: any) => setTargetUnit(val)}>
+                      <SelectTrigger className="h-7 w-16 text-xs bg-white border-purple-300 text-purple-950 font-bold px-1.5">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="liters">Ltr</SelectItem>
+                        <SelectItem value="kg">Kg</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
 
                 <Button
                   size="sm"
@@ -1701,14 +1978,14 @@ Generated via DairyHub Master Multi-Solids Engine`;
           {optimizerResult && (
             <div
               className={cn(
-                "p-3 sm:p-4 rounded-2xl border shadow-sm transition-all space-y-2.5",
+                "p-3 sm:p-4 rounded-2xl border shadow-sm transition-all space-y-3",
                 optimizerResult.isExact
                   ? "bg-gradient-to-r from-emerald-950/80 via-slate-900 to-emerald-950/70 border-emerald-500/60 text-white"
                   : "bg-gradient-to-r from-slate-900 via-amber-950/60 to-slate-900 border-amber-500/50 text-white"
               )}
             >
               <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <Badge
                     className={cn(
                       "text-[10px] font-black uppercase px-2 py-0.5",
@@ -1717,57 +1994,140 @@ Generated via DairyHub Master Multi-Solids Engine`;
                   >
                     {optimizerResult.isExact ? "🎯 100% Target Matched" : "⚡ Optimal Allocation"}
                   </Badge>
+                  <Badge className="text-[10px] font-bold bg-white/10 text-white border-white/20">
+                    {optimizerResult.isTargetBatchMode ? "🎯 Target Batch Mode" : "🥛 Dynamic Base Milk Mode"}
+                  </Badge>
                   <h4 className="text-xs sm:text-sm font-black text-white">{optimizerResult.title}</h4>
                 </div>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setOptimizerResult(null)}
-                  className="h-6 w-6 p-0 text-slate-400 hover:text-white"
-                >
-                  <X className="w-4 h-4" />
-                </Button>
+
+                <div className="flex items-center gap-2 ml-auto">
+                  <Button
+                    size="sm"
+                    onClick={handleCopyAdditions}
+                    className={cn(
+                      "h-7 text-xs font-black gap-1.5 rounded-xl shadow-md transition-all",
+                      isAdditionsCopied
+                        ? "bg-emerald-400 text-emerald-950 hover:bg-emerald-300"
+                        : "bg-emerald-500 hover:bg-emerald-600 text-slate-950"
+                    )}
+                  >
+                    {isAdditionsCopied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-950" />
+                        <span>Copied! ✓</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-slate-950" />
+                        <span>📋 Copy Additions</span>
+                      </>
+                    )}
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setOptimizerResult(null)}
+                    className="h-6 w-6 p-0 text-slate-400 hover:text-white"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
 
               {/* Solved Results Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 font-mono text-xs">
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono text-xs">
+                <div className="bg-black/40 p-2.5 rounded-xl border border-white/10">
                   <span className="text-[10px] text-slate-400 font-sans block">Total Batch Qty</span>
-                  <strong className="text-white text-sm">{optimizerResult.finalQty.toLocaleString()} {targetUnit}</strong>
+                  <strong className="text-white text-base">{optimizerResult.finalQty.toLocaleString()} {targetUnit}</strong>
                 </div>
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
+                <div className="bg-black/40 p-2.5 rounded-xl border border-white/10">
                   <span className="text-[10px] text-amber-300 font-sans block">Solved Fat %</span>
-                  <strong className="text-amber-400 text-sm">{optimizerResult.finalFat}%</strong>
+                  <strong className="text-amber-400 text-base">{optimizerResult.finalFat}%</strong>
                   <span className="text-[10px] text-slate-400 block">Dev: {optimizerResult.fatDiff > 0 ? `+${optimizerResult.fatDiff}` : optimizerResult.fatDiff}%</span>
                 </div>
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
+                <div className="bg-black/40 p-2.5 rounded-xl border border-white/10">
                   <span className="text-[10px] text-sky-300 font-sans block">Solved SNF %</span>
-                  <strong className="text-sky-300 text-sm">{optimizerResult.finalSnf}%</strong>
+                  <strong className="text-sky-300 text-base">{optimizerResult.finalSnf}%</strong>
                   <span className="text-[10px] text-slate-400 block">Dev: {optimizerResult.snfDiff > 0 ? `+${optimizerResult.snfDiff}` : optimizerResult.snfDiff}%</span>
                 </div>
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
+                <div className="bg-black/40 p-2.5 rounded-xl border border-white/10">
                   <span className="text-[10px] text-pink-300 font-sans block">Solved Sugar %</span>
-                  <strong className="text-pink-300 text-sm">{optimizerResult.finalSugar}%</strong>
+                  <strong className="text-pink-300 text-base">{optimizerResult.finalSugar}%</strong>
                   <span className="text-[10px] text-slate-400 block">Dev: {optimizerResult.sugarDiff > 0 ? `+${optimizerResult.sugarDiff}` : optimizerResult.sugarDiff}%</span>
                 </div>
-                <div className="bg-black/40 p-2 rounded-xl border border-white/10">
+                <div className="bg-black/40 p-2.5 rounded-xl border border-white/10">
                   <span className="text-[10px] text-purple-300 font-sans block">Solved TS %</span>
-                  <strong className="text-purple-300 text-sm">{optimizerResult.finalTs}%</strong>
+                  <strong className="text-purple-300 text-base">{optimizerResult.finalTs}%</strong>
                   <span className="text-[10px] text-slate-400 block">Target: {targetTsSum}%</span>
                 </div>
               </div>
 
-              {/* Allocations Pill List */}
-              <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                <span className="text-[10px] font-sans text-slate-400">Allocated Additions:</span>
-                {optimizerResult.allocations.map((a) => (
-                  <span
-                    key={a.id}
-                    className="text-[10px] font-mono bg-white/10 px-2 py-0.5 rounded-lg border border-white/15 text-white"
-                  >
-                    {a.name}: <strong>{a.qty.toLocaleString()} {targetUnit}</strong>
+              {/* Dedicated Recipe / Additions Cards Section */}
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-1.5 font-bold text-white">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Required Ingredients To Add In Batch (Recipe):</span>
+                  </div>
+                  <span className="text-[11px] text-slate-400 font-sans">
+                    Ready to weigh & add into mixing tank
                   </span>
-                ))}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {optimizerResult.allocations.filter((a) => a.qty > 0).map((item) => {
+                    const isBaseOrLocked = Boolean(item.isLocked);
+                    return (
+                      <div
+                        key={item.id}
+                        className={cn(
+                          "p-2.5 rounded-xl border transition-all flex flex-col justify-between gap-1.5",
+                          isBaseOrLocked
+                            ? "bg-slate-900/90 border-slate-700/80 text-white"
+                            : "bg-emerald-950/60 border-emerald-500/50 shadow-xs text-white"
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-extrabold truncate text-white">{item.name}</span>
+                          <Badge
+                            className={cn(
+                              "text-[9px] font-black uppercase px-1.5 py-0.2 shrink-0",
+                              isBaseOrLocked
+                                ? "bg-slate-700 text-slate-200"
+                                : "bg-emerald-400 text-emerald-950"
+                            )}
+                          >
+                            {isBaseOrLocked ? "In Tank (Base)" : "➕ Add This"}
+                          </Badge>
+                        </div>
+
+                        <div className="flex items-baseline justify-between pt-1">
+                          <div className="flex items-baseline gap-1">
+                            <span className={cn("text-lg font-black font-mono", isBaseOrLocked ? "text-slate-200" : "text-emerald-300")}>
+                              {item.qty.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
+                            <span className="text-xs font-bold text-slate-400">{item.unit || "Kg"}</span>
+                          </div>
+                          {item.costRate ? (
+                            <span className="text-[10px] font-mono text-slate-400">
+                              ₹{(item.qty * item.costRate).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                            </span>
+                          ) : null}
+                        </div>
+
+                        <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between border-t border-white/10 pt-1">
+                          <span>TS: {item.ts}%</span>
+                          <span>
+                            {item.fat ? `Fat: ${item.fat}% ` : ""}
+                            {item.snf ? `SNF: ${item.snf}% ` : ""}
+                            {item.sugar ? `Sug: ${item.sugar}%` : ""}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
