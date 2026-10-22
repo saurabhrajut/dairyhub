@@ -40,12 +40,30 @@ import { Badge } from "@/components/ui/badge";
 
 import dynamic from "next/dynamic";
 
-const MostAdvancedStandardizationCalc = dynamic(() => import("./most-advanced-standardization-calc").then(m => ({ default: m.MostAdvancedStandardizationCalc })), { 
+const MostAdvancedStandardizationCalc = dynamic(() => 
+  import("./most-advanced-standardization-calc")
+    .then(m => ({ default: m.MostAdvancedStandardizationCalc }))
+    .catch((err) => {
+      console.warn("Chunk load error caught, reloading to get fresh bundle...", err);
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
+      throw err;
+    }), { 
   ssr: false, 
   loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
 });
 
-const AdvancedStandardizationCalc = dynamic(() => import("./advanced-standardization-calc").then(m => ({ default: m.AdvancedStandardizationCalc })), { 
+const AdvancedStandardizationCalc = dynamic(() => 
+  import("./advanced-standardization-calc")
+    .then(m => ({ default: m.AdvancedStandardizationCalc }))
+    .catch((err) => {
+      console.warn("Chunk load error caught, reloading to get fresh bundle...", err);
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
+      throw err;
+    }), { 
   ssr: false, 
   loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div> 
 });
@@ -63,9 +81,10 @@ const calculatorsInfo = {
     },
     'advanced-standardization': { 
         title: "Multi-Solids Batch (Sweet Curd/Lassi)", 
-        icon: Beaker, 
+        subtitle: "Multi-Solids Excel Engine",
+        icon: Sparkles, 
         component: AdvancedStandardizationCalc,
-        color: "from-purple-600 to-indigo-700" 
+        color: "from-purple-600 via-indigo-600 to-purple-800" 
     },
     'fat-snf-clr-ts': { 
         title: "Fat, SNF, CLR & TS", 
@@ -242,6 +261,7 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
                 {Object.entries(calculatorsInfo).map(([key, info]) => {
                   const { title, icon: Icon, color } = info as any;
                   const isMaster = key === 'most-advanced-standardization';
+                  const isMultiSolidsMaster = key === 'advanced-standardization';
                   return (
                     <button
                       key={key}
@@ -250,12 +270,19 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
                         "group relative flex flex-col items-center justify-center p-4 bg-white hover:shadow-xl rounded-2xl border-2 text-center aspect-square transition-all duration-300 transform hover:scale-105",
                         isMaster
                           ? "border-amber-400 shadow-md bg-gradient-to-b from-amber-50/40 via-white to-orange-50/30 ring-2 ring-amber-400/30"
+                          : isMultiSolidsMaster
+                          ? "border-purple-400 shadow-md bg-gradient-to-b from-purple-50/40 via-white to-indigo-50/30 ring-2 ring-purple-400/30"
                           : "border-transparent hover:border-primary/20"
                       )}
                     >
                       {isMaster && (
                         <span className="absolute -top-2.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1">
                           ⭐ Master Edition
+                        </span>
+                      )}
+                      {isMultiSolidsMaster && (
+                        <span className="absolute -top-2.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1">
+                          ⭐ Multi-Solids Master
                         </span>
                       )}
 
@@ -273,6 +300,11 @@ export function StandardizationIIModal({ isOpen, setIsOpen }: { isOpen: boolean;
                       {isMaster && (
                         <span className="text-[10px] font-bold text-amber-700 mt-1">
                           Master Excel Matrix Engine
+                        </span>
+                      )}
+                      {isMultiSolidsMaster && (
+                        <span className="text-[10px] font-bold text-purple-700 mt-1">
+                          Excel Matrix & Auto-Solver
                         </span>
                       )}
                     </button>
