@@ -30,7 +30,8 @@ import {
   Sparkles,
   LayoutGrid,
   Activity,
-  PackageCheck
+  PackageCheck,
+  Dumbbell
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/language-context";
@@ -56,6 +57,8 @@ import { paneerProcessingContent } from "@/lib/content/processing/paneer";
 import { cheeseContent } from "@/lib/content/processing/cheese";
 import { flavouredMilkContent } from "@/lib/content/processing/flavoured-milk";
 import { wheyBeverageContent } from "@/lib/content/processing/whey-beverage";
+import { infantFormulaContent } from "@/lib/content/processing/infant-formula";
+import { bodybuildingSupplementsContent } from "@/lib/content/processing/bodybuilding-supplements";
 
 // ─────────────────────────────────────────────
 // Language-aware UI label helpers
@@ -98,6 +101,8 @@ const productsConfig: Record<string, { icon: any; color: string; bgLight: string
   shrikhand: { icon: IceCream, color: "from-yellow-500 to-orange-500", bgLight: "bg-amber-50 hover:bg-amber-100", borderColor: "border-amber-200 hover:border-amber-400" },
   "condensed-milk": { icon: PackageOpen, color: "from-amber-200 to-orange-300", bgLight: "bg-amber-50 hover:bg-amber-100", borderColor: "border-amber-200 hover:border-amber-400" },
   "milk-powder": { icon: ShoppingBag, color: "from-slate-500 to-gray-600", bgLight: "bg-gray-50 hover:bg-gray-100", borderColor: "border-gray-200 hover:border-gray-400" },
+  "infant-formula": { icon: Sparkles, color: "from-rose-500 to-pink-500", bgLight: "bg-rose-50 hover:bg-rose-100", borderColor: "border-rose-200 hover:border-rose-400" },
+  "bodybuilding-supplements": { icon: Dumbbell, color: "from-amber-600 via-orange-500 to-red-600", bgLight: "bg-amber-50 hover:bg-amber-100", borderColor: "border-amber-200 hover:border-amber-400" },
   paneer: { icon: Layers, color: "from-green-500 to-emerald-600", bgLight: "bg-green-50 hover:bg-green-100", borderColor: "border-green-200 hover:border-green-400" },
   cheese: { icon: Layers, color: "from-yellow-400 to-orange-500", bgLight: "bg-yellow-50 hover:bg-yellow-100", borderColor: "border-yellow-200 hover:border-yellow-400" },
   "flavoured-milk": { icon: Coffee, color: "from-purple-500 to-pink-600", bgLight: "bg-purple-50 hover:bg-purple-100", borderColor: "border-purple-200 hover:border-purple-400" },
@@ -238,6 +243,15 @@ const CONTENT_STYLES = `
   }
   .dairy-content pre code { display: block; background: none; border: none; padding: 0; }
   .dairy-content img { border-radius: 0.4rem; margin: 0.4rem 0; }
+
+  /* ═══ FLOWCHART ENHANCEMENTS ═══ */
+  .flowchart-step-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .flowchart-step-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  }
 `;
 
 // ─── Table transformer ─────────────────────────────────────────────────────
@@ -385,6 +399,8 @@ export function ProductsProcessingModal({
     shrikhand: t(shrikhandContent),
     "condensed-milk": t(condensedMilkContent),
     "milk-powder": t(milkPowderContent),
+    "infant-formula": t(infantFormulaContent),
+    "bodybuilding-supplements": t(bodybuildingSupplementsContent),
     paneer: (() => {
       const raw = t(paneerProcessingContent) as any;
       const topicsObj = raw.topics || {};
