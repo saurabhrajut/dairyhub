@@ -985,6 +985,249 @@ const topicComponents = {
       </SectionCard>
     );
   },
+
+  capa: function Content({ content }: { content: any }) {
+    const c = content.capa;
+    if (!c) return null;
+    return (
+      <SectionCard title={c.title} palette="orange">
+        <p>{c.intro.p1}</p>
+        <p>{c.intro.p2}</p>
+        <p>{c.intro.p3}</p>
+
+        {/* Correction vs CA vs PA Comparison Cards */}
+        <SubHeading palette="orange">{c.ca_vs_pa.title}</SubHeading>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+          <InfoCard title={c.ca_vs_pa.correction_title} palette="amber">
+            <p className="text-gray-600 text-sm leading-relaxed">{c.ca_vs_pa.correction_desc}</p>
+          </InfoCard>
+          <InfoCard title={c.ca_vs_pa.ca_title} palette="red">
+            <p className="text-gray-600 text-sm leading-relaxed">{c.ca_vs_pa.ca_desc}</p>
+          </InfoCard>
+          <InfoCard title={c.ca_vs_pa.pa_title} palette="green">
+            <p className="text-gray-600 text-sm leading-relaxed">{c.ca_vs_pa.pa_desc}</p>
+          </InfoCard>
+        </div>
+
+        {/* Detailed Table */}
+        <ScrollableTable minWidth="640px">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-1/4 font-bold">Parameter / Aspect</TableHead>
+              <TableHead className="w-1/4 font-bold text-amber-700">Immediate Correction</TableHead>
+              <TableHead className="w-1/4 font-bold text-red-700">Corrective Action (CA)</TableHead>
+              <TableHead className="w-1/4 font-bold text-green-700">Preventive Action (PA)</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {c.ca_vs_pa.table.map((row: any, i: number) => (
+              <TableRow key={i}>
+                <TableCell className="font-semibold text-gray-800 text-sm">{row.aspect}</TableCell>
+                <TableCell className="text-gray-700 text-sm">{row.correction}</TableCell>
+                <TableCell className="text-gray-700 text-sm">{row.ca}</TableCell>
+                <TableCell className="text-gray-700 text-sm">{row.pa}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </ScrollableTable>
+
+        {/* Scientific RCA Tools */}
+        <SubHeading palette="orange">{c.scientific_basis.title}</SubHeading>
+        <div className="space-y-3 mt-2">
+          {c.scientific_basis.list.map((item: any, i: number) => (
+            <InfoCard key={i} title={item.title} palette="orange">
+              <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+            </InfoCard>
+          ))}
+        </div>
+
+        {/* 8-Step CAPA Workflow */}
+        <SubHeading palette="orange">{c.capa_workflow.title}</SubHeading>
+        <div className="space-y-3 mt-2">
+          {c.capa_workflow.steps.map((item: any, i: number) => (
+            <div key={i} className="border border-orange-200 rounded-xl p-3 sm:p-4 bg-orange-50/40">
+              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                <span className="bg-orange-600 text-white text-xs font-bold px-2 py-0.5 rounded-full shrink-0">
+                  {item.step}
+                </span>
+                <span className="font-bold text-sm text-orange-950">{item.name}</span>
+              </div>
+              <p className="text-gray-700 text-sm mb-2 leading-relaxed">{item.description}</p>
+              {item.tools && (
+                <div className="text-xs text-orange-800 bg-orange-100/80 inline-block px-2.5 py-1 rounded-md font-medium">
+                  🛠 Essential Tools: {item.tools}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Real-World Case Studies */}
+        <SubHeading palette="orange">{c.dairy_case_studies.title}</SubHeading>
+        <div className="space-y-3 mt-2">
+          {c.dairy_case_studies.list.map((cs: any, i: number) => (
+            <div key={i} className="border border-amber-200 rounded-xl p-3 sm:p-4 bg-white shadow-sm space-y-2">
+              <p className="font-bold text-sm text-amber-950 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                {cs.title}
+              </p>
+              <div className="text-xs sm:text-sm space-y-1.5 text-gray-700">
+                <p><strong className="text-red-700">Incident / Problem:</strong> {cs.problem}</p>
+                <p><strong className="text-amber-800">Root Cause (RCA):</strong> {cs.root_cause}</p>
+                <p><strong className="text-blue-800">Corrective Action (CA):</strong> {cs.corrective_action}</p>
+                <p><strong className="text-emerald-800">Preventive Action (PA):</strong> {cs.preventive_action}</p>
+                <p className="bg-emerald-50 text-emerald-900 p-2 rounded-lg font-semibold mt-1">
+                  ✓ Verified Operational Outcome: {cs.outcome}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Global Regulatory Compliance */}
+        <SubHeading palette="orange">{c.regulatory_framework.title}</SubHeading>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+          {c.regulatory_framework.list.map((reg: any, i: number) => (
+            <InfoCard key={i} title={reg.title} palette="slate">
+              <p className="text-gray-600 text-sm leading-relaxed">{reg.description}</p>
+            </InfoCard>
+          ))}
+        </div>
+
+        {/* Effectiveness KPIs */}
+        <SubHeading palette="orange">{c.effectiveness_metrics.title}</SubHeading>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+          {c.effectiveness_metrics.list.map((m: any, i: number) => (
+            <div key={i} className="border border-orange-200 bg-orange-50/50 rounded-xl p-3 sm:p-4">
+              <p className="font-bold text-sm text-orange-950 mb-1">{m.title}</p>
+              {m.formula && (
+                <p className="font-mono text-xs text-orange-800 bg-orange-100/90 px-2 py-1 rounded mb-1.5">
+                  {m.formula}
+                </p>
+              )}
+              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{m.description}</p>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+    );
+  },
+
+  kaizen: function Content({ content }: { content: any }) {
+    const c = content.kaizen;
+    if (!c) return null;
+    return (
+      <SectionCard title={c.title} palette="emerald">
+        <p>{c.intro.p1}</p>
+        <p>{c.intro.p2}</p>
+        <p>{c.intro.p3}</p>
+
+        {/* Core Philosophy */}
+        <SubHeading palette="emerald">{c.core_philosophy.title}</SubHeading>
+        <div className="space-y-3 mt-2">
+          {c.core_philosophy.list.map((item: any, i: number) => (
+            <InfoCard key={i} title={item.title} palette="emerald">
+              <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+            </InfoCard>
+          ))}
+        </div>
+
+        {/* 8 Wastes of Dairy Processing (Muda) */}
+        <SubHeading palette="emerald">{c.muda_dairy_wastes.title}</SubHeading>
+        <div className="space-y-3 mt-2">
+          {c.muda_dairy_wastes.list.map((item: any, i: number) => (
+            <div key={i} className="border border-emerald-200 rounded-xl p-3 sm:p-4 bg-white shadow-sm space-y-1.5">
+              <p className="font-bold text-sm text-emerald-950">{item.waste}</p>
+              <p className="text-xs sm:text-sm text-red-700">
+                <strong>Waste in Dairy:</strong> {item.dairy_example}
+              </p>
+              <p className="text-xs sm:text-sm text-emerald-900 bg-emerald-50 p-2 rounded-lg font-medium">
+                <strong>Kaizen Countermeasure:</strong> {item.solution}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Scientific Kaizen Tools */}
+        <SubHeading palette="emerald">{c.kaizen_tools.title}</SubHeading>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+          {c.kaizen_tools.list.map((tool: any, i: number) => (
+            <InfoCard key={i} title={tool.title} palette="teal">
+              <p className="text-gray-600 text-sm leading-relaxed">{tool.description}</p>
+            </InfoCard>
+          ))}
+        </div>
+
+        {/* 7-Step Implementation Cycle */}
+        <SubHeading palette="emerald">{c.implementation_steps.title}</SubHeading>
+        <div className="space-y-3 mt-2">
+          {c.implementation_steps.steps.map((step: any, i: number) => (
+            <div key={i} className="border border-emerald-200 rounded-xl p-3 sm:p-4 bg-emerald-50/50">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="bg-emerald-600 text-white text-xs font-bold px-2 py-0.5 rounded-full shrink-0">
+                  {step.step}
+                </span>
+                <span className="font-bold text-sm text-emerald-950">{step.name}</span>
+              </div>
+              <p className="text-gray-700 text-sm leading-relaxed">{step.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Real-World Case Studies */}
+        <SubHeading palette="emerald">{c.dairy_case_studies.title}</SubHeading>
+        <div className="space-y-3 mt-2">
+          {c.dairy_case_studies.list.map((cs: any, i: number) => (
+            <div key={i} className="border border-emerald-200 rounded-xl p-3 sm:p-4 bg-white shadow-sm space-y-2">
+              <p className="font-bold text-sm text-emerald-950 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                {cs.title}
+              </p>
+              <div className="text-xs sm:text-sm space-y-1.5 text-gray-700">
+                <p><strong className="text-red-700">Baseline Bottle-Neck:</strong> {cs.baseline}</p>
+                <p><strong className="text-blue-800">Kaizen Action Executed:</strong> {cs.kaizen_action}</p>
+                <p className="bg-emerald-50 text-emerald-900 p-2 rounded-lg font-semibold">
+                  ✓ Quantified Operational Result: {cs.result}
+                </p>
+                <p className="text-xs text-emerald-800 font-medium">💰 Bottom-Line Savings: {cs.roi}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Kaizen vs Innovation Table */}
+        <SubHeading palette="emerald">{c.kaizen_vs_innovation.title}</SubHeading>
+        <ScrollableTable minWidth="560px">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-1/3 font-bold">Parameter / Aspect</TableHead>
+              <TableHead className="w-1/3 font-bold text-emerald-700">Kaizen (Continuous Improvement)</TableHead>
+              <TableHead className="w-1/3 font-bold text-blue-700">Traditional Innovation (Kaikaku)</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {c.kaizen_vs_innovation.table.map((row: any, i: number) => (
+              <TableRow key={i}>
+                <TableCell className="font-semibold text-gray-800 text-sm">{row.parameter}</TableCell>
+                <TableCell className="text-gray-700 text-sm">{row.kaizen}</TableCell>
+                <TableCell className="text-gray-700 text-sm">{row.innovation}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </ScrollableTable>
+
+        {/* KPIs & Metrics */}
+        <SubHeading palette="emerald">{c.kpis_and_metrics.title}</SubHeading>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+          {c.kpis_and_metrics.list.map((m: any, i: number) => (
+            <InfoCard key={i} title={m.title} palette="green">
+              <p className="text-gray-600 text-sm leading-relaxed">{m.description}</p>
+            </InfoCard>
+          ))}
+        </div>
+      </SectionCard>
+    );
+  },
 };
 
 // ─── Topic Registry ───────────────────────────────────────────────────────────
@@ -1012,6 +1255,8 @@ const TOPICS = [
   { value: "sensory",        icon: Star,            palette: "violet"  as PaletteKey, tabKey: "sensory"        },
   { value: "microbiology",   icon: Microscope,      palette: "emerald" as PaletteKey, tabKey: "microbiology"   },
   { value: "packaging",      icon: Package,         palette: "slate"   as PaletteKey, tabKey: "packaging"      },
+  { value: "capa",           icon: Zap,             palette: "orange"  as PaletteKey, tabKey: "capa"           },
+  { value: "kaizen",         icon: Sparkles,        palette: "emerald" as PaletteKey, tabKey: "kaizen"         },
   { value: "bodies",         icon: Factory,         palette: "stone"   as PaletteKey, tabKey: "bodies"         },
 ];
 
