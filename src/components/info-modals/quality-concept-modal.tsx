@@ -221,12 +221,52 @@ const topicComponents = {
   intro: function Content({ content }: { content: any }) {
     return (
       <SectionCard title={content.title} palette="blue">
-        <p className="text-sm sm:text-base">{content.intro1}</p>
-        <p>{content.intro2}</p>
-        <p>{content.intro3}</p>
-        <InfoCard title="Key Benefits" palette="blue">
+        <p className="text-sm sm:text-base leading-relaxed">{content.intro1}</p>
+        <p className="leading-relaxed">{content.intro2}</p>
+        <p className="leading-relaxed">{content.intro3}</p>
+
+        {/* Key Benefits */}
+        <InfoCard title="Key Scientific & Commercial Benefits" palette="blue">
           <BulletList items={content.introBenefits} palette="blue" />
         </InfoCard>
+
+        {/* ISO 9000:2015 7 Core Principles */}
+        {content.iso_principles && (
+          <>
+            <SubHeading palette="blue">{content.iso_principles.title}</SubHeading>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+              {content.iso_principles.list.map((item: any, i: number) => (
+                <InfoCard key={i} title={item.title} palette="indigo">
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+                </InfoCard>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Cost of Quality (PAF Model) */}
+        {content.cost_of_quality && (
+          <>
+            <SubHeading palette="blue">{content.cost_of_quality.title}</SubHeading>
+            <p className="text-sm text-gray-700">{content.cost_of_quality.p1}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+              {content.cost_of_quality.list.map((item: any, i: number) => (
+                <div key={i} className="border border-blue-200 rounded-xl p-3 sm:p-4 bg-blue-50/50">
+                  <p className="font-bold text-sm text-blue-900 mb-1">{item.title}</p>
+                  <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* FSMS ISO 22000 Architecture */}
+        {content.fsms_framework && (
+          <div className="mt-4 border border-blue-200 rounded-xl p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <p className="font-bold text-sm text-blue-900 mb-1">{content.fsms_framework.title}</p>
+            <p className="text-gray-700 text-sm leading-relaxed">{content.fsms_framework.p1}</p>
+          </div>
+        )}
       </SectionCard>
     );
   },
@@ -235,23 +275,63 @@ const topicComponents = {
     const c = content.whatIsQuality;
     return (
       <SectionCard title={c.title} palette="indigo">
-        <p>{c.p1}</p>
-        <div className="flex justify-center my-4">
-          <blockquote className="border-l-4 border-indigo-500 bg-indigo-50 px-6 py-4 rounded-r-xl text-lg font-mono text-indigo-900 shadow-sm">
-            Quality ∝ 1 / {c.variability}
-          </blockquote>
+        <p className="leading-relaxed">{c.p1}</p>
+
+        {/* Taguchi Loss Function Highlight */}
+        <div className="my-4 p-4 rounded-xl border border-indigo-200 bg-indigo-50/60 shadow-sm">
+          <p className="font-bold text-sm text-indigo-900 mb-2">{c.variability}</p>
+          <div className="flex justify-center my-2">
+            <blockquote className="border-l-4 border-indigo-600 bg-white px-5 py-3 rounded-r-xl font-mono text-sm sm:text-base text-indigo-950 shadow-sm">
+              {c.taguchi_formula ? c.taguchi_formula : `Quality ∝ 1 / ${c.variability}`}
+            </blockquote>
+          </div>
+          {c.taguchi_explanation && (
+            <p className="text-xs sm:text-sm text-indigo-900 leading-relaxed mt-2">{c.taguchi_explanation}</p>
+          )}
         </div>
-        <p>{c.p2}</p>
-        <p>{c.p3}</p>
-        <p>{c.p4}</p>
+
+        <p className="leading-relaxed">{c.p2}</p>
+        <p className="leading-relaxed">{c.p3}</p>
+        <p className="leading-relaxed">{c.p4}</p>
+
+        {/* Garvin's 8 Dimensions */}
+        {c.garvin_dimensions && (
+          <>
+            <SubHeading palette="indigo">{c.garvin_dimensions.title}</SubHeading>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+              {c.garvin_dimensions.list.map((item: any, i: number) => (
+                <InfoCard key={i} title={item.title} palette="indigo">
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+                </InfoCard>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Scientific Dimensions */}
         <SubHeading palette="indigo">{c.dimensions.title}</SubHeading>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
           {c.dimensions.list.map((item: any, i: number) => (
-            <InfoCard key={i} title={item.title} palette="indigo">
-              <p className="text-gray-600 text-sm break-words">{item.description}</p>
+            <InfoCard key={i} title={item.title} palette="blue">
+              <p className="text-gray-600 text-sm break-words leading-relaxed">{item.description}</p>
             </InfoCard>
           ))}
         </div>
+
+        {/* Adulteration Detection */}
+        {c.adulteration_detection && (
+          <>
+            <SubHeading palette="indigo">{c.adulteration_detection.title}</SubHeading>
+            <div className="space-y-2 mt-2">
+              {c.adulteration_detection.list.map((item: any, i: number) => (
+                <div key={i} className="border border-indigo-100 rounded-xl p-3 bg-white shadow-sm">
+                  <p className="font-bold text-sm text-indigo-900">{item.title}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1 leading-relaxed">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </SectionCard>
     );
   },
@@ -260,15 +340,61 @@ const topicComponents = {
     const c = content.qc;
     return (
       <SectionCard title={c.title} palette="cyan">
-        <p>{c.p1}</p>
-        <p>{c.p2}</p>
+        <p className="leading-relaxed">{c.p1}</p>
+        <p className="leading-relaxed">{c.p2}</p>
+
+        {/* 4-Stage Testing Pipeline */}
+        {c.testing_stages && (
+          <>
+            <SubHeading palette="cyan">{c.testing_stages.title}</SubHeading>
+            <div className="space-y-3 mt-2">
+              {["stage1", "stage2", "stage3", "stage4"].map((stgKey, i) => {
+                const stage = c.testing_stages[stgKey];
+                if (!stage) return null;
+                return (
+                  <div key={i} className="border border-cyan-200 rounded-xl p-3 sm:p-4 bg-cyan-50/40">
+                    <p className="font-bold text-sm text-cyan-950 mb-1">{stage.title}</p>
+                    <p className="text-xs sm:text-sm text-cyan-800 mb-2">{stage.description}</p>
+                    <ul className="space-y-1.5 pl-2">
+                      {stage.tests.map((testItem: string, ti: number) => (
+                        <li key={ti} className="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-600 mt-1.5 shrink-0" />
+                          <span dangerouslySetInnerHTML={{ __html: testItem }} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+
+        {/* Operational Responsibilities */}
         <SubHeading palette="cyan">{c.responsibilities.title}</SubHeading>
         <NumberedList items={c.responsibilities.list} palette="cyan" />
+
+        {/* ISO 17025 Competence Standards */}
+        {c.iso_17025 && (
+          <>
+            <SubHeading palette="cyan">{c.iso_17025.title}</SubHeading>
+            <p className="text-sm text-gray-700 mb-2">{c.iso_17025.p1}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {c.iso_17025.list.map((item: any, i: number) => (
+                <InfoCard key={i} title={item.title} palette="teal">
+                  <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{item.description}</p>
+                </InfoCard>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Analytical Instruments */}
         <SubHeading palette="cyan">{c.tools.title}</SubHeading>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
           {c.tools.list.map((item: any, i: number) => (
             <InfoCard key={i} title={item.title} palette="cyan">
-              <p className="text-gray-600 text-sm break-words">{item.description}</p>
+              <p className="text-gray-600 text-sm break-words leading-relaxed">{item.description}</p>
             </InfoCard>
           ))}
         </div>
@@ -280,8 +406,9 @@ const topicComponents = {
     const c = content.qa;
     return (
       <SectionCard title={c.title} palette="teal">
-        <p>{c.p1}</p>
-        <p>{c.p2}</p>
+        <p className="leading-relaxed">{c.p1}</p>
+        <p className="leading-relaxed">{c.p2}</p>
+
         {/* Mobile: stacked cards | sm+: scrollable table preserved */}
         <div className="mt-3 space-y-2 sm:hidden">
           {c.table.rows.map((row: any, i: number) => (
@@ -289,17 +416,17 @@ const topicComponents = {
               <div className="bg-teal-50 px-3 py-1.5 font-semibold text-teal-800">{row.c1}</div>
               <div className="px-3 py-1.5 border-t border-teal-100">
                 <span className="text-xs font-bold text-cyan-600 block mb-0.5">{c.table.header2}</span>
-                <span className="text-gray-700">{row.qc}</span>
+                <span className="text-gray-700 text-xs sm:text-sm">{row.qc}</span>
               </div>
               <div className="px-3 py-1.5 border-t border-teal-100 bg-teal-50/40">
                 <span className="text-xs font-bold text-teal-600 block mb-0.5">{c.table.header3}</span>
-                <span className="text-gray-700">{row.qa}</span>
+                <span className="text-gray-700 text-xs sm:text-sm">{row.qa}</span>
               </div>
             </div>
           ))}
         </div>
         <div className="hidden sm:block">
-          <ScrollableTable>
+          <ScrollableTable minWidth="600px">
             <TableCaption className="text-xs">{c.table.caption}</TableCaption>
             <TableHeader className="bg-teal-50">
               <TableRow>
@@ -311,22 +438,43 @@ const topicComponents = {
             <TableBody>
               {c.table.rows.map((row: any, i: number) => (
                 <TableRow key={i} className="hover:bg-teal-50/50">
-                  <TableCell className="font-semibold text-gray-700">{row.c1}</TableCell>
-                  <TableCell className="text-cyan-800">{row.qc}</TableCell>
-                  <TableCell className="text-teal-800">{row.qa}</TableCell>
+                  <TableCell className="font-semibold text-gray-700 text-sm">{row.c1}</TableCell>
+                  <TableCell className="text-cyan-800 text-xs sm:text-sm">{row.qc}</TableCell>
+                  <TableCell className="text-teal-800 text-xs sm:text-sm">{row.qa}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </ScrollableTable>
         </div>
-        <SubHeading palette="teal">{c.qa_system_components.title}</SubHeading>
-        <div className="space-y-2 mt-2">
-          {c.qa_system_components.list.map((item: any, i: number) => (
-            <InfoCard key={i} title={item.title} palette="teal">
-              <p className="text-gray-600 text-sm break-words">{item.description}</p>
-            </InfoCard>
-          ))}
-        </div>
+
+        {/* 7 Core Systematic Pillars */}
+        {c.qa_pillars && (
+          <>
+            <SubHeading palette="teal">{c.qa_pillars.title}</SubHeading>
+            <div className="space-y-3 mt-2">
+              {c.qa_pillars.list.map((item: any, i: number) => (
+                <div key={i} className="border border-teal-200 rounded-xl p-3 sm:p-4 bg-white shadow-sm">
+                  <p className="font-bold text-sm text-teal-900 mb-1">{item.title}</p>
+                  <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Essential QA Elements */}
+        {c.qa_system_components && (
+          <>
+            <SubHeading palette="teal">{c.qa_system_components.title}</SubHeading>
+            <div className="space-y-2 mt-2">
+              {c.qa_system_components.list.map((item: any, i: number) => (
+                <InfoCard key={i} title={item.title} palette="teal">
+                  <p className="text-gray-600 text-sm break-words leading-relaxed">{item.description}</p>
+                </InfoCard>
+              ))}
+            </div>
+          </>
+        )}
       </SectionCard>
     );
   },
@@ -335,7 +483,22 @@ const topicComponents = {
     const c = content.prps;
     return (
       <SectionCard title={c.title} palette="emerald">
-        <p>{c.p1}</p>
+        <p className="leading-relaxed">{c.p1}</p>
+
+        {/* ISO/TS 22002-1 15 Core PRPs */}
+        {c.iso_prps_15 && (
+          <>
+            <SubHeading palette="emerald">{c.iso_prps_15.title}</SubHeading>
+            <div className="space-y-3 mt-2">
+              {c.iso_prps_15.list.map((prp: any, i: number) => (
+                <div key={i} className="border border-emerald-200 rounded-xl p-3 sm:p-4 bg-emerald-50/40">
+                  <p className="font-bold text-sm text-emerald-950 mb-1">{prp.title}</p>
+                  <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{prp.description}</p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* GMP */}
         <div className="mt-4 rounded-xl border border-emerald-200 overflow-hidden shadow-sm">
@@ -346,7 +509,7 @@ const topicComponents = {
             <p className="text-sm">{c.gmp.p1}</p>
             {c.gmp.list.map((item: any, i: number) => (
               <InfoCard key={i} title={item.title} palette="emerald">
-                <p className="text-gray-600 text-sm break-words">{item.description}</p>
+                <p className="text-gray-600 text-sm break-words leading-relaxed">{item.description}</p>
               </InfoCard>
             ))}
           </div>
@@ -361,7 +524,7 @@ const topicComponents = {
             <p className="text-sm">{c.ghp.p1}</p>
             {c.ghp.list.map((item: any, i: number) => (
               <InfoCard key={i} title={item.title} palette="emerald">
-                <p className="text-gray-600 text-sm break-words">{item.description}</p>
+                <p className="text-gray-600 text-sm break-words leading-relaxed">{item.description}</p>
               </InfoCard>
             ))}
           </div>
@@ -376,7 +539,7 @@ const topicComponents = {
             <p className="text-sm">{c.glp.p1}</p>
             {c.glp.list.map((item: any, i: number) => (
               <InfoCard key={i} title={item.title} palette="emerald">
-                <p className="text-gray-600 text-sm break-words">{item.description}</p>
+                <p className="text-gray-600 text-sm break-words leading-relaxed">{item.description}</p>
               </InfoCard>
             ))}
           </div>
@@ -389,8 +552,27 @@ const topicComponents = {
     const c = content.oprps;
     return (
       <SectionCard title={c.title} palette="green">
-        <p>{c.p1}</p>
-        <SubHeading palette="green">{c.p2}</SubHeading>
+        <p className="leading-relaxed">{c.p1}</p>
+        <p className="leading-relaxed">{c.p2}</p>
+
+        {/* ISO 22000 Clause 8.5.2.4 Categorization Logic */}
+        {c.decision_matrix && (
+          <div className="mt-4 border border-green-200 rounded-xl p-3 sm:p-4 bg-green-50/50">
+            <p className="font-bold text-sm text-green-950 mb-1">{c.decision_matrix.title}</p>
+            <p className="text-xs sm:text-sm text-green-800 mb-2">{c.decision_matrix.p1}</p>
+            <div className="space-y-2 mt-2">
+              {c.decision_matrix.criteria.map((crit: any, i: number) => (
+                <div key={i} className="bg-white border border-green-200 rounded-lg p-2.5">
+                  <p className="font-semibold text-xs text-green-900">{crit.step}</p>
+                  <p className="text-gray-600 text-xs mt-0.5 leading-relaxed">{crit.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Comparative Table: PRP vs oPRP vs CCP */}
+        <SubHeading palette="green">{c.table.caption}</SubHeading>
         {/* Mobile: stacked accordion cards | sm+: scrollable table */}
         <div className="mt-3 space-y-2 sm:hidden">
           {c.table.rows.map((row: any, i: number) => (
@@ -403,7 +585,7 @@ const topicComponents = {
               ].map((col, ci) => (
                 <div key={ci} className={`px-3 py-1.5 border-t border-green-100 ${ci % 2 === 1 ? "bg-green-50/40" : ""}`}>
                   <span className="text-xs font-bold text-green-600 block mb-0.5">{col.label}</span>
-                  <span className="text-gray-700 break-words">{col.val}</span>
+                  <span className="text-gray-700 text-xs sm:text-sm break-words">{col.val}</span>
                 </div>
               ))}
             </div>
@@ -422,25 +604,30 @@ const topicComponents = {
             <TableBody>
               {c.table.rows.map((row: any, i: number) => (
                 <TableRow key={i} className="hover:bg-green-50/50">
-                  <TableCell className="font-semibold text-gray-700">{row.c1}</TableCell>
-                  <TableCell className="text-gray-600 text-sm break-words">{row.c2}</TableCell>
-                  <TableCell className="text-gray-600 text-sm break-words">{row.c3}</TableCell>
-                  <TableCell className="text-gray-600 text-sm break-words">{row.c4}</TableCell>
+                  <TableCell className="font-semibold text-gray-700 text-xs sm:text-sm">{row.c1}</TableCell>
+                  <TableCell className="text-gray-600 text-xs sm:text-sm break-words">{row.c2}</TableCell>
+                  <TableCell className="text-gray-600 text-xs sm:text-sm break-words">{row.c3}</TableCell>
+                  <TableCell className="text-gray-600 text-xs sm:text-sm break-words">{row.c4}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </ScrollableTable>
         </div>
+
+        {/* Real-World Dairy oPRPs */}
         <SubHeading palette="green">{c.dairy_examples.title}</SubHeading>
         <div className="space-y-3 mt-2">
           {c.dairy_examples.list.map((item: any, i: number) => (
-            <InfoCard key={i} title={item.title} palette="green">
-              <p
-                className="text-gray-600 text-sm break-words overflow-wrap-anywhere"
-                style={{ overflowWrap: "anywhere", wordBreak: "break-word" }}
+            <div key={i} className="border border-green-200 rounded-xl p-3 sm:p-4 bg-white shadow-sm space-y-1.5">
+              <p className="font-bold text-sm text-green-950 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
+                {item.title}
+              </p>
+              <div
+                className="text-gray-700 text-xs sm:text-sm leading-relaxed space-y-1"
                 dangerouslySetInnerHTML={{ __html: item.description }}
               />
-            </InfoCard>
+            </div>
           ))}
         </div>
       </SectionCard>
@@ -452,38 +639,55 @@ const topicComponents = {
     const juran = content.juran;
     return (
       <>
+        {/* Deming */}
         <SectionCard title={deming.title} palette="violet">
-          <p>{deming.p1}</p>
-          <p>{deming.p2}</p>
-          <InfoCard title={deming.cycle.title} palette="violet">
-            <p className="text-gray-700 text-sm mb-3 break-words">{deming.cycle.p1}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {[deming.cycle.plan, deming.cycle.do, deming.cycle.check, deming.cycle.act].map(
-                (phase: any, i: number) => (
-                  <div key={i} className="bg-violet-100 border border-violet-200 rounded-lg p-2 sm:p-3">
-                    <p className="font-bold text-violet-800 text-sm mb-1">{phase.title}</p>
-                    <p className="text-gray-700 text-xs leading-relaxed break-words">{phase.description}</p>
-                  </div>
-                )
-              )}
-            </div>
-          </InfoCard>
+          <p className="leading-relaxed">{deming.p1}</p>
+          <p className="leading-relaxed">{deming.p2}</p>
+
+          <SubHeading palette="violet">{deming.fourteen_points.title}</SubHeading>
+          <div className="space-y-2.5 mt-2">
+            {deming.fourteen_points.list.map((item: any, i: number) => (
+              <div key={i} className="border border-violet-200 rounded-xl p-3 sm:p-4 bg-violet-50/40">
+                <p className="font-bold text-sm text-violet-950 mb-1">{item.title}</p>
+                <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{item.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <SubHeading palette="violet">{deming.cycle.title}</SubHeading>
+          <p className="text-sm text-gray-700 mb-2">{deming.cycle.p1}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+            {deming.cycle.steps.map((st: any, i: number) => (
+              <div key={i} className="border border-purple-200 rounded-xl p-3 bg-white shadow-sm">
+                <span className="bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded-full inline-block mb-1.5">
+                  {st.step}
+                </span>
+                <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{st.description}</p>
+              </div>
+            ))}
+          </div>
         </SectionCard>
 
-        <SectionCard title={juran.title} palette="purple">
-          <p>{juran.p1}</p>
-          <p className="italic text-sm text-gray-500 mt-1">{juran.p2}</p>
-          <InfoCard title={juran.trilogy.title} palette="purple">
-            <p className="text-gray-700 text-sm mb-3 break-words">{juran.trilogy.p1}</p>
-            <div className="space-y-2">
-              {juran.trilogy.list.map((item: any, i: number) => (
-                <div key={i} className="bg-purple-100 border border-purple-200 rounded-lg p-2 sm:p-3">
-                  <p className="font-bold text-purple-800 text-sm mb-1">{item.title}</p>
-                  <p className="text-gray-700 text-xs leading-relaxed break-words">{item.description}</p>
-                </div>
-              ))}
+        {/* Juran */}
+        <SectionCard title={juran.title} palette="violet">
+          <p className="leading-relaxed">{juran.p1}</p>
+          <p className="leading-relaxed">{juran.p2}</p>
+
+          <SubHeading palette="violet">{juran.trilogy.title}</SubHeading>
+          <div className="space-y-3 mt-2">
+            {juran.trilogy.list.map((item: any, i: number) => (
+              <InfoCard key={i} title={item.title} palette="violet">
+                <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+              </InfoCard>
+            ))}
+          </div>
+
+          {juran.pareto_principle && (
+            <div className="mt-4 border border-violet-200 rounded-xl p-3 sm:p-4 bg-violet-50/50">
+              <p className="font-bold text-sm text-violet-950 mb-1">{juran.pareto_principle.title}</p>
+              <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{juran.pareto_principle.p1}</p>
             </div>
-          </InfoCard>
+          )}
         </SectionCard>
       </>
     );
@@ -493,15 +697,24 @@ const topicComponents = {
     const c = content.tqm;
     return (
       <SectionCard title={c.title} palette="pink">
-        <p>{c.p1}</p>
+        <p className="leading-relaxed">{c.p1}</p>
+        <p className="leading-relaxed">{c.p2}</p>
+
         <SubHeading palette="pink">{c.principles.title}</SubHeading>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
           {c.principles.list.map((item: any, i: number) => (
             <InfoCard key={i} title={item.title} palette="pink">
-              <p className="text-gray-600 text-sm break-words">{item.description}</p>
+              <p className="text-gray-600 text-sm break-words leading-relaxed">{item.description}</p>
             </InfoCard>
           ))}
         </div>
+
+        {c.quality_circles && (
+          <div className="mt-4 border border-pink-200 rounded-xl p-3 sm:p-4 bg-pink-50/40">
+            <p className="font-bold text-sm text-pink-950 mb-1">{c.quality_circles.title}</p>
+            <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{c.quality_circles.p1}</p>
+          </div>
+        )}
       </SectionCard>
     );
   },
@@ -510,23 +723,32 @@ const topicComponents = {
     const c = content.haccp;
     return (
       <SectionCard title={c.title} palette="red">
-        <p>{c.p1}</p>
-        <InfoCard title={c.prerequisites.title} palette="red">
-          <p className="text-sm text-gray-700 break-words">{c.prerequisites.description}</p>
-        </InfoCard>
-        <SubHeading palette="red">{c.principles.title}</SubHeading>
+        <p className="leading-relaxed">{c.p1}</p>
+
+        {/* 5 Preliminary Steps */}
+        <SubHeading palette="red">5 Preliminary Steps (Codex Alimentarius)</SubHeading>
+        <div className="space-y-2 mt-2">
+          {c.twelve_steps.preliminary_steps.map((st: any, i: number) => (
+            <div key={i} className="border border-red-200 rounded-xl p-3 bg-red-50/30">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full shrink-0">{st.step}</span>
+                <span className="font-bold text-sm text-red-950">{st.name}</span>
+              </div>
+              <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{st.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* 7 Core HACCP Principles */}
+        <SubHeading palette="red">7 Core Principles of HACCP in Dairy Processing</SubHeading>
         <div className="space-y-3 mt-2">
-          {c.principles.list.map((item: any, i: number) => (
-            <div
-              key={i}
-              className="p-3 sm:p-4 bg-red-50 rounded-xl border border-red-100"
-            >
-              <p className="font-bold text-red-700 text-sm mb-1">
-                {item.title}
-              </p>
-              <p className="text-gray-700 text-sm leading-relaxed break-words">
-                {item.description}
-              </p>
+          {c.twelve_steps.principles.map((p: any, i: number) => (
+            <div key={i} className="border border-red-200 rounded-xl p-3 sm:p-4 bg-white shadow-sm space-y-1.5">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="bg-red-700 text-white text-xs font-bold px-2.5 py-0.5 rounded-full shrink-0">{p.step}</span>
+                <span className="font-bold text-sm text-red-950">{p.name}</span>
+              </div>
+              <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{p.description}</p>
             </div>
           ))}
         </div>
@@ -538,66 +760,282 @@ const topicComponents = {
     const c = content.iso;
     return (
       <SectionCard title={c.title} palette="purple">
-        <p>{c.p1}</p>
-        <p>{c.p2}</p>
+        {c.subtitle && (
+          <p className="text-xs sm:text-sm font-semibold text-purple-700 uppercase tracking-wide mb-1">
+            {c.subtitle}
+          </p>
+        )}
+        <p className="leading-relaxed text-sm sm:text-base">{c.hero_description}</p>
 
-        {/* ISO 9001 */}
-        <div className="mt-4 rounded-xl border border-purple-200 overflow-hidden shadow-sm">
-          <div className="bg-purple-50 px-3 sm:px-4 py-2 border-b border-purple-200">
-            <h3 className="font-bold text-purple-700">{c.qms.title}</h3>
-          </div>
-          <div className="p-3 sm:p-4 space-y-3 bg-white">
-            <p className="text-sm">{c.qms.p1}</p>
-            <InfoCard palette="purple" title={c.qms.structure}>
-              <ul className="space-y-1">
-                {c.qms.clauses.map((clause: string, i: number) => (
-                  <li key={i} className="text-xs text-gray-700 flex gap-1.5">
-                    <span className="text-purple-400">▸</span>
-                    {clause}
-                  </li>
-                ))}
-              </ul>
-            </InfoCard>
-            <p className="text-sm font-semibold text-purple-700">{c.qms.elementsTitle}</p>
-            <div className="space-y-2">
-              {c.qms.list.map((item: any, i: number) => (
-                <InfoCard key={i} title={item.title} palette="purple">
-                  <p className="text-gray-600 text-sm break-words">{item.description}</p>
-                </InfoCard>
+        {/* ─── 1. Annex SL / HLS Framework ─── */}
+        {c.hls_framework && (
+          <div className="mt-6 border border-purple-200 rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-purple-50/80 via-white to-purple-50/40 shadow-sm space-y-3">
+            <div className="flex items-center gap-2 border-b border-purple-200/60 pb-2">
+              <Layers className="w-5 h-5 text-purple-700 shrink-0" />
+              <h3 className="font-bold text-sm sm:text-base text-purple-950 font-headline">
+                {c.hls_framework.title}
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+              {c.hls_framework.description}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2">
+              {c.hls_framework.clauses.map((cl: any, i: number) => (
+                <div key={i} className="border border-purple-100 rounded-xl p-2.5 sm:p-3 bg-white text-xs space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-purple-900 bg-purple-100 px-2 py-0.5 rounded-full text-[11px]">
+                      {cl.clause}
+                    </span>
+                    <span className="font-semibold text-gray-900">{cl.title}</span>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">{cl.dairy_focus}</p>
+                </div>
               ))}
             </div>
           </div>
+        )}
+
+        {/* ─── 2. Exhaustive Standards Deep-Dive ─── */}
+        <div className="mt-8 space-y-8">
+          <div className="flex items-center gap-2 border-b border-purple-200 pb-2">
+            <Award className="w-5 h-5 text-purple-700 shrink-0" />
+            <h3 className="font-bold text-base sm:text-lg text-purple-950 font-headline">
+              Detailed Standards Breakdown (All 7 Dairy ISO Standards)
+            </h3>
+          </div>
+
+          {c.standards.map((std: any) => (
+            <div
+              key={std.id}
+              className="border-2 border-purple-200/90 rounded-2xl p-4 sm:p-6 bg-white shadow-sm space-y-5"
+            >
+              {/* Header Badge */}
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-purple-100 pb-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-base sm:text-lg text-purple-950">{std.code}</span>
+                    <span className="text-[11px] font-bold uppercase bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full">
+                      {std.badge}
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-gray-600 font-medium mt-0.5">{std.name}</p>
+                </div>
+              </div>
+
+              {/* Summary & Dairy Significance */}
+              <div className="space-y-2 text-xs sm:text-sm">
+                <p className="text-gray-800 leading-relaxed">{std.summary}</p>
+                <div className="bg-purple-50/70 border border-purple-200/60 rounded-xl p-3 text-purple-950 leading-relaxed">
+                  <strong className="text-purple-900 block mb-1">Dairy Industry Significance:</strong>
+                  {std.dairy_significance}
+                </div>
+              </div>
+
+              {/* Core Clauses */}
+              {std.core_clauses && std.core_clauses.length > 0 && (
+                <div className="space-y-2.5">
+                  <p className="text-xs sm:text-sm font-bold text-purple-950 flex items-center gap-1.5">
+                    <CheckSquare className="w-4 h-4 text-purple-700" />
+                    Key Clause Implementation & Dairy Records
+                  </p>
+                  <div className="space-y-2">
+                    {std.core_clauses.map((cc: any, idx: number) => (
+                      <div key={idx} className="border border-purple-100 rounded-xl p-3 bg-purple-50/30 text-xs space-y-1.5">
+                        <div className="flex flex-wrap items-center justify-between gap-1">
+                          <span className="font-bold text-purple-900 bg-purple-100/80 px-2 py-0.5 rounded text-[11px]">
+                            {cc.clause}
+                          </span>
+                          <span className="font-semibold text-gray-900">{cc.title}</span>
+                        </div>
+                        <p className="text-gray-700 leading-relaxed">{cc.dairy_implementation}</p>
+                        <p className="text-gray-500 bg-white/80 border border-purple-100/60 p-2 rounded-lg text-[11px]">
+                          <strong className="text-purple-900">Key Audit Records:</strong> {cc.key_records}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Risk-Based Thinking / Examples */}
+              {std.risk_based_thinking && (
+                <div className="border border-amber-200 rounded-xl p-3 sm:p-4 bg-amber-50/40 text-xs sm:text-sm space-y-2.5">
+                  <p className="font-bold text-amber-950 flex items-center gap-1.5">
+                    <ShieldAlert className="w-4 h-4 text-amber-700" />
+                    {std.risk_based_thinking.title}
+                  </p>
+                  <div className="space-y-2">
+                    {std.risk_based_thinking.examples.map((ex: any, idx: number) => (
+                      <div key={idx} className="bg-white border border-amber-200/70 rounded-lg p-2.5 space-y-1 text-xs">
+                        <span className="font-bold text-amber-900 block">{ex.process}</span>
+                        <p className="text-gray-700"><strong className="text-red-700">Identified Risk:</strong> {ex.risk}</p>
+                        <p className="text-emerald-800 bg-emerald-50/50 p-1.5 rounded border border-emerald-100">
+                          <strong>Engineered Mitigation:</strong> {ex.mitigation}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Audit & Compliance Grid */}
+              {std.audit_and_compliance && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  <div className="border border-purple-100 rounded-xl p-3 bg-purple-50/30 space-y-1.5">
+                    <p className="font-bold text-purple-950 flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-purple-700" />
+                      Key Audit Focus Areas
+                    </p>
+                    <ul className="space-y-1 list-disc pl-4 text-gray-700">
+                      {std.audit_and_compliance.focus_areas.map((fa: string, idx: number) => (
+                        <li key={idx} className="leading-relaxed">{fa}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="border border-rose-100 rounded-xl p-3 bg-rose-50/30 space-y-1.5">
+                    <p className="font-bold text-rose-950 flex items-center gap-1">
+                      <ShieldAlert className="w-3.5 h-3.5 text-rose-700" />
+                      Frequent Audit Non-Conformances
+                    </p>
+                    <ul className="space-y-1 list-disc pl-4 text-gray-700">
+                      {std.audit_and_compliance.common_nonconformances.map((nc: string, idx: number) => (
+                        <li key={idx} className="leading-relaxed">{nc}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="md:col-span-2 border border-emerald-100 rounded-xl p-3 bg-emerald-50/30 space-y-1.5">
+                    <p className="font-bold text-emerald-950 flex items-center gap-1">
+                      <Zap className="w-3.5 h-3.5 text-emerald-700" />
+                      Standard-Specific Target KPIs
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                      {std.audit_and_compliance.kpis.map((kpi: string, idx: number) => (
+                        <div key={idx} className="bg-white border border-emerald-200/60 rounded-lg p-2 font-medium text-emerald-900 text-xs">
+                          {kpi}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Case Study */}
+              {std.case_study && (
+                <div className="border border-purple-200 rounded-xl p-3 sm:p-4 bg-gradient-to-br from-purple-50/60 to-white text-xs sm:text-sm space-y-2">
+                  <div className="flex items-center gap-1.5 text-purple-950 font-bold">
+                    <Sparkles className="w-4 h-4 text-purple-600" />
+                    <span>{std.case_study.title}</span>
+                  </div>
+                  <p className="text-gray-700"><strong className="text-gray-900">Problem:</strong> {std.case_study.problem}</p>
+                  <p className="text-gray-700"><strong className="text-gray-900">Engineering Solution:</strong> {std.case_study.solution}</p>
+                  <p className="text-purple-900 bg-purple-100/60 p-2 rounded-lg font-medium">
+                    <strong>Results & Impact:</strong> {std.case_study.results}
+                  </p>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
 
-        {/* ISO 22000 */}
-        <div className="mt-4 rounded-xl border border-purple-200 overflow-hidden shadow-sm">
-          <div className="bg-purple-50 px-3 sm:px-4 py-2 border-b border-purple-200">
-            <h3 className="font-bold text-purple-700">{c.fsms.title}</h3>
+        {/* ─── 3. IMS Integration Matrix ─── */}
+        {c.ims_integration && (
+          <div className="mt-8 border-2 border-purple-200 rounded-2xl p-4 sm:p-6 bg-white shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-purple-200 pb-2">
+              <LayoutGrid className="w-5 h-5 text-purple-700 shrink-0" />
+              <h3 className="font-bold text-base sm:text-lg text-purple-950 font-headline">
+                {c.ims_integration.title}
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+              {c.ims_integration.concept}
+            </p>
+
+            {/* Matrix Table */}
+            {c.ims_integration.matrix_table && (
+              <ScrollableTable minWidth="640px">
+                <TableHeader className="bg-purple-100/70">
+                  <TableRow>
+                    {c.ims_integration.matrix_table.headers.map((h: string, idx: number) => (
+                      <TableHead key={idx} className="font-bold text-purple-950 text-xs whitespace-nowrap">
+                        {h}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {c.ims_integration.matrix_table.rows.map((r: string[], idx: number) => (
+                    <TableRow key={idx} className="hover:bg-purple-50/40 text-xs">
+                      <TableCell className="font-bold text-purple-900 whitespace-nowrap">{r[0]}</TableCell>
+                      <TableCell className="font-medium text-gray-800">{r[1]}</TableCell>
+                      <TableCell className="text-gray-700">{r[2]}</TableCell>
+                      <TableCell className="font-semibold text-emerald-800">{r[3]}</TableCell>
+                      <TableCell className="text-gray-600">{r[4]}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </ScrollableTable>
+            )}
+
+            {/* Benefits */}
+            {c.ims_integration.benefits && (
+              <div className="border border-purple-100 rounded-xl p-3 sm:p-4 bg-purple-50/40 space-y-2 text-xs sm:text-sm">
+                <p className="font-bold text-purple-950">Commercial & Operational Benefits of IMS Integration:</p>
+                <BulletList items={c.ims_integration.benefits} palette="purple" />
+              </div>
+            )}
+
+            {/* Audit Strategy */}
+            {c.ims_integration.audit_strategy && (
+              <div className="border border-purple-200/70 rounded-xl p-3 sm:p-4 bg-white text-xs sm:text-sm text-gray-700 leading-relaxed">
+                <strong className="text-purple-950 block mb-1">Integrated Process-Flow Audit Methodology:</strong>
+                {c.ims_integration.audit_strategy}
+              </div>
+            )}
           </div>
-          <div className="p-3 sm:p-4 space-y-3 bg-white">
-            <p className="text-sm">{c.fsms.p1}</p>
-            <p className="text-sm italic text-gray-500">{c.fsms.p2}</p>
-            <p className="text-sm font-semibold text-purple-700">{c.fsms.elementsTitle}</p>
-            <div className="space-y-2">
-              {c.fsms.list.map((item: any, i: number) => (
-                <InfoCard key={i} title={item.title} palette="purple">
-                  <p className="text-gray-600 text-sm break-words">{item.description}</p>
-                </InfoCard>
+        )}
+
+        {/* ─── 4. Step-by-Step Implementation Roadmap ─── */}
+        {c.implementation_roadmap && (
+          <div className="mt-8 border-2 border-purple-200 rounded-2xl p-4 sm:p-6 bg-white shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-purple-200 pb-2">
+              <GitBranch className="w-5 h-5 text-purple-700 shrink-0" />
+              <h3 className="font-bold text-base sm:text-lg text-purple-950 font-headline">
+                {c.implementation_roadmap.title}
+              </h3>
+            </div>
+
+            <div className="space-y-3">
+              {c.implementation_roadmap.steps.map((st: any) => (
+                <div key={st.step} className="border border-purple-100 rounded-xl p-3 sm:p-4 bg-purple-50/30 text-xs sm:text-sm space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-1 border-b border-purple-100 pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-full bg-purple-700 text-white font-bold flex items-center justify-center text-xs">
+                        {st.step}
+                      </span>
+                      <span className="font-bold text-purple-950">{st.phase}</span>
+                    </div>
+                    <span className="bg-purple-100 text-purple-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">
+                      {st.timeline}
+                    </span>
+                  </div>
+                  <ul className="space-y-1 list-disc pl-5 text-gray-700 text-xs">
+                    {st.activities.map((act: string, idx: number) => (
+                      <li key={idx} className="leading-relaxed">{act}</li>
+                    ))}
+                  </ul>
+                  <p className="text-purple-900 bg-white border border-purple-200/60 p-2 rounded-lg text-xs">
+                    <strong className="text-purple-950">Key Milestones & Deliverables:</strong> {st.deliverable}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
-        </div>
-
-        {/* ISO 17025 */}
-        <div className="mt-4">
-          <InfoCard title={c.iso_17025.title} palette="purple">
-            <p className="text-gray-600 text-sm break-words">{c.iso_17025.description}</p>
-          </InfoCard>
-        </div>
+        )}
       </SectionCard>
     );
   },
-
   bodies: function Content({ content }: { content: any }) {
     const c = content.regulatory_bodies;
     const bodies = [
@@ -696,36 +1134,39 @@ const topicComponents = {
     const sPalettes: PaletteKey[] = ["orange", "amber", "emerald", "sky", "violet"];
     return (
       <SectionCard title={c.title} palette="orange">
-        <p>{c.p1}</p>
-        <div className="space-y-3 mt-4">
-          {c.principles.list.map((item: any, i: number) => {
+        <p className="leading-relaxed">{c.p1}</p>
+
+        {/* 5S Principles */}
+        <div className="space-y-3 mt-3">
+          {c.principles.map((item: any, i: number) => {
             const p = PALETTE[sPalettes[i] ?? "orange"];
             return (
-              <div
-                key={i}
-                className={cn("flex items-start gap-3 p-3 sm:p-4 rounded-xl border", p.bg, p.border)}
-              >
-                <span
-                  className={cn("font-black text-xl sm:text-2xl w-7 sm:w-8 shrink-0", p.text)}
-                  style={{ fontFamily: "serif" }}
-                >
-                  {i + 1}
-                </span>
-                <div>
-                  <p className={cn("font-bold text-sm", p.heading)}>
-                    {item.title}
-                    <span className="ml-2 font-normal text-gray-400 text-xs">
-                      {item.japanese}
-                    </span>
-                  </p>
-                  <p className="text-gray-600 text-sm mt-1 leading-relaxed break-words">
-                    {item.description}
-                  </p>
+              <div key={i} className={cn("border rounded-xl p-3 sm:p-4 bg-white shadow-sm space-y-1.5", p.border)}>
+                <div className="flex flex-wrap items-center justify-between gap-1 border-b pb-1.5" style={{ borderColor: p.accent + "33" }}>
+                  <span className={cn("font-bold text-sm", p.heading)}>{item.japanese} — {item.name}</span>
+                  <span className="text-xs text-gray-500 italic">{item.meaning}</span>
                 </div>
+                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                  <strong className={p.heading}>Dairy Plant Application:</strong> {item.dairy_app}
+                </p>
               </div>
             );
           })}
         </div>
+
+        {/* 5S Dairy Section Audit Scoring */}
+        {c.dairy_audit_checklist && (
+          <>
+            <SubHeading palette="orange">{c.dairy_audit_checklist.title}</SubHeading>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+              {c.dairy_audit_checklist.list.map((item: any, i: number) => (
+                <InfoCard key={i} title={item.title} palette="orange">
+                  <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{item.description}</p>
+                </InfoCard>
+              ))}
+            </div>
+          </>
+        )}
       </SectionCard>
     );
   },
@@ -734,33 +1175,38 @@ const topicComponents = {
     const c = content.sop;
     return (
       <SectionCard title={c.title} palette="slate">
-        <p>{c.p1}</p>
-        <SubHeading palette="slate">{c.types.title}</SubHeading>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-          {c.types.list.map((item: any, i: number) => (
-            <InfoCard key={i} title={item.title} palette="slate">
-              <p className="text-gray-600 text-sm break-words">{item.description}</p>
-            </InfoCard>
-          ))}
-        </div>
-        <SubHeading palette="slate">{c.importance.title}</SubHeading>
-        <div className="space-y-2 mt-2">
-          {c.importance.list.map((item: string, i: number) => (
-            <div
-              key={i}
-              className="text-sm p-3 bg-slate-50 rounded-lg border border-slate-200 text-gray-700"
-              dangerouslySetInnerHTML={{ __html: item }}
-            />
-          ))}
-        </div>
+        <p className="leading-relaxed">{c.p1}</p>
+        <p className="leading-relaxed">{c.p2}</p>
+
+        {/* 10-Part ISO SOP Template */}
         <SubHeading palette="slate">{c.structure.title}</SubHeading>
         <div className="space-y-2 mt-2">
-          {c.structure.list.map((item: any, i: number) => (
-            <InfoCard key={i} title={item.title} palette="slate">
-              <p className="text-gray-600 text-sm break-words">{item.description}</p>
-            </InfoCard>
+          {c.structure.parts.map((p: any, i: number) => (
+            <div key={i} className="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+              <p className="font-bold text-xs sm:text-sm text-slate-900">{p.part}</p>
+              <p className="text-xs sm:text-sm text-gray-600 mt-0.5 leading-relaxed">{p.desc}</p>
+            </div>
           ))}
         </div>
+
+        {/* Real Core Dairy SOPs */}
+        <SubHeading palette="slate">{c.dairy_sops.title}</SubHeading>
+        <div className="space-y-3 mt-2">
+          {c.dairy_sops.list.map((item: any, i: number) => (
+            <div key={i} className="border border-slate-300 rounded-xl p-3 sm:p-4 bg-white shadow-sm space-y-1">
+              <p className="font-bold text-sm text-slate-900">{item.title}</p>
+              <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">{item.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Document Control */}
+        {c.document_control && (
+          <div className="mt-4 border border-slate-200 rounded-xl p-3 sm:p-4 bg-slate-100/70">
+            <p className="font-bold text-sm text-slate-900 mb-1">{c.document_control.title}</p>
+            <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{c.document_control.p1}</p>
+          </div>
+        )}
       </SectionCard>
     );
   },
@@ -769,25 +1215,63 @@ const topicComponents = {
     const c = content.fifo_fefo;
     return (
       <SectionCard title={c.title} palette="amber">
-        <p>{c.p1}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-          <InfoCard title={c.fifo.title} palette="amber">
-            <p className="text-gray-700 text-sm break-words">{c.fifo.description}</p>
-          </InfoCard>
-          <InfoCard title={c.fefo.title} palette="green">
-            <p className="text-gray-700 text-sm break-words">{c.fefo.description}</p>
-          </InfoCard>
+        <p className="leading-relaxed">{c.p1}</p>
+        <p className="leading-relaxed">{c.p2}</p>
+
+        {/* FIFO and FEFO Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+          <div className="border border-amber-200 rounded-xl p-3 sm:p-4 bg-amber-50/40 space-y-1.5">
+            <p className="font-bold text-sm text-amber-950">{c.fifo.title}</p>
+            <p className="text-xs text-amber-800 font-medium">{c.fifo.definition}</p>
+            <p className="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">{c.fifo.dairy_use}</p>
+          </div>
+          <div className="border border-green-200 rounded-xl p-3 sm:p-4 bg-green-50/40 space-y-1.5">
+            <p className="font-bold text-sm text-green-950">{c.fefo.title}</p>
+            <p className="text-xs text-green-800 font-medium">{c.fefo.definition}</p>
+            <p className="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">{c.fefo.dairy_use}</p>
+          </div>
         </div>
-        <div className="mt-4">
-          <InfoCard title={c.dairy_importance.title} palette="amber">
-            <p className="text-gray-700 text-sm break-words">{c.dairy_importance.description}</p>
-          </InfoCard>
-        </div>
+
+        {/* Arrhenius Shelf-Life Kinetics */}
+        {c.scientific_basis && (
+          <div className="my-4 border border-amber-200 rounded-xl p-3 sm:p-4 bg-amber-50/60 shadow-sm">
+            <p className="font-bold text-sm text-amber-950 mb-1">{c.scientific_basis.title}</p>
+            <div className="flex justify-center my-2">
+              <blockquote className="border-l-4 border-amber-600 bg-white px-5 py-2.5 rounded-r-xl font-mono text-sm sm:text-base text-amber-950 shadow-sm">
+                {c.scientific_basis.formula}
+              </blockquote>
+            </div>
+            <p className="text-xs sm:text-sm text-amber-900 leading-relaxed mt-2">{c.scientific_basis.explanation}</p>
+          </div>
+        )}
+
+        {/* Comparative Table */}
+        <SubHeading palette="amber">{c.table.caption}</SubHeading>
+        <ScrollableTable minWidth="560px">
+          <TableHeader className="bg-amber-50">
+            <TableRow>
+              <TableHead className="font-bold text-amber-800">Parametric Dimension</TableHead>
+              <TableHead className="font-bold text-amber-700">FIFO (First In, First Out)</TableHead>
+              <TableHead className="font-bold text-green-700">FEFO (First Expired, First Out)</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {c.table.rows.map((row: any, i: number) => (
+              <TableRow key={i}>
+                <TableCell className="font-semibold text-gray-800 text-xs sm:text-sm">{row.c1}</TableCell>
+                <TableCell className="text-gray-700 text-xs sm:text-sm">{row.c2}</TableCell>
+                <TableCell className="text-gray-700 text-xs sm:text-sm">{row.c3}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </ScrollableTable>
+
+        {/* Implementation Enablers */}
         <SubHeading palette="amber">{c.implementation.title}</SubHeading>
-        <div className="space-y-2 mt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
           {c.implementation.list.map((item: any, i: number) => (
             <InfoCard key={i} title={item.title} palette="amber">
-              <p className="text-gray-600 text-sm break-words">{item.description}</p>
+              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{item.description}</p>
             </InfoCard>
           ))}
         </div>
@@ -799,27 +1283,53 @@ const topicComponents = {
     const c = content.taccp_vaccp;
     return (
       <SectionCard title={c.title} palette="rose">
-        <p>{c.p1}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-          <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-            <h4 className="font-bold text-red-700 flex items-center gap-2 mb-2 text-sm sm:text-base">
-              <ShieldAlert className="w-4 h-4" />
-              {c.taccp.title}
-            </h4>
-            <p className="text-xs sm:text-sm text-red-900 leading-relaxed break-words">{c.taccp.description}</p>
-          </div>
-          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-            <h4 className="font-bold text-yellow-700 flex items-center gap-2 mb-2 text-sm sm:text-base">
-              <Zap className="w-4 h-4" />
-              {c.vaccp.title}
-            </h4>
-            <p className="text-xs sm:text-sm text-yellow-900 leading-relaxed break-words">{c.vaccp.description}</p>
-          </div>
+        <p className="leading-relaxed">{c.p1}</p>
+        <p className="leading-relaxed">{c.p2}</p>
+
+        {/* 3-Way Food Protection Matrix Table */}
+        <SubHeading palette="rose">{c.security_matrix.title}</SubHeading>
+        <ScrollableTable minWidth="640px">
+          <TableHeader className="bg-rose-50">
+            <TableRow>
+              <TableHead className="font-bold text-rose-800">Security Dimension</TableHead>
+              <TableHead className="font-bold text-red-700">HACCP (Food Safety)</TableHead>
+              <TableHead className="font-bold text-orange-700">TACCP (Food Defense)</TableHead>
+              <TableHead className="font-bold text-blue-700">VACCP (Food Fraud)</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {c.security_matrix.table.map((row: any, i: number) => (
+              <TableRow key={i}>
+                <TableCell className="font-semibold text-gray-800 text-xs sm:text-sm">{row.parameter}</TableCell>
+                <TableCell className="text-gray-700 text-xs sm:text-sm">{row.haccp}</TableCell>
+                <TableCell className="text-gray-700 text-xs sm:text-sm">{row.taccp}</TableCell>
+                <TableCell className="text-gray-700 text-xs sm:text-sm">{row.vaccp}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </ScrollableTable>
+
+        {/* TACCP Food Defense */}
+        <SubHeading palette="rose">{c.taccp.title}</SubHeading>
+        <p className="text-xs sm:text-sm text-gray-700">{c.taccp.p1}</p>
+        <div className="space-y-2 mt-2">
+          {c.taccp.measures.map((m: string, i: number) => (
+            <div key={i} className="border border-rose-200 rounded-xl p-3 bg-rose-50/40 text-xs sm:text-sm text-gray-700">
+              <span dangerouslySetInnerHTML={{ __html: m }} />
+            </div>
+          ))}
         </div>
-        <p
-          className="mt-4 text-sm italic text-gray-500 p-3 bg-rose-50 rounded-lg border border-rose-100"
-          dangerouslySetInnerHTML={{ __html: c.p2 }}
-        />
+
+        {/* VACCP Food Fraud */}
+        <SubHeading palette="rose">{c.vaccp.title}</SubHeading>
+        <p className="text-xs sm:text-sm text-gray-700">{c.vaccp.p1}</p>
+        <div className="space-y-2 mt-2">
+          {c.vaccp.dairy_frauds.map((df: string, i: number) => (
+            <div key={i} className="border border-rose-200 rounded-xl p-3 bg-white shadow-sm text-xs sm:text-sm text-gray-700">
+              <span dangerouslySetInnerHTML={{ __html: df }} />
+            </div>
+          ))}
+        </div>
       </SectionCard>
     );
   },
@@ -828,19 +1338,41 @@ const topicComponents = {
     const c = content.lean;
     return (
       <SectionCard title={c.title} palette="teal">
-        <p>{c.p1}</p>
+        <p className="leading-relaxed">{c.p1}</p>
+        <p className="leading-relaxed">{c.p2}</p>
+
+        {/* 8 Wastes of Lean Dairy */}
         <SubHeading palette="teal">{c.eight_wastes.title}</SubHeading>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+        <div className="space-y-3 mt-2">
           {c.eight_wastes.list.map((item: any, i: number) => (
-            <InfoCard key={i} title={item.title} palette="teal">
-              <p className="text-gray-600 text-sm break-words">{item.description}</p>
-            </InfoCard>
+            <div key={i} className="border border-teal-200 rounded-xl p-3 sm:p-4 bg-white shadow-sm space-y-1.5">
+              <p className="font-bold text-sm text-teal-950">{item.waste}</p>
+              <p className="text-xs sm:text-sm text-red-700">
+                <strong>Waste in Dairy:</strong> {item.dairy_example}
+              </p>
+              <p className="text-xs sm:text-sm text-teal-900 bg-teal-50 p-2 rounded-lg font-medium">
+                <strong>Lean Countermeasure:</strong> {item.solution}
+              </p>
+            </div>
           ))}
         </div>
+
+        {/* Primary Lean Tools */}
+        {c.lean_tools && (
+          <>
+            <SubHeading palette="teal">{c.lean_tools.title}</SubHeading>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+              {c.lean_tools.list.map((tool: any, i: number) => (
+                <InfoCard key={i} title={tool.title} palette="teal">
+                  <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{tool.description}</p>
+                </InfoCard>
+              ))}
+            </div>
+          </>
+        )}
       </SectionCard>
     );
   },
-
   six_sigma: function Content({ content }: { content: any }) {
     const c = content.six_sigma;
     const stepPalettes: PaletteKey[] = ["indigo", "blue", "cyan", "teal", "emerald"];

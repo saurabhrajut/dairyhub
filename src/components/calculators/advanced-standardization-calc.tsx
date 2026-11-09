@@ -2149,7 +2149,7 @@ Generated via DairyHub Master Multi-Solids Engine`;
                     </div>
                   </div>
                   <p className="text-[9.5px] text-slate-400 leading-tight">
-                    💡 <strong>टैंक दूध आधारित:</strong> इस मोड में कोई फिक्स बैच साइज नहीं होता। आप नीचे टेबल में उपलब्ध दूध (Base Milk) भरें। सॉल्वर स्वतः बाकी सामग्री की मात्रा निकालेगा।
+                    💡 <strong>Tank Milk Based:</strong> No fixed batch size in this mode. Enter available Base Milk in the table below; the solver automatically computes required quantities for other ingredients.
                   </p>
                 </div>
               )}
